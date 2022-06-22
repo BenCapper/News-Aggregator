@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/storyListFragment"
+            android:icon="@drawable/ic_launcher_foreground"
+            android:title="@string/nav_host" />
+    </group>
+    <item android:title="Favourites">
+        <menu>
+            <item
+                android:id="@+id/nav_location"
+                android:icon="@drawable/ic_launcher_foreground"
+                android:onClick="faveLocation"
+                android:title="@string/nav_host" />
+        </menu>
+    </item>
+    <item android:title="Account">
+        <menu>
+            <item
+                android:id="@+id/nav_sign_out"
+                android:icon="@drawable/ic_launcher_foreground"
+                android:onClick="signOut"
+                android:title="@string/nav_host" />
+        </menu>
+    </item>
+</menu>
