@@ -15,8 +15,7 @@ data class StoryModel(var id: String = "",
                       var author: String = "",
                       var category: String = "",
                       var preview: String = "",
-                      var time: Time = Time.from(Instant.now()) as Time,
-                      var date: Date = Date.from(Instant.now()), )
+                      var date: String = "", )
                          : Parcelable
     {
                         @Exclude
@@ -29,7 +28,6 @@ data class StoryModel(var id: String = "",
                                 "author" to author,
                                 "category" to category,
                                 "preview" to preview,
-                                "time" to time,
                                 "date" to date,
                             )
                         }

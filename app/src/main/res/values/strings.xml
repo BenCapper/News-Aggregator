@@ -5,6 +5,7 @@
     <string name="select_profile_image">Select Profile Image</string>
     <string name="messageLoading">Loading</string>
 
+    <string name="nav_host">Nav Host</string>
 
     <string name="sign_in">Nav Sign In</string>
     <string name="create_acc">Create Account</string>
