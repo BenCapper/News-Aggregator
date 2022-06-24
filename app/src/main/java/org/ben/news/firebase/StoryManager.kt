@@ -15,6 +15,29 @@ object StoryManager : StoryStore {
     var database: DatabaseReference = FirebaseDatabase.getInstance().reference
 
 
+    override fun findAllByDateOutlet(date: String, outlet: String, storyList: MutableLiveData<List<StoryModel>>){
+        database.child("stories").child(date).child(outlet)
+            .addValueEventListener(object : ValueEventListener {
+                override fun onCancelled(error: DatabaseError) {
+                    Timber.i("Firebase building error : ${error.message}")
+                }
+
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val localList = ArrayList<StoryModel>()
+                    val children = snapshot.children
+                    children.forEach {
+                        val story = it.getValue(StoryModel::class.java)
+                        localList.add(story!!)
+                    }
+                    database.child("stories").child(date).child(outlet)
+                        .removeEventListener(this)
+
+                    storyList.value = localList
+                    Timber.i("STORYr : ${storyList.value}")
+                }
+            })
+    }
+
     override fun findAll(storyList: MutableLiveData<List<StoryModel>>) {
         database.child("stories")
             .addValueEventListener(object : ValueEventListener {
@@ -137,9 +160,9 @@ object StoryManager : StoryStore {
         val c = Calendar.getInstance().time
         Timber.i("Current time => $c")
 
-        val df = SimpleDateFormat("dd.mm.yy", Locale.getDefault())
+        val df = SimpleDateFormat("dd.mm.yy")
         val formattedDate: String = df.format(c)
-        Timber.i("FORMATTED DATE => $formattedDate")
+        Timber.i("CHECK DATE => $formattedDate")
     }
 
     fun updateImageRef(userId: String,imageUri: String) {

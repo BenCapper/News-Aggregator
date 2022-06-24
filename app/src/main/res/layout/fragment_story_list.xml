@@ -7,6 +7,7 @@
     tools:context=".ui.storyList.StoryListFragment">
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
         android:layout_width="300dp"
         android:layout_height="688dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -17,8 +18,8 @@
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swiperefresh"
-        android:layout_width="280dp"
-        android:layout_height="670dp"
+        android:layout_width="253dp"
+        android:layout_height="45dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="24dp"
         android:layout_marginEnd="16dp"
