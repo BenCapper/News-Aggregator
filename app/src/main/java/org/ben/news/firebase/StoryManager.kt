@@ -97,10 +97,9 @@ object StoryManager : StoryStore {
             }
     }
 
-    override fun create(firebaseUser: MutableLiveData<FirebaseUser>, story: StoryModel) {
+    override fun create(story: StoryModel) {
         Timber.i("Firebase DB Reference : $database")
 
-        val uid = firebaseUser.value!!.uid
         val key = database.child("story").push().key
         if (key == null) {
             Timber.i("Firebase Error : Key Empty")
@@ -111,7 +110,6 @@ object StoryManager : StoryStore {
 
         val childAdd = HashMap<String, Any>()
         childAdd["/stories/$key"] = storyValues
-        childAdd["/user-stories/$uid/$key"] = storyValues
 
         database.updateChildren(childAdd)
     }

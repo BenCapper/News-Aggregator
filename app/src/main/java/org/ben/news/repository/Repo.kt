@@ -1,13 +1,17 @@
 package org.ben.news.repository
 
+import androidx.fragment.app.activityViewModels
 import com.google.firebase.database.core.Context
+import org.ben.news.firebase.StoryManager
 import org.ben.news.models.StoryModel
+import org.ben.news.ui.auth.LoggedInViewModel
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import timber.log.Timber
 import java.io.IOException
 
 class Repo {
+
 
     companion object {
         var instance: Repo? = null
@@ -41,7 +45,6 @@ class Repo {
                 val regex ="""[0-9]{2}.[0-9]{2}.[0-9]{2}""".toRegex()
                 date = regex.find(date)?.value.toString()
                 Timber.i("DATE = $date")
-                date = ""
                 val author = stories.select("span.auth")
                     .eq(i)
                     .text()
@@ -57,7 +60,8 @@ class Repo {
                     .eq(i)
                     .attr("src")
                 Timber.i("IMAGE = $image")
-                listData.add(StoryModel(i.toString(), title, link, url, author, "", image, date))
+                val story = StoryModel(i.toString(), title, link, url, author, "", image, date)
+                StoryManager.create(story)
             }
         } catch (e: IOException) {
             e.printStackTrace()
