@@ -24,7 +24,6 @@ class StoryListFragment : Fragment() {
     private var _fragBinding: FragmentStoryListBinding? = null
     private val fragBinding get() = _fragBinding!!
     lateinit var loader : AlertDialog
-    private val storyListViewModel: StoryListViewModel by activityViewModels()
     private val loggedInViewModel : LoggedInViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {

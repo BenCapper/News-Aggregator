@@ -10,7 +10,6 @@ import android.view.View
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -24,8 +23,8 @@ import org.ben.news.R
 import org.ben.news.databinding.NavHeaderBinding
 import org.ben.news.firebase.FirebaseImageManager
 import org.ben.news.helpers.readImageUri
+import org.ben.news.repository.RepoViewModel
 import org.ben.news.ui.auth.Login
-import org.ben.news.ui.storyList.StoryListViewModel
 import timber.log.Timber
 
 
@@ -38,7 +37,7 @@ class Home : AppCompatActivity() {
     private lateinit var loggedInViewModel : LoggedInViewModel
     private lateinit var headerView : View
     private lateinit var intentLauncher : ActivityResultLauncher<Intent>
-    private val viewModel = StoryListViewModel()
+    private val viewModel = RepoViewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

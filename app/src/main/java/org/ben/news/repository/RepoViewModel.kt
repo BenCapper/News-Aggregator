@@ -1,4 +1,4 @@
-package org.ben.news.ui.storyList
+package org.ben.news.repository
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -7,9 +7,9 @@ import com.google.firebase.database.core.Context
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
 import org.ben.news.models.StoryModel
-import org.ben.news.repository.Repo
 
-class StoryListViewModel : ViewModel() {
+
+class RepoViewModel : ViewModel() {
     var stories: MutableLiveData<MutableList<StoryModel>> = MutableLiveData()
 
     fun init (context: Context) {

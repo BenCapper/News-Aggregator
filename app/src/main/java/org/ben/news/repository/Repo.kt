@@ -1,12 +1,9 @@
 package org.ben.news.repository
 
-import androidx.fragment.app.activityViewModels
 import com.google.firebase.database.core.Context
 import org.ben.news.firebase.StoryManager
 import org.ben.news.models.StoryModel
-import org.ben.news.ui.auth.LoggedInViewModel
 import org.jsoup.Jsoup
-import org.jsoup.nodes.Document
 import timber.log.Timber
 import java.io.IOException
 
@@ -27,12 +24,12 @@ class Repo {
     }
 
     fun getStories(): MutableList<StoryModel> {
+        StoryManager.checkDate()
         val listData = mutableListOf<StoryModel>()
         try {
             val url = "https://timcast.com/news/"
             val doc = Jsoup.connect(url).get()
             val stories = doc.select(".article-block")
-            //Timber.i("stories = $stories")
             val storiesSize = stories.size
             for (i in 0 until storiesSize) {
                 val title = stories.select("h2")
@@ -60,7 +57,7 @@ class Repo {
                     .eq(i)
                     .attr("src")
                 Timber.i("IMAGE = $image")
-                val story = StoryModel(i.toString(), title, link, url, author, "", image, date)
+                val story = StoryModel(i.toString(),title,link,url,"Timcast",author, "US", image, date)
                 StoryManager.create(story)
             }
         } catch (e: IOException) {

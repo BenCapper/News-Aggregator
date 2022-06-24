@@ -2,11 +2,11 @@ package org.ben.news.firebase
 
 
 import androidx.lifecycle.MutableLiveData
-import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
 import org.ben.news.models.StoryModel
 import org.ben.news.models.StoryStore
 import timber.log.Timber
+import java.text.SimpleDateFormat
 import java.util.*
 
 
@@ -98,8 +98,6 @@ object StoryManager : StoryStore {
     }
 
     override fun create(story: StoryModel) {
-        Timber.i("Firebase DB Reference : $database")
-
         val key = database.child("story").push().key
         if (key == null) {
             Timber.i("Firebase Error : Key Empty")
@@ -107,9 +105,10 @@ object StoryManager : StoryStore {
         }
         story.id = key
         val storyValues = story.toMap()
-
+        var newDate = story.date.replace(".","-")
+        var outlet = story.outlet
         val childAdd = HashMap<String, Any>()
-        childAdd["/stories/$key"] = storyValues
+        childAdd["/stories/$newDate/$outlet/$key"] = storyValues
 
         database.updateChildren(childAdd)
     }
@@ -132,6 +131,15 @@ object StoryManager : StoryStore {
         childUpdate["user-stories/$userId/$storyId"] = storyValues
 
         database.updateChildren(childUpdate)
+    }
+
+    fun checkDate(){
+        val c = Calendar.getInstance().time
+        Timber.i("Current time => $c")
+
+        val df = SimpleDateFormat("dd.mm.yy", Locale.getDefault())
+        val formattedDate: String = df.format(c)
+        Timber.i("FORMATTED DATE => $formattedDate")
     }
 
     fun updateImageRef(userId: String,imageUri: String) {
