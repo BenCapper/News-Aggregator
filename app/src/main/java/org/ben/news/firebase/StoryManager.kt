@@ -156,14 +156,6 @@ object StoryManager : StoryStore {
         database.updateChildren(childUpdate)
     }
 
-    fun checkDate(){
-        val c = Calendar.getInstance().time
-        Timber.i("Current time => $c")
-
-        val df = SimpleDateFormat("dd.mm.yy")
-        val formattedDate: String = df.format(c)
-        Timber.i("CHECK DATE => $formattedDate")
-    }
 
     fun updateImageRef(userId: String,imageUri: String) {
 
