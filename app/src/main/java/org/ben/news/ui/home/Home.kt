@@ -23,7 +23,6 @@ import org.ben.news.R
 import org.ben.news.databinding.NavHeaderBinding
 import org.ben.news.firebase.FirebaseImageManager
 import org.ben.news.helpers.readImageUri
-import org.ben.news.repository.RepoViewModel
 import org.ben.news.ui.auth.Login
 import timber.log.Timber
 
@@ -37,7 +36,6 @@ class Home : AppCompatActivity() {
     private lateinit var loggedInViewModel : LoggedInViewModel
     private lateinit var headerView : View
     private lateinit var intentLauncher : ActivityResultLauncher<Intent>
-    private val viewModel = RepoViewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,9 +50,6 @@ class Home : AppCompatActivity() {
         findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         val navController = navHostFragment.navController
 
-        viewModel.fetchData().observe(this, Observer {
-            Timber.i("FetchData", "$it")
-        })
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
 
@@ -89,7 +84,6 @@ class Home : AppCompatActivity() {
         loggedInViewModel = ViewModelProvider(this)[LoggedInViewModel::class.java]
         loggedInViewModel.liveFirebaseUser.observe(this) { firebaseUser ->
             if (firebaseUser != null) {
-                updateNavHeader(firebaseUser)
             }
         }
 
@@ -113,41 +107,7 @@ class Home : AppCompatActivity() {
         }
     }
 
-    private fun updateNavHeader(currentUser: FirebaseUser) {
-        FirebaseImageManager.checkStorageForExistingProfilePic(currentUser.uid)
-        FirebaseImageManager.imageUri.observe(this) { result ->
-            if (result == Uri.EMPTY) {
-                Timber.i("NO Existing imageUri")
-                if (currentUser.photoUrl != null) {
-                    //if you're a google user
-                    FirebaseImageManager.updateUserImage(
-                        currentUser.uid,
-                        currentUser.photoUrl,
-                        navHeaderBinding.imageView,
-                        true
-                    )
-                } else {
-                    Timber.i("Loading Existing Default imageUri")
-                    FirebaseImageManager.updateDefaultImage(
-                        currentUser.uid,
-                        R.drawable.ic_launcher_foreground,
-                        navHeaderBinding.imageView
-                    )
-                }
-            } else // load existing image from firebase
-            {
-                Timber.i("Loading Existing imageUri")
-                FirebaseImageManager.updateUserImage(
-                    currentUser.uid,
-                    FirebaseImageManager.imageUri.value,
-                    navHeaderBinding.imageView, false
-                )
-            }
-        }
-        navHeaderBinding.navHeaderEmail.text = currentUser.email
-        if(currentUser.displayName != null)
-            navHeaderBinding.navHeaderEmail.text = currentUser.displayName
-    }
+
 
 
     override fun onSupportNavigateUp(): Boolean {

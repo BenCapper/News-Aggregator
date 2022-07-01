@@ -71,7 +71,7 @@ class StoryListFragment : Fragment() {
         fragBinding.swiperefresh.setOnRefreshListener {
             fragBinding.swiperefresh.isRefreshing = true
             showLoader(loader, "Downloading Buildings")
-            storyListViewModel.loadAll()
+            storyListViewModel.load()
 
         }
     }

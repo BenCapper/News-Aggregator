@@ -28,7 +28,7 @@
             android:layout_marginTop="60dp"
             android:layout_marginEnd="16dp"
             android:layout_toEndOf="@+id/imageView2"
-            android:text="@{story.linkPreview}"
+            android:text="@{story.author}"
             android:textColor="@color/black"
             android:textSize="8sp" />
 
@@ -54,7 +54,7 @@
             android:layout_marginTop="5dp"
             android:layout_marginEnd="16dp"
             android:layout_toEndOf="@+id/imageView2"
-            android:text="@{story.headline}"
+            android:text="@{story.title}"
             android:textSize="10sp" />
 
         <ImageView
