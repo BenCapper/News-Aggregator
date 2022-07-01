@@ -2,11 +2,11 @@ package org.ben.news.firebase
 
 
 import androidx.lifecycle.MutableLiveData
-import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
 import org.ben.news.models.StoryModel
 import org.ben.news.models.StoryStore
 import timber.log.Timber
+import java.text.SimpleDateFormat
 import java.util.*
 
 
@@ -14,6 +14,29 @@ object StoryManager : StoryStore {
 
     var database: DatabaseReference = FirebaseDatabase.getInstance().reference
 
+
+    override fun findAllByDateOutlet(date: String, outlet: String, storyList: MutableLiveData<List<StoryModel>>){
+        database.child("stories").child(date).child(outlet)
+            .addValueEventListener(object : ValueEventListener {
+                override fun onCancelled(error: DatabaseError) {
+                    Timber.i("Firebase building error : ${error.message}")
+                }
+
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val localList = ArrayList<StoryModel>()
+                    val children = snapshot.children
+                    children.forEach {
+                        val story = it.getValue(StoryModel::class.java)
+                        localList.add(story!!)
+                    }
+                    database.child("stories").child(date).child(outlet)
+                        .removeEventListener(this)
+
+                    storyList.value = localList
+                    Timber.i("STORYr : ${storyList.value}")
+                }
+            })
+    }
 
     override fun findAll(storyList: MutableLiveData<List<StoryModel>>) {
         database.child("stories")
@@ -97,10 +120,7 @@ object StoryManager : StoryStore {
             }
     }
 
-    override fun create(firebaseUser: MutableLiveData<FirebaseUser>, story: StoryModel) {
-        Timber.i("Firebase DB Reference : $database")
-
-        val uid = firebaseUser.value!!.uid
+    override fun create(story: StoryModel) {
         val key = database.child("story").push().key
         if (key == null) {
             Timber.i("Firebase Error : Key Empty")
@@ -108,10 +128,10 @@ object StoryManager : StoryStore {
         }
         story.id = key
         val storyValues = story.toMap()
-
+        var newDate = story.date.replace(".","-")
+        var outlet = story.outlet
         val childAdd = HashMap<String, Any>()
-        childAdd["/stories/$key"] = storyValues
-        childAdd["/user-stories/$uid/$key"] = storyValues
+        childAdd["/stories/$newDate/$outlet/$key"] = storyValues
 
         database.updateChildren(childAdd)
     }
@@ -135,6 +155,7 @@ object StoryManager : StoryStore {
 
         database.updateChildren(childUpdate)
     }
+
 
     fun updateImageRef(userId: String,imageUri: String) {
 
