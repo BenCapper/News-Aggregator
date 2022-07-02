@@ -13,8 +13,8 @@ data class StoryModel(var title: String = "",
                       var img_name: String = "",
                       var img_src: String = "",
                       var preview: String = "",
-                      var date: String = "")
-                         : Parcelable
+                      var date: String = "",
+                      var link: String = "") : Parcelable
     {
                         @Exclude
                         fun toMap(): Map<String, Any?> {
@@ -24,7 +24,8 @@ data class StoryModel(var title: String = "",
                                 "img_name" to img_name,
                                 "img_src" to img_src,
                                 "preview" to preview,
-                                "date" to date
+                                "date" to date,
+                                "link" to link
                             )
                         }
 
