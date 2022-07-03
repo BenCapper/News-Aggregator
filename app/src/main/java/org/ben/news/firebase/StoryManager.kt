@@ -38,8 +38,9 @@ object StoryManager : StoryStore {
             })
     }
 
-    override fun findAll(storyList: MutableLiveData<List<StoryModel>>) {
-        database.child("stories")
+    override fun findAll(dateYest: String, date: String,storyList: MutableLiveData<List<StoryModel>>) {
+        val totalList = ArrayList<StoryModel>()
+        database.child("stories").child("Timcast").child(dateYest)
             .addValueEventListener(object : ValueEventListener {
                 override fun onCancelled(error: DatabaseError) {
                     Timber.i("Firebase building error : ${error.message}")
@@ -50,22 +51,18 @@ object StoryManager : StoryStore {
                     val children = snapshot.children
                     children.forEach {
                         val story = it.getValue(StoryModel::class.java)
+                        totalList.add(story!!)
                         localList.add(story!!)
                     }
-                    database.child("stories")
+                    database.child("stories").child("Timcast").child(dateYest)
                         .removeEventListener(this)
-
-                    storyList.value = localList
                 }
+
             })
-    }
-
-    override fun findAll(userId: String, storyList: MutableLiveData<List<StoryModel>>) {
-
-        database.child("user-stories").child(userId)
+        database.child("stories").child("Timcast").child(date)
             .addValueEventListener(object : ValueEventListener {
                 override fun onCancelled(error: DatabaseError) {
-                    Timber.i("Firebase story error : ${error.message}")
+                    Timber.i("Firebase building error : ${error.message}")
                 }
 
                 override fun onDataChange(snapshot: DataSnapshot) {
@@ -73,16 +70,19 @@ object StoryManager : StoryStore {
                     val children = snapshot.children
                     children.forEach {
                         val story = it.getValue(StoryModel::class.java)
+                        totalList.add(story!!)
                         localList.add(story!!)
-
                     }
-                    database.child("user-stories").child(userId)
+                    database.child("stories").child("Timcast").child(date)
                         .removeEventListener(this)
+                    storyList.value = totalList
 
-                    storyList.value = localList
                 }
             })
+
     }
+
+
 
     override fun search(userId: String,term: String, storyList: MutableLiveData<List<StoryModel>>) {
 
@@ -96,7 +96,7 @@ object StoryManager : StoryStore {
                     val localList = ArrayList<StoryModel>()
                     val children = snapshot.children
                     children.forEach {
-                        if (it.getValue(StoryModel::class.java)?.headline!!.contains(term) ) {
+                        if (it.getValue(StoryModel::class.java)?.title!!.contains(term) ) {
                             val story = it.getValue(StoryModel::class.java)
                             localList.add(story!!)
                         }
@@ -126,12 +126,11 @@ object StoryManager : StoryStore {
             Timber.i("Firebase Error : Key Empty")
             return
         }
-        story.id = key
+        story.title = key
         val storyValues = story.toMap()
         var newDate = story.date.replace(".","-")
-        var outlet = story.outlet
         val childAdd = HashMap<String, Any>()
-        childAdd["/stories/$newDate/$outlet/$key"] = storyValues
+        childAdd["/stories/$newDate/$key"] = storyValues
 
         database.updateChildren(childAdd)
     }
@@ -171,7 +170,7 @@ object StoryManager : StoryStore {
                         it.ref.child("profilepic").setValue(imageUri)
                         //Update all donations that match 'it'
                         val story = it.getValue(StoryModel::class.java)
-                        allStories.child(story!!.id)
+                        allStories.child(story!!.title)
                             .child("profilepic").setValue(imageUri)
                     }
                 }

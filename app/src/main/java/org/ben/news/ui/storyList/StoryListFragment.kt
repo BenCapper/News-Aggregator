@@ -3,10 +3,9 @@ package org.ben.news.ui.storyList
 import android.app.AlertDialog
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
+import android.view.*
+import android.widget.SearchView
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -63,6 +62,32 @@ class StoryListFragment : Fragment() {
 
         return root
     }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu_home, menu)
+
+        /* Finding the search bar in the menu and setting it to the search view. */
+        val item = menu.findItem(R.id.app_bar_search)
+        val searchView = item.actionView as SearchView
+
+
+        /* This is the code that is executed when the search bar is used. It searches the database for
+        the building that the user is searching for. */
+        searchView.setOnQueryTextListener(object :  SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                if (newText != null) {
+                }
+                return true
+            }
+        })
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+
     private fun render(storyList: ArrayList<StoryModel>) {
         fragBinding.recyclerView.adapter = StoryAdapter(storyList)
     }
@@ -71,7 +96,7 @@ class StoryListFragment : Fragment() {
         fragBinding.swiperefresh.setOnRefreshListener {
             fragBinding.swiperefresh.isRefreshing = true
             showLoader(loader, "Downloading Buildings")
-            storyListViewModel.loadAll()
+            storyListViewModel.load()
 
         }
     }

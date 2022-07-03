@@ -10,6 +10,7 @@ import android.view.View
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -23,7 +24,6 @@ import org.ben.news.R
 import org.ben.news.databinding.NavHeaderBinding
 import org.ben.news.firebase.FirebaseImageManager
 import org.ben.news.helpers.readImageUri
-import org.ben.news.repository.RepoViewModel
 import org.ben.news.ui.auth.Login
 import timber.log.Timber
 
@@ -37,7 +37,6 @@ class Home : AppCompatActivity() {
     private lateinit var loggedInViewModel : LoggedInViewModel
     private lateinit var headerView : View
     private lateinit var intentLauncher : ActivityResultLauncher<Intent>
-    private val viewModel = RepoViewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,16 +44,13 @@ class Home : AppCompatActivity() {
         homeBinding = HomeBinding.inflate(layoutInflater)
         setContentView(homeBinding.root)
         drawerLayout = homeBinding.drawerLayout
-        //val toolbar = findViewById<Toolbar>(R.id.toolbar)
-        //setSupportActionBar(toolbar)
+        val toolbar = findViewById<Toolbar>(R.id.toolbar)
+        setSupportActionBar(toolbar)
 
         val navHostFragment = supportFragmentManager.
         findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         val navController = navHostFragment.navController
 
-        viewModel.fetchData().observe(this, Observer {
-            Timber.i("FetchData", "$it")
-        })
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
 
@@ -130,7 +126,7 @@ class Home : AppCompatActivity() {
                     Timber.i("Loading Existing Default imageUri")
                     FirebaseImageManager.updateDefaultImage(
                         currentUser.uid,
-                        R.drawable.ic_launcher_foreground,
+                        R.drawable.ic_person,
                         navHeaderBinding.imageView
                     )
                 }

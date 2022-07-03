@@ -8,6 +8,7 @@ import org.ben.news.firebase.StoryManager
 import org.ben.news.models.StoryModel
 import timber.log.Timber
 import java.text.SimpleDateFormat
+import java.time.LocalDate
 import java.util.*
 
 class StoryListViewModel : ViewModel() {
@@ -33,34 +34,32 @@ class StoryListViewModel : ViewModel() {
 
     fun load() {
         try {
-            val c: Date = Calendar.getInstance().time
             val df = SimpleDateFormat("MM.dd.yy")
-            val formattedDate: String = df.format(c)
+
+            val date = Calendar.getInstance().time
+            val formattedDate: String = df.format(date)
             var newDate = formattedDate.replace(".","-")
             Timber.i("FORMATTED : $newDate")
-            StoryManager.findAllByDateOutlet(newDate, "Timcast",storyList)
+
+            var yest = LocalDate.now()
+            var yesterday = yest.minusDays(1)
+            val year = yesterday.year.toString().substring(2)
+            var month = yesterday.month.value.toString()
+            if (month.length == 1){
+                month = "0$month"
+            }
+            var day = yesterday.dayOfMonth.toString()
+            if (day.length == 1){
+                day = "0$day"
+            }
+            val yesterdaysDate = "$month-$day-$year"
+            Timber.i("YESTERDAY : $yesterdaysDate")
+            StoryManager.findAll(yesterdaysDate,newDate,storyList)
             Timber.i("Load Success : ${storyList.value}")
         }
         catch (e: Exception) {
             Timber.i("Load Error : $e.message")
         }
     }
-
-
-    fun loadAll() {
-        try {
-            val c: Date = Calendar.getInstance().time
-            val df = SimpleDateFormat("MM.dd.yy")
-            val formattedDate: String = df.format(c)
-            var newDate = formattedDate.replace(".","-")
-            Timber.i("FORMATTED : $newDate")
-            StoryManager.findAllByDateOutlet(newDate, "Timcast",storyList)
-            Timber.i("Load Success : ${storyList.value.toString()}")
-        }
-        catch (e: Exception) {
-            Timber.i("Load Error : $e.message")
-        }
-    }
-
 
 }

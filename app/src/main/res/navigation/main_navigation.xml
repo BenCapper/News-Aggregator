@@ -3,11 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_navigation.xml"
-    app:startDestination="@id/storyListFragment2">
+    app:startDestination="@id/storyListFragment">
 
     <fragment
-        android:id="@+id/storyListFragment2"
+        android:id="@+id/storyListFragment"
         android:name="org.ben.news.ui.storyList.StoryListFragment"
-        android:label="fragment_story_list"
+        android:label="@string/list_title"
         tools:layout="@layout/fragment_story_list" />
 </navigation>
