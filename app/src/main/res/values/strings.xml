@@ -8,12 +8,16 @@
     <string name="nav_host">Nav Host</string>
 
     <string name="sign_in">News Sign In</string>
+    <string name="sign_out">Sign Out</string>
     <string name="create_acc">Create Account</string>
     <string name="hint_email">Email</string>
     <string name="hint_pass">Password</string>
     <string name="login_title">News Login</string>
     <string name="login_fail">Authentication Failed</string>
+    <string name="account">Account</string>
+    <string name="history">History</string>
 
     <string name="list_title">360 News</string>
     <string name="filter">Filter</string>
+    <string name="liked_articles">Liked Articles</string>
 </resources>
