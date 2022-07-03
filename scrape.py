@@ -9,7 +9,7 @@ from bs4 import BeautifulSoup
 
 
 class Article:
-  def __init__(self, id, headline, date, author, preview, image, image_title, link):
+  def __init__(self, id, headline, date, author, preview, image, image_title, link, outlet):
       self.id = id
       self.headline = headline
       self.date = date
@@ -18,6 +18,7 @@ class Article:
       self.image = image
       self.image_title = image_title
       self.link = link
+      self.outlet = outlet
    
 with open ("/home/bencapper/src/News/news.json") as file:
   data = json.load(file)
@@ -103,7 +104,8 @@ for article in articles:
        'preview': first_line,
        'img_src': img_link,
        'img_name': image_title,
-       'link': link
+       'link': link,
+       'outlet': "www.Timcast.com"
    })
 
    print(f"Title = {tim_article.headline}")

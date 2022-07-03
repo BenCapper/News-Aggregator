@@ -3,9 +3,7 @@ package org.ben.news.models
 import android.os.Parcelable
 import com.google.firebase.database.Exclude
 import kotlinx.android.parcel.Parcelize
-import java.sql.Time
-import java.time.Instant
-import java.util.*
+
 
 @Parcelize
 data class StoryModel(var title: String = "",
@@ -14,6 +12,7 @@ data class StoryModel(var title: String = "",
                       var img_src: String = "",
                       var preview: String = "",
                       var date: String = "",
+                      var outlet: String = "",
                       var link: String = "") : Parcelable
     {
                         @Exclude
@@ -25,6 +24,7 @@ data class StoryModel(var title: String = "",
                                 "img_src" to img_src,
                                 "preview" to preview,
                                 "date" to date,
+                                "outlet" to outlet,
                                 "link" to link
                             )
                         }

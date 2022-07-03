@@ -29,7 +29,7 @@
             android:layout_marginTop="6dp"
             android:layout_marginEnd="44dp"
             android:layout_toEndOf="@+id/imageView2"
-            android:text="@{story.author}"
+            android:text="@{story.outlet}"
             android:textColor="@color/dark"
             android:textSize="12sp" />
 
@@ -47,13 +47,13 @@
 
         <TextView
             android:id="@+id/headline"
-            android:layout_width="286dp"
-            android:layout_height="75dp"
+            android:layout_width="289dp"
+            android:layout_height="53dp"
             android:layout_below="@+id/date"
             android:layout_alignParentEnd="true"
-            android:layout_marginStart="5dp"
+            android:layout_marginStart="3dp"
             android:layout_marginTop="5dp"
-            android:layout_marginEnd="17dp"
+            android:layout_marginEnd="1dp"
             android:layout_toEndOf="@+id/imageView2"
             android:text="@{story.title}"
             android:textColor="@color/black"
