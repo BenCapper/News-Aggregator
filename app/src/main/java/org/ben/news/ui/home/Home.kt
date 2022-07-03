@@ -10,6 +10,7 @@ import android.view.View
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -43,8 +44,8 @@ class Home : AppCompatActivity() {
         homeBinding = HomeBinding.inflate(layoutInflater)
         setContentView(homeBinding.root)
         drawerLayout = homeBinding.drawerLayout
-        //val toolbar = findViewById<Toolbar>(R.id.toolbar)
-        //setSupportActionBar(toolbar)
+        val toolbar = findViewById<Toolbar>(R.id.toolbar)
+        setSupportActionBar(toolbar)
 
         val navHostFragment = supportFragmentManager.
         findFragmentById(R.id.nav_host_fragment) as NavHostFragment
@@ -84,6 +85,7 @@ class Home : AppCompatActivity() {
         loggedInViewModel = ViewModelProvider(this)[LoggedInViewModel::class.java]
         loggedInViewModel.liveFirebaseUser.observe(this) { firebaseUser ->
             if (firebaseUser != null) {
+                updateNavHeader(firebaseUser)
             }
         }
 
@@ -107,7 +109,41 @@ class Home : AppCompatActivity() {
         }
     }
 
-
+    private fun updateNavHeader(currentUser: FirebaseUser) {
+        FirebaseImageManager.checkStorageForExistingProfilePic(currentUser.uid)
+        FirebaseImageManager.imageUri.observe(this) { result ->
+            if (result == Uri.EMPTY) {
+                Timber.i("NO Existing imageUri")
+                if (currentUser.photoUrl != null) {
+                    //if you're a google user
+                    FirebaseImageManager.updateUserImage(
+                        currentUser.uid,
+                        currentUser.photoUrl,
+                        navHeaderBinding.imageView,
+                        true
+                    )
+                } else {
+                    Timber.i("Loading Existing Default imageUri")
+                    FirebaseImageManager.updateDefaultImage(
+                        currentUser.uid,
+                        R.drawable.ic_person,
+                        navHeaderBinding.imageView
+                    )
+                }
+            } else // load existing image from firebase
+            {
+                Timber.i("Loading Existing imageUri")
+                FirebaseImageManager.updateUserImage(
+                    currentUser.uid,
+                    FirebaseImageManager.imageUri.value,
+                    navHeaderBinding.imageView, false
+                )
+            }
+        }
+        navHeaderBinding.navHeaderEmail.text = currentUser.email
+        if(currentUser.displayName != null)
+            navHeaderBinding.navHeaderEmail.text = currentUser.displayName
+    }
 
 
     override fun onSupportNavigateUp(): Boolean {

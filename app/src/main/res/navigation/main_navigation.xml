@@ -8,6 +8,6 @@
     <fragment
         android:id="@+id/storyListFragment"
         android:name="org.ben.news.ui.storyList.StoryListFragment"
-        android:label="fragment_story_list"
+        android:label="@string/list_title"
         tools:layout="@layout/fragment_story_list" />
 </navigation>
