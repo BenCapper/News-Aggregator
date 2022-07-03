@@ -80,6 +80,9 @@ class StoryListFragment : Fragment() {
 
             override fun onQueryTextChange(newText: String?): Boolean {
                 if (newText != null) {
+                    storyListViewModel.search(
+                        newText
+                    )
                 }
                 return true
             }

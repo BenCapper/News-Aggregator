@@ -32,43 +32,57 @@ class StoryListViewModel : ViewModel() {
 
     init { load() }
 
+    private val df = SimpleDateFormat("MM.dd.yy")
+    private val calDate = Calendar.getInstance().time
+    private var formattedDate: String = df.format(calDate)
+    private var today = formattedDate.replace(".","-")
+    private val now = LocalDate.now()
 
-    fun load() {
-        var list = ArrayList<String>()
-        list.add("07-01-22")
-        try {
-            val df = SimpleDateFormat("MM.dd.yy")
-
-            val date = Calendar.getInstance().time
-            val formattedDate: String = df.format(date)
-            var newDate = formattedDate.replace(".","-")
-            Timber.i("FORMATTED : $newDate")
-            list.add(newDate)
-            list.add("06-30-22")
-            var yest = LocalDate.now()
-            var yesterday = yest.minusDays(1)
+    fun getDates(n:Int): ArrayList<String> {
+        var dates = ArrayList<String>()
+        for (i in 1..n) {
+            val yesterday = now.minusDays(i.toLong())
             val year = yesterday.year.toString().substring(2)
             var month = yesterday.month.value.toString()
-            if (month.length == 1){
+            if (month.length == 1) {
                 month = "0$month"
             }
             var day = yesterday.dayOfMonth.toString()
-            if (day.length == 1){
+            if (day.length == 1) {
                 day = "0$day"
             }
-            val yesterdaysDate = "$month-$day-$year"
-            list.add(yesterdaysDate)
+            val date = "$month-$day-$year"
+            dates.add(date)
+        }
+
+        return dates
+    }
 
 
+    fun load() {
+        var list: ArrayList<String>
+        try {
+            list = getDates(5)
             Timber.i("LISTY : $list")
             StoryManager.findAll(list,storyList)
             Timber.i("Load Success : ${storyList.value}")
         }
         catch (e: Exception) {
-            Timber.i("Load Error : $e.message")
+                Timber.i("Load Error : $e.message")
         }
+
     }
 
-
+    fun search( term: String) {
+        var dates: ArrayList<String>
+        try {
+            dates = getDates(5)
+            StoryManager.search(term,dates,storyList)
+            Timber.i("Building Search Success")
+        }
+        catch (e: java.lang.Exception) {
+            Timber.i("Building Search Error : $e.message")
+        }
+    }
 
 }

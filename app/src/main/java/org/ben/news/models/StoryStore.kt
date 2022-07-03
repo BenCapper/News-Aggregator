@@ -10,5 +10,5 @@ interface StoryStore {
     fun create(story: StoryModel)
     fun delete(userId:String, storyId: String)
     fun update(userId:String, storyId: String, story: StoryModel)
-    fun search(userId: String,term: String, storyList: MutableLiveData<List<StoryModel>>)
+    fun search(term: String, dates: ArrayList<String>, storyList: MutableLiveData<List<StoryModel>>)
 }
