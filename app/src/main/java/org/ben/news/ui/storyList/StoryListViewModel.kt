@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseUser
+import org.ben.news.firebase.FirebaseImageManager
 import org.ben.news.firebase.StoryManager
 import org.ben.news.models.StoryModel
 import timber.log.Timber

@@ -24,6 +24,7 @@ import org.ben.news.R
 import org.ben.news.databinding.NavHeaderBinding
 import org.ben.news.firebase.FirebaseImageManager
 import org.ben.news.helpers.readImageUri
+import org.ben.news.helpers.showImagePicker
 import org.ben.news.ui.auth.Login
 import timber.log.Timber
 
@@ -94,7 +95,7 @@ class Home : AppCompatActivity() {
                 startActivity(Intent(this, Login::class.java))
             }
         }
-
+        registerImagePickerCallback()
     }
 
     /**
@@ -106,6 +107,7 @@ class Home : AppCompatActivity() {
         headerView = homeBinding.navView.getHeaderView(0)
         navHeaderBinding = NavHeaderBinding.bind(headerView)
         navHeaderBinding.imageView.setOnClickListener {
+            showImagePicker(intentLauncher)
         }
     }
 

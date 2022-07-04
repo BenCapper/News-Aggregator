@@ -112,7 +112,7 @@ object StoryManager : StoryStore {
                         val localList = ArrayList<StoryModel>()
                         val children = snapshot.children
                         children.forEach {
-                            if (it.getValue(StoryModel::class.java)?.title!!.contains(term)) {
+                            if (it.getValue(StoryModel::class.java)?.title!!.contains(term, true)) {
                                 val story = it.getValue(StoryModel::class.java)
                                 totalList.add(story!!)
                                 localList.add(story!!)

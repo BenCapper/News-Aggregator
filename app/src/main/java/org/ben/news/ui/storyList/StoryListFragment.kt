@@ -1,6 +1,7 @@
 package org.ben.news.ui.storyList
 
 import android.app.AlertDialog
+import android.net.Uri
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.view.*
@@ -8,17 +9,23 @@ import android.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import androidx.preference.PreferenceDataStore
+import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.storage.FirebaseStorage
+import com.squareup.picasso.Picasso
 import org.ben.news.R
 import org.ben.news.adapters.StoryAdapter
 import org.ben.news.databinding.FragmentStoryListBinding
+import org.ben.news.firebase.FirebaseImageManager
 import org.ben.news.helpers.createLoader
 import org.ben.news.helpers.hideLoader
 import org.ben.news.helpers.showLoader
 import org.ben.news.models.StoryModel
 import org.ben.news.ui.auth.LoggedInViewModel
+import java.io.File
 
 class StoryListFragment : Fragment() {
 
@@ -30,6 +37,7 @@ class StoryListFragment : Fragment() {
     lateinit var loader : AlertDialog
     private val loggedInViewModel : LoggedInViewModel by activityViewModels()
     private val storyListViewModel: StoryListViewModel by activityViewModels()
+    private var storage = FirebaseStorage.getInstance().reference
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,6 +57,8 @@ class StoryListFragment : Fragment() {
         activity?.title = getString(R.string.nav_host)
         fragBinding.recyclerView.layoutManager = LinearLayoutManager(activity)
         showLoader(loader, "Downloading Stories")
+
+
         storyListViewModel.observableStoryList.observe(viewLifecycleOwner) { story ->
             story?.let {
                 render(story as ArrayList<StoryModel>)
