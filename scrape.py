@@ -95,6 +95,7 @@ for article in articles:
    title = title.replace(".", " ")
    title = title.replace(","," ")
    title = title.replace("$", " ")
+   title = title.replace("&amp;", "and")
    ref = db.reference(f"stories/Timcast/{found_date}/{title}")
    tim_article = Article(counter,title,found_date,author,first_line,img_link, image_title,link)
    ref.set({

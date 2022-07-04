@@ -21,51 +21,45 @@
 
         <TextView
             android:id="@+id/link"
-            android:layout_width="259dp"
-            android:layout_height="22dp"
+            android:layout_width="wrap_content"
+            android:layout_height="31dp"
             android:layout_below="@+id/headline"
+            android:layout_alignParentStart="true"
             android:layout_alignParentEnd="true"
-            android:layout_marginStart="5dp"
+            android:layout_marginStart="0dp"
             android:layout_marginTop="6dp"
-            android:layout_marginEnd="44dp"
-            android:layout_toEndOf="@+id/imageView2"
+            android:layout_marginEnd="60dp"
             android:text="@{story.outlet}"
             android:textColor="@color/dark"
             android:textSize="12sp" />
 
         <TextView
             android:id="@+id/date"
-            android:layout_width="286dp"
-            android:layout_height="26dp"
+            android:layout_width="395dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/imageView2"
+            android:layout_alignParentStart="true"
             android:layout_alignParentEnd="true"
-            android:layout_marginStart="5dp"
-            android:layout_marginEnd="17dp"
-            android:layout_toEndOf="@+id/imageView2"
+            android:layout_marginStart="0dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="0dp"
             android:text="@{story.date}"
             android:textColor="@color/dark"
             android:textSize="12sp" />
 
         <TextView
             android:id="@+id/headline"
-            android:layout_width="289dp"
-            android:layout_height="53dp"
+            android:layout_width="392dp"
+            android:layout_height="49dp"
             android:layout_below="@+id/date"
+            android:layout_alignParentStart="true"
             android:layout_alignParentEnd="true"
-            android:layout_marginStart="3dp"
+            android:layout_marginStart="0dp"
             android:layout_marginTop="5dp"
-            android:layout_marginEnd="1dp"
-            android:layout_toEndOf="@+id/imageView2"
+            android:layout_marginEnd="3dp"
             android:text="@{story.title}"
             android:textColor="@color/black"
-            android:textSize="16sp" />
-
-        <ImageView
-            android:id="@+id/imageView2"
-            android:layout_width="81dp"
-            android:layout_height="134dp"
-            android:layout_alignParentStart="true"
-            android:layout_marginStart="5dp"
-            tools:srcCompat="@tools:sample/backgrounds/scenic" />
+            android:textSize="14sp" />
 
         <Button
             android:id="@+id/button"
@@ -74,10 +68,22 @@
             android:layout_below="@+id/headline"
             android:layout_alignParentEnd="true"
             android:layout_marginStart="-35dp"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="0dp"
             android:layout_marginEnd="12dp"
             android:layout_toEndOf="@+id/link"
             android:background="@drawable/ic_like_off" />
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="222dp"
+            android:layout_height="77dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="0dp"
+            android:layout_marginTop="0dp"
+            android:layout_marginEnd="200dp"
+            tools:srcCompat="@tools:sample/backgrounds/scenic" />
 
     </RelativeLayout>
 </androidx.cardview.widget.CardView>

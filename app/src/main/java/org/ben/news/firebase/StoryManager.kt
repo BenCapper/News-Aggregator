@@ -8,6 +8,7 @@ import org.ben.news.models.StoryStore
 import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.ArrayList
 
 
 object StoryManager : StoryStore {
@@ -15,30 +16,38 @@ object StoryManager : StoryStore {
     var database: DatabaseReference = FirebaseDatabase.getInstance().reference
 
 
-    override fun findAllByDateOutlet(date: String, outlet: String, storyList: MutableLiveData<List<StoryModel>>){
-        database.child("stories").child(date).child(outlet)
-            .addValueEventListener(object : ValueEventListener {
-                override fun onCancelled(error: DatabaseError) {
-                    Timber.i("Firebase building error : ${error.message}")
-                }
+    override fun findAll(dates: ArrayList<String>, storyList: MutableLiveData<List<StoryModel>>) {
+        var totalList = ArrayList<StoryModel>()
+        dates.sort()
+        dates.reverse()
 
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    val localList = ArrayList<StoryModel>()
-                    val children = snapshot.children
-                    children.forEach {
-                        val story = it.getValue(StoryModel::class.java)
-                        localList.add(story!!)
+        for (date in dates ) {
+            database.child("stories").child("Timcast").child(date)
+                .addValueEventListener(object : ValueEventListener {
+                    override fun onCancelled(error: DatabaseError) {
+                        Timber.i("Firebase building error : ${error.message}")
                     }
-                    database.child("stories").child(date).child(outlet)
-                        .removeEventListener(this)
 
-                    storyList.value = localList
-                    Timber.i("STORYr : ${storyList.value}")
-                }
-            })
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        val localList = ArrayList<StoryModel>()
+                        val children = snapshot.children
+                        children.forEach {
+                            val story = it.getValue(StoryModel::class.java)
+                            totalList.add(story!!)
+                            localList.add(story!!)
+                        }
+                        database.child("stories").child("Timcast").child(date)
+                            .removeEventListener(this)
+                        Timber.i("TOTALLIST=$totalList")
+                        storyList.value = totalList
+                    }
+
+                })
+        }
+
     }
 
-    override fun findAll(dateYest: String, date: String,storyList: MutableLiveData<List<StoryModel>>) {
+    override fun findToday(dateYest: String, date: String,storyList: MutableLiveData<List<StoryModel>>) {
         val totalList = ArrayList<StoryModel>()
         database.child("stories").child("Timcast").child(dateYest)
             .addValueEventListener(object : ValueEventListener {
@@ -53,6 +62,8 @@ object StoryManager : StoryStore {
                         val story = it.getValue(StoryModel::class.java)
                         totalList.add(story!!)
                         localList.add(story!!)
+                        Timber.i("TOTALLIST=$totalList")
+                        Timber.i("LOCALLIST=$localList")
                     }
                     database.child("stories").child("Timcast").child(dateYest)
                         .removeEventListener(this)
@@ -84,29 +95,38 @@ object StoryManager : StoryStore {
 
 
 
-    override fun search(userId: String,term: String, storyList: MutableLiveData<List<StoryModel>>) {
+    override fun search(term: String, dates: ArrayList<String>, storyList: MutableLiveData<List<StoryModel>>) {
 
-        database.child("user-stories").child(userId)
-            .addValueEventListener(object : ValueEventListener {
-                override fun onCancelled(error: DatabaseError) {
-                    Timber.i("Firebase story error : ${error.message}")
-                }
+        var totalList = ArrayList<StoryModel>()
+        dates.sort()
+        dates.reverse()
 
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    val localList = ArrayList<StoryModel>()
-                    val children = snapshot.children
-                    children.forEach {
-                        if (it.getValue(StoryModel::class.java)?.title!!.contains(term) ) {
-                            val story = it.getValue(StoryModel::class.java)
-                            localList.add(story!!)
-                        }
+        for (date in dates ) {
+            database.child("stories").child("Timcast").child(date)
+                .addValueEventListener(object : ValueEventListener {
+                    override fun onCancelled(error: DatabaseError) {
+                        Timber.i("Firebase building error : ${error.message}")
                     }
-                    database.child("user-stories").child(userId)
-                        .removeEventListener(this)
 
-                    storyList.value = localList
-                }
-            })
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        val localList = ArrayList<StoryModel>()
+                        val children = snapshot.children
+                        children.forEach {
+                            if (it.getValue(StoryModel::class.java)?.title!!.contains(term, true)) {
+                                val story = it.getValue(StoryModel::class.java)
+                                totalList.add(story!!)
+                                localList.add(story!!)
+                            }
+                        }
+                        database.child("stories").child("Timcast").child(date)
+                            .removeEventListener(this)
+                        Timber.i("TOTALLIST=$totalList")
+                        storyList.value = totalList
+                    }
+
+                })
+        }
+
     }
 
     override fun findById(userId: String, storyId: String, story: MutableLiveData<StoryModel>) {

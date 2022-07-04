@@ -40,6 +40,19 @@ object FirebaseImageManager {
         }
     }
 
+    fun checkForImage(title: String) {
+        val imageRef = storage.child("${title}.png")
+
+        imageRef.metadata.addOnSuccessListener { //File Exists
+            imageRef.downloadUrl.addOnCompleteListener { task ->
+                imageUri.value = task.result!!
+                Timber.i("URI = ${imageUri.value}")
+            }
+            //File Doesn't Exist
+        }.addOnFailureListener {
+            imageUri.value = Uri.EMPTY
+        }
+    }
     /**
      * This function uploads an image to Firebase Storage and returns the download URL of the image
      *
@@ -100,6 +113,31 @@ object FirebaseImageManager {
                 ) {
                     Timber.i("DX onBitmapLoaded $bitmap")
                     uploadImageToFirebase(userid, bitmap!!,updating)
+                    imageView.setImageBitmap(bitmap)
+                }
+
+                override fun onBitmapFailed(e: java.lang.Exception?,
+                                            errorDrawable: Drawable?) {
+                    Timber.i("DX onBitmapFailed $e")
+                }
+
+                override fun onPrepareLoad(placeHolderDrawable: Drawable?) {
+                    Timber.i("DX onPrepareLoad $placeHolderDrawable")
+                    //uploadImageToFirebase(userid, defaultImageUri.value,updating)
+                }
+            })
+    }
+    fun updateImage(imageUri : Uri?, imageView: ImageView) {
+        Picasso.get().load(imageUri)
+            .resize(200, 200)
+            .transform(customTransformation())
+            .memoryPolicy(MemoryPolicy.NO_CACHE)
+            .centerCrop()
+            .into(object : Target {
+                override fun onBitmapLoaded(bitmap: Bitmap?,
+                                            from: Picasso.LoadedFrom?
+                ) {
+                    Timber.i("DX onBitmapLoaded $bitmap")
                     imageView.setImageBitmap(bitmap)
                 }
 
