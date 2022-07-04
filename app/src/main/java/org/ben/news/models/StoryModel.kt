@@ -13,6 +13,7 @@ data class StoryModel(var title: String = "",
                       var preview: String = "",
                       var date: String = "",
                       var outlet: String = "",
+                      var storage_link: String = "",
                       var link: String = "") : Parcelable
     {
                         @Exclude
@@ -25,6 +26,7 @@ data class StoryModel(var title: String = "",
                                 "preview" to preview,
                                 "date" to date,
                                 "outlet" to outlet,
+                                "storage_link" to storage_link,
                                 "link" to link
                             )
                         }

@@ -30,23 +30,12 @@ class StoryAdapter constructor(private var stories: ArrayList<StoryModel>, priva
     : RecyclerView.Adapter<StoryAdapter.MainHolder>() {
 
     private var storage = FirebaseStorage.getInstance().reference
-    private var titles = ArrayList<HashMap<String, String>>()
-    private var pair = HashMap<String, String>()
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainHolder {
         val binding = CardStoryBinding
             .inflate(LayoutInflater.from(parent.context), parent, false)
         var count = 0
-        for (story in stories){
-            Timber.i("STORY=${story}")
-            storage.child("${story.img_name}.png").downloadUrl.addOnSuccessListener {
-                pair[story.title] = it.toString()
-                Timber.i("TITLES=${pair}")
-                titles.add(pair)
-            }.addOnFailureListener {
-                // Handle any errors
-            }
-        }
 
         return MainHolder(binding)
     }
@@ -72,10 +61,7 @@ class StoryAdapter constructor(private var stories: ArrayList<StoryModel>, priva
         fun bind(story: StoryModel, listener : StoryListener) {
             var imgRef = storage.child(story.img_name)
 
-            for (t in titles){
-                var uri = t[story.title]
-                Glide.with(this.itemView.context).load(uri).into(binding.imageView2)
-            }
+            Glide.with(this.itemView.context).load(story.storage_link).into(binding.imageView2)
             binding.root.setOnClickListener { listener.onStoryClick(story) }
             binding.root.tag = story
             binding.story = story
