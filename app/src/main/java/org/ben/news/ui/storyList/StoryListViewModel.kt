@@ -41,7 +41,7 @@ class StoryListViewModel : ViewModel() {
 
     fun getDates(n:Int): ArrayList<String> {
         var dates = ArrayList<String>()
-        for (i in 1..n) {
+        for (i in 0..n) {
             val yesterday = now.minusDays(i.toLong())
             val year = yesterday.year.toString().substring(2)
             var month = yesterday.month.value.toString()
