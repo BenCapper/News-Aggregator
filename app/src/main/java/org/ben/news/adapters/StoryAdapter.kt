@@ -73,14 +73,9 @@ class StoryAdapter constructor(private var stories: ArrayList<StoryModel>, priva
             var imgRef = storage.child(story.img_name)
 
             for (t in titles){
-
-                if (t[story.title]?.contains(story.title) == false){
-                    Timber.i("GLIDING=${t[story.title]}")
-                    var uri = t[story.title]
-                    Glide.with(this.itemView.context).load(uri).into(binding.imageView2)
-                }
+                var uri = t[story.title]
+                Glide.with(this.itemView.context).load(uri).into(binding.imageView2)
             }
-            //Picasso.get().load("gs://news-a3e22.appspot.com/${imgRef.path}").into(binding.imageView2)
             binding.root.setOnClickListener { listener.onStoryClick(story) }
             binding.root.tag = story
             binding.story = story
