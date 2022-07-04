@@ -1,33 +1,27 @@
 package org.ben.news.ui.storyList
 
 import android.app.AlertDialog
+import android.content.Intent
 import android.net.Uri
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.view.*
 import android.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.navigation.fragment.findNavController
-import androidx.preference.PreferenceDataStore
-import androidx.preference.PreferenceManager
-import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.storage.FirebaseStorage
-import com.squareup.picasso.Picasso
 import org.ben.news.R
 import org.ben.news.adapters.StoryAdapter
+import org.ben.news.adapters.StoryListener
 import org.ben.news.databinding.FragmentStoryListBinding
-import org.ben.news.firebase.FirebaseImageManager
 import org.ben.news.helpers.createLoader
 import org.ben.news.helpers.hideLoader
 import org.ben.news.helpers.showLoader
 import org.ben.news.models.StoryModel
 import org.ben.news.ui.auth.LoggedInViewModel
-import java.io.File
 
-class StoryListFragment : Fragment() {
+
+class StoryListFragment : Fragment(), StoryListener {
 
     companion object {
         fun newInstance() = StoryListFragment()
@@ -102,7 +96,7 @@ class StoryListFragment : Fragment() {
 
 
     private fun render(storyList: ArrayList<StoryModel>) {
-        fragBinding.recyclerView.adapter = StoryAdapter(storyList)
+        fragBinding.recyclerView.adapter = StoryAdapter(storyList, this)
     }
 
     private fun setSwipeRefresh() {
@@ -123,6 +117,15 @@ class StoryListFragment : Fragment() {
         super.onResume()
         showLoader(loader, "Downloading Buildings")
         storyListViewModel.load()
+    }
+
+    override fun onStoryClick(story: StoryModel) {
+        val intent = Intent(Intent.ACTION_VIEW).setData(Uri.parse(story.link))
+        startActivity(intent)
+    }
+
+    override fun onLike(story: StoryModel) {
+
     }
 
     override fun onDestroyView() {

@@ -21,8 +21,12 @@ import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
+interface StoryListener {
+    fun onStoryClick(story: StoryModel)
+    fun onLike(story: StoryModel)
+}
 
-class StoryAdapter constructor(private var stories: ArrayList<StoryModel>)
+class StoryAdapter constructor(private var stories: ArrayList<StoryModel>, private val listener: StoryListener, )
     : RecyclerView.Adapter<StoryAdapter.MainHolder>() {
 
     private var storage = FirebaseStorage.getInstance().reference
@@ -54,7 +58,7 @@ class StoryAdapter constructor(private var stories: ArrayList<StoryModel>)
 
     override fun onBindViewHolder(holder: MainHolder, position: Int) {
         val story = stories[holder.absoluteAdapterPosition]
-        holder.bind(story)
+        holder.bind(story, listener)
     }
 
     override fun getItemCount(): Int = stories.size
@@ -65,7 +69,7 @@ class StoryAdapter constructor(private var stories: ArrayList<StoryModel>)
 
         //val readOnlyRow = readOnly
 
-        fun bind(story: StoryModel) {
+        fun bind(story: StoryModel, listener : StoryListener) {
             var imgRef = storage.child(story.img_name)
 
             for (t in titles){
@@ -77,7 +81,7 @@ class StoryAdapter constructor(private var stories: ArrayList<StoryModel>)
                 }
             }
             //Picasso.get().load("gs://news-a3e22.appspot.com/${imgRef.path}").into(binding.imageView2)
-
+            binding.root.setOnClickListener { listener.onStoryClick(story) }
             binding.root.tag = story
             binding.story = story
             binding.executePendingBindings()
