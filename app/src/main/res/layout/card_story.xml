@@ -15,7 +15,19 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
+        android:layout_height="40dp">
+
+    </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="wrap_content"
+        android:layout_height="130dp" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginTop="130dp"
         android:background="#FFFFFF"
         android:padding="16dp">
 
@@ -27,7 +39,7 @@
             android:layout_alignParentStart="true"
             android:layout_alignParentEnd="true"
             android:layout_marginStart="0dp"
-            android:layout_marginTop="6dp"
+            android:layout_marginTop="8dp"
             android:layout_marginEnd="60dp"
             android:text="@{story.outlet}"
             android:textColor="@color/dark"
@@ -37,11 +49,11 @@
             android:id="@+id/date"
             android:layout_width="395dp"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/imageView2"
             android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
             android:layout_marginStart="0dp"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="2dp"
             android:layout_marginEnd="0dp"
             android:text="@{story.date}"
             android:textColor="@color/dark"
@@ -55,7 +67,7 @@
             android:layout_alignParentStart="true"
             android:layout_alignParentEnd="true"
             android:layout_marginStart="0dp"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="10dp"
             android:layout_marginEnd="3dp"
             android:text="@{story.title}"
             android:textColor="@color/black"
@@ -68,21 +80,10 @@
             android:layout_below="@+id/headline"
             android:layout_alignParentEnd="true"
             android:layout_marginStart="-35dp"
-            android:layout_marginTop="0dp"
+            android:layout_marginTop="3dp"
             android:layout_marginEnd="12dp"
             android:layout_toEndOf="@+id/link"
             android:background="@drawable/ic_like_off" />
-
-        <ImageView
-            android:id="@+id/imageView2"
-            android:layout_width="222dp"
-            android:layout_height="77dp"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true"
-            android:layout_marginStart="0dp"
-            android:layout_marginTop="0dp"
-            android:layout_marginEnd="200dp" />
 
     </RelativeLayout>
 </androidx.cardview.widget.CardView>
