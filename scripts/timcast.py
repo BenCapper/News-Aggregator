@@ -20,6 +20,7 @@ class Article:
      self.link = link
      self.outlet = outlet
      self.storage_link = storage_link
+
  
 with open ("/home/bencapper/src/News/news.json") as file:
  data = json.load(file)
@@ -54,6 +55,7 @@ for article in articles:
       days = found_date.split("-")
       day = f"0{days[1]}"
       found_date = f"{days[0]}-{day}-{days[2]}"
+
 
   # Get link to article
   link = article.find("a")
