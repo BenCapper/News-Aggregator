@@ -25,7 +25,7 @@ object StoryManager : StoryStore {
             database.child("stories").child("Timcast").child(date)
                 .addValueEventListener(object : ValueEventListener {
                     override fun onCancelled(error: DatabaseError) {
-                        Timber.i("Firebase building error : ${error.message}")
+                        Timber.i("Firebase Timcast error : ${error.message}")
                     }
 
                     override fun onDataChange(snapshot: DataSnapshot) {
@@ -37,6 +37,26 @@ object StoryManager : StoryStore {
                             localList.add(story!!)
                         }
                         database.child("stories").child("Timcast").child(date)
+                            .removeEventListener(this)
+                        Timber.i("TOTALLIST=$totalList")
+                    }
+
+                })
+            database.child("stories").child("GB").child(date)
+                .addValueEventListener(object : ValueEventListener {
+                    override fun onCancelled(error: DatabaseError) {
+                        Timber.i("Firebase GB news error : ${error.message}")
+                    }
+
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        val localList = ArrayList<StoryModel>()
+                        val children = snapshot.children
+                        children.forEach {
+                            val story = it.getValue(StoryModel::class.java)
+                            totalList.add(story!!)
+                            localList.add(story!!)
+                        }
+                        database.child("stories").child("GB").child(date)
                             .removeEventListener(this)
                         Timber.i("TOTALLIST=$totalList")
                         storyList.value = totalList
