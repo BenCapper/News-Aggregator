@@ -17,5 +17,6 @@ local.properties
 /scripts/news.json
 /scripts/GB
 /scripts/Timcast
+/scripts/log
 news.json
 /app/google-services.json

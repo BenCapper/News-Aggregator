@@ -1,134 +1,201 @@
-from datetime import datetime
-from uuid import uuid4
-import os
-import requests
-import datetime
 import json
+import os
+from uuid import uuid4
+
 import firebase_admin
-from firebase_admin import credentials, storage, db
+import requests
 from bs4 import BeautifulSoup
+from firebase_admin import credentials, db, storage
+
 
 class Article:
- def __init__(self, headline, date, author, preview, image, image_title, link, outlet, storage_link):
-     self.headline = headline
-     self.date = date
-     self.author = author
-     self.preview = preview
-     self.image = image
-     self.image_title = image_title
-     self.link = link
-     self.outlet = outlet
-     self.storage_link = storage_link
+    def __init__(
+        self,
+        headline,
+        date,
+        author,
+        preview,
+        image,
+        image_title,
+        link,
+        outlet,
+        storage_link,
+    ):
+        self.headline = headline
+        self.date = date
+        self.author = author
+        self.preview = preview
+        self.image = image
+        self.image_title = image_title
+        self.link = link
+        self.outlet = outlet
+        self.storage_link = storage_link
 
 
 path = "/home/bencapper/src/News-Aggregator/scripts/news.json"
 db_url = "https://news-a3e22-default-rtdb.firebaseio.com/"
 bucket = "news-a3e22.appspot.com"
 
+
 def initialise(path, db_url, bucket):
-    with open (path) as file:
+    with open(path) as file:
         data = json.load(file)
         cred = credentials.Certificate(data)
-    firebase_admin.initialize_app(cred, {
-        'databaseURL': db_url,
-        'storageBucket': bucket
-    })
+    firebase_admin.initialize_app(
+        cred, {"databaseURL": db_url, "storageBucket": bucket}
+    )
 
 
-initialise(path,db_url,bucket)
+ref_list = []
+log_file_path = "/home/bencapper/src/News-Aggregator/scripts/log/gbdone.log"
+log_folder_path = "/home/bencapper/src/News-Aggregator/scripts/log/"
+if os.path.exists(log_folder_path):
+    pass
+else:
+    os.mkdir(log_folder_path)
+
+if os.path.exists(log_file_path):
+    open_temp = open(log_file_path, "r")
+    read_temp = open_temp.read()
+    ref_list = read_temp.splitlines()
+else:
+    os.mknod(log_file_path)
+
+initialise(path, db_url, bucket)
 gbPage = requests.get("https://www.gbnews.uk/tag/news").content
 gbSoup = BeautifulSoup(gbPage, features="lxml")
-articles = gbSoup.find_all("div","content")[:-2]
+articles = gbSoup.find_all("div", "content")[:-2]
 for article in articles:
-    images = article.select("img")
 
-    for i in images:
-        img_src = str(i).split(' src="')[1].split(' title="')[0].split("?image")[0]
-        title = str(i).split(' title="')[1].split('" width')[0]
-        img_name = title.replace(" ", "-")
-        
-        if os.path.exists("/home/bencapper/src/News-Aggregator/scripts/GB") == False:
-            os.mkdir("/home/bencapper/src/News-Aggregator/scripts/GB")
-        bucket = storage.bucket()
-        img_title = title.replace(".", " ").replace("‘","'").replace("’", "'").replace(","," ").replace("£", " ").replace("&amp;", "and").replace("  ", " ").replace(" ", "-")
-        img_title += ".jpg"
-        token = ""
+    # get url
+    a = article.select("a")
+    url = str(a).split('href="')[1].split('" itemprop')[0]
 
-        today = datetime.date.today().strftime('%m-%d-%y')
+    # get article page
+    full_page = requests.get(url).content
+    articleSoup = BeautifulSoup(full_page, features="lxml")
 
-        with open(f"/home/bencapper/src/News-Aggregator/scripts/GB/{img_title}", "wb") as img:
-            img.write(requests.get(img_src).content)
-            blob = bucket.blob(f"{img_title}")
+    # headline
+    title = str(articleSoup.select("h1")).split('">')[1].split("</h1>")[0]
+
+    # title with hyphon for storage
+    alt_title = (
+        title.replace("%", "pc")
+        .replace("?", " ")
+        .replace("+", " ")
+        .replace(":", " ")
+        .replace("+", " ")
+        .replace("£", " ")
+        .replace(".", " ")
+        .replace("&amp;", "and")
+        .replace("  ", " ")
+        .replace(" ", "-")
+    )
+
+    # date
+    date = str(articleSoup.select("time")).split("day ")[1].split(" -")[0].split(" ")
+    day = date[0]
+    month = date[1]
+    if month == "January":
+        month = "01"
+    if month == "February":
+        month = "02"
+    if month == "March":
+        month = "03"
+    if month == "April":
+        month = "04"
+    if month == "May":
+        month = "05"
+    if month == "June":
+        month = "06"
+    if month == "July":
+        month = "07"
+    if month == "August":
+        month = "08"
+    if month == "September":
+        month = "09"
+    if month == "October":
+        month = "10"
+    if month == "November":
+        month = "11"
+    if month == "December":
+        month = "12"
+    year = date[2][2:]
+    date = f"{month}-{day}-{year}"
+
+    # author
+    fname = (
+        str(articleSoup.select("address")).split('firstname">')[1].split("</span>")[0]
+    )
+    author = (
+        f"{fname} "
+        + str(articleSoup.select("address")).split('lastname">')[1].split("</span>")[0]
+    )
+
+    gb_image_path = "/home/bencapper/src/News-Aggregator/scripts/GB"
+    # create image folder locally
+    if os.path.exists(gb_image_path) is False:
+        os.mkdir(gb_image_path)
+
+    # Get image source (big image from article page)
+    src = articleSoup.select("img")[1]
+    src = (
+        str(src)
+        .replace("'", '"')
+        .split(' src="')[1]
+        .split('" title="')[0]
+        .replace("&amp;", "&")
+    )
+
+    # replace title spaces for the image title
+    img_title = (
+        title.replace("%", "pc")
+        .replace("?", " ")
+        .replace(":", " ")
+        .replace("+", " ")
+        .replace("£", " ")
+        .replace(".", " ")
+        .replace("&amp;", "and")
+        .replace("  ", " ")
+        .replace(" ", "-")
+    )
+    img_title += ".jpg"
+
+    bucket = storage.bucket()
+    token = ""
+
+    if alt_title not in ref_list:
+        ref_list.append(title)
+        open_temp = open(log_file_path, "a")
+        # use images from folder to upload to storage
+        with open(f"{gb_image_path}/{img_title}", "wb") as img:
+            img.write(requests.get(src).content)
+            blob = bucket.blob(f"GB/{img_title}")
             token = uuid4()
-            metadata = {'firebaseStorageDownloadTokens': token}
- 
-            blob.upload_from_filename(f"/home/bencapper/src/News-Aggregator/scripts/GB/{img_title}")
+            metadata = {"firebaseStorageDownloadTokens": token}
+            blob.upload_from_filename(f"{gb_image_path}/{img_title}")
 
-        storage_link = f"https://firebasestorage.googleapis.com/v0/b/news-a3e22.appspot.com/o/{img_title}?alt=media&token={token}"
-        
-        
+        storage_link = f"https://firebasestorage.googleapis.com/v0/b/news-a3e22.appspot.com/o/GB%2F{img_title}?alt=media&token={token}"
 
-        title = title.replace(".", " ").replace("‘","'").replace("’", "'").replace(","," ").replace("£", " ").replace("&amp;", "and").replace("  ", " ")
+        ref = db.reference(f"stories/GB/{date}/{alt_title}")
+        gb_article = Article(
+            title, date, author, "", src, img_title, url, "www.GBNews.uk", storage_link
+        )
+        ref.set(
+            {
+                "title": title,
+                "date": date,
+                "author": author,
+                "preview": "",
+                "img_src": src,
+                "img_name": img_title,
+                "link": url,
+                "outlet": "www.GBNews.uk",
+                "storage_link": storage_link,
+            }
+        )
 
-
-        links = article.select("a")
-        art_link = ""
-        for link in links: # loop to match title, add right one to article
-            article_link = str(link).split('a class="" href="')[1].split('" itemprop=')[0]
-            if article_link == img_title:
-                art_link = article_link
-        articlePage = requests.get(article_link).content
-        articleSoup = BeautifulSoup(articlePage, features="lxml")
-        article_date = str(articleSoup.find("div","meta")).split('="Published')[1].split("-")[0].split('day ')[1]
-        day = article_date.split(" ")[0]
-        month = article_date.split(" ")[1]
-        year = article_date.split(" ")[2][2:]
-        if month == "January":
-            month = "01"
-        if month == "February":
-            month = "02"
-        if month == "March":
-            month = "03"
-        if month == "April":
-            month = "04"
-        if month == "May":
-            month = "05"
-        if month == "June":
-            month = "06"
-        if month == "July":
-            month = "07"
-        if month == "August":
-            month = "08"
-        if month == "September":
-            month = "09"
-        if month == "October":
-            month = "10"
-        if month == "November":
-            month = "11"
-        if month == "December":
-            month = "12"
-        article_date = f"{month}-{day}-{year}"
-        article_auth_first = str(articleSoup.find("address","name")).split('firstname">')[1].split('</span>')[0]
-        article_auth_last = str(articleSoup.find("address","name")).split('lastname">')[1].split('</span>')[0]
-        article_auth = f"{article_auth_first} {article_auth_last}"
-
-        ref = db.reference(f"stories/GB/{article_date}/{title}")
-        gb_article = Article(title,article_date,article_auth,"",img_src,img_title, art_link,"www.GBNews.uk",storage_link)
-        ref.set({
-            'title':title,
-            'date': article_date,
-            'author': article_auth,
-            'preview': "",
-            'img_src': img_src,
-            'img_name': img_title,
-            'link': article_link,
-            'outlet': "www.GBNews.uk",
-            'storage_link': storage_link
-        })
-        print(title)
-        print(today)
-        print(img_src)
-        print(img_title)
-        print(art_link)
-        print(storage_link)
-
+        open_temp.write(str(alt_title) + "\n")
+        print("GB story added to the database")
+    else:
+        print("Already in the database")
