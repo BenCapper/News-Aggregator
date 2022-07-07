@@ -58,7 +58,6 @@ object StoryManager : StoryStore {
                         }
                         database.child("stories").child("GB").child(date)
                             .removeEventListener(this)
-                        Timber.i("TOTALLIST=$totalList")
                         storyList.value = totalList
                     }
 
@@ -66,6 +65,7 @@ object StoryManager : StoryStore {
         }
 
     }
+
 
     override fun findToday(dateYest: String, date: String,storyList: MutableLiveData<List<StoryModel>>) {
         val totalList = ArrayList<StoryModel>()
@@ -82,8 +82,6 @@ object StoryManager : StoryStore {
                         val story = it.getValue(StoryModel::class.java)
                         totalList.add(story!!)
                         localList.add(story!!)
-                        Timber.i("TOTALLIST=$totalList")
-                        Timber.i("LOCALLIST=$localList")
                     }
                     database.child("stories").child("Timcast").child(dateYest)
                         .removeEventListener(this)
@@ -93,7 +91,6 @@ object StoryManager : StoryStore {
         database.child("stories").child("Timcast").child(date)
             .addValueEventListener(object : ValueEventListener {
                 override fun onCancelled(error: DatabaseError) {
-                    Timber.i("Firebase building error : ${error.message}")
                 }
 
                 override fun onDataChange(snapshot: DataSnapshot) {
@@ -132,7 +129,9 @@ object StoryManager : StoryStore {
                         val localList = ArrayList<StoryModel>()
                         val children = snapshot.children
                         children.forEach {
-                            if (it.getValue(StoryModel::class.java)?.title!!.contains(term, true)) {
+                            if (it.getValue(StoryModel::class.java)?.title!!.contains(term, true) ||
+                                it.getValue(StoryModel::class.java)?.outlet!!.contains(term, true) ||
+                                it.getValue(StoryModel::class.java)?.date!!.contains(term, true)) {
                                 val story = it.getValue(StoryModel::class.java)
                                 totalList.add(story!!)
                                 localList.add(story!!)
@@ -141,6 +140,31 @@ object StoryManager : StoryStore {
                         database.child("stories").child("Timcast").child(date)
                             .removeEventListener(this)
                         Timber.i("TOTALLIST=$totalList")
+                        storyList.value = totalList
+                    }
+
+                })
+
+            database.child("stories").child("GB").child(date)
+                .addValueEventListener(object : ValueEventListener {
+                    override fun onCancelled(error: DatabaseError) {
+                        Timber.i("Firebase building error : ${error.message}")
+                    }
+
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        val localList = ArrayList<StoryModel>()
+                        val children = snapshot.children
+                        children.forEach {
+                            if (it.getValue(StoryModel::class.java)?.title!!.contains(term, true) ||
+                                it.getValue(StoryModel::class.java)?.outlet!!.contains(term, true) ||
+                                it.getValue(StoryModel::class.java)?.date!!.contains(term, true)) {
+                                val story = it.getValue(StoryModel::class.java)
+                                totalList.add(story!!)
+                                localList.add(story!!)
+                            }
+                        }
+                        database.child("stories").child("GB").child(date)
+                            .removeEventListener(this)
                         storyList.value = totalList
                     }
 
