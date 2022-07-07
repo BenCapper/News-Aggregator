@@ -27,10 +27,11 @@
     </style>
 
     <style name="Theme.News.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
-        <item name="colorControlNormal">@color/orange</item>"
-        <item name="actionMenuTextColor">@color/dark</item>"
-        <item name="android:editTextColor">@color/dark</item>
-        <item name="colorAccent">@color/dark</item>
+        <item name="colorControlNormal">@color/white</item>"
+        <item name="colorControlHighlight">@color/grey_500</item>"
+        <item name="actionMenuTextColor">@color/white</item>"
+        <item name="android:editTextColor">@color/white</item>
+        <item name="colorAccent">@color/white</item>
     </style>
     <style name="SearchViewStyle" parent="Widget.AppCompat.SearchView">
         <item name="android:textColor">@color/dark</item>
