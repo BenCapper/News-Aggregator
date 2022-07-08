@@ -18,5 +18,6 @@ local.properties
 /scripts/GB
 /scripts/Timcast
 /scripts/log
+/scripts/__pycache__
 news.json
 /app/google-services.json
