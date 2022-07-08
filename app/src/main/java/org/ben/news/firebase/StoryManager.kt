@@ -62,6 +62,26 @@ object StoryManager : StoryStore {
                     }
 
                 })
+            database.child("stories").child("Gript").child(date)
+                .addValueEventListener(object : ValueEventListener {
+                    override fun onCancelled(error: DatabaseError) {
+                        Timber.i("Firebase Gript error : ${error.message}")
+                    }
+
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        val localList = ArrayList<StoryModel>()
+                        val children = snapshot.children
+                        children.forEach {
+                            val story = it.getValue(StoryModel::class.java)
+                            totalList.add(story!!)
+                            localList.add(story!!)
+                        }
+                        database.child("stories").child("Gript").child(date)
+                            .removeEventListener(this)
+                        storyList.value = totalList
+                    }
+
+                })
         }
 
     }
@@ -164,6 +184,31 @@ object StoryManager : StoryStore {
                             }
                         }
                         database.child("stories").child("GB").child(date)
+                            .removeEventListener(this)
+                        storyList.value = totalList
+                    }
+
+                })
+
+            database.child("stories").child("Gript").child(date)
+                .addValueEventListener(object : ValueEventListener {
+                    override fun onCancelled(error: DatabaseError) {
+                        Timber.i("Firebase Gript error : ${error.message}")
+                    }
+
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        val localList = ArrayList<StoryModel>()
+                        val children = snapshot.children
+                        children.forEach {
+                            if (it.getValue(StoryModel::class.java)?.title!!.contains(term, true) ||
+                                it.getValue(StoryModel::class.java)?.outlet!!.contains(term, true) ||
+                                it.getValue(StoryModel::class.java)?.date!!.contains(term, true)) {
+                                val story = it.getValue(StoryModel::class.java)
+                                totalList.add(story!!)
+                                localList.add(story!!)
+                            }
+                        }
+                        database.child("stories").child("Gript").child(date)
                             .removeEventListener(this)
                         storyList.value = totalList
                     }
