@@ -35,7 +35,6 @@ class StoryAdapter constructor(private var stories: ArrayList<StoryModel>, priva
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainHolder {
         val binding = CardStoryBinding
             .inflate(LayoutInflater.from(parent.context), parent, false)
-        var count = 0
 
         return MainHolder(binding)
     }

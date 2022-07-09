@@ -18,72 +18,32 @@ object StoryManager : StoryStore {
 
     override fun findAll(dates: ArrayList<String>, storyList: MutableLiveData<List<StoryModel>>) {
         var totalList = ArrayList<StoryModel>()
+        var outlets = ArrayList<String>()
         dates.sort()
         dates.reverse()
-
-        for (date in dates ) {
-            database.child("stories").child("Timcast").child(date)
-                .addValueEventListener(object : ValueEventListener {
-                    override fun onCancelled(error: DatabaseError) {
-                        Timber.i("Firebase Timcast error : ${error.message}")
-                    }
-
-                    override fun onDataChange(snapshot: DataSnapshot) {
-                        val localList = ArrayList<StoryModel>()
-                        val children = snapshot.children
-                        children.forEach {
-                            val story = it.getValue(StoryModel::class.java)
-                            totalList.add(story!!)
-                            localList.add(story!!)
+            for (date in dates) {
+                database.child("stories").child(date)
+                    .addValueEventListener(object : ValueEventListener {
+                        override fun onCancelled(error: DatabaseError) {
+                            Timber.i("Firebase Timcast error : ${error.message}")
                         }
-                        database.child("stories").child("Timcast").child(date)
-                            .removeEventListener(this)
-                        Timber.i("TOTALLIST=$totalList")
-                    }
 
-                })
-            database.child("stories").child("GB").child(date)
-                .addValueEventListener(object : ValueEventListener {
-                    override fun onCancelled(error: DatabaseError) {
-                        Timber.i("Firebase GB news error : ${error.message}")
-                    }
+                        override fun onDataChange(snapshot: DataSnapshot) {
+                            val localList = ArrayList<StoryModel>()
+                            val children = snapshot.children
+                            children.forEach {
+                                val story = it.getValue(StoryModel::class.java)
+                                totalList.add(story!!)
+                                localList.add(story!!)
+                                Timber.i("STORY=$story")
+                            }
+                            database.child("stories").child(date)
+                                .removeEventListener(this)
+                            storyList.value = totalList
 
-                    override fun onDataChange(snapshot: DataSnapshot) {
-                        val localList = ArrayList<StoryModel>()
-                        val children = snapshot.children
-                        children.forEach {
-                            val story = it.getValue(StoryModel::class.java)
-                            totalList.add(story!!)
-                            localList.add(story!!)
                         }
-                        database.child("stories").child("GB").child(date)
-                            .removeEventListener(this)
-                        storyList.value = totalList
-                    }
-
-                })
-            database.child("stories").child("Gript").child(date)
-                .addValueEventListener(object : ValueEventListener {
-                    override fun onCancelled(error: DatabaseError) {
-                        Timber.i("Firebase Gript error : ${error.message}")
-                    }
-
-                    override fun onDataChange(snapshot: DataSnapshot) {
-                        val localList = ArrayList<StoryModel>()
-                        val children = snapshot.children
-                        children.forEach {
-                            val story = it.getValue(StoryModel::class.java)
-                            totalList.add(story!!)
-                            localList.add(story!!)
-                        }
-                        database.child("stories").child("Gript").child(date)
-                            .removeEventListener(this)
-                        storyList.value = totalList
-                    }
-
-                })
+                    })
         }
-
     }
 
 
