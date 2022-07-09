@@ -3,25 +3,21 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
 
-    <group android:checkableBehavior="single">
-        <item
-            android:id="@+id/storyListFragment"
-            android:icon="@drawable/ic_launcher_foreground"
-            android:title="@string/list_title" />
-    </group>
-    <item android:title="@string/history">
+
+    <item android:title="@string/articles">
         <menu>
             <item
-                android:id="@+id/nav_location"
-                android:icon="@drawable/ic_launcher_foreground"
+                android:id="@+id/nav_liked"
                 android:title="@string/liked_articles" />
+            <item
+                android:id="@+id/nav_history"
+                android:title="@string/history" />
         </menu>
     </item>
     <item android:title="@string/account">
         <menu>
             <item
                 android:id="@+id/nav_sign_out"
-                android:icon="@drawable/ic_launcher_foreground"
                 android:onClick="signOut"
                 android:title="@string/sign_out" />
         </menu>

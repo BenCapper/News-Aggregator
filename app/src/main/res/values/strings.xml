@@ -20,4 +20,5 @@
     <string name="list_title">360 News</string>
     <string name="filter">Filter</string>
     <string name="liked_articles">Liked Articles</string>
+    <string name="articles">Articles</string>
 </resources>
