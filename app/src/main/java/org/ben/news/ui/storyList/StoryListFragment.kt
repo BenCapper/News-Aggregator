@@ -105,27 +105,11 @@ class StoryListFragment : Fragment(), StoryListener {
         state?.let { fragBinding.recyclerView.layoutManager?.onRestoreInstanceState(it) }
     }
 
-    private fun setSwipeRefresh() {
-        fragBinding.swiperefresh.setOnRefreshListener {
-            fragBinding.swiperefresh.isRefreshing = true
-            showLoader(loader, "Downloading Buildings")
-            storyListViewModel.load()
-
-        }
-    }
-
-    private fun checkSwipeRefresh() {
-        if (fragBinding.swiperefresh.isRefreshing)
-            fragBinding.swiperefresh.isRefreshing = false
-    }
 
     override fun onResume() {
         super.onResume()
         showLoader(loader, "Downloading Buildings")
         storyListViewModel.load()
-
-
-
     }
 
     override fun onStoryClick(story: StoryModel) {
