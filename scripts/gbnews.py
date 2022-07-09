@@ -18,7 +18,7 @@ bucket = "news-a3e22.appspot.com"
 page_url = "https://www.gbnews.uk/tag/news"
 img_path = "/home/bencapper/src/News/GB"
 storage_path = "https://firebasestorage.googleapis.com/v0/b/news-a3e22.appspot.com/o"
-db_path = "stories/GB"
+db_path = "stories"
 outlet = "www.GBNews.uk"
 
 

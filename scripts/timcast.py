@@ -20,7 +20,7 @@ bucket = "news-a3e22.appspot.com"
 page_url = "https://timcast.com/news/"
 img_path = "/home/bencapper/src/News/Timcast"
 storage_path = "https://firebasestorage.googleapis.com/v0/b/news-a3e22.appspot.com/o"
-db_path = "stories/Timcast"
+db_path = "stories"
 outlet = "www.Timcast.com"
 
 
@@ -90,21 +90,21 @@ for article in articles:
 
     if title not in ref_list:
         # add to log list and open file
-        ref_list.append(title)
         open_temp = open(log_file_path, "a")
 
-        # wait before creating timestamp
-        time.sleep(1)
-        now = datetime.now()
-
-        # upload the image to storage
-        with open(f"{img_path}/{img_title}", "wb") as img:
-            img.write(requests.get(img_link).content)
-            blob = bucket.blob(f"Timcast/{img_title}")
-            token = uuid4()
-            metadata = {"firebaseStorageDownloadTokens": token}
-            blob.upload_from_filename(f"{img_path}/{img_title}")
-        storage_link = f"{storage_path}/Timcast%2F{img_title}?alt=media&token={token}"
+        # Try except in case of no image error on source page
+        try:
+            # upload the image to storage
+            with open(f"{img_path}/{img_title}", "wb") as img:
+                img.write(requests.get(img_link).content)
+                blob = bucket.blob(f"Timcast/{img_title}")
+                token = uuid4()
+                metadata = {"firebaseStorageDownloadTokens": token}
+                blob.upload_from_filename(f"{img_path}/{img_title}")
+            storage_link = f"{storage_path}/Timcast%2F{img_title}?alt=media&token={token}"
+        except:
+            print("Image error")
+            storage_link = f"{storage_path}/Timcast%2Fimg_title?alt=media&token=token"
 
         # Push the article to firebase as json
         pushToDB(
@@ -121,6 +121,7 @@ for article in articles:
         )
 
         # write title to log file
+        ref_list.append(title)
         open_temp.write(str(title) + "\n")
         print("Timcast story added to the database")
     else:

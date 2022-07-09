@@ -16,7 +16,7 @@ bucket = "news-a3e22.appspot.com"
 page_url = "https://gript.ie/news/"
 img_path = "/home/bencapper/src/News/Gript"
 storage_path = "https://firebasestorage.googleapis.com/v0/b/news-a3e22.appspot.com/o"
-db_path = "stories/Gript"
+db_path = "stories"
 outlet = "www.Gript.ie"
 
 
