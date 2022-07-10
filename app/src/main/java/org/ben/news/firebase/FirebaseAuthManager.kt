@@ -65,7 +65,7 @@ class FirebaseAuthManager(application: Application) {
             .addOnCompleteListener(application!!.mainExecutor) { task ->
                 if (task.isSuccessful) {
                     liveFirebaseUser.postValue(firebaseAuth!!.currentUser)
-                    firebaseAuth!!.currentUser?.let { create(it) }
+                    firebaseAuth!!.currentUser?.let { UserManager.create(it) }
                     errorStatus.postValue(false)
                 } else {
                     Timber.i("Registration Failure: $task.exception!!.message")
@@ -74,17 +74,6 @@ class FirebaseAuthManager(application: Application) {
             }
     }
 
-   private fun create(firebaseUser: FirebaseUser) {
-        Timber.i("Firebase DB Reference : ${StoryManager.database}")
-        val user: UserModel = UserModel(firebaseUser.uid)
-        val userValues = user.toMap()
-
-        val childAdd = HashMap<String, Any>()
-        childAdd["/users/${user.id}"] = userValues
-
-
-        StoryManager.database.updateChildren(childAdd)
-    }
     /**
      * The function logs out the user and sets the loggedOut and errorStatus LiveData objects to true
      * and false respectively

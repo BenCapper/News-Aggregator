@@ -21,6 +21,7 @@ import org.ben.news.helpers.createLoader
 import org.ben.news.helpers.hideLoader
 import org.ben.news.helpers.showLoader
 import org.ben.news.models.StoryModel
+import org.ben.news.models.UserModel
 import org.ben.news.ui.auth.LoggedInViewModel
 import timber.log.Timber
 
@@ -125,7 +126,7 @@ class StoryListFragment : Fragment(), StoryListener {
     }
 
     override fun onLike(story: StoryModel) {
-
+        var user:UserModel = UserModel(loggedInViewModel.liveFirebaseUser.value!!.uid)
     }
 
     override fun onDestroyView() {
