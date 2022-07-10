@@ -4,7 +4,10 @@ import android.app.Application
 import androidx.lifecycle.MutableLiveData
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import org.ben.news.models.StoryModel
+import org.ben.news.models.UserModel
 import timber.log.Timber
+import java.util.HashMap
 
 class FirebaseAuthManager(application: Application) {
 
@@ -62,6 +65,7 @@ class FirebaseAuthManager(application: Application) {
             .addOnCompleteListener(application!!.mainExecutor) { task ->
                 if (task.isSuccessful) {
                     liveFirebaseUser.postValue(firebaseAuth!!.currentUser)
+                    firebaseAuth!!.currentUser?.let { create(it) }
                     errorStatus.postValue(false)
                 } else {
                     Timber.i("Registration Failure: $task.exception!!.message")
@@ -70,6 +74,17 @@ class FirebaseAuthManager(application: Application) {
             }
     }
 
+   private fun create(firebaseUser: FirebaseUser) {
+        Timber.i("Firebase DB Reference : ${StoryManager.database}")
+        val user: UserModel = UserModel(firebaseUser.uid)
+        val userValues = user.toMap()
+
+        val childAdd = HashMap<String, Any>()
+        childAdd["/users/${user.id}"] = userValues
+
+
+        StoryManager.database.updateChildren(childAdd)
+    }
     /**
      * The function logs out the user and sets the loggedOut and errorStatus LiveData objects to true
      * and false respectively
