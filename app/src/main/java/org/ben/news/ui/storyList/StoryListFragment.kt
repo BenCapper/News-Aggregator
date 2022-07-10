@@ -22,6 +22,7 @@ import org.ben.news.helpers.hideLoader
 import org.ben.news.helpers.showLoader
 import org.ben.news.models.StoryModel
 import org.ben.news.ui.auth.LoggedInViewModel
+import timber.log.Timber
 
 
 class StoryListFragment : Fragment(), StoryListener {
@@ -63,7 +64,6 @@ class StoryListFragment : Fragment(), StoryListener {
             story?.let {
                 render(story as ArrayList<StoryModel>)
                 hideLoader(loader)
-
             }
         }
 
@@ -110,6 +110,7 @@ class StoryListFragment : Fragment(), StoryListener {
         super.onResume()
         showLoader(loader, "Downloading Buildings")
         storyListViewModel.load()
+
     }
 
     override fun onStoryClick(story: StoryModel) {
