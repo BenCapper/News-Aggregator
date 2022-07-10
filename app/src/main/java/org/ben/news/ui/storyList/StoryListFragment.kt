@@ -108,8 +108,13 @@ class StoryListFragment : Fragment(), StoryListener {
 
     override fun onResume() {
         super.onResume()
-        showLoader(loader, "Downloading Buildings")
-        storyListViewModel.load()
+        showLoader(loader, "Downloading stories")
+        loggedInViewModel.liveFirebaseUser.observe(viewLifecycleOwner) { firebaseUser ->
+            if (firebaseUser != null) {
+                storyListViewModel.liveFirebaseUser.value = firebaseUser
+                storyListViewModel.load()
+            }
+        }
 
     }
 

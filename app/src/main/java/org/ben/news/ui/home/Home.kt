@@ -86,7 +86,7 @@ class Home : AppCompatActivity() {
         loggedInViewModel = ViewModelProvider(this)[LoggedInViewModel::class.java]
         loggedInViewModel.liveFirebaseUser.observe(this) { firebaseUser ->
             if (firebaseUser != null) {
-                //updateNavHeader(firebaseUser)
+                updateNavHeader(firebaseUser)
             }
         }
 
