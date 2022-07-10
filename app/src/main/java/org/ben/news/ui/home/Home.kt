@@ -87,6 +87,7 @@ class Home : AppCompatActivity() {
         loggedInViewModel.liveFirebaseUser.observe(this) { firebaseUser ->
             if (firebaseUser != null) {
                 updateNavHeader(firebaseUser)
+                navHeaderBinding.navHeaderEmail.text = loggedInViewModel.liveFirebaseUser.value?.email
             }
         }
 
@@ -106,6 +107,7 @@ class Home : AppCompatActivity() {
         Timber.i("Init Nav Header")
         headerView = homeBinding.navView.getHeaderView(0)
         navHeaderBinding = NavHeaderBinding.bind(headerView)
+
         navHeaderBinding.imageView.setOnClickListener {
             showImagePicker(intentLauncher)
         }

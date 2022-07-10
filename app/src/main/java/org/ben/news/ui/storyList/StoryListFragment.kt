@@ -4,11 +4,14 @@ import android.app.AlertDialog
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.os.Parcelable
 import android.view.*
 import android.widget.SearchView
+import androidx.annotation.Nullable
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.storage.FirebaseStorage
 import org.ben.news.R
 import org.ben.news.adapters.StoryAdapter
@@ -18,7 +21,9 @@ import org.ben.news.helpers.createLoader
 import org.ben.news.helpers.hideLoader
 import org.ben.news.helpers.showLoader
 import org.ben.news.models.StoryModel
+import org.ben.news.models.UserModel
 import org.ben.news.ui.auth.LoggedInViewModel
+import timber.log.Timber
 
 
 class StoryListFragment : Fragment(), StoryListener {
@@ -32,6 +37,8 @@ class StoryListFragment : Fragment(), StoryListener {
     private val loggedInViewModel : LoggedInViewModel by activityViewModels()
     private val storyListViewModel: StoryListViewModel by activityViewModels()
     private var storage = FirebaseStorage.getInstance().reference
+    var state: Parcelable? = null
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,7 +56,8 @@ class StoryListFragment : Fragment(), StoryListener {
         val root = fragBinding.root
         loader = createLoader(requireActivity())
         activity?.title = getString(R.string.nav_host)
-        fragBinding.recyclerView.layoutManager = LinearLayoutManager(activity)
+        fragBinding.recyclerView.layoutManager = activity?.let { LinearLayoutManager(it) }
+
         showLoader(loader, "Downloading Stories")
 
 
@@ -57,10 +65,8 @@ class StoryListFragment : Fragment(), StoryListener {
             story?.let {
                 render(story as ArrayList<StoryModel>)
                 hideLoader(loader)
-                checkSwipeRefresh()
             }
         }
-        setSwipeRefresh()
 
 
 
@@ -97,35 +103,30 @@ class StoryListFragment : Fragment(), StoryListener {
 
     private fun render(storyList: ArrayList<StoryModel>) {
         fragBinding.recyclerView.adapter = StoryAdapter(storyList, this)
+        state?.let { fragBinding.recyclerView.layoutManager?.onRestoreInstanceState(it) }
     }
 
-    private fun setSwipeRefresh() {
-        fragBinding.swiperefresh.setOnRefreshListener {
-            fragBinding.swiperefresh.isRefreshing = true
-            showLoader(loader, "Downloading Buildings")
-            storyListViewModel.load()
-
-        }
-    }
-
-    private fun checkSwipeRefresh() {
-        if (fragBinding.swiperefresh.isRefreshing)
-            fragBinding.swiperefresh.isRefreshing = false
-    }
 
     override fun onResume() {
         super.onResume()
-        showLoader(loader, "Downloading Buildings")
-        storyListViewModel.load()
+        showLoader(loader, "Downloading stories")
+        loggedInViewModel.liveFirebaseUser.observe(viewLifecycleOwner) { firebaseUser ->
+            if (firebaseUser != null) {
+                storyListViewModel.liveFirebaseUser.value = firebaseUser
+                storyListViewModel.load()
+            }
+        }
+
     }
 
     override fun onStoryClick(story: StoryModel) {
         val intent = Intent(Intent.ACTION_VIEW).setData(Uri.parse(story.link))
+        state = fragBinding.recyclerView.layoutManager?.onSaveInstanceState()
         startActivity(intent)
     }
 
     override fun onLike(story: StoryModel) {
-
+        var user:UserModel = UserModel(loggedInViewModel.liveFirebaseUser.value!!.uid)
     }
 
     override fun onDestroyView() {

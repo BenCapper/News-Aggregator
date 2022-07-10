@@ -11,8 +11,11 @@ import com.squareup.picasso.MemoryPolicy
 import com.squareup.picasso.Picasso
 import com.squareup.picasso.Target
 import org.ben.news.helpers.customTransformation
+import org.ben.news.models.StoryModel
+import org.ben.news.models.UserModel
 import timber.log.Timber
 import java.io.ByteArrayOutputStream
+import java.util.HashMap
 
 object FirebaseImageManager {
 
@@ -28,7 +31,7 @@ object FirebaseImageManager {
      * @param userid The user's id
      */
     fun checkStorageForExistingProfilePic(userid: String) {
-        val imageRef = storage.child("photos").child("${userid}.jpg")
+        val imageRef = storage.child("user-images").child("${userid}.jpg")
 
         imageRef.metadata.addOnSuccessListener { //File Exists
             imageRef.downloadUrl.addOnCompleteListener { task ->
@@ -40,19 +43,6 @@ object FirebaseImageManager {
         }
     }
 
-    fun checkForImage(title: String) {
-        val imageRef = storage.child("${title}.png")
-
-        imageRef.metadata.addOnSuccessListener { //File Exists
-            imageRef.downloadUrl.addOnCompleteListener { task ->
-                imageUri.value = task.result!!
-                Timber.i("URI = ${imageUri.value}")
-            }
-            //File Doesn't Exist
-        }.addOnFailureListener {
-            imageUri.value = Uri.EMPTY
-        }
-    }
     /**
      * This function uploads an image to Firebase Storage and returns the download URL of the image
      *
@@ -63,7 +53,7 @@ object FirebaseImageManager {
      */
     fun uploadImageToFirebase(userid: String, bitmap: Bitmap, updating : Boolean) {
         // Get the data from an ImageView as bytes
-        val imageRef = storage.child("photos").child("${userid}.jpg")
+        val imageRef = storage.child("user-images").child("${userid}.jpg")
         //val bitmap = (imageView as BitmapDrawable).bitmap
         val baos = ByteArrayOutputStream()
         lateinit var uploadTask: UploadTask
@@ -79,6 +69,7 @@ object FirebaseImageManager {
                     it.metadata!!.reference!!.downloadUrl.addOnCompleteListener { task ->
                         imageUri.value = task.result!!
                         StoryManager.updateImageRef(userid,imageUri.value.toString())
+                        updateUserImage(userid, imageUri.value.toString())
                     }
                 }
             }
@@ -90,6 +81,16 @@ object FirebaseImageManager {
                 }
             }
         }
+    }
+
+    fun updateUserImage(userId: String, image: String) {
+        var user: UserModel = UserModel(userId, image = image)
+        val userValues = user.toMap()
+
+        val childUpdate : MutableMap<String, Any?> = HashMap()
+        childUpdate["users/${user.id}"] = userValues
+
+        StoryManager.database.updateChildren(childUpdate)
     }
 
     /**
@@ -113,31 +114,6 @@ object FirebaseImageManager {
                 ) {
                     Timber.i("DX onBitmapLoaded $bitmap")
                     uploadImageToFirebase(userid, bitmap!!,updating)
-                    imageView.setImageBitmap(bitmap)
-                }
-
-                override fun onBitmapFailed(e: java.lang.Exception?,
-                                            errorDrawable: Drawable?) {
-                    Timber.i("DX onBitmapFailed $e")
-                }
-
-                override fun onPrepareLoad(placeHolderDrawable: Drawable?) {
-                    Timber.i("DX onPrepareLoad $placeHolderDrawable")
-                    //uploadImageToFirebase(userid, defaultImageUri.value,updating)
-                }
-            })
-    }
-    fun updateImage(imageUri : Uri?, imageView: ImageView) {
-        Picasso.get().load(imageUri)
-            .resize(200, 200)
-            .transform(customTransformation())
-            .memoryPolicy(MemoryPolicy.NO_CACHE)
-            .centerCrop()
-            .into(object : Target {
-                override fun onBitmapLoaded(bitmap: Bitmap?,
-                                            from: Picasso.LoadedFrom?
-                ) {
-                    Timber.i("DX onBitmapLoaded $bitmap")
                     imageView.setImageBitmap(bitmap)
                 }
 

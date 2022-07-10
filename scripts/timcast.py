@@ -89,7 +89,9 @@ for article in articles:
     title = titleFormat(title)
 
     if title not in ref_list:
+
         # add to log list and open file
+        ref_list.append(title)
         open_temp = open(log_file_path, "a")
 
         # Try except in case of no image error on source page
@@ -104,7 +106,7 @@ for article in articles:
             storage_link = f"{storage_path}/Timcast%2F{img_title}?alt=media&token={token}"
         except:
             print("Image error")
-            storage_link = f"{storage_path}/Timcast%2Fimg_title?alt=media&token=token"
+
 
         # Push the article to firebase as json
         pushToDB(
@@ -121,7 +123,7 @@ for article in articles:
         )
 
         # write title to log file
-        ref_list.append(title)
+
         open_temp.write(str(title) + "\n")
         print("Timcast story added to the database")
     else:
