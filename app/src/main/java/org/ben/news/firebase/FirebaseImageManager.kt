@@ -11,8 +11,11 @@ import com.squareup.picasso.MemoryPolicy
 import com.squareup.picasso.Picasso
 import com.squareup.picasso.Target
 import org.ben.news.helpers.customTransformation
+import org.ben.news.models.StoryModel
+import org.ben.news.models.UserModel
 import timber.log.Timber
 import java.io.ByteArrayOutputStream
+import java.util.HashMap
 
 object FirebaseImageManager {
 
@@ -66,6 +69,7 @@ object FirebaseImageManager {
                     it.metadata!!.reference!!.downloadUrl.addOnCompleteListener { task ->
                         imageUri.value = task.result!!
                         StoryManager.updateImageRef(userid,imageUri.value.toString())
+                        updateUserImage(userid, imageUri.value.toString())
                     }
                 }
             }
@@ -77,6 +81,16 @@ object FirebaseImageManager {
                 }
             }
         }
+    }
+
+    fun updateUserImage(userId: String, image: String) {
+        var user: UserModel = UserModel(userId, image = image)
+        val userValues = user.toMap()
+
+        val childUpdate : MutableMap<String, Any?> = HashMap()
+        childUpdate["users/${user.id}"] = userValues
+
+        StoryManager.database.updateChildren(childUpdate)
     }
 
     /**
