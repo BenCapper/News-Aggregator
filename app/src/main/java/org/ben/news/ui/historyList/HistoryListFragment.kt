@@ -10,7 +10,9 @@ import android.view.*
 import android.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.storage.FirebaseStorage
 import org.ben.news.R
 import org.ben.news.adapters.StoryAdapter
@@ -18,6 +20,7 @@ import org.ben.news.adapters.StoryListener
 import org.ben.news.databinding.FragmentHistoryListBinding
 import org.ben.news.databinding.FragmentLikedListBinding
 import org.ben.news.firebase.StoryManager
+import org.ben.news.helpers.SwipeToDeleteCallback
 import org.ben.news.helpers.createLoader
 import org.ben.news.helpers.hideLoader
 import org.ben.news.helpers.showLoader
@@ -68,7 +71,20 @@ class HistoryListFragment : Fragment(), StoryListener {
             }
         }
 
-
+        val swipeDeleteHandler = object : SwipeToDeleteCallback(requireContext()) {
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                showLoader(loader, "Deleting History Article")
+                val adapter = fragBinding.recyclerViewHistory.adapter as StoryAdapter
+                adapter.removeAt(viewHolder.absoluteAdapterPosition)
+                historyListViewModel.delete(
+                    historyListViewModel.liveFirebaseUser.value?.uid!!,
+                    (viewHolder.itemView.tag as StoryModel).title
+                )
+                hideLoader(loader)
+            }
+        }
+        val itemTouchDeleteHelper = ItemTouchHelper(swipeDeleteHandler)
+        itemTouchDeleteHelper.attachToRecyclerView(fragBinding.recyclerViewHistory)
 
         return root
     }

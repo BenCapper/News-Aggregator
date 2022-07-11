@@ -50,4 +50,13 @@ class LikedListViewModel : ViewModel() {
         }
     }
 
+    fun delete(userid: String, id: String) {
+        try {
+            StoryManager.delete(userid,"likes", id)
+            Timber.i("Delete Success")
+        }
+        catch (e: java.lang.Exception) {
+            Timber.i("Delete Error : $e.message")
+        }
+    }
 }

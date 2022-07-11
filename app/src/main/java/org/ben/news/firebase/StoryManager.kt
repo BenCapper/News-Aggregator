@@ -138,11 +138,11 @@ object StoryManager : StoryStore {
 
 
 
-    override fun delete(userId: String, storyId: String) {
+    override fun delete(userId: String, path: String, title: String) {
 
         val childDelete : MutableMap<String, Any?> = HashMap()
-        childDelete["/stories/$storyId"] = null
-        childDelete["/user-stories/$userId/$storyId"] = null
+
+        childDelete["/user-$path/$userId/$title"] = null
 
         database.updateChildren(childDelete)
     }

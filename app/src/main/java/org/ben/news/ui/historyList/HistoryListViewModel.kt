@@ -53,5 +53,13 @@ class HistoryListViewModel : ViewModel() {
         }
     }
 
-
+    fun delete(userid: String, title: String) {
+        try {
+            StoryManager.delete(userid,"history",title)
+            Timber.i("Delete Success")
+        }
+        catch (e: java.lang.Exception) {
+            Timber.i("Delete Error : $e.message")
+        }
+    }
 }
