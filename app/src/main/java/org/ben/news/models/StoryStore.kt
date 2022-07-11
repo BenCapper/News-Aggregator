@@ -4,7 +4,6 @@ import androidx.lifecycle.MutableLiveData
 import com.google.firebase.auth.FirebaseUser
 
 interface StoryStore {
-    fun findToday(dateYest:String, date:String, storyList: MutableLiveData<List<StoryModel>>)
     fun findAll(dates: ArrayList<String>, storyList: MutableLiveData<List<StoryModel>>)
     fun findLiked(userId: String, storyList: MutableLiveData<List<StoryModel>>)
     fun findById(userId:String, storyId: String, story: MutableLiveData<StoryModel>)
