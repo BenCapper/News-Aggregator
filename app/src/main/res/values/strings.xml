@@ -19,6 +19,7 @@
 
     <string name="list_title">360 News</string>
     <string name="filter">Filter</string>
-    <string name="liked_articles">Liked Articles</string>
+    <string name="liked_articles">Saved</string>
+    <string name="saved_article">Article Saved</string>
     <string name="articles">Articles</string>
 </resources>

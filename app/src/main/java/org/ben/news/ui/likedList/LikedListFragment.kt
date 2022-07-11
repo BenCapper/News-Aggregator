@@ -1,21 +1,21 @@
-package org.ben.news.ui.storyList
+package org.ben.news.ui.likedList
 
 import android.app.AlertDialog
 import android.content.Intent
 import android.net.Uri
+import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.os.Parcelable
-import android.os.UserManager
 import android.view.*
 import android.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.storage.FirebaseStorage
 import org.ben.news.R
 import org.ben.news.adapters.StoryAdapter
 import org.ben.news.adapters.StoryListener
+import org.ben.news.databinding.FragmentLikedListBinding
 import org.ben.news.databinding.FragmentStoryListBinding
 import org.ben.news.firebase.StoryManager
 import org.ben.news.helpers.createLoader
@@ -23,19 +23,20 @@ import org.ben.news.helpers.hideLoader
 import org.ben.news.helpers.showLoader
 import org.ben.news.models.StoryModel
 import org.ben.news.ui.auth.LoggedInViewModel
+import org.ben.news.ui.storyList.StoryListFragment
+import org.ben.news.ui.storyList.StoryListViewModel
 import splitties.snackbar.snack
 
-
-class StoryListFragment : Fragment(), StoryListener {
+class LikedListFragment : Fragment(), StoryListener {
 
     companion object {
         fun newInstance() = StoryListFragment()
     }
-    private var _fragBinding: FragmentStoryListBinding? = null
+    private var _fragBinding: FragmentLikedListBinding? = null
     private val fragBinding get() = _fragBinding!!
     lateinit var loader : AlertDialog
     private val loggedInViewModel : LoggedInViewModel by activityViewModels()
-    private val storyListViewModel: StoryListViewModel by activityViewModels()
+    private val likedListViewModel: LikedListViewModel by activityViewModels()
     private var storage = FirebaseStorage.getInstance().reference
     var state: Parcelable? = null
 
@@ -52,16 +53,16 @@ class StoryListFragment : Fragment(), StoryListener {
         savedInstanceState: Bundle?
     ): View {
 
-        _fragBinding = FragmentStoryListBinding.inflate(inflater, container, false)
+        _fragBinding = FragmentLikedListBinding.inflate(inflater, container, false)
         val root = fragBinding.root
         loader = createLoader(requireActivity())
         activity?.title = getString(R.string.nav_host)
-        fragBinding.recyclerView.layoutManager = activity?.let { LinearLayoutManager(it) }
+        fragBinding.recyclerViewLiked.layoutManager = activity?.let { LinearLayoutManager(it) }
 
         showLoader(loader, "Downloading Stories")
 
 
-        storyListViewModel.observableStoryList.observe(viewLifecycleOwner) { story ->
+        likedListViewModel.observableLikedList.observe(viewLifecycleOwner) { story ->
             story?.let {
                 render(story as ArrayList<StoryModel>)
                 hideLoader(loader)
@@ -90,7 +91,7 @@ class StoryListFragment : Fragment(), StoryListener {
 
             override fun onQueryTextChange(newText: String?): Boolean {
                 if (newText != null) {
-                    storyListViewModel.search(
+                    likedListViewModel.search(
                         newText
                     )
                 }
@@ -102,8 +103,8 @@ class StoryListFragment : Fragment(), StoryListener {
 
 
     private fun render(storyList: ArrayList<StoryModel>) {
-        fragBinding.recyclerView.adapter = StoryAdapter(storyList, this)
-        state?.let { fragBinding.recyclerView.layoutManager?.onRestoreInstanceState(it) }
+        fragBinding.recyclerViewLiked.adapter = StoryAdapter(storyList, this)
+        state?.let { fragBinding.recyclerViewLiked.layoutManager?.onRestoreInstanceState(it) }
     }
 
 
@@ -112,8 +113,8 @@ class StoryListFragment : Fragment(), StoryListener {
         showLoader(loader, "Downloading stories")
         loggedInViewModel.liveFirebaseUser.observe(viewLifecycleOwner) { firebaseUser ->
             if (firebaseUser != null) {
-                storyListViewModel.liveFirebaseUser.value = firebaseUser
-                storyListViewModel.load()
+                likedListViewModel.liveFirebaseUser.value = firebaseUser
+                likedListViewModel.load()
             }
         }
 
@@ -121,7 +122,7 @@ class StoryListFragment : Fragment(), StoryListener {
 
     override fun onStoryClick(story: StoryModel) {
         val intent = Intent(Intent.ACTION_VIEW).setData(Uri.parse(story.link))
-        state = fragBinding.recyclerView.layoutManager?.onSaveInstanceState()
+        state = fragBinding.recyclerViewLiked.layoutManager?.onSaveInstanceState()
         startActivity(intent)
     }
 

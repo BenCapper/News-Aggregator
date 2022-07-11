@@ -87,7 +87,7 @@ class Home : AppCompatActivity() {
         loggedInViewModel.liveFirebaseUser.observe(this) { firebaseUser ->
             if (firebaseUser != null) {
                 updateNavHeader(firebaseUser)
-                navHeaderBinding.navHeaderEmail.text = loggedInViewModel.liveFirebaseUser.value?.email
+                navHeaderBinding.navHeaderEmail.text = loggedInViewModel.liveFirebaseUser.value?.email!!.split("@")[0]
             }
         }
 
@@ -165,6 +165,12 @@ class Home : AppCompatActivity() {
         val intent = Intent(this, Login::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
         startActivity(intent)
+    }
+
+    fun savedArticles(item: MenuItem) {
+        findNavController(R.id.nav_host_fragment).navigate(R.id.likedListFragment)
+        findViewById<DrawerLayout>(R.id.drawer_layout).closeDrawers()
+        Timber.i("UserId = ${loggedInViewModel.liveFirebaseUser.value!!.uid}")
     }
 
     private fun registerImagePickerCallback() {
