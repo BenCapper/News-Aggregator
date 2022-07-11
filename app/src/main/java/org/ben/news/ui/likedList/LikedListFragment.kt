@@ -13,8 +13,10 @@ import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.storage.FirebaseStorage
 import org.ben.news.R
+import org.ben.news.adapters.NoSaveAdapter
 import org.ben.news.adapters.StoryAdapter
 import org.ben.news.adapters.StoryListener
+import org.ben.news.adapters.StoryNoSaveListener
 import org.ben.news.databinding.FragmentLikedListBinding
 import org.ben.news.databinding.FragmentStoryListBinding
 import org.ben.news.firebase.StoryManager
@@ -27,7 +29,7 @@ import org.ben.news.ui.storyList.StoryListFragment
 import org.ben.news.ui.storyList.StoryListViewModel
 import splitties.snackbar.snack
 
-class LikedListFragment : Fragment(), StoryListener {
+class LikedListFragment : Fragment(), StoryNoSaveListener {
 
     companion object {
         fun newInstance() = StoryListFragment()
@@ -103,7 +105,7 @@ class LikedListFragment : Fragment(), StoryListener {
 
 
     private fun render(storyList: ArrayList<StoryModel>) {
-        fragBinding.recyclerViewLiked.adapter = StoryAdapter(storyList, this)
+        fragBinding.recyclerViewLiked.adapter = NoSaveAdapter(storyList, this)
         state?.let { fragBinding.recyclerViewLiked.layoutManager?.onRestoreInstanceState(it) }
     }
 
@@ -127,10 +129,7 @@ class LikedListFragment : Fragment(), StoryListener {
         startActivity(intent)
     }
 
-    override fun onLike(story: StoryModel) {
-        //StoryManager.create(loggedInViewModel.liveFirebaseUser.value!!.uid,"likes", story)
-        //view?.snack(R.string.saved_article)
-    }
+
 
     override fun onDestroyView() {
         super.onDestroyView()
