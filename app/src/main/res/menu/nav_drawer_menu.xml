@@ -8,6 +8,7 @@
         <menu>
             <item
                 android:id="@+id/nav_liked"
+                android:onClick="savedArticles"
                 android:title="@string/liked_articles" />
             <item
                 android:id="@+id/nav_history"

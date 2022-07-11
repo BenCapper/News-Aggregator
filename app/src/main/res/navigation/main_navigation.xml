@@ -9,5 +9,16 @@
         android:id="@+id/storyListFragment"
         android:name="org.ben.news.ui.storyList.StoryListFragment"
         android:label="@string/list_title"
-        tools:layout="@layout/fragment_story_list" />
+        tools:layout="@layout/fragment_story_list" >
+        <action
+            android:id="@+id/action_storyListFragment_to_likedListFragment"
+            app:destination="@id/likedListFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim" />
+    </fragment>
+    <fragment
+        android:id="@+id/likedListFragment"
+        android:name="org.ben.news.ui.likedList.LikedListFragment"
+        android:label="fragment_liked_list"
+        tools:layout="@layout/fragment_liked_list" />
 </navigation>
