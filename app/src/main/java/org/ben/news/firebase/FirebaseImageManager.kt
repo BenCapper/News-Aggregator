@@ -69,7 +69,6 @@ object FirebaseImageManager {
                     it.metadata!!.reference!!.downloadUrl.addOnCompleteListener { task ->
                         imageUri.value = task.result!!
                         StoryManager.updateImageRef(userid,imageUri.value.toString())
-                        updateUserImage(userid, imageUri.value.toString())
                     }
                 }
             }
@@ -83,15 +82,6 @@ object FirebaseImageManager {
         }
     }
 
-    fun updateUserImage(userId: String, image: String) {
-        var user: UserModel = UserModel(userId, image = image)
-        val userValues = user.toMap()
-
-        val childUpdate : MutableMap<String, Any?> = HashMap()
-        childUpdate["users/${user.id}"] = userValues
-
-        StoryManager.database.updateChildren(childUpdate)
-    }
 
     /**
      * It uploads an image to firebase storage.

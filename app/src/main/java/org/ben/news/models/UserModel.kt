@@ -7,6 +7,7 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class UserModel(var id: String = "",
+                     var email: String = "",
                       var liked: ArrayList<String> = ArrayList(),
                       var history: ArrayList<String> = ArrayList(),
                       var image: String = "") : Parcelable
@@ -15,6 +16,7 @@ data class UserModel(var id: String = "",
     fun toMap(): Map<String, Any?> {
         return mapOf(
             "id" to id,
+            "email" to email,
             "liked" to liked,
             "history" to history,
             "image" to image,

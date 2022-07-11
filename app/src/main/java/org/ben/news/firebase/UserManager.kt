@@ -34,14 +34,14 @@ object UserManager : UserStore {
 
     override fun create(firebaseUser: FirebaseUser){
         Timber.i("Firebase DB Reference : ${StoryManager.database}")
-        val user: UserModel = UserModel(firebaseUser.uid)
+        val user= UserModel(firebaseUser.uid, firebaseUser.email!!)
         val userValues = user.toMap()
 
         val childAdd = HashMap<String, Any>()
         childAdd["/users/${user.id}"] = userValues
 
 
-        StoryManager.database.updateChildren(childAdd)
+        database.updateChildren(childAdd)
     }
 
     override fun delete(userId: String, storyId: String) {
