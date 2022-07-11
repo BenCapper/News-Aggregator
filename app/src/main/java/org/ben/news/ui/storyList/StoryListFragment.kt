@@ -120,13 +120,14 @@ class StoryListFragment : Fragment(), StoryListener {
     }
 
     override fun onStoryClick(story: StoryModel) {
+        StoryManager.create(loggedInViewModel.liveFirebaseUser.value!!.uid,"history", story)
         val intent = Intent(Intent.ACTION_VIEW).setData(Uri.parse(story.link))
         state = fragBinding.recyclerView.layoutManager?.onSaveInstanceState()
         startActivity(intent)
     }
 
     override fun onLike(story: StoryModel) {
-        StoryManager.create(loggedInViewModel.liveFirebaseUser.value!!.uid, story)
+        StoryManager.create(loggedInViewModel.liveFirebaseUser.value!!.uid,"likes", story)
         view?.snack(R.string.saved_article)
     }
 

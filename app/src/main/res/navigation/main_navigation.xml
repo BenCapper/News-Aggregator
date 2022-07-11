@@ -15,10 +15,18 @@
             app:destination="@id/likedListFragment"
             app:enterAnim="@anim/nav_default_enter_anim"
             app:exitAnim="@anim/nav_default_exit_anim" />
+        <action
+            android:id="@+id/action_storyListFragment_to_historyListFragment"
+            app:destination="@id/historyListFragment" />
     </fragment>
     <fragment
         android:id="@+id/likedListFragment"
         android:name="org.ben.news.ui.likedList.LikedListFragment"
         android:label="fragment_liked_list"
         tools:layout="@layout/fragment_liked_list" />
+    <fragment
+        android:id="@+id/historyListFragment"
+        android:name="org.ben.news.ui.historyList.HistoryListFragment"
+        android:label="fragment_history_list"
+        tools:layout="@layout/fragment_history_list" />
 </navigation>

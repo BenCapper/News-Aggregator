@@ -12,6 +12,7 @@
                 android:title="@string/liked_articles" />
             <item
                 android:id="@+id/nav_history"
+                android:onClick="historyArticles"
                 android:title="@string/history" />
         </menu>
     </item>
