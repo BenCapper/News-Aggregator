@@ -87,7 +87,7 @@ class Home : AppCompatActivity() {
         loggedInViewModel.liveFirebaseUser.observe(this) { firebaseUser ->
             if (firebaseUser != null) {
                 updateNavHeader(firebaseUser)
-                navHeaderBinding.navHeaderEmail.text = loggedInViewModel.liveFirebaseUser.value?.email
+                navHeaderBinding.navHeaderEmail.text = loggedInViewModel.liveFirebaseUser.value?.email!!.split("@")[0]
             }
         }
 

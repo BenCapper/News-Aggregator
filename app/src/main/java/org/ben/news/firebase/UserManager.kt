@@ -53,13 +53,12 @@ object UserManager : UserStore {
         database.updateChildren(childDelete)
     }
 
-    override fun update(userId: String, storyId: String, story: StoryModel) {
+    override fun update(userId: String, user: UserModel) {
 
-        val storyValues = story.toMap()
+        val userValues = user.toMap()
 
         val childUpdate : MutableMap<String, Any?> = HashMap()
-        childUpdate["stories/$storyId"] = storyValues
-        childUpdate["user-stories/$userId/$storyId"] = storyValues
+        childUpdate["users/$userId"] = userValues
 
         database.updateChildren(childUpdate)
     }
