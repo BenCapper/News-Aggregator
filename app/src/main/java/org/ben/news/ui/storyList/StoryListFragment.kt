@@ -5,25 +5,25 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.os.Parcelable
+import android.os.UserManager
 import android.view.*
 import android.widget.SearchView
-import androidx.annotation.Nullable
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.storage.FirebaseStorage
 import org.ben.news.R
 import org.ben.news.adapters.StoryAdapter
 import org.ben.news.adapters.StoryListener
 import org.ben.news.databinding.FragmentStoryListBinding
+import org.ben.news.firebase.StoryManager
 import org.ben.news.helpers.createLoader
 import org.ben.news.helpers.hideLoader
 import org.ben.news.helpers.showLoader
 import org.ben.news.models.StoryModel
-import org.ben.news.models.UserModel
 import org.ben.news.ui.auth.LoggedInViewModel
-import timber.log.Timber
+import splitties.snackbar.snack
 
 
 class StoryListFragment : Fragment(), StoryListener {
@@ -126,7 +126,8 @@ class StoryListFragment : Fragment(), StoryListener {
     }
 
     override fun onLike(story: StoryModel) {
-        var user:UserModel = UserModel(loggedInViewModel.liveFirebaseUser.value!!.uid)
+        StoryManager.create(loggedInViewModel.liveFirebaseUser.value!!.uid, story)
+        view?.snack(R.string.saved_article)
     }
 
     override fun onDestroyView() {

@@ -141,17 +141,11 @@ object StoryManager : StoryStore {
             }
     }
 
-    override fun create(story: StoryModel) {
-        val key = database.child("story").push().key
-        if (key == null) {
-            Timber.i("Firebase Error : Key Empty")
-            return
-        }
-        story.title = key
+    override fun create(userId: String, story: StoryModel) {
         val storyValues = story.toMap()
         var newDate = story.date.replace(".","-")
         val childAdd = HashMap<String, Any>()
-        childAdd["/stories/$newDate/$key"] = storyValues
+        childAdd["/user-likes/$userId/$newDate/${story.title}"] = storyValues
 
         database.updateChildren(childAdd)
     }

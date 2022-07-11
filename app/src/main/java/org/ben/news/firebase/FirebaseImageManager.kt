@@ -11,11 +11,8 @@ import com.squareup.picasso.MemoryPolicy
 import com.squareup.picasso.Picasso
 import com.squareup.picasso.Target
 import org.ben.news.helpers.customTransformation
-import org.ben.news.models.StoryModel
-import org.ben.news.models.UserModel
 import timber.log.Timber
 import java.io.ByteArrayOutputStream
-import java.util.HashMap
 
 object FirebaseImageManager {
 
