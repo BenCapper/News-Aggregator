@@ -34,7 +34,7 @@ object UserManager : UserStore {
 
     override fun create(firebaseUser: FirebaseUser){
         Timber.i("Firebase DB Reference : ${StoryManager.database}")
-        val user= UserModel(firebaseUser.uid, firebaseUser.email!!)
+        val user= UserModel(firebaseUser.uid)
         val userValues = user.toMap()
 
         val childAdd = HashMap<String, Any>()
