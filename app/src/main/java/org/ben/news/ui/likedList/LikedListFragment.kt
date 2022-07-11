@@ -10,14 +10,19 @@ import android.view.*
 import android.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.storage.FirebaseStorage
 import org.ben.news.R
+import org.ben.news.adapters.NoSaveAdapter
 import org.ben.news.adapters.StoryAdapter
 import org.ben.news.adapters.StoryListener
+import org.ben.news.adapters.StoryNoSaveListener
 import org.ben.news.databinding.FragmentLikedListBinding
 import org.ben.news.databinding.FragmentStoryListBinding
 import org.ben.news.firebase.StoryManager
+import org.ben.news.helpers.SwipeToDeleteCallback
 import org.ben.news.helpers.createLoader
 import org.ben.news.helpers.hideLoader
 import org.ben.news.helpers.showLoader
@@ -27,7 +32,7 @@ import org.ben.news.ui.storyList.StoryListFragment
 import org.ben.news.ui.storyList.StoryListViewModel
 import splitties.snackbar.snack
 
-class LikedListFragment : Fragment(), StoryListener {
+class LikedListFragment : Fragment(), StoryNoSaveListener {
 
     companion object {
         fun newInstance() = StoryListFragment()
@@ -69,7 +74,20 @@ class LikedListFragment : Fragment(), StoryListener {
             }
         }
 
-
+        val swipeDeleteHandler = object : SwipeToDeleteCallback(requireContext()) {
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                showLoader(loader, "Deleting History Article")
+                val adapter = fragBinding.recyclerViewLiked.adapter as NoSaveAdapter
+                adapter.removeAt(viewHolder.absoluteAdapterPosition)
+                likedListViewModel.delete(
+                    likedListViewModel.liveFirebaseUser.value?.uid!!,
+                    (viewHolder.itemView.tag as StoryModel).title
+                )
+                hideLoader(loader)
+            }
+        }
+        val itemTouchDeleteHelper = ItemTouchHelper(swipeDeleteHandler)
+        itemTouchDeleteHelper.attachToRecyclerView(fragBinding.recyclerViewLiked)
 
         return root
     }
@@ -103,7 +121,7 @@ class LikedListFragment : Fragment(), StoryListener {
 
 
     private fun render(storyList: ArrayList<StoryModel>) {
-        fragBinding.recyclerViewLiked.adapter = StoryAdapter(storyList, this)
+        fragBinding.recyclerViewLiked.adapter = NoSaveAdapter(storyList, this)
         state?.let { fragBinding.recyclerViewLiked.layoutManager?.onRestoreInstanceState(it) }
     }
 
@@ -121,15 +139,13 @@ class LikedListFragment : Fragment(), StoryListener {
     }
 
     override fun onStoryClick(story: StoryModel) {
+        StoryManager.create(loggedInViewModel.liveFirebaseUser.value!!.uid, "history",story)
         val intent = Intent(Intent.ACTION_VIEW).setData(Uri.parse(story.link))
         state = fragBinding.recyclerViewLiked.layoutManager?.onSaveInstanceState()
         startActivity(intent)
     }
 
-    override fun onLike(story: StoryModel) {
-        StoryManager.create(loggedInViewModel.liveFirebaseUser.value!!.uid, story)
-        view?.snack(R.string.saved_article)
-    }
+
 
     override fun onDestroyView() {
         super.onDestroyView()

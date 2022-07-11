@@ -1,4 +1,4 @@
-package org.ben.news.ui.likedList
+package org.ben.news.ui.historyList
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -7,14 +7,17 @@ import com.google.firebase.auth.FirebaseUser
 import org.ben.news.firebase.StoryManager
 import org.ben.news.models.StoryModel
 import timber.log.Timber
+import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.util.*
+import kotlin.collections.ArrayList
 
-
-class LikedListViewModel : ViewModel() {
-    private val likedList =
+class HistoryListViewModel : ViewModel() {
+    private val historyList =
         MutableLiveData<List<StoryModel>>()
 
-    val observableLikedList: LiveData<List<StoryModel>>
-        get() = likedList
+    val observableHistoryList: LiveData<List<StoryModel>>
+        get() = historyList
 
     private val story = MutableLiveData<StoryModel>()
 
@@ -31,8 +34,8 @@ class LikedListViewModel : ViewModel() {
 
     fun load() {
         try {
-            StoryManager.find(liveFirebaseUser.value!!.uid,"likes",likedList)
-            Timber.i("Load Success : ${likedList.value}")
+            StoryManager.find(liveFirebaseUser.value!!.uid,"history",historyList)
+            Timber.i("Load Success : ${historyList.value}")
         }
         catch (e: Exception) {
             Timber.i("Load Error : $e.message")
@@ -42,7 +45,7 @@ class LikedListViewModel : ViewModel() {
 
     fun search( term: String) {
         try {
-            StoryManager.search(term,liveFirebaseUser.value!!.uid,"likes",likedList)
+            StoryManager.search(term,liveFirebaseUser.value!!.uid,"history",historyList)
             Timber.i("Search Success")
         }
         catch (e: java.lang.Exception) {
@@ -50,9 +53,9 @@ class LikedListViewModel : ViewModel() {
         }
     }
 
-    fun delete(userid: String, id: String) {
+    fun delete(userid: String, title: String) {
         try {
-            StoryManager.delete(userid,"likes", id)
+            StoryManager.delete(userid,"history",title)
             Timber.i("Delete Success")
         }
         catch (e: java.lang.Exception) {

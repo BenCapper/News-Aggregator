@@ -1,41 +1,44 @@
-package org.ben.news.ui.storyList
+package org.ben.news.ui.historyList
 
 import android.app.AlertDialog
 import android.content.Intent
 import android.net.Uri
+import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.os.Parcelable
-import android.os.UserManager
 import android.view.*
 import android.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.material.snackbar.Snackbar
+import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.storage.FirebaseStorage
 import org.ben.news.R
 import org.ben.news.adapters.StoryAdapter
 import org.ben.news.adapters.StoryListener
-import org.ben.news.databinding.FragmentStoryListBinding
+import org.ben.news.databinding.FragmentHistoryListBinding
+import org.ben.news.databinding.FragmentLikedListBinding
 import org.ben.news.firebase.StoryManager
+import org.ben.news.helpers.SwipeToDeleteCallback
 import org.ben.news.helpers.createLoader
 import org.ben.news.helpers.hideLoader
 import org.ben.news.helpers.showLoader
 import org.ben.news.models.StoryModel
 import org.ben.news.ui.auth.LoggedInViewModel
+import org.ben.news.ui.likedList.LikedListViewModel
+import org.ben.news.ui.storyList.StoryListFragment
 import splitties.snackbar.snack
 
-
-class StoryListFragment : Fragment(), StoryListener {
-
+class HistoryListFragment : Fragment(), StoryListener {
     companion object {
         fun newInstance() = StoryListFragment()
     }
-    private var _fragBinding: FragmentStoryListBinding? = null
+    private var _fragBinding: FragmentHistoryListBinding? = null
     private val fragBinding get() = _fragBinding!!
     lateinit var loader : AlertDialog
     private val loggedInViewModel : LoggedInViewModel by activityViewModels()
-    private val storyListViewModel: StoryListViewModel by activityViewModels()
+    private val historyListViewModel: HistoryListViewModel by activityViewModels()
     private var storage = FirebaseStorage.getInstance().reference
     var state: Parcelable? = null
 
@@ -52,23 +55,36 @@ class StoryListFragment : Fragment(), StoryListener {
         savedInstanceState: Bundle?
     ): View {
 
-        _fragBinding = FragmentStoryListBinding.inflate(inflater, container, false)
+        _fragBinding = FragmentHistoryListBinding.inflate(inflater, container, false)
         val root = fragBinding.root
         loader = createLoader(requireActivity())
         activity?.title = getString(R.string.nav_host)
-        fragBinding.recyclerView.layoutManager = activity?.let { LinearLayoutManager(it) }
+        fragBinding.recyclerViewHistory.layoutManager = activity?.let { LinearLayoutManager(it) }
 
         showLoader(loader, "Downloading Stories")
 
 
-        storyListViewModel.observableStoryList.observe(viewLifecycleOwner) { story ->
+        historyListViewModel.observableHistoryList.observe(viewLifecycleOwner) { story ->
             story?.let {
                 render(story as ArrayList<StoryModel>)
                 hideLoader(loader)
             }
         }
 
-
+        val swipeDeleteHandler = object : SwipeToDeleteCallback(requireContext()) {
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                showLoader(loader, "Deleting History Article")
+                val adapter = fragBinding.recyclerViewHistory.adapter as StoryAdapter
+                adapter.removeAt(viewHolder.absoluteAdapterPosition)
+                historyListViewModel.delete(
+                    historyListViewModel.liveFirebaseUser.value?.uid!!,
+                    (viewHolder.itemView.tag as StoryModel).title
+                )
+                hideLoader(loader)
+            }
+        }
+        val itemTouchDeleteHelper = ItemTouchHelper(swipeDeleteHandler)
+        itemTouchDeleteHelper.attachToRecyclerView(fragBinding.recyclerViewHistory)
 
         return root
     }
@@ -90,7 +106,7 @@ class StoryListFragment : Fragment(), StoryListener {
 
             override fun onQueryTextChange(newText: String?): Boolean {
                 if (newText != null) {
-                    storyListViewModel.search(
+                    historyListViewModel.search(
                         newText
                     )
                 }
@@ -102,8 +118,8 @@ class StoryListFragment : Fragment(), StoryListener {
 
 
     private fun render(storyList: ArrayList<StoryModel>) {
-        fragBinding.recyclerView.adapter = StoryAdapter(storyList, this)
-        state?.let { fragBinding.recyclerView.layoutManager?.onRestoreInstanceState(it) }
+        fragBinding.recyclerViewHistory.adapter = StoryAdapter(storyList, this)
+        state?.let { fragBinding.recyclerViewHistory.layoutManager?.onRestoreInstanceState(it) }
     }
 
 
@@ -112,22 +128,22 @@ class StoryListFragment : Fragment(), StoryListener {
         showLoader(loader, "Downloading stories")
         loggedInViewModel.liveFirebaseUser.observe(viewLifecycleOwner) { firebaseUser ->
             if (firebaseUser != null) {
-                storyListViewModel.liveFirebaseUser.value = firebaseUser
-                storyListViewModel.load()
+                historyListViewModel.liveFirebaseUser.value = firebaseUser
+                historyListViewModel.load()
             }
         }
 
     }
 
     override fun onStoryClick(story: StoryModel) {
-        StoryManager.create(loggedInViewModel.liveFirebaseUser.value!!.uid,"history", story)
+        StoryManager.create(loggedInViewModel.liveFirebaseUser.value!!.uid, "history",story)
         val intent = Intent(Intent.ACTION_VIEW).setData(Uri.parse(story.link))
-        state = fragBinding.recyclerView.layoutManager?.onSaveInstanceState()
+        state = fragBinding.recyclerViewHistory.layoutManager?.onSaveInstanceState()
         startActivity(intent)
     }
 
     override fun onLike(story: StoryModel) {
-        StoryManager.create(loggedInViewModel.liveFirebaseUser.value!!.uid,"likes", story)
+        StoryManager.create(loggedInViewModel.liveFirebaseUser.value!!.uid, "likes",story)
         view?.snack(R.string.saved_article)
     }
 

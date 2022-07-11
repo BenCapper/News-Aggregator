@@ -78,17 +78,18 @@
 
         <Button
             android:id="@+id/button"
-            android:layout_width="85dp"
-            android:layout_height="33dp"
+            android:layout_width="119dp"
+            android:layout_height="30dp"
             android:layout_below="@+id/headline"
             android:layout_alignParentEnd="true"
-            android:layout_marginStart="-70dp"
+            android:layout_marginStart="-58dp"
             android:layout_marginTop="3dp"
             android:layout_marginEnd="0dp"
             android:layout_toEndOf="@+id/link"
-            android:text="Save"
+            android:background="@android:color/transparent"
             android:textSize="10sp"
-            app:iconTint="@color/d_grey" />
+            app:icon="@drawable/ic_download"
+            app:iconTint="#000000" />
 
     </RelativeLayout>
 </androidx.cardview.widget.CardView>
