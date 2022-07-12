@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.os.Parcelable
 import android.os.UserManager
 import android.view.*
+import android.widget.ImageView
 import android.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -57,7 +58,7 @@ class StoryListFragment : Fragment(), StoryListener {
         loader = createLoader(requireActivity())
         activity?.title = getString(R.string.nav_host)
         fragBinding.recyclerView.layoutManager = activity?.let { LinearLayoutManager(it) }
-
+        activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.logo)
         showLoader(loader, "Downloading Stories")
 
 

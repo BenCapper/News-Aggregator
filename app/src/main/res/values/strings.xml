@@ -16,10 +16,11 @@
     <string name="login_fail">Authentication Failed</string>
     <string name="account">Account</string>
     <string name="history">History</string>
+    <string name="view_history">View History</string>
 
     <string name="list_title">360 News</string>
     <string name="filter">Filter</string>
-    <string name="liked_articles">Saved</string>
+    <string name="liked_articles">Saved Articles</string>
     <string name="saved_article">Added to Saved Articles</string>
     <string name="articles">Articles</string>
 </resources>

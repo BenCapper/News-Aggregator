@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.*
+import android.widget.ImageView
 import android.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -144,7 +145,6 @@ class LikedListFragment : Fragment(), StoryNoSaveListener {
         state = fragBinding.recyclerViewLiked.layoutManager?.onSaveInstanceState()
         startActivity(intent)
     }
-
 
 
     override fun onDestroyView() {

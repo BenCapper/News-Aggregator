@@ -21,10 +21,11 @@
             app:titleTextColor="@color/orange">
 
             <ImageView
+                android:id="@+id/toolimg"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:src="@drawable/logo_alt"
-                android:scaleType="centerCrop" />
+                android:scaleType="centerCrop"
+                android:src="@drawable/logo_alt" />
 
         </androidx.appcompat.widget.Toolbar>
 

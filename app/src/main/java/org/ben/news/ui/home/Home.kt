@@ -7,6 +7,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
+import android.widget.ImageView
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -169,12 +170,14 @@ class Home : AppCompatActivity() {
 
     fun savedArticles(item: MenuItem) {
         findNavController(R.id.nav_host_fragment).navigate(R.id.likedListFragment)
+        findViewById<ImageView>(R.id.toolimg).setImageResource(R.drawable.saved)
         findViewById<DrawerLayout>(R.id.drawer_layout).closeDrawers()
         Timber.i("UserId = ${loggedInViewModel.liveFirebaseUser.value!!.uid}")
     }
 
     fun historyArticles(item: MenuItem) {
         findNavController(R.id.nav_host_fragment).navigate(R.id.historyListFragment)
+        findViewById<ImageView>(R.id.toolimg).setImageResource(R.drawable.history)
         findViewById<DrawerLayout>(R.id.drawer_layout).closeDrawers()
         Timber.i("UserId = ${loggedInViewModel.liveFirebaseUser.value!!.uid}")
     }
