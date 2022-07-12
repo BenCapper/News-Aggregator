@@ -40,6 +40,7 @@ def titleFormat(string):
        .replace(",", " ")
        .replace("$", " ")
        .replace("&amp;", "and")
+       .replace("/","-")
        .replace("  ", " ")
    )
    return string
