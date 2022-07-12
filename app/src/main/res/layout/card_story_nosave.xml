@@ -31,19 +31,32 @@
             android:background="#FFFFFF"
             android:padding="16dp">
 
+            <Button
+                android:id="@+id/button2"
+                android:layout_width="54dp"
+                android:layout_height="36dp"
+                android:layout_below="@+id/headline_nosave"
+                android:layout_marginStart="-80dp"
+                android:layout_marginTop="4dp"
+                android:layout_toEndOf="@+id/link_nosave"
+                android:background="@android:color/transparent"
+                android:textSize="10sp"
+                app:icon="@drawable/ic_share"
+                app:iconTint="#000000" />
+
             <TextView
                 android:id="@+id/link_nosave"
-                android:layout_width="wrap_content"
-                android:layout_height="20dp"
+                android:layout_width="269dp"
+                android:layout_height="25dp"
                 android:layout_below="@+id/headline_nosave"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentEnd="true"
                 android:layout_marginStart="0dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="60dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginEnd="126dp"
                 android:text="@{story.outlet}"
                 android:textColor="@color/dark"
-                android:textSize="10sp"
+                android:textSize="12sp"
                 android:textStyle="italic" />
 
             <TextView

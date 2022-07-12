@@ -10,6 +10,7 @@ import org.ben.news.models.StoryModel
 
 interface StoryNoSaveListener {
     fun onStoryClick(story: StoryModel)
+    fun onShare(story: StoryModel)
 }
 
 class NoSaveAdapter constructor(private var stories: ArrayList<StoryModel>, private val listener: StoryNoSaveListener, )
@@ -49,6 +50,7 @@ class NoSaveAdapter constructor(private var stories: ArrayList<StoryModel>, priv
             Glide.with(this.itemView.context).load(story.storage_link).override(1254,460).centerCrop().into(binding.imageView2Nosave)
 
             binding.root.setOnClickListener { listener.onStoryClick(story) }
+            binding.button2.setOnClickListener { listener.onShare(story) }
             binding.root.tag = story
             binding.story = story
             binding.executePendingBindings()

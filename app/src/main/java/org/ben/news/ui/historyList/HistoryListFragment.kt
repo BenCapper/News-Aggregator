@@ -148,6 +148,18 @@ class HistoryListFragment : Fragment(), StoryListener {
         view?.snack(R.string.saved_article)
     }
 
+    override fun onShare(story: StoryModel) {
+        val sendIntent: Intent = Intent().apply {
+            action = Intent.ACTION_SEND
+            putExtra(Intent.EXTRA_TEXT, story.link)
+            putExtra(Intent.EXTRA_TITLE, story.title)
+            type = "text/html"
+        }
+
+        val shareIntent = Intent.createChooser(sendIntent, null)
+        startActivity(shareIntent)
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _fragBinding = null
