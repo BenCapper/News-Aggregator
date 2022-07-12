@@ -60,7 +60,7 @@ class StoryAdapter constructor(private var stories: ArrayList<StoryModel>, priva
         fun bind(story: StoryModel, listener : StoryListener) {
             var imgRef = storage.child(story.img_name)
 
-            Glide.with(this.itemView.context).load(story.storage_link).override(1250,457).centerCrop().into(binding.imageView2)
+            Glide.with(this.itemView.context).load(story.storage_link).override(1254,460).centerCrop().into(binding.imageView2)
 
             binding.root.setOnClickListener { listener.onStoryClick(story) }
             binding.button.setOnClickListener { listener.onLike(story) }
