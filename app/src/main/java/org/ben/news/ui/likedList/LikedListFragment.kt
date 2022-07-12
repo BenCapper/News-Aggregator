@@ -64,6 +64,7 @@ class LikedListFragment : Fragment(), StoryNoSaveListener {
         loader = createLoader(requireActivity())
         activity?.title = getString(R.string.nav_host)
         fragBinding.recyclerViewLiked.layoutManager = activity?.let { LinearLayoutManager(it) }
+        activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.saved)
 
         showLoader(loader, "Downloading Stories")
 

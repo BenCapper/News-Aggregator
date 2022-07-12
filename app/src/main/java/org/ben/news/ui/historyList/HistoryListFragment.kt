@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.*
+import android.widget.ImageView
 import android.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -58,7 +59,7 @@ class HistoryListFragment : Fragment(), StoryListener {
         _fragBinding = FragmentHistoryListBinding.inflate(inflater, container, false)
         val root = fragBinding.root
         loader = createLoader(requireActivity())
-        activity?.title = getString(R.string.nav_host)
+        activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.history)
         fragBinding.recyclerViewHistory.layoutManager = activity?.let { LinearLayoutManager(it) }
 
         showLoader(loader, "Downloading Stories")
