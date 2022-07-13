@@ -141,6 +141,7 @@ class StoryListFragment : Fragment(), StoryListener {
         }
 
         val shareIntent = Intent.createChooser(sendIntent, null)
+        state = fragBinding.recyclerView.layoutManager?.onSaveInstanceState()
         startActivity(shareIntent)
     }
     override fun onDestroyView() {

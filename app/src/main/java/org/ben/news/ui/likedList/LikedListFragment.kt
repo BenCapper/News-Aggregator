@@ -154,8 +154,8 @@ class LikedListFragment : Fragment(), StoryNoSaveListener {
             putExtra(Intent.EXTRA_TITLE, story.title)
             type = "text/html"
         }
-
         val shareIntent = Intent.createChooser(sendIntent, null)
+        state = fragBinding.recyclerViewLiked.layoutManager?.onSaveInstanceState()
         startActivity(shareIntent)
     }
 

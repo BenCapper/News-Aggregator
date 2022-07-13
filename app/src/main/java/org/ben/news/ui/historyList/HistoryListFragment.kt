@@ -155,8 +155,8 @@ class HistoryListFragment : Fragment(), StoryListener {
             putExtra(Intent.EXTRA_TITLE, story.title)
             type = "text/html"
         }
-
         val shareIntent = Intent.createChooser(sendIntent, null)
+        state = fragBinding.recyclerViewHistory.layoutManager?.onSaveInstanceState()
         startActivity(shareIntent)
     }
 
