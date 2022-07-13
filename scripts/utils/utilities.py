@@ -83,6 +83,20 @@ def pushToDB(
            "storage_link": storage_link,
        }
    )
+
+def pushToDbNoImg(
+   db_path, title, date, link, outlet, storage_link
+):
+   ref = db.reference(f"{db_path}/{date}/{title}")
+   ref.set(
+       {
+           "title": title,
+           "date": date,
+           "link": link,
+           "outlet": outlet,
+           "storage_link": storage_link,
+       }
+   )
  
 def addYearAndFormat(date):
    dates = date.split('/')

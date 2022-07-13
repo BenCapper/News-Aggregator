@@ -18,7 +18,7 @@ page_url = "https://www.thegatewaypundit.com/"
 img_path = "/home/bencapper/src/News/GWP"
 storage_path = "https://firebasestorage.googleapis.com/v0/b/news-a3e22.appspot.com/o"
 db_path = "stories"
-outlet = "www.TheGatewayPundit.com/"
+outlet = "www.TheGatewayPundit.com"
  
 logFolder(log_folder_path)
  
