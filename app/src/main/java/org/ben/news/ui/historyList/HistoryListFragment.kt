@@ -111,6 +111,9 @@ class HistoryListFragment : Fragment(), StoryListener {
                         newText
                     )
                 }
+                else {
+                    historyListViewModel.load()
+                }
                 return true
             }
         })

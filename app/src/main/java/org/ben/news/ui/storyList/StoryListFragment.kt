@@ -95,6 +95,9 @@ class StoryListFragment : Fragment(), StoryListener {
                         newText
                     )
                 }
+                else {
+                    storyListViewModel.load()
+                }
                 return true
             }
         })

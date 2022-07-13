@@ -115,6 +115,9 @@ class LikedListFragment : Fragment(), StoryNoSaveListener {
                         newText
                     )
                 }
+                else {
+                    likedListViewModel.load()
+                }
                 return true
             }
         })
