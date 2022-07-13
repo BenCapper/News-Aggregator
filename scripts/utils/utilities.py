@@ -89,7 +89,7 @@ def pushToDB(
 def addYearAndFormat(date):
    dates = date.split('/')
    month = dates[0]
-   day = dates[1]
+   day = dates[1][:-1]
    if len(day) == 1:
        day = f"0{day}"
    if len(month) == 1:

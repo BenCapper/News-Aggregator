@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.*
+import android.widget.ImageView
 import android.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -63,6 +64,7 @@ class LikedListFragment : Fragment(), StoryNoSaveListener {
         loader = createLoader(requireActivity())
         activity?.title = getString(R.string.nav_host)
         fragBinding.recyclerViewLiked.layoutManager = activity?.let { LinearLayoutManager(it) }
+        activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.saved)
 
         showLoader(loader, "Downloading Stories")
 
@@ -144,8 +146,18 @@ class LikedListFragment : Fragment(), StoryNoSaveListener {
         state = fragBinding.recyclerViewLiked.layoutManager?.onSaveInstanceState()
         startActivity(intent)
     }
+    
+    override fun onShare(story: StoryModel) {
+        val sendIntent: Intent = Intent().apply {
+            action = Intent.ACTION_SEND
+            putExtra(Intent.EXTRA_TEXT, story.link)
+            putExtra(Intent.EXTRA_TITLE, story.title)
+            type = "text/html"
+        }
 
-
+        val shareIntent = Intent.createChooser(sendIntent, null)
+        startActivity(shareIntent)
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()

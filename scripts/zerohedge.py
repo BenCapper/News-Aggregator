@@ -45,7 +45,7 @@ for article in articles:
    img_src = str(a).split('<img alt=')[1].split('src="')[1].split('"/>')[0].replace("&amp;", "&")
    date = str(article).split('ArticleFooter_mobileTimeStamp__FdD_1">')[1].split("AT")[0]
    date = addYearAndFormat(date)
-   date.replace(" ", "")
+
  
    # Get year and add to date
  

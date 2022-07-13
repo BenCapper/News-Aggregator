@@ -24,6 +24,7 @@ import kotlin.collections.HashMap
 interface StoryListener {
     fun onStoryClick(story: StoryModel)
     fun onLike(story: StoryModel)
+    fun onShare(story: StoryModel)
 }
 
 class StoryAdapter constructor(private var stories: ArrayList<StoryModel>, private val listener: StoryListener, )
@@ -64,6 +65,7 @@ class StoryAdapter constructor(private var stories: ArrayList<StoryModel>, priva
 
             binding.root.setOnClickListener { listener.onStoryClick(story) }
             binding.button.setOnClickListener { listener.onLike(story) }
+            binding.button3.setOnClickListener { listener.onShare(story) }
             binding.root.tag = story
             binding.story = story
             binding.executePendingBindings()
