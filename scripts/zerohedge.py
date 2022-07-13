@@ -66,7 +66,7 @@ for article in articles:
        storage_link = f"https://firebasestorage.googleapis.com/v0/b/news-a3e22.appspot.com/o/Zerohedge%2F{img_title}?alt=media&token={token}"
  
        pushToDB(
-           db_path, title, date, "", "", img_src, img_title, url, outlet, storage_link
+           db_path, title, date, img_src, img_title, url, outlet, storage_link
        )
  
        open_temp.write(str(title) + "\n")

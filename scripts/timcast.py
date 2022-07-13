@@ -62,19 +62,7 @@ for article in articles:
    link = link.split('"')
    link = link[0]
  
-   # Isolate author name
-   auth = article.find("span", "auth")
-   author = str(auth).split("|")[1].split("</span>")[0].strip()
- 
-   # Some article blocks dont have previews
-   article_preview = article.find("p")
-   preview = str(article_preview)
-   lines = preview.split("\t")
-   first_line = ""
-   for line in lines:
-       if len(line) > 10:
-           first_line = line
- 
+
    # Use img tag to get the Headline and src location
    image = article.find("img")
    image = str(image)
@@ -111,8 +99,6 @@ for article in articles:
            db_path,
            title,
            found_date,
-           author,
-           first_line,
            img_link,
            img_title,
            link,

@@ -3,8 +3,6 @@ class Article:
         self,
         headline,
         date,
-        author,
-        preview,
         image,
         image_title,
         link,
@@ -13,8 +11,6 @@ class Article:
     ):
         self.headline = headline
         self.date = date
-        self.author = author
-        self.preview = preview
         self.image = image
         self.image_title = image_title
         self.link = link

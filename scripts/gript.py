@@ -78,7 +78,7 @@ for article in articles:
  
        # Push the article to firebase as json
        pushToDB(
-           db_path, title, date, "", "", img_link, img_title, url, outlet, storage_link
+           db_path, title, date, img_link, img_title, url, outlet, storage_link
        )
  
        # write title to log file

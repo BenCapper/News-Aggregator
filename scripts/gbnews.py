@@ -57,14 +57,6 @@ for article in articles:
    date = str(articleSoup.select("time")).split("day ")[1].split(" -")[0].split(" ")
    date = formatDate(date)
  
-   # author
-   fname = (
-       str(articleSoup.select("address")).split('firstname">')[1].split("</span>")[0]
-   )
-   author = (
-       f"{fname} "
-       + str(articleSoup.select("address")).split('lastname">')[1].split("</span>")[0]
-   )
  
    # Get image source (big image from article page)
    src = articleSoup.select("img")[1]
@@ -96,7 +88,7 @@ for article in articles:
        storage_link = f"https://firebasestorage.googleapis.com/v0/b/news-a3e22.appspot.com/o/GB%2F{img_title}?alt=media&token={token}"
  
        pushToDB(
-           db_path, title, date, author, "", src, img_title, url, outlet, storage_link
+           db_path, title, date, src, img_title, url, outlet, storage_link
        )
  
        open_temp.write(str(title) + "\n")
