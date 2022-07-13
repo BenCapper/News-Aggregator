@@ -59,7 +59,6 @@ class StoryAdapter constructor(private var stories: ArrayList<StoryModel>, priva
         //val readOnlyRow = readOnly
 
         fun bind(story: StoryModel, listener : StoryListener) {
-            var imgRef = storage.child(story.img_name)
 
             Glide.with(this.itemView.context).load(story.storage_link).override(1254,460).centerCrop().into(binding.imageView2)
 

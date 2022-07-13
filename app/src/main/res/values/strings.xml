@@ -7,7 +7,7 @@
 
     <string name="nav_host">Nav Host</string>
 
-    <string name="sign_in">News Sign In</string>
+    <string name="sign_in">Sign In</string>
     <string name="sign_out">Sign Out</string>
     <string name="create_acc">Create Account</string>
     <string name="hint_email">Email</string>
@@ -23,4 +23,13 @@
     <string name="liked_articles">Saved Articles</string>
     <string name="saved_article">Added to Saved Articles</string>
     <string name="articles">Articles</string>
+    <string name="outlets">Outlets</string>
+    <string name="timcast">Timcast</string>
+    <string name="bongino">Bongino Report</string>
+    <string name="zerohedge">Zerohedge</string>
+    <string name="gbnews">GB News</string>
+    <string name="breitbart">Breitbart</string>
+    <string name="dailycaller">The Daily Caller</string>
+    <string name="gript">Gript</string>
+    <string name="gateway">The Gateway Pundit</string>
 </resources>

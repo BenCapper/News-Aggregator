@@ -1,4 +1,4 @@
-package org.ben.news.ui.historyList
+package org.ben.news.ui.dailycaller
 
 import android.app.AlertDialog
 import android.content.Intent
@@ -7,39 +7,38 @@ import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.*
+import androidx.fragment.app.Fragment
 import android.widget.ImageView
 import android.widget.SearchView
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.storage.FirebaseStorage
 import org.ben.news.R
 import org.ben.news.adapters.StoryAdapter
 import org.ben.news.adapters.StoryListener
-import org.ben.news.databinding.FragmentHistoryListBinding
-import org.ben.news.databinding.FragmentLikedListBinding
+import org.ben.news.databinding.FragmentBreitbartBinding
+import org.ben.news.databinding.FragmentCallerBinding
 import org.ben.news.firebase.StoryManager
-import org.ben.news.helpers.SwipeToDeleteCallback
 import org.ben.news.helpers.createLoader
 import org.ben.news.helpers.hideLoader
 import org.ben.news.helpers.showLoader
 import org.ben.news.models.StoryModel
 import org.ben.news.ui.auth.LoggedInViewModel
-import org.ben.news.ui.likedList.LikedListViewModel
-import org.ben.news.ui.storyList.StoryListFragment
+import org.ben.news.ui.breitbart.BreitbartFragment
+import org.ben.news.ui.breitbart.BreitbartViewModel
 import splitties.snackbar.snack
 
-class HistoryListFragment : Fragment(), StoryListener {
+class CallerFragment : Fragment(), StoryListener {
+
+
     companion object {
-        fun newInstance() = StoryListFragment()
+        fun newInstance() = CallerFragment()
     }
-    private var _fragBinding: FragmentHistoryListBinding? = null
+    private var _fragBinding: FragmentCallerBinding? = null
     private val fragBinding get() = _fragBinding!!
     lateinit var loader : AlertDialog
     private val loggedInViewModel : LoggedInViewModel by activityViewModels()
-    private val historyListViewModel: HistoryListViewModel by activityViewModels()
+    private val callerViewModel: CallerViewModel by activityViewModels()
     private var storage = FirebaseStorage.getInstance().reference
     var state: Parcelable? = null
 
@@ -56,36 +55,23 @@ class HistoryListFragment : Fragment(), StoryListener {
         savedInstanceState: Bundle?
     ): View {
 
-        _fragBinding = FragmentHistoryListBinding.inflate(inflater, container, false)
+        _fragBinding = FragmentCallerBinding.inflate(inflater, container, false)
         val root = fragBinding.root
         loader = createLoader(requireActivity())
-        activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.history)
-        fragBinding.recyclerViewHistory.layoutManager = activity?.let { LinearLayoutManager(it) }
-
+        activity?.title = getString(R.string.nav_host)
+        fragBinding.recyclerViewCaller.layoutManager = activity?.let { LinearLayoutManager(it) }
+        activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.logo)
         showLoader(loader, "Downloading Stories")
 
 
-        historyListViewModel.observableHistoryList.observe(viewLifecycleOwner) { story ->
+        callerViewModel.observableCallerList.observe(viewLifecycleOwner) { story ->
             story?.let {
                 render(story as ArrayList<StoryModel>)
                 hideLoader(loader)
             }
         }
 
-        val swipeDeleteHandler = object : SwipeToDeleteCallback(requireContext()) {
-            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                showLoader(loader, "Deleting History Article")
-                val adapter = fragBinding.recyclerViewHistory.adapter as StoryAdapter
-                adapter.removeAt(viewHolder.absoluteAdapterPosition)
-                historyListViewModel.delete(
-                    historyListViewModel.liveFirebaseUser.value?.uid!!,
-                    (viewHolder.itemView.tag as StoryModel).title
-                )
-                hideLoader(loader)
-            }
-        }
-        val itemTouchDeleteHelper = ItemTouchHelper(swipeDeleteHandler)
-        itemTouchDeleteHelper.attachToRecyclerView(fragBinding.recyclerViewHistory)
+
 
         return root
     }
@@ -107,12 +93,12 @@ class HistoryListFragment : Fragment(), StoryListener {
 
             override fun onQueryTextChange(newText: String?): Boolean {
                 if (newText != null) {
-                    historyListViewModel.search(
+                    callerViewModel.search(
                         newText
                     )
                 }
                 else {
-                    historyListViewModel.load()
+                    callerViewModel.load()
                 }
                 return true
             }
@@ -122,8 +108,8 @@ class HistoryListFragment : Fragment(), StoryListener {
 
 
     private fun render(storyList: ArrayList<StoryModel>) {
-        fragBinding.recyclerViewHistory.adapter = StoryAdapter(storyList, this)
-        state?.let { fragBinding.recyclerViewHistory.layoutManager?.onRestoreInstanceState(it) }
+        fragBinding.recyclerViewCaller.adapter = StoryAdapter(storyList, this)
+        state?.let { fragBinding.recyclerViewCaller.layoutManager?.onRestoreInstanceState(it) }
     }
 
 
@@ -132,22 +118,22 @@ class HistoryListFragment : Fragment(), StoryListener {
         showLoader(loader, "Downloading stories")
         loggedInViewModel.liveFirebaseUser.observe(viewLifecycleOwner) { firebaseUser ->
             if (firebaseUser != null) {
-                historyListViewModel.liveFirebaseUser.value = firebaseUser
-                historyListViewModel.load()
+                callerViewModel.liveFirebaseUser.value = firebaseUser
+                callerViewModel.load()
             }
         }
 
     }
 
     override fun onStoryClick(story: StoryModel) {
-        StoryManager.create(loggedInViewModel.liveFirebaseUser.value!!.uid, "history",story)
+        StoryManager.create(loggedInViewModel.liveFirebaseUser.value!!.uid,"history", story)
         val intent = Intent(Intent.ACTION_VIEW).setData(Uri.parse(story.link))
-        state = fragBinding.recyclerViewHistory.layoutManager?.onSaveInstanceState()
+        state = fragBinding.recyclerViewCaller.layoutManager?.onSaveInstanceState()
         startActivity(intent)
     }
 
     override fun onLike(story: StoryModel) {
-        StoryManager.create(loggedInViewModel.liveFirebaseUser.value!!.uid, "likes",story)
+        StoryManager.create(loggedInViewModel.liveFirebaseUser.value!!.uid,"likes", story)
         view?.snack(R.string.saved_article)
     }
 
@@ -158,11 +144,11 @@ class HistoryListFragment : Fragment(), StoryListener {
             putExtra(Intent.EXTRA_TITLE, story.title)
             type = "text/html"
         }
+
         val shareIntent = Intent.createChooser(sendIntent, null)
-        state = fragBinding.recyclerViewHistory.layoutManager?.onSaveInstanceState()
+        state = fragBinding.recyclerViewCaller.layoutManager?.onSaveInstanceState()
         startActivity(shareIntent)
     }
-
     override fun onDestroyView() {
         super.onDestroyView()
         _fragBinding = null
