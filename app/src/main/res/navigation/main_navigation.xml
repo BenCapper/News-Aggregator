@@ -18,6 +18,9 @@
         <action
             android:id="@+id/action_storyListFragment_to_historyListFragment"
             app:destination="@id/historyListFragment" />
+        <action
+            android:id="@+id/action_storyListFragment_to_breitbartFragment"
+            app:destination="@id/breitbartFragment" />
     </fragment>
     <fragment
         android:id="@+id/likedListFragment"
@@ -29,4 +32,9 @@
         android:name="org.ben.news.ui.historyList.HistoryListFragment"
         android:label="fragment_history_list"
         tools:layout="@layout/fragment_history_list" />
+    <fragment
+        android:id="@+id/breitbartFragment"
+        android:name="org.ben.news.ui.breitbart.BreitbartFragment"
+        android:label="fragment_breitbart"
+        tools:layout="@layout/fragment_breitbart" />
 </navigation>

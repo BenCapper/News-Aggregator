@@ -16,6 +16,35 @@
                 android:title="@string/view_history" />
         </menu>
     </item>
+    <item android:title="@string/outlets">
+        <menu>
+            <item
+                android:id="@+id/menubong"
+                android:title="@string/bongino" />
+            <item
+                android:id="@+id/menubreit"
+                android:onClick="breitbartArticles"
+                android:title="@string/breitbart" />
+            <item
+                android:id="@+id/menucaller"
+                android:title="@string/dailycaller" />
+            <item
+                android:id="@+id/menugwp"
+                android:title="@string/gateway" />
+            <item
+                android:id="@+id/menugbn"
+                android:title="@string/gbnews" />
+            <item
+                android:id="@+id/menugript"
+                android:title="@string/gript" />
+            <item
+                android:id="@+id/menutim"
+                android:title="@string/timcast" />
+            <item
+                android:id="@+id/menuzero"
+                android:title="@string/zerohedge" />
+        </menu>
+    </item>
     <item android:title="@string/account">
         <menu>
             <item
