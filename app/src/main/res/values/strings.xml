@@ -7,7 +7,7 @@
 
     <string name="nav_host">Nav Host</string>
 
-    <string name="sign_in">News Sign In</string>
+    <string name="sign_in">Sign In</string>
     <string name="sign_out">Sign Out</string>
     <string name="create_acc">Create Account</string>
     <string name="hint_email">Email</string>
