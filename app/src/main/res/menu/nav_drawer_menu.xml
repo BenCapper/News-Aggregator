@@ -20,6 +20,7 @@
         <menu>
             <item
                 android:id="@+id/menubong"
+                android:onClick="bongArticles"
                 android:title="@string/bongino" />
             <item
                 android:id="@+id/menubreit"
