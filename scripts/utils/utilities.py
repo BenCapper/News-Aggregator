@@ -69,15 +69,13 @@ def imgFolder(img_path):
  
  
 def pushToDB(
-   db_path, title, date, author, preview, img_src, img_name, link, outlet, storage_link
+   db_path, title, date, img_src, img_name, link, outlet, storage_link
 ):
    ref = db.reference(f"{db_path}/{date}/{title}")
    ref.set(
        {
            "title": title,
            "date": date,
-           "author": author,
-           "preview": preview,
            "img_src": img_src,
            "img_name": img_name,
            "link": link,
