@@ -27,6 +27,7 @@
                 android:title="@string/breitbart" />
             <item
                 android:id="@+id/menucaller"
+                android:onClick="callerArticles"
                 android:title="@string/dailycaller" />
             <item
                 android:id="@+id/menugwp"

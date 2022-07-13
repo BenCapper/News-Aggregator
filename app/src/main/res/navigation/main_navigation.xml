@@ -21,6 +21,9 @@
         <action
             android:id="@+id/action_storyListFragment_to_breitbartFragment"
             app:destination="@id/breitbartFragment" />
+        <action
+            android:id="@+id/action_storyListFragment_to_callerFragment"
+            app:destination="@id/callerFragment" />
     </fragment>
     <fragment
         android:id="@+id/likedListFragment"
@@ -37,4 +40,9 @@
         android:name="org.ben.news.ui.breitbart.BreitbartFragment"
         android:label="fragment_breitbart"
         tools:layout="@layout/fragment_breitbart" />
+    <fragment
+        android:id="@+id/callerFragment"
+        android:name="org.ben.news.ui.dailycaller.CallerFragment"
+        android:label="fragment_caller"
+        tools:layout="@layout/fragment_caller" />
 </navigation>

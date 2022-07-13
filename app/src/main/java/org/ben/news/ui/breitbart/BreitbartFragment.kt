@@ -97,6 +97,9 @@ class BreitbartFragment : Fragment(), StoryListener {
                         newText
                     )
                 }
+                else {
+                    breitbartViewModel.load()
+                }
                 return true
             }
         })

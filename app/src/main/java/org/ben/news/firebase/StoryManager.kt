@@ -152,7 +152,6 @@ object StoryManager : StoryStore {
             database.child("stories").child(date)
                 .addValueEventListener(object : ValueEventListener {
                     override fun onCancelled(error: DatabaseError) {
-                        Timber.i("Firebase building error : ${error.message}")
                     }
 
                     override fun onDataChange(snapshot: DataSnapshot) {
