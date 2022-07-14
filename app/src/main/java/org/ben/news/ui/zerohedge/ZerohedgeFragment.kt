@@ -35,7 +35,6 @@ class ZerohedgeFragment : Fragment(), StoryListener {
     lateinit var loader : AlertDialog
     private val loggedInViewModel : LoggedInViewModel by activityViewModels()
     private val zeroViewModel: ZerohedgeViewModel by activityViewModels()
-    private var storage = FirebaseStorage.getInstance().reference
     var state: Parcelable? = null
 
 
@@ -54,7 +53,6 @@ class ZerohedgeFragment : Fragment(), StoryListener {
         _fragBinding = FragmentZerohedgeBinding.inflate(inflater, container, false)
         val root = fragBinding.root
         loader = createLoader(requireActivity())
-        activity?.title = getString(R.string.nav_host)
         fragBinding.recyclerViewZero.layoutManager = activity?.let { LinearLayoutManager(it) }
         activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.logo)
         showLoader(loader, "Downloading Stories")

@@ -39,7 +39,6 @@ class BreitbartFragment : Fragment(), StoryListener {
     lateinit var loader : AlertDialog
     private val loggedInViewModel : LoggedInViewModel by activityViewModels()
     private val breitbartViewModel: BreitbartViewModel by activityViewModels()
-    private var storage = FirebaseStorage.getInstance().reference
     var state: Parcelable? = null
 
 
@@ -58,7 +57,6 @@ class BreitbartFragment : Fragment(), StoryListener {
         _fragBinding = FragmentBreitbartBinding.inflate(inflater, container, false)
         val root = fragBinding.root
         loader = createLoader(requireActivity())
-        activity?.title = getString(R.string.nav_host)
         fragBinding.recyclerViewBreit.layoutManager = activity?.let { LinearLayoutManager(it) }
         activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.logo)
         showLoader(loader, "Downloading Stories")
