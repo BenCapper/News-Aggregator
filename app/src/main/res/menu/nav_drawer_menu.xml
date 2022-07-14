@@ -32,18 +32,23 @@
                 android:title="@string/dailycaller" />
             <item
                 android:id="@+id/menugwp"
+                android:onClick="gatewayArticles"
                 android:title="@string/gateway" />
             <item
                 android:id="@+id/menugbn"
+                android:onClick="gbArticles"
                 android:title="@string/gbnews" />
             <item
                 android:id="@+id/menugript"
+                android:onClick="griptArticles"
                 android:title="@string/gript" />
             <item
                 android:id="@+id/menutim"
+                android:onClick="timArticles"
                 android:title="@string/timcast" />
             <item
                 android:id="@+id/menuzero"
+                android:onClick="zeroArticles"
                 android:title="@string/zerohedge" />
         </menu>
     </item>

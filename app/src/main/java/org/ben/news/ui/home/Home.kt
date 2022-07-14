@@ -198,6 +198,37 @@ class Home : AppCompatActivity() {
         Timber.i("UserId = ${loggedInViewModel.liveFirebaseUser.value!!.uid}")
     }
 
+    fun gatewayArticles(item: MenuItem) {
+        findNavController(R.id.nav_host_fragment).navigate(R.id.gatewayFragment)
+        findViewById<DrawerLayout>(R.id.drawer_layout).closeDrawers()
+        Timber.i("UserId = ${loggedInViewModel.liveFirebaseUser.value!!.uid}")
+    }
+
+    fun gbArticles(item: MenuItem) {
+        findNavController(R.id.nav_host_fragment).navigate(R.id.gbFragment)
+        findViewById<DrawerLayout>(R.id.drawer_layout).closeDrawers()
+        Timber.i("UserId = ${loggedInViewModel.liveFirebaseUser.value!!.uid}")
+    }
+
+    fun griptArticles(item: MenuItem) {
+        findNavController(R.id.nav_host_fragment).navigate(R.id.griptFragment)
+        findViewById<DrawerLayout>(R.id.drawer_layout).closeDrawers()
+        Timber.i("UserId = ${loggedInViewModel.liveFirebaseUser.value!!.uid}")
+    }
+
+    fun timArticles(item: MenuItem) {
+        findNavController(R.id.nav_host_fragment).navigate(R.id.timcastFragment)
+        findViewById<DrawerLayout>(R.id.drawer_layout).closeDrawers()
+        Timber.i("UserId = ${loggedInViewModel.liveFirebaseUser.value!!.uid}")
+    }
+
+    fun zeroArticles(item: MenuItem) {
+        findNavController(R.id.nav_host_fragment).navigate(R.id.zerohedgeFragment)
+        findViewById<DrawerLayout>(R.id.drawer_layout).closeDrawers()
+        Timber.i("UserId = ${loggedInViewModel.liveFirebaseUser.value!!.uid}")
+    }
+
+
     private fun registerImagePickerCallback() {
         intentLauncher =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
