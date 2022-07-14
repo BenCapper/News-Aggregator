@@ -36,6 +36,9 @@
         <action
             android:id="@+id/action_storyListFragment_to_griptFragment"
             app:destination="@id/griptFragment" />
+        <action
+            android:id="@+id/action_storyListFragment_to_timcastFragment"
+            app:destination="@id/timcastFragment" />
     </fragment>
     <fragment
         android:id="@+id/likedListFragment"
@@ -77,4 +80,9 @@
         android:name="org.ben.news.ui.gript.GriptFragment"
         android:label="fragment_gript"
         tools:layout="@layout/fragment_gript" />
+    <fragment
+        android:id="@+id/timcastFragment"
+        android:name="org.ben.news.ui.timcast.TimcastFragment"
+        android:label="fragment_timcast"
+        tools:layout="@layout/fragment_timcast" />
 </navigation>

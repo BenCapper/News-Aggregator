@@ -44,6 +44,7 @@
                 android:title="@string/gript" />
             <item
                 android:id="@+id/menutim"
+                android:onClick="timArticles"
                 android:title="@string/timcast" />
             <item
                 android:id="@+id/menuzero"
