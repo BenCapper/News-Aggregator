@@ -8,10 +8,12 @@
         <menu>
             <item
                 android:id="@+id/nav_liked"
+                android:icon="@drawable/ic_saved"
                 android:onClick="savedArticles"
                 android:title="@string/liked_articles" />
             <item
                 android:id="@+id/nav_history"
+                android:icon="@drawable/ic_eye"
                 android:onClick="historyArticles"
                 android:title="@string/view_history" />
         </menu>
@@ -64,6 +66,7 @@
         <menu>
             <item
                 android:id="@+id/nav_sign_out"
+                android:icon="@drawable/ic_logout"
                 android:onClick="signOut"
                 android:title="@string/sign_out" />
         </menu>
