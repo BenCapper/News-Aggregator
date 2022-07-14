@@ -222,6 +222,12 @@ class Home : AppCompatActivity() {
         Timber.i("UserId = ${loggedInViewModel.liveFirebaseUser.value!!.uid}")
     }
 
+    fun zeroArticles(item: MenuItem) {
+        findNavController(R.id.nav_host_fragment).navigate(R.id.zerohedgeFragment)
+        findViewById<DrawerLayout>(R.id.drawer_layout).closeDrawers()
+        Timber.i("UserId = ${loggedInViewModel.liveFirebaseUser.value!!.uid}")
+    }
+
 
     private fun registerImagePickerCallback() {
         intentLauncher =

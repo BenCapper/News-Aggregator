@@ -48,6 +48,7 @@
                 android:title="@string/timcast" />
             <item
                 android:id="@+id/menuzero"
+                android:onClick="zeroArticles"
                 android:title="@string/zerohedge" />
         </menu>
     </item>
