@@ -61,6 +61,7 @@ class Home : AppCompatActivity() {
         setupActionBarWithNavController(navController, appBarConfiguration)
 
         val navView = homeBinding.navView
+        navView.itemIconTintList = null
         navView.setupWithNavController(navController)
 
         initNavHeader()

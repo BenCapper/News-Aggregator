@@ -4,14 +4,16 @@
     tools:showIn="navigation_view">
 
 
-    <item android:title="@string/articles">
+    <item android:title="@string/account">
         <menu>
             <item
                 android:id="@+id/nav_liked"
+                android:icon="@drawable/ic_saved"
                 android:onClick="savedArticles"
                 android:title="@string/liked_articles" />
             <item
                 android:id="@+id/nav_history"
+                android:icon="@drawable/ic_eye"
                 android:onClick="historyArticles"
                 android:title="@string/view_history" />
         </menu>
@@ -19,43 +21,52 @@
     <item android:title="@string/outlets">
         <menu>
             <item
-                android:id="@+id/menubong"
-                android:onClick="bongArticles"
-                android:title="@string/bongino" />
-            <item
-                android:id="@+id/menubreit"
-                android:onClick="breitbartArticles"
-                android:title="@string/breitbart" />
-            <item
-                android:id="@+id/menucaller"
-                android:onClick="callerArticles"
-                android:title="@string/dailycaller" />
-            <item
-                android:id="@+id/menugwp"
-                android:onClick="gatewayArticles"
-                android:title="@string/gateway" />
-            <item
-                android:id="@+id/menugbn"
-                android:onClick="gbArticles"
-                android:title="@string/gbnews" />
-            <item
                 android:id="@+id/menugript"
+                android:icon="@drawable/ieicon"
                 android:onClick="griptArticles"
                 android:title="@string/gript" />
             <item
                 android:id="@+id/menutim"
+                android:icon="@drawable/usicon"
                 android:onClick="timArticles"
                 android:title="@string/timcast" />
             <item
                 android:id="@+id/menuzero"
+                android:icon="@drawable/usicon"
                 android:onClick="zeroArticles"
                 android:title="@string/zerohedge" />
+            <item
+                android:id="@+id/menugbn"
+                android:icon="@drawable/gbicon"
+                android:onClick="gbArticles"
+                android:title="@string/gbnews" />
+            <item
+                android:id="@+id/menubreit"
+                android:icon="@drawable/usicon"
+                android:onClick="breitbartArticles"
+                android:title="@string/breitbart" />
+            <item
+                android:id="@+id/menubong"
+                android:icon="@drawable/usicon"
+                android:onClick="bongArticles"
+                android:title="@string/bongino" />
+            <item
+                android:id="@+id/menucaller"
+                android:icon="@drawable/usicon"
+                android:onClick="callerArticles"
+                android:title="@string/dailycaller" />
+            <item
+                android:id="@+id/menugwp"
+                android:icon="@drawable/usicon"
+                android:onClick="gatewayArticles"
+                android:title="@string/gateway" />
         </menu>
     </item>
-    <item android:title="@string/account">
+    <item android:title="">
         <menu>
             <item
                 android:id="@+id/nav_sign_out"
+                android:icon="@drawable/ic_logout"
                 android:onClick="signOut"
                 android:title="@string/sign_out" />
         </menu>

@@ -39,7 +39,6 @@ class BreitbartFragment : Fragment(), StoryListener {
     lateinit var loader : AlertDialog
     private val loggedInViewModel : LoggedInViewModel by activityViewModels()
     private val breitbartViewModel: BreitbartViewModel by activityViewModels()
-    private var storage = FirebaseStorage.getInstance().reference
     var state: Parcelable? = null
 
 
@@ -57,21 +56,15 @@ class BreitbartFragment : Fragment(), StoryListener {
 
         _fragBinding = FragmentBreitbartBinding.inflate(inflater, container, false)
         val root = fragBinding.root
-        loader = createLoader(requireActivity())
-        activity?.title = getString(R.string.nav_host)
         fragBinding.recyclerViewBreit.layoutManager = activity?.let { LinearLayoutManager(it) }
-        activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.logo)
-        showLoader(loader, "Downloading Stories")
+        activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.breit)
 
 
         breitbartViewModel.observableBreitList.observe(viewLifecycleOwner) { story ->
             story?.let {
                 render(story as ArrayList<StoryModel>)
-                hideLoader(loader)
             }
         }
-
-
 
         return root
     }
@@ -115,7 +108,6 @@ class BreitbartFragment : Fragment(), StoryListener {
 
     override fun onResume() {
         super.onResume()
-        showLoader(loader, "Downloading stories")
         loggedInViewModel.liveFirebaseUser.observe(viewLifecycleOwner) { firebaseUser ->
             if (firebaseUser != null) {
                 breitbartViewModel.liveFirebaseUser.value = firebaseUser

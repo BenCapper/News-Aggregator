@@ -40,7 +40,6 @@ class HistoryListFragment : Fragment(), StoryListener {
     lateinit var loader : AlertDialog
     private val loggedInViewModel : LoggedInViewModel by activityViewModels()
     private val historyListViewModel: HistoryListViewModel by activityViewModels()
-    private var storage = FirebaseStorage.getInstance().reference
     var state: Parcelable? = null
 
 
@@ -59,29 +58,23 @@ class HistoryListFragment : Fragment(), StoryListener {
         _fragBinding = FragmentHistoryListBinding.inflate(inflater, container, false)
         val root = fragBinding.root
         loader = createLoader(requireActivity())
-        activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.history)
+        activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.history1)
         fragBinding.recyclerViewHistory.layoutManager = activity?.let { LinearLayoutManager(it) }
-
-        showLoader(loader, "Downloading Stories")
-
 
         historyListViewModel.observableHistoryList.observe(viewLifecycleOwner) { story ->
             story?.let {
                 render(story as ArrayList<StoryModel>)
-                hideLoader(loader)
             }
         }
 
         val swipeDeleteHandler = object : SwipeToDeleteCallback(requireContext()) {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                showLoader(loader, "Deleting History Article")
                 val adapter = fragBinding.recyclerViewHistory.adapter as StoryAdapter
                 adapter.removeAt(viewHolder.absoluteAdapterPosition)
                 historyListViewModel.delete(
                     historyListViewModel.liveFirebaseUser.value?.uid!!,
                     (viewHolder.itemView.tag as StoryModel).title
                 )
-                hideLoader(loader)
             }
         }
         val itemTouchDeleteHelper = ItemTouchHelper(swipeDeleteHandler)
@@ -129,7 +122,6 @@ class HistoryListFragment : Fragment(), StoryListener {
 
     override fun onResume() {
         super.onResume()
-        showLoader(loader, "Downloading stories")
         loggedInViewModel.liveFirebaseUser.observe(viewLifecycleOwner) { firebaseUser ->
             if (firebaseUser != null) {
                 historyListViewModel.liveFirebaseUser.value = firebaseUser

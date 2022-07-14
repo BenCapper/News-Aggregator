@@ -24,8 +24,7 @@
                 android:id="@+id/toolimg"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:scaleType="centerCrop"
-                android:src="@drawable/logo_alt" />
+                android:scaleType="centerCrop" />
 
         </androidx.appcompat.widget.Toolbar>
 

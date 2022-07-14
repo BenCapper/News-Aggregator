@@ -17,31 +17,49 @@
             app:exitAnim="@anim/nav_default_exit_anim" />
         <action
             android:id="@+id/action_storyListFragment_to_historyListFragment"
-            app:destination="@id/historyListFragment" />
+            app:destination="@id/historyListFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim" />
         <action
             android:id="@+id/action_storyListFragment_to_breitbartFragment"
-            app:destination="@id/breitbartFragment" />
+            app:destination="@id/breitbartFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim" />
         <action
             android:id="@+id/action_storyListFragment_to_callerFragment"
-            app:destination="@id/callerFragment" />
+            app:destination="@id/callerFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim" />
         <action
             android:id="@+id/action_storyListFragment_to_bonginoFragment"
-            app:destination="@id/bonginoFragment" />
+            app:destination="@id/bonginoFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim" />
         <action
             android:id="@+id/action_storyListFragment_to_gatewayFragment"
-            app:destination="@id/gatewayFragment" />
+            app:destination="@id/gatewayFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim" />
         <action
             android:id="@+id/action_storyListFragment_to_gbFragment"
-            app:destination="@id/gbFragment" />
+            app:destination="@id/gbFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim" />
         <action
             android:id="@+id/action_storyListFragment_to_griptFragment"
-            app:destination="@id/griptFragment" />
+            app:destination="@id/griptFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim" />
         <action
             android:id="@+id/action_storyListFragment_to_timcastFragment"
-            app:destination="@id/timcastFragment" />
+            app:destination="@id/timcastFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim" />
         <action
             android:id="@+id/action_storyListFragment_to_zerohedgeFragment"
-            app:destination="@id/zerohedgeFragment" />
+            app:destination="@id/zerohedgeFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim" />
     </fragment>
     <fragment
         android:id="@+id/likedListFragment"
