@@ -38,7 +38,7 @@ class GbViewModel : ViewModel() {
     private var today = formattedDate.replace(".","-")
     private val now = LocalDate.now()
 
-    fun getDates(n:Int): ArrayList<String> {
+    private fun getDates(n:Int): ArrayList<String> {
         var dates = ArrayList<String>()
         for (i in 0..n) {
             val yesterday = now.minusDays(i.toLong())

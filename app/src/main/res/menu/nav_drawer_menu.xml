@@ -40,6 +40,7 @@
                 android:title="@string/gbnews" />
             <item
                 android:id="@+id/menugript"
+                android:onClick="griptArticles"
                 android:title="@string/gript" />
             <item
                 android:id="@+id/menutim"

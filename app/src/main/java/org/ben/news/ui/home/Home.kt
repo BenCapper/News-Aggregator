@@ -209,7 +209,13 @@ class Home : AppCompatActivity() {
         findViewById<DrawerLayout>(R.id.drawer_layout).closeDrawers()
         Timber.i("UserId = ${loggedInViewModel.liveFirebaseUser.value!!.uid}")
     }
-    
+
+    fun griptArticles(item: MenuItem) {
+        findNavController(R.id.nav_host_fragment).navigate(R.id.griptFragment)
+        findViewById<DrawerLayout>(R.id.drawer_layout).closeDrawers()
+        Timber.i("UserId = ${loggedInViewModel.liveFirebaseUser.value!!.uid}")
+    }
+
 
     private fun registerImagePickerCallback() {
         intentLauncher =

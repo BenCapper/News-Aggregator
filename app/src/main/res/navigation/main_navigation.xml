@@ -33,6 +33,9 @@
         <action
             android:id="@+id/action_storyListFragment_to_gbFragment"
             app:destination="@id/gbFragment" />
+        <action
+            android:id="@+id/action_storyListFragment_to_griptFragment"
+            app:destination="@id/griptFragment" />
     </fragment>
     <fragment
         android:id="@+id/likedListFragment"
@@ -69,4 +72,9 @@
         android:name="org.ben.news.ui.gbnews.GbFragment"
         android:label="fragment_gb"
         tools:layout="@layout/fragment_gb" />
+    <fragment
+        android:id="@+id/griptFragment"
+        android:name="org.ben.news.ui.gript.GriptFragment"
+        android:label="fragment_gript"
+        tools:layout="@layout/fragment_gript" />
 </navigation>
