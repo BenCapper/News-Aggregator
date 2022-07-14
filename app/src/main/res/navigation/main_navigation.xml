@@ -27,6 +27,9 @@
         <action
             android:id="@+id/action_storyListFragment_to_bonginoFragment"
             app:destination="@id/bonginoFragment" />
+        <action
+            android:id="@+id/action_storyListFragment_to_gatewayFragment"
+            app:destination="@id/gatewayFragment" />
     </fragment>
     <fragment
         android:id="@+id/likedListFragment"
@@ -53,4 +56,9 @@
         android:name="org.ben.news.ui.bongino.BonginoFragment"
         android:label="fragment_bongino"
         tools:layout="@layout/fragment_bongino" />
+    <fragment
+        android:id="@+id/gatewayFragment"
+        android:name="org.ben.news.ui.gwp.GatewayFragment"
+        android:label="fragment_gateway"
+        tools:layout="@layout/fragment_gateway" />
 </navigation>
