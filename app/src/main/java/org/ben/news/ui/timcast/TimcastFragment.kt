@@ -53,7 +53,7 @@ class TimcastFragment : Fragment(), StoryListener {
         _fragBinding = FragmentTimcastBinding.inflate(inflater, container, false)
         val root = fragBinding.root
         fragBinding.recyclerViewTim.layoutManager = activity?.let { LinearLayoutManager(it) }
-        activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.logo)
+        activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.tim)
 
         timViewModel.observableTimList.observe(viewLifecycleOwner) { story ->
             story?.let {

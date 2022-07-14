@@ -57,7 +57,7 @@ class CallerFragment : Fragment(), StoryListener {
         _fragBinding = FragmentCallerBinding.inflate(inflater, container, false)
         val root = fragBinding.root
         fragBinding.recyclerViewCaller.layoutManager = activity?.let { LinearLayoutManager(it) }
-        activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.logo)
+        activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.dc)
 
 
         callerViewModel.observableCallerList.observe(viewLifecycleOwner) { story ->

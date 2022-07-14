@@ -53,7 +53,7 @@ class GatewayFragment : Fragment(), StoryListener {
         _fragBinding = FragmentGatewayBinding.inflate(inflater, container, false)
         val root = fragBinding.root
         fragBinding.recyclerViewGate.layoutManager = activity?.let { LinearLayoutManager(it) }
-        activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.logo)
+        activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.gwp)
 
         gateViewModel.observableGateList.observe(viewLifecycleOwner) { story ->
             story?.let {

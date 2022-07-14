@@ -53,7 +53,7 @@ class GbFragment : Fragment(), StoryListener {
         _fragBinding = FragmentGbBinding.inflate(inflater, container, false)
         val root = fragBinding.root
         fragBinding.recyclerViewGb.layoutManager = activity?.let { LinearLayoutManager(it) }
-        activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.logo)
+        activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.gb)
 
 
         gbViewModel.observableGateList.observe(viewLifecycleOwner) { story ->

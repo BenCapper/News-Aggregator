@@ -57,7 +57,7 @@ class BreitbartFragment : Fragment(), StoryListener {
         _fragBinding = FragmentBreitbartBinding.inflate(inflater, container, false)
         val root = fragBinding.root
         fragBinding.recyclerViewBreit.layoutManager = activity?.let { LinearLayoutManager(it) }
-        activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.logo)
+        activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.breit)
 
 
         breitbartViewModel.observableBreitList.observe(viewLifecycleOwner) { story ->

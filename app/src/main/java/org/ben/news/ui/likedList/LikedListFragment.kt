@@ -62,7 +62,7 @@ class LikedListFragment : Fragment(), StoryNoSaveListener {
         _fragBinding = FragmentLikedListBinding.inflate(inflater, container, false)
         val root = fragBinding.root
         fragBinding.recyclerViewLiked.layoutManager = activity?.let { LinearLayoutManager(it) }
-        activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.saved)
+        activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.saved2)
 
 
 

@@ -58,7 +58,7 @@ class HistoryListFragment : Fragment(), StoryListener {
         _fragBinding = FragmentHistoryListBinding.inflate(inflater, container, false)
         val root = fragBinding.root
         loader = createLoader(requireActivity())
-        activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.history)
+        activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.history1)
         fragBinding.recyclerViewHistory.layoutManager = activity?.let { LinearLayoutManager(it) }
 
         historyListViewModel.observableHistoryList.observe(viewLifecycleOwner) { story ->

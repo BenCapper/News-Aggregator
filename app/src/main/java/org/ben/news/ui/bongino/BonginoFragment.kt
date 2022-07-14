@@ -58,7 +58,7 @@ class BonginoFragment : Fragment(), StoryListener {
         _fragBinding = FragmentBonginoBinding.inflate(inflater, container, false)
         val root = fragBinding.root
         fragBinding.recyclerViewBong.layoutManager = activity?.let { LinearLayoutManager(it) }
-        activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.logo)
+        activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.bong)
 
         bonginoViewModel.observableBongList.observe(viewLifecycleOwner) { story ->
             story?.let {

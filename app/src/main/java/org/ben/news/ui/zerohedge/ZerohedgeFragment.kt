@@ -53,7 +53,7 @@ class ZerohedgeFragment : Fragment(), StoryListener {
         _fragBinding = FragmentZerohedgeBinding.inflate(inflater, container, false)
         val root = fragBinding.root
         fragBinding.recyclerViewZero.layoutManager = activity?.let { LinearLayoutManager(it) }
-        activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.logo)
+        activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.zero)
 
         zeroViewModel.observableZeroList.observe(viewLifecycleOwner) { story ->
             story?.let {

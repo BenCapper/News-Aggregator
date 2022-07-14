@@ -57,7 +57,7 @@ class GriptFragment : Fragment(), StoryListener {
         _fragBinding = FragmentGriptBinding.inflate(inflater, container, false)
         val root = fragBinding.root
         fragBinding.recyclerViewGript.layoutManager = activity?.let { LinearLayoutManager(it) }
-        activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.logo)
+        activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.gript)
 
 
         griptViewModel.observableGriptList.observe(viewLifecycleOwner) { story ->
