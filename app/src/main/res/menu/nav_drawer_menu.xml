@@ -36,6 +36,7 @@
                 android:title="@string/gateway" />
             <item
                 android:id="@+id/menugbn"
+                android:onClick="gbArticles"
                 android:title="@string/gbnews" />
             <item
                 android:id="@+id/menugript"

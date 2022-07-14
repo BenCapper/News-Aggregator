@@ -30,6 +30,9 @@
         <action
             android:id="@+id/action_storyListFragment_to_gatewayFragment"
             app:destination="@id/gatewayFragment" />
+        <action
+            android:id="@+id/action_storyListFragment_to_gbFragment"
+            app:destination="@id/gbFragment" />
     </fragment>
     <fragment
         android:id="@+id/likedListFragment"
@@ -61,4 +64,9 @@
         android:name="org.ben.news.ui.gwp.GatewayFragment"
         android:label="fragment_gateway"
         tools:layout="@layout/fragment_gateway" />
+    <fragment
+        android:id="@+id/gbFragment"
+        android:name="org.ben.news.ui.gbnews.GbFragment"
+        android:label="fragment_gb"
+        tools:layout="@layout/fragment_gb" />
 </navigation>
