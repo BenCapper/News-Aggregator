@@ -61,30 +61,25 @@ class LikedListFragment : Fragment(), StoryNoSaveListener {
 
         _fragBinding = FragmentLikedListBinding.inflate(inflater, container, false)
         val root = fragBinding.root
-        loader = createLoader(requireActivity())
         fragBinding.recyclerViewLiked.layoutManager = activity?.let { LinearLayoutManager(it) }
         activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.saved)
 
-        showLoader(loader, "Downloading Stories")
 
 
         likedListViewModel.observableLikedList.observe(viewLifecycleOwner) { story ->
             story?.let {
                 render(story as ArrayList<StoryModel>)
-                hideLoader(loader)
             }
         }
 
         val swipeDeleteHandler = object : SwipeToDeleteCallback(requireContext()) {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                showLoader(loader, "Deleting History Article")
                 val adapter = fragBinding.recyclerViewLiked.adapter as NoSaveAdapter
                 adapter.removeAt(viewHolder.absoluteAdapterPosition)
                 likedListViewModel.delete(
                     likedListViewModel.liveFirebaseUser.value?.uid!!,
                     (viewHolder.itemView.tag as StoryModel).title
                 )
-                hideLoader(loader)
             }
         }
         val itemTouchDeleteHelper = ItemTouchHelper(swipeDeleteHandler)
@@ -132,7 +127,6 @@ class LikedListFragment : Fragment(), StoryNoSaveListener {
 
     override fun onResume() {
         super.onResume()
-        showLoader(loader, "Downloading stories")
         loggedInViewModel.liveFirebaseUser.observe(viewLifecycleOwner) { firebaseUser ->
             if (firebaseUser != null) {
                 likedListViewModel.liveFirebaseUser.value = firebaseUser

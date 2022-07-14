@@ -52,20 +52,15 @@ class GbFragment : Fragment(), StoryListener {
 
         _fragBinding = FragmentGbBinding.inflate(inflater, container, false)
         val root = fragBinding.root
-        loader = createLoader(requireActivity())
         fragBinding.recyclerViewGb.layoutManager = activity?.let { LinearLayoutManager(it) }
         activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.logo)
-        showLoader(loader, "Downloading Stories")
 
 
         gbViewModel.observableGateList.observe(viewLifecycleOwner) { story ->
             story?.let {
                 render(story as ArrayList<StoryModel>)
-                hideLoader(loader)
             }
         }
-
-
 
         return root
     }
@@ -109,7 +104,6 @@ class GbFragment : Fragment(), StoryListener {
 
     override fun onResume() {
         super.onResume()
-        showLoader(loader, "Downloading stories")
         loggedInViewModel.liveFirebaseUser.observe(viewLifecycleOwner) { firebaseUser ->
             if (firebaseUser != null) {
                 gbViewModel.liveFirebaseUser.value = firebaseUser
