@@ -14,7 +14,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.News"
         tools:targetApi="31" >
-
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-7534564032628512~6720499947"/>
 
         <activity
             android:name=".ui.auth.Login"
@@ -30,11 +32,7 @@
             android:name=".ui.home.Home"
             android:exported="true"
             android:windowSoftInputMode="adjustPan" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
     </application>
 </manifest>
