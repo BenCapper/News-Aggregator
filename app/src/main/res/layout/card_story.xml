@@ -33,11 +33,10 @@
 
         <Button
             android:id="@+id/button3"
-            android:layout_width="54dp"
-            android:layout_height="36dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_below="@+id/headline"
-            android:layout_marginStart="-119dp"
-            android:layout_marginTop="4dp"
+            android:layout_marginStart="-150dp"
             android:layout_marginEnd="0dp"
             android:layout_toStartOf="@+id/button"
             android:layout_toEndOf="@+id/link"
@@ -48,8 +47,8 @@
 
         <TextView
             android:id="@+id/link"
-            android:layout_width="238dp"
-            android:layout_height="25dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_below="@+id/headline"
             android:layout_alignParentStart="true"
             android:layout_alignParentEnd="true"
@@ -58,12 +57,12 @@
             android:layout_marginEnd="157dp"
             android:text="@{story.outlet}"
             android:textColor="@color/dark"
-            android:textSize="12sp"
+            android:textSize="11sp"
             android:textStyle="italic" />
 
         <TextView
             android:id="@+id/date"
-            android:layout_width="395dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
@@ -78,8 +77,8 @@
 
         <TextView
             android:id="@+id/headline"
-            android:layout_width="392dp"
-            android:layout_height="48dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_below="@+id/date"
             android:layout_alignParentStart="true"
             android:layout_alignParentEnd="true"
@@ -93,11 +92,11 @@
 
         <Button
             android:id="@+id/button"
-            android:layout_width="64dp"
-            android:layout_height="40dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_below="@+id/headline"
             android:layout_alignParentEnd="true"
-            android:layout_marginTop="3dp"
+            android:layout_marginTop="0dp"
             android:layout_marginEnd="0dp"
             android:background="@android:color/transparent"
             android:textSize="10sp"

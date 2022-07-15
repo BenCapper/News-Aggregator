@@ -62,6 +62,7 @@ class StoryListFragment : Fragment(), StoryListener {
             story?.let {
                 render(story as ArrayList<StoryModel>)
             }
+
         }
 
         return root

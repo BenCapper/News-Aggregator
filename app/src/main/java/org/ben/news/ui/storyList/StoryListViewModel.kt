@@ -63,7 +63,8 @@ class StoryListViewModel : ViewModel() {
     fun load() {
         var list: ArrayList<String>
         try {
-            list = getDates(5)
+            list = getDates(1)
+            list.sortDescending()
             Timber.i("LISTY : $list")
             StoryManager.findAll(list,storyList)
             Timber.i("Load Success : ${storyList.value}")
