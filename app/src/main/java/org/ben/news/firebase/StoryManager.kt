@@ -16,12 +16,23 @@ object StoryManager : StoryStore {
 
     private fun formatTitle(title: String): String {
         return title.replace("(dot)", ".")
-            ?.replace("(pc)", "%")
-            ?.replace("(colon)", ":")
-            ?.replace("(hash)", "#")
-            ?.replace("(quest)", "?")
-            ?.replace("(comma)", ",")
-            ?.replace("(USD)", "$").toString()
+            .replace("(pc)", "%")
+            .replace("(colon)", ":")
+            .replace("(hash)", "#")
+            .replace("(quest)", "?")
+            .replace("(comma)", ",")
+            .replace("(USD)", "$")
+    }
+
+    private fun formatTitleIllegal(title: String): String {
+        return title.replace(".", "(dot)")
+            .replace("%", "(pc)")
+            .replace(":", "(colon)")
+            .replace("#", "(hash)")
+            .replace("?", "(quest)")
+            .replace(",", "(comma)")
+            .replace("$", "(USD)")
+            .replace("&amp;", "and")
     }
 
     override fun findAll(dates: ArrayList<String>, storyList: MutableLiveData<List<StoryModel>>) {
@@ -258,7 +269,8 @@ object StoryManager : StoryStore {
     override fun create(userId: String, path:String, story: StoryModel) {
         val storyValues = story.toMap()
         val childAdd = HashMap<String, Any>()
-        childAdd["/user-$path/$userId/${story.title}"] = storyValues
+        val title = formatTitleIllegal(story.title)
+        childAdd["/user-$path/$userId/$title"] = storyValues
         database.updateChildren(childAdd)
     }
 
@@ -267,8 +279,8 @@ object StoryManager : StoryStore {
     override fun delete(userId: String, path: String, title: String) {
 
         val childDelete : MutableMap<String, Any?> = HashMap()
-
-        childDelete["/user-$path/$userId/$title"] = null
+        val new = formatTitleIllegal(title)
+        childDelete["/user-$path/$userId/$new"] = null
 
         database.updateChildren(childDelete)
     }
