@@ -32,13 +32,13 @@ def pageSoup(page_url):
  
 def titleFormat(string):
    string = (
-       string.replace(".", " ")
-       .replace("%", "pc")
-       .replace(":", " ")
-       .replace("#", " ")
-       .replace("?", " ")
-       .replace(",", " ")
-       .replace("$", " ")
+       string.replace(".", "(dot)")
+       .replace("%", "(pc)")
+       .replace(":", "(colon)")
+       .replace("#", "(hash)")
+       .replace("?", "(quest)")
+       .replace(",", "(comma)")
+       .replace("$", "(USD)")
        .replace("&amp;", "and")
        .replace("/","-")
        .replace("  ", " ")
@@ -48,13 +48,13 @@ def titleFormat(string):
  
 def imgTitleFormat(string):
    string = (
-       string.replace(".", " ")
-       .replace("%", "pc")
-       .replace(":", " ")
-       .replace("#", " ")
-       .replace("?", " ")
-       .replace(",", " ")
-       .replace("$", " ")
+       string.replace(".", "(dot)")
+       .replace("%", "(pc)")
+       .replace(":", "(colon)")
+       .replace("#", "(hash)")
+       .replace("?", "(quest)")
+       .replace(",", "(comma)")
+       .replace("$", "(USD)")
        .replace("&amp;", "and")
        .replace("  ", " ")
        .replace(" ", "-")

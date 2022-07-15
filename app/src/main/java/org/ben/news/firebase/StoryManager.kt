@@ -6,7 +6,6 @@ import com.google.firebase.database.*
 import org.ben.news.models.StoryModel
 import org.ben.news.models.StoryStore
 import timber.log.Timber
-import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -15,6 +14,15 @@ object StoryManager : StoryStore {
 
     var database: DatabaseReference = FirebaseDatabase.getInstance().reference
 
+    private fun formatTitle(title: String): String {
+        return title.replace("(dot)", ".")
+            ?.replace("(pc)", "%")
+            ?.replace("(colon)", ":")
+            ?.replace("(hash)", "#")
+            ?.replace("(quest)", "?")
+            ?.replace("(comma)", ",")
+            ?.replace("(USD)", "$").toString()
+    }
 
     override fun findAll(dates: ArrayList<String>, storyList: MutableLiveData<List<StoryModel>>) {
         val totalList = ArrayList<StoryModel>()
@@ -29,7 +37,8 @@ object StoryManager : StoryStore {
                         override fun onDataChange(snapshot: DataSnapshot) {
                             val children = snapshot.children
                             children.forEach {
-                                val story = it.getValue(StoryModel::class.java)
+                                var story = it.getValue(StoryModel::class.java)
+                                story?.title = story?.title?.let { it -> formatTitle(it) }.toString()
                                 totalList.add(story!!)
                             }
                             database.child("stories").child(date)
@@ -58,6 +67,7 @@ object StoryManager : StoryStore {
                                 it.getValue(StoryModel::class.java)?.date!!.contains(term, true)
                             ) {
                                 val story = it.getValue(StoryModel::class.java)
+                                story?.title = story?.title?.let { it -> formatTitle(it) }.toString()
                                 totalList.add(story!!)
                             }
                         }
@@ -84,6 +94,7 @@ object StoryManager : StoryStore {
                         children.forEach {
                             val story = it.getValue(StoryModel::class.java)
                             if(story?.outlet == outlet) {
+                                story?.title = story?.title?.let { it -> formatTitle(it) }.toString()
                                 totalList.add(story)
                             }
                         }
@@ -110,8 +121,9 @@ object StoryManager : StoryStore {
                     override fun onDataChange(snapshot: DataSnapshot) {
                         val children = snapshot.children
                         children.forEach {
-                            val story = it.getValue(StoryModel::class.java)
+                            var story = it.getValue(StoryModel::class.java)
                             if(story?.outlet == outlet) {
+                                story?.title = story?.title?.let { it -> formatTitle(it) }.toString()
                                 totalList.add(story)
                             }
                         }
@@ -137,6 +149,7 @@ object StoryManager : StoryStore {
                     val children = snapshot.children
                     children.forEach {
                         val story = it.getValue(StoryModel::class.java)
+                        story?.title = story?.title?.let { it -> formatTitle(it) }.toString()
                         totalList.add(story!!)
                         Timber.i("user-article=$story")
                     }
@@ -164,6 +177,7 @@ object StoryManager : StoryStore {
                             it.getValue(StoryModel::class.java)?.outlet!!.contains(term, true) ||
                             it.getValue(StoryModel::class.java)?.date!!.contains(term, true)) {
                             val story = it.getValue(StoryModel::class.java)
+                            story?.title = story?.title?.let { it -> formatTitle(it) }.toString()
                             totalList.add(story!!)
                         }
                     }
@@ -189,7 +203,8 @@ object StoryManager : StoryStore {
                             if (it.getValue(StoryModel::class.java)?.title!!.contains(term, true) &&
                                 it.getValue(StoryModel::class.java)?.outlet!! == outlet
                             ) {
-                                val story = it.getValue(StoryModel::class.java)
+                                var story = it.getValue(StoryModel::class.java)
+                                story?.title = story?.title?.let { it -> formatTitle(it) }.toString()
                                 totalList.add(story!!)
                             }
                         }
@@ -216,7 +231,8 @@ object StoryManager : StoryStore {
                             if (it.getValue(StoryModel::class.java)?.title!!.contains(term, true) &&
                                 it.getValue(StoryModel::class.java)?.outlet!! == outlet
                             ) {
-                                val story = it.getValue(StoryModel::class.java)
+                                var story = it.getValue(StoryModel::class.java)
+                                story?.title = story?.title?.let { it -> formatTitle(it) }.toString()
                                 totalList.add(story!!)
                             }
                         }
