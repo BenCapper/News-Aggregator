@@ -42,7 +42,8 @@ class StoryListFragment : Fragment(), StoryListener {
     private val loggedInViewModel : LoggedInViewModel by activityViewModels()
     private val storyListViewModel: StoryListViewModel by activityViewModels()
     var state: Parcelable? = null
-    lateinit var mAdView : AdView
+    private lateinit var mAdView : AdView
+    lateinit var mAdViewTop : AdView
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -64,8 +65,11 @@ class StoryListFragment : Fragment(), StoryListener {
         MobileAds.initialize(this.context!!) {}
 
         mAdView = fragBinding.adView
+        mAdViewTop = fragBinding.adView2
         val adRequest = AdRequest.Builder().build()
+        val adRequestTop = AdRequest.Builder().build()
         mAdView.loadAd(adRequest)
+        mAdViewTop.loadAd(adRequestTop)
         storyListViewModel.observableStoryList.observe(viewLifecycleOwner) { story ->
             story?.let {
                 render(story as ArrayList<StoryModel>)
