@@ -57,11 +57,13 @@ class StoryListFragment : Fragment(), StoryListener {
         fragBinding.recyclerView.layoutManager = activity?.let { LinearLayoutManager(it) }
         activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.logo)
 
+        storyListViewModel.load()
 
         storyListViewModel.observableStoryList.observe(viewLifecycleOwner) { story ->
             story?.let {
                 render(story as ArrayList<StoryModel>)
             }
+
         }
 
         return root
