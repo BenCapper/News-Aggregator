@@ -12,6 +12,9 @@ import android.widget.ImageView
 import android.widget.SearchView
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.AdView
+import com.google.android.gms.ads.MobileAds
 import com.google.firebase.storage.FirebaseStorage
 import org.ben.news.R
 import org.ben.news.adapters.StoryAdapter
@@ -40,7 +43,8 @@ class CallerFragment : Fragment(), StoryListener {
     private val loggedInViewModel : LoggedInViewModel by activityViewModels()
     private val callerViewModel: CallerViewModel by activityViewModels()
     var state: Parcelable? = null
-
+    private lateinit var mAdView : AdView
+    lateinit var mAdViewTop : AdView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,6 +63,13 @@ class CallerFragment : Fragment(), StoryListener {
         fragBinding.recyclerViewCaller.layoutManager = activity?.let { LinearLayoutManager(it) }
         activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.dc)
 
+        MobileAds.initialize(this.context!!) {}
+        mAdView = fragBinding.adViewCallerBot
+        mAdViewTop = fragBinding.adViewCallerTop
+        val adRequest = AdRequest.Builder().build()
+        val adRequestTop = AdRequest.Builder().build()
+        mAdView.loadAd(adRequest)
+        mAdViewTop.loadAd(adRequestTop)
 
         callerViewModel.observableCallerList.observe(viewLifecycleOwner) { story ->
             story?.let {
