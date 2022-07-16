@@ -62,14 +62,15 @@ class StoryListFragment : Fragment(), StoryListener {
         val root = fragBinding.root
         fragBinding.recyclerView.layoutManager = activity?.let { LinearLayoutManager(it) }
         activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.logo)
-        MobileAds.initialize(this.context!!) {}
 
+        MobileAds.initialize(this.context!!) {}
         mAdView = fragBinding.adView
         mAdViewTop = fragBinding.adView2
         val adRequest = AdRequest.Builder().build()
         val adRequestTop = AdRequest.Builder().build()
         mAdView.loadAd(adRequest)
         mAdViewTop.loadAd(adRequestTop)
+
         storyListViewModel.observableStoryList.observe(viewLifecycleOwner) { story ->
             story?.let {
                 render(story as ArrayList<StoryModel>)
