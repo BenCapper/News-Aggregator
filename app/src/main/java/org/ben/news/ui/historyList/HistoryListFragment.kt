@@ -14,6 +14,9 @@ import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.AdView
+import com.google.android.gms.ads.MobileAds
 import com.google.firebase.storage.FirebaseStorage
 import org.ben.news.R
 import org.ben.news.adapters.StoryAdapter
@@ -41,6 +44,8 @@ class HistoryListFragment : Fragment(), StoryListener {
     private val loggedInViewModel : LoggedInViewModel by activityViewModels()
     private val historyListViewModel: HistoryListViewModel by activityViewModels()
     var state: Parcelable? = null
+    private lateinit var mAdView : AdView
+    lateinit var mAdViewTop : AdView
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -60,6 +65,14 @@ class HistoryListFragment : Fragment(), StoryListener {
         loader = createLoader(requireActivity())
         activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.history1)
         fragBinding.recyclerViewHistory.layoutManager = activity?.let { LinearLayoutManager(it) }
+
+        MobileAds.initialize(this.context!!) {}
+        mAdView = fragBinding.adViewHistoryBot
+        mAdViewTop = fragBinding.adViewHistoryTop
+        val adRequest = AdRequest.Builder().build()
+        val adRequestTop = AdRequest.Builder().build()
+        mAdView.loadAd(adRequest)
+        mAdViewTop.loadAd(adRequestTop)
 
         historyListViewModel.observableHistoryList.observe(viewLifecycleOwner) { story ->
             story?.let {

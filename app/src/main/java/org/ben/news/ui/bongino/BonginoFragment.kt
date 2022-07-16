@@ -12,6 +12,9 @@ import android.widget.ImageView
 import android.widget.SearchView
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.AdView
+import com.google.android.gms.ads.MobileAds
 import com.google.firebase.storage.FirebaseStorage
 import org.ben.news.R
 import org.ben.news.adapters.StoryAdapter
@@ -39,8 +42,9 @@ class BonginoFragment : Fragment(), StoryListener {
     lateinit var loader : AlertDialog
     private val loggedInViewModel : LoggedInViewModel by activityViewModels()
     private val bonginoViewModel: BonginoViewModel by activityViewModels()
-    private var storage = FirebaseStorage.getInstance().reference
     var state: Parcelable? = null
+    private lateinit var mAdView : AdView
+    lateinit var mAdViewTop : AdView
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -59,6 +63,14 @@ class BonginoFragment : Fragment(), StoryListener {
         val root = fragBinding.root
         fragBinding.recyclerViewBong.layoutManager = activity?.let { LinearLayoutManager(it) }
         activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.bong)
+
+        MobileAds.initialize(this.context!!) {}
+        mAdView = fragBinding.adViewBongBot
+        mAdViewTop = fragBinding.adViewBongTop
+        val adRequest = AdRequest.Builder().build()
+        val adRequestTop = AdRequest.Builder().build()
+        mAdView.loadAd(adRequest)
+        mAdViewTop.loadAd(adRequestTop)
 
         bonginoViewModel.observableBongList.observe(viewLifecycleOwner) { story ->
             story?.let {

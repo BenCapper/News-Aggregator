@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.MobileAds
 import com.google.android.material.snackbar.Snackbar
@@ -41,7 +42,8 @@ class StoryListFragment : Fragment(), StoryListener {
     private val loggedInViewModel : LoggedInViewModel by activityViewModels()
     private val storyListViewModel: StoryListViewModel by activityViewModels()
     var state: Parcelable? = null
-    lateinit var mAdView : AdView
+    private lateinit var mAdView : AdView
+    lateinit var mAdViewTop : AdView
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -60,11 +62,15 @@ class StoryListFragment : Fragment(), StoryListener {
         val root = fragBinding.root
         fragBinding.recyclerView.layoutManager = activity?.let { LinearLayoutManager(it) }
         activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.logo)
-        MobileAds.initialize(this.context!!) {}
 
+        MobileAds.initialize(this.context!!) {}
         mAdView = fragBinding.adView
+        mAdViewTop = fragBinding.adView2
         val adRequest = AdRequest.Builder().build()
+        val adRequestTop = AdRequest.Builder().build()
         mAdView.loadAd(adRequest)
+        mAdViewTop.loadAd(adRequestTop)
+
         storyListViewModel.observableStoryList.observe(viewLifecycleOwner) { story ->
             story?.let {
                 render(story as ArrayList<StoryModel>)
