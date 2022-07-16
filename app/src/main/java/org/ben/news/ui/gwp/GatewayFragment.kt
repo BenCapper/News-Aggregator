@@ -42,6 +42,7 @@ class GatewayFragment : Fragment(), StoryListener {
     private lateinit var mAdView : AdView
     lateinit var mAdViewTop : AdView
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)

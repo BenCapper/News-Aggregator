@@ -11,6 +11,9 @@ import android.widget.ImageView
 import android.widget.SearchView
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.AdView
+import com.google.android.gms.ads.MobileAds
 import com.google.firebase.storage.FirebaseStorage
 import org.ben.news.R
 import org.ben.news.adapters.StoryAdapter
@@ -36,6 +39,8 @@ class GbFragment : Fragment(), StoryListener {
     private val loggedInViewModel : LoggedInViewModel by activityViewModels()
     private val gbViewModel: GbViewModel by activityViewModels()
     var state: Parcelable? = null
+    private lateinit var mAdView : AdView
+    lateinit var mAdViewTop : AdView
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -55,8 +60,15 @@ class GbFragment : Fragment(), StoryListener {
         fragBinding.recyclerViewGb.layoutManager = activity?.let { LinearLayoutManager(it) }
         activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.gb)
 
+        MobileAds.initialize(this.context!!) {}
+        mAdView = fragBinding.adViewGbBot
+        mAdViewTop = fragBinding.adViewGbTop
+        val adRequest = AdRequest.Builder().build()
+        val adRequestTop = AdRequest.Builder().build()
+        mAdView.loadAd(adRequest)
+        mAdViewTop.loadAd(adRequestTop)
 
-        gbViewModel.observableGateList.observe(viewLifecycleOwner) { story ->
+        gbViewModel.observableGbList.observe(viewLifecycleOwner) { story ->
             story?.let {
                 render(story as ArrayList<StoryModel>)
             }

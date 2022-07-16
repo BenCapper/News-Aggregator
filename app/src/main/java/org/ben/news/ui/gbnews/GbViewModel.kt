@@ -16,7 +16,7 @@ class GbViewModel : ViewModel() {
     private val gbList =
         MutableLiveData<List<StoryModel>>()
 
-    val observableGateList: LiveData<List<StoryModel>>
+    val observableGbList: LiveData<List<StoryModel>>
         get() = gbList
 
     private val story = MutableLiveData<StoryModel>()
