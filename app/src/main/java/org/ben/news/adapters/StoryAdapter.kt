@@ -4,10 +4,13 @@ import android.graphics.BitmapFactory
 import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.view.LayoutInflater
+import android.view.RoundedCorner
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.annotation.GlideModule
+import com.bumptech.glide.load.resource.bitmap.ResourceBitmapDecoder
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.storage.FirebaseStorage
 import com.squareup.picasso.Picasso
@@ -15,6 +18,7 @@ import org.ben.news.R
 import org.ben.news.databinding.CardStoryBinding
 import org.ben.news.firebase.FirebaseImageManager
 import org.ben.news.models.StoryModel
+import splitties.views.imageBitmap
 import timber.log.Timber
 import java.io.File
 import java.util.*
@@ -60,7 +64,7 @@ class StoryAdapter constructor(private var stories: ArrayList<StoryModel>, priva
 
         fun bind(story: StoryModel, listener : StoryListener) {
 
-            Glide.with(this.itemView.context).load(story.storage_link).override(1254,460).centerCrop().into(binding.imageView2)
+            Glide.with(this.itemView.context).load(story.storage_link).override(850,280).centerCrop().into(binding.imageView2)
 
             binding.root.setOnClickListener { listener.onStoryClick(story) }
             binding.button.setOnClickListener { listener.onLike(story) }
