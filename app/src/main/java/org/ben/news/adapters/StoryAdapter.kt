@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.annotation.GlideModule
+import com.bumptech.glide.load.resource.bitmap.ResourceBitmapDecoder
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.storage.FirebaseStorage
@@ -62,7 +63,7 @@ class StoryAdapter constructor(private var stories: ArrayList<StoryModel>, priva
         //val readOnlyRow = readOnly
 
         fun bind(story: StoryModel, listener : StoryListener) {
-            
+
             Glide.with(this.itemView.context).load(story.storage_link).override(850,280).centerCrop().into(binding.imageView2)
 
             binding.root.setOnClickListener { listener.onStoryClick(story) }
