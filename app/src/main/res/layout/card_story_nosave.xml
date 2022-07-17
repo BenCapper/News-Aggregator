@@ -7,11 +7,14 @@
             name="story"
             type="org.ben.news.models.StoryModel" />
     </data>
+
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:elevation="24dp">
+        android:elevation="24dp"
+        app:cardCornerRadius="5dp"
+        app:cardElevation="3dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"

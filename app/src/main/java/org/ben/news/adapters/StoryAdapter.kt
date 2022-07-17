@@ -17,6 +17,7 @@ import org.ben.news.R
 import org.ben.news.databinding.CardStoryBinding
 import org.ben.news.firebase.FirebaseImageManager
 import org.ben.news.models.StoryModel
+import splitties.views.imageBitmap
 import timber.log.Timber
 import java.io.File
 import java.util.*
@@ -61,7 +62,7 @@ class StoryAdapter constructor(private var stories: ArrayList<StoryModel>, priva
         //val readOnlyRow = readOnly
 
         fun bind(story: StoryModel, listener : StoryListener) {
-
+            
             Glide.with(this.itemView.context).load(story.storage_link).override(850,280).centerCrop().into(binding.imageView2)
 
             binding.root.setOnClickListener { listener.onStoryClick(story) }
