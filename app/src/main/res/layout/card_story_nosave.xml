@@ -13,31 +13,34 @@
         android:layout_marginBottom="8dp"
         android:elevation="24dp">
 
-        <RelativeLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="40dp">
+            android:layout_height="130dp">
 
-        </RelativeLayout>
-
-        <ImageView
-            android:id="@+id/imageView2_nosave"
-            android:layout_width="wrap_content"
-            android:layout_height="130dp" />
+            <ImageView
+                android:id="@+id/imageView_nosave"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="130dp"
+            android:layout_marginTop="110dp"
             android:background="#FFFFFF"
-            android:padding="16dp">
+            android:padding="20dp">
 
             <Button
-                android:id="@+id/button2"
-                android:layout_width="match_parent"
+                android:id="@+id/button3_nosave"
+                android:layout_width="209dp"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/headline_nosave"
-                android:layout_marginStart="-80dp"
-                android:layout_marginTop="4dp"
+                android:layout_marginStart="-60dp"
+                android:layout_marginEnd="0dp"
                 android:layout_toEndOf="@+id/link_nosave"
                 android:background="@android:color/transparent"
                 android:textSize="10sp"
@@ -53,7 +56,7 @@
                 android:layout_alignParentEnd="true"
                 android:layout_marginStart="0dp"
                 android:layout_marginTop="15dp"
-                android:layout_marginEnd="126dp"
+                android:layout_marginEnd="120dp"
                 android:text="@{story.outlet}"
                 android:textColor="@color/dark"
                 android:textSize="11sp"
@@ -88,7 +91,6 @@
                 android:textColor="@color/black"
                 android:textSize="13sp"
                 android:textStyle="bold" />
-
 
 
         </RelativeLayout>
