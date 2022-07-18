@@ -47,7 +47,7 @@ class NoSaveAdapter constructor(private var stories: ArrayList<StoryModel>, priv
         fun bind(story: StoryModel, listener: StoryNoSaveListener) {
             var imgRef = storage.child(story.img_name)
 
-            Glide.with(this.itemView.context).load(story.storage_link).override(850,280).centerCrop().into(binding.imageViewNosave)
+            Glide.with(this.itemView.context).load(story.storage_link).into(binding.imageViewNosave)
 
             binding.root.setOnClickListener { listener.onStoryClick(story) }
             binding.button3Nosave.setOnClickListener { listener.onShare(story) }
