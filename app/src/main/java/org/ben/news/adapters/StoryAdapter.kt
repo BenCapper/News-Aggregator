@@ -98,26 +98,26 @@ class StoryAdapter constructor(
         //val readOnlyRow = readOnly
 
         fun bind() {
+
             val adLoader = AdLoader.Builder(this.itemView.context, "ca-app-pub-3940256099942544/2247696110")
                 .forNativeAd { ad : NativeAd ->
-                    binding.headlinead.text = ad.body
-                    binding.date.text = ad.headline
-                    binding.linkad.text = ad.callToAction
-                    binding.linkad2.text = ad.advertiser
+                    val nativeAdView = binding.root
+                    nativeAdView.mediaView = binding.adMedia
+                    nativeAdView.bodyView = binding.body
+                    nativeAdView.headlineView = binding.headad
+                    nativeAdView.callToActionView = binding.call
+                    nativeAdView.advertiserView = binding.advert
+                    ad.mediaContent?.let { binding.adMedia.setMediaContent(it) }
+                    binding.headad.text = ad.headline
+                    binding.body.text = ad.body
+                    binding.call.text = ad.callToAction
+                    binding.advert.text = ad.advertiser
                     binding.img.setImageDrawable(ad.mediaContent!!.mainImage)
-                    Timber.i("IM DOING SOMETHING ${ad.mediaContent}")
+                    binding.nativeAd.setNativeAd(ad)
+
+                    Timber.i("IM DOING SOMETHING ${binding.nativeAd}")
 
                 }
-                .withAdListener(object : AdListener() {
-                    override fun onAdFailedToLoad(adError: LoadAdError) {
-                        // Handle the failure by logging, altering the UI, and so on.
-                    }
-                })
-                .withNativeAdOptions(
-                    NativeAdOptions.Builder()
-                    // Methods in the NativeAdOptions.Builder class can be
-                    // used here to specify individual options settings.
-                    .build())
                 .build()
             adLoader.loadAd(AdRequest.Builder().build())
         }
