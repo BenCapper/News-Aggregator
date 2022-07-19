@@ -23,5 +23,5 @@ local.properties
 /scripts/models/__pycache__
 /scripts/utils/__pycache__
 news.json
-
+.vscode/
 /app/google-services.json
