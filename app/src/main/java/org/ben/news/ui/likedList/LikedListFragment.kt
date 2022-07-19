@@ -79,12 +79,14 @@ class LikedListFragment : Fragment(), StoryNoSaveListener {
 
         val swipeDeleteHandler = object : SwipeToDeleteCallback(requireContext()) {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                val adapter = fragBinding.recyclerViewLiked.adapter as NoSaveAdapter
-                adapter.removeAt(viewHolder.absoluteAdapterPosition)
-                likedListViewModel.delete(
-                    likedListViewModel.liveFirebaseUser.value?.uid!!,
-                    (viewHolder.itemView.tag as StoryModel).title
-                )
+                if (viewHolder.itemViewType != 1) {
+                    val adapter = fragBinding.recyclerViewLiked.adapter as NoSaveAdapter
+                    adapter.removeAt(viewHolder.absoluteAdapterPosition)
+                    likedListViewModel.delete(
+                        likedListViewModel.liveFirebaseUser.value?.uid!!,
+                        (viewHolder.itemView.tag as StoryModel).title
+                    )
+                }
             }
         }
         val itemTouchDeleteHelper = ItemTouchHelper(swipeDeleteHandler)

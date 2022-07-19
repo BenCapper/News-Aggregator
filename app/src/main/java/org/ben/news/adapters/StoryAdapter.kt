@@ -93,7 +93,7 @@ class StoryAdapter constructor(
     }
 
 
-    inner class AdHolder(private var binding : CardAdBinding) : RecyclerView.ViewHolder(binding.root) {
+    class AdHolder(private var binding : CardAdBinding) : RecyclerView.ViewHolder(binding.root) {
 
         //val readOnlyRow = readOnly
 
@@ -107,6 +107,7 @@ class StoryAdapter constructor(
                     nativeAdView.headlineView = binding.headad
                     nativeAdView.callToActionView = binding.call
                     nativeAdView.advertiserView = binding.advert
+                    binding.root.tag = ad
                     ad.mediaContent?.let { binding.adMedia.setMediaContent(it) }
                     binding.headad.text = ad.headline
                     binding.body.text = ad.body

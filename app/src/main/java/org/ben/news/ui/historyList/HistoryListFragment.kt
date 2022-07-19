@@ -76,12 +76,14 @@ class HistoryListFragment : Fragment(), StoryListener {
 
         val swipeDeleteHandler = object : SwipeToDeleteCallback(requireContext()) {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                val adapter = fragBinding.recyclerViewHistory.adapter as StoryAdapter
-                adapter.removeAt(viewHolder.absoluteAdapterPosition)
-                historyListViewModel.delete(
-                    historyListViewModel.liveFirebaseUser.value?.uid!!,
-                    (viewHolder.itemView.tag as StoryModel).title
-                )
+                if (viewHolder.itemViewType != 1) {
+                    val adapter = fragBinding.recyclerViewHistory.adapter as StoryAdapter
+                    adapter.removeAt(viewHolder.absoluteAdapterPosition)
+                    historyListViewModel.delete(
+                        historyListViewModel.liveFirebaseUser.value?.uid!!,
+                        (viewHolder.itemView.tag as StoryModel).title
+                    )
+                }
             }
         }
         val itemTouchDeleteHelper = ItemTouchHelper(swipeDeleteHandler)
