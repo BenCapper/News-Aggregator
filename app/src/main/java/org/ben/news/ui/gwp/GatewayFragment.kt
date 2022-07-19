@@ -39,8 +39,7 @@ class GatewayFragment : Fragment(), StoryListener {
     private val loggedInViewModel : LoggedInViewModel by activityViewModels()
     private val gateViewModel: GatewayViewModel by activityViewModels()
     var state: Parcelable? = null
-    private lateinit var mAdView : AdView
-    lateinit var mAdViewTop : AdView
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -61,12 +60,7 @@ class GatewayFragment : Fragment(), StoryListener {
         activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.gwp)
 
         MobileAds.initialize(this.context!!) {}
-        mAdView = fragBinding.adViewGateBot
-        mAdViewTop = fragBinding.adViewGateTop
-        val adRequest = AdRequest.Builder().build()
-        val adRequestTop = AdRequest.Builder().build()
-        mAdView.loadAd(adRequest)
-        mAdViewTop.loadAd(adRequestTop)
+
 
         gateViewModel.observableGateList.observe(viewLifecycleOwner) { story ->
             story?.let {

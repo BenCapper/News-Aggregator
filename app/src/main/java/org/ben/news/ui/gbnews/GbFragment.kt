@@ -39,8 +39,7 @@ class GbFragment : Fragment(), StoryListener {
     private val loggedInViewModel : LoggedInViewModel by activityViewModels()
     private val gbViewModel: GbViewModel by activityViewModels()
     var state: Parcelable? = null
-    private lateinit var mAdView : AdView
-    lateinit var mAdViewTop : AdView
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -61,12 +60,7 @@ class GbFragment : Fragment(), StoryListener {
         activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.gb)
 
         MobileAds.initialize(this.context!!) {}
-        mAdView = fragBinding.adViewGbBot
-        mAdViewTop = fragBinding.adViewGbTop
-        val adRequest = AdRequest.Builder().build()
-        val adRequestTop = AdRequest.Builder().build()
-        mAdView.loadAd(adRequest)
-        mAdViewTop.loadAd(adRequestTop)
+
 
         gbViewModel.observableGbList.observe(viewLifecycleOwner) { story ->
             story?.let {

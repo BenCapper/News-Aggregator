@@ -48,8 +48,7 @@ class LikedListFragment : Fragment(), StoryNoSaveListener {
     private val likedListViewModel: LikedListViewModel by activityViewModels()
     private var storage = FirebaseStorage.getInstance().reference
     var state: Parcelable? = null
-    private lateinit var mAdView : AdView
-    lateinit var mAdViewTop : AdView
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -70,12 +69,7 @@ class LikedListFragment : Fragment(), StoryNoSaveListener {
         activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.saved2)
 
         MobileAds.initialize(this.context!!) {}
-        mAdView = fragBinding.adViewLikeBot
-        mAdViewTop = fragBinding.adViewLikeTop
-        val adRequest = AdRequest.Builder().build()
-        val adRequestTop = AdRequest.Builder().build()
-        mAdView.loadAd(adRequest)
-        mAdViewTop.loadAd(adRequestTop)
+
 
         likedListViewModel.observableLikedList.observe(viewLifecycleOwner) { story ->
             story?.let {

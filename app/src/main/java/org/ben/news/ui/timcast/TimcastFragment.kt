@@ -39,8 +39,7 @@ class TimcastFragment : Fragment(), StoryListener {
     private val loggedInViewModel : LoggedInViewModel by activityViewModels()
     private val timViewModel: TimcastViewModel by activityViewModels()
     var state: Parcelable? = null
-    private lateinit var mAdView : AdView
-    lateinit var mAdViewTop : AdView
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -61,12 +60,7 @@ class TimcastFragment : Fragment(), StoryListener {
         activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.tim)
 
         MobileAds.initialize(this.context!!) {}
-        mAdView = fragBinding.adViewTimBot
-        mAdViewTop = fragBinding.adViewTimTop
-        val adRequest = AdRequest.Builder().build()
-        val adRequestTop = AdRequest.Builder().build()
-        mAdView.loadAd(adRequest)
-        mAdViewTop.loadAd(adRequestTop)
+
 
         timViewModel.observableTimList.observe(viewLifecycleOwner) { story ->
             story?.let {

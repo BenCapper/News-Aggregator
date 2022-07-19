@@ -44,8 +44,7 @@ class HistoryListFragment : Fragment(), StoryListener {
     private val loggedInViewModel : LoggedInViewModel by activityViewModels()
     private val historyListViewModel: HistoryListViewModel by activityViewModels()
     var state: Parcelable? = null
-    private lateinit var mAdView : AdView
-    lateinit var mAdViewTop : AdView
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -67,12 +66,7 @@ class HistoryListFragment : Fragment(), StoryListener {
         fragBinding.recyclerViewHistory.layoutManager = activity?.let { LinearLayoutManager(it) }
 
         MobileAds.initialize(this.context!!) {}
-        mAdView = fragBinding.adViewHistoryBot
-        mAdViewTop = fragBinding.adViewHistoryTop
-        val adRequest = AdRequest.Builder().build()
-        val adRequestTop = AdRequest.Builder().build()
-        mAdView.loadAd(adRequest)
-        mAdViewTop.loadAd(adRequestTop)
+
 
         historyListViewModel.observableHistoryList.observe(viewLifecycleOwner) { story ->
             story?.let {

@@ -43,8 +43,7 @@ class CallerFragment : Fragment(), StoryListener {
     private val loggedInViewModel : LoggedInViewModel by activityViewModels()
     private val callerViewModel: CallerViewModel by activityViewModels()
     var state: Parcelable? = null
-    private lateinit var mAdView : AdView
-    lateinit var mAdViewTop : AdView
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,12 +63,7 @@ class CallerFragment : Fragment(), StoryListener {
         activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.dc)
 
         MobileAds.initialize(this.context!!) {}
-        mAdView = fragBinding.adViewCallerBot
-        mAdViewTop = fragBinding.adViewCallerTop
-        val adRequest = AdRequest.Builder().build()
-        val adRequestTop = AdRequest.Builder().build()
-        mAdView.loadAd(adRequest)
-        mAdViewTop.loadAd(adRequestTop)
+
 
         callerViewModel.observableCallerList.observe(viewLifecycleOwner) { story ->
             story?.let {
