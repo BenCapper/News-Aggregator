@@ -1,29 +1,23 @@
 package org.ben.news.adapters
 
-import android.graphics.BitmapFactory
-import android.graphics.drawable.BitmapDrawable
-import android.net.Uri
+
+import android.graphics.Bitmap
+import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
-import android.view.RoundedCorner
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.bumptech.glide.annotation.GlideModule
-import com.bumptech.glide.load.resource.bitmap.ResourceBitmapDecoder
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.storage.FirebaseStorage
-import com.squareup.picasso.Picasso
-import org.ben.news.R
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.request.target.BitmapImageViewTarget
+import com.bumptech.glide.request.target.Target
+import com.google.android.gms.ads.*
+import com.google.android.gms.ads.nativead.NativeAd
+import com.google.android.gms.ads.nativead.NativeAdOptions
+import org.ben.news.databinding.CardAdBinding
 import org.ben.news.databinding.CardStoryBinding
-import org.ben.news.firebase.FirebaseImageManager
 import org.ben.news.models.StoryModel
-import splitties.views.imageBitmap
 import timber.log.Timber
-import java.io.File
-import java.util.*
-import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
+
 
 interface StoryListener {
     fun onStoryClick(story: StoryModel)
@@ -31,17 +25,29 @@ interface StoryListener {
     fun onShare(story: StoryModel)
 }
 
-class StoryAdapter constructor(private var stories: ArrayList<StoryModel>, private val listener: StoryListener, )
-    : RecyclerView.Adapter<StoryAdapter.MainHolder>() {
+class StoryAdapter constructor(
+    private var stories: ArrayList<StoryModel>,
+    private val listener: StoryListener
+)
+    : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    private var storage = FirebaseStorage.getInstance().reference
 
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainHolder {
-        val binding = CardStoryBinding
-            .inflate(LayoutInflater.from(parent.context), parent, false)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        return if(viewType != 1){
+            val binding = CardStoryBinding
+                .inflate(LayoutInflater.from(parent.context), parent, false)
 
-        return MainHolder(binding)
+            MainHolder(binding)
+
+        } else {
+            val binding = CardAdBinding
+                .inflate(LayoutInflater.from(parent.context), parent, false)
+
+            AdHolder(binding)
+
+        }
+
     }
 
     fun removeAt(position: Int) {
@@ -49,14 +55,24 @@ class StoryAdapter constructor(private var stories: ArrayList<StoryModel>, priva
         notifyItemRemoved(position)
     }
 
-    override fun onBindViewHolder(holder: MainHolder, position: Int) {
-        val story = stories[holder.absoluteAdapterPosition]
-        holder.bind(story, listener)
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+
+        if (holder is MainHolder){
+            val story = stories[holder.absoluteAdapterPosition]
+            holder.bind(story, listener)
+        }
+        if (holder is AdHolder) {
+            holder.bind()
+        }
+
     }
 
     override fun getItemCount(): Int = stories.size
 
 
+    override fun getItemViewType(position: Int): Int {
+        return position % 5
+    }
     /* This class binds the building information to the recyclerview card */
     inner class MainHolder(private val binding : CardStoryBinding) : RecyclerView.ViewHolder(binding.root) {
 
@@ -64,16 +80,50 @@ class StoryAdapter constructor(private var stories: ArrayList<StoryModel>, priva
 
         fun bind(story: StoryModel, listener : StoryListener) {
 
-            Glide.with(this.itemView.context).load(story.storage_link).into(binding.imageView2)
 
             binding.root.setOnClickListener { listener.onStoryClick(story) }
             binding.button.setOnClickListener { listener.onLike(story) }
             binding.button3.setOnClickListener { listener.onShare(story) }
             binding.root.tag = story
             binding.story = story
+            Glide.with(this.itemView.context).load(story.storage_link).into(binding.imageView2)
             binding.executePendingBindings()
         }
 
     }
+
+
+    class AdHolder(private var binding : CardAdBinding) : RecyclerView.ViewHolder(binding.root) {
+
+        //val readOnlyRow = readOnly
+
+        fun bind() {
+
+            val adLoader = AdLoader.Builder(this.itemView.context, "ca-app-pub-3940256099942544/2247696110")
+                .forNativeAd { ad : NativeAd ->
+                    val nativeAdView = binding.root
+                    nativeAdView.mediaView = binding.adMedia
+                    nativeAdView.bodyView = binding.body
+                    nativeAdView.headlineView = binding.headad
+                    nativeAdView.callToActionView = binding.call
+                    nativeAdView.advertiserView = binding.advert
+                    binding.root.tag = ad
+                    ad.mediaContent?.let { binding.adMedia.setMediaContent(it) }
+                    binding.headad.text = ad.headline
+                    binding.body.text = ad.body
+                    binding.call.text = ad.callToAction
+                    binding.advert.text = ad.advertiser
+                    binding.img.setImageDrawable(ad.mediaContent!!.mainImage)
+                    binding.nativeAd.setNativeAd(ad)
+
+                    Timber.i("IM DOING SOMETHING ${binding.nativeAd}")
+
+                }
+                .build()
+            adLoader.loadAd(AdRequest.Builder().build())
+        }
+
+    }
+
 
 }

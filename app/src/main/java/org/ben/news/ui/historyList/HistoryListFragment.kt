@@ -44,8 +44,7 @@ class HistoryListFragment : Fragment(), StoryListener {
     private val loggedInViewModel : LoggedInViewModel by activityViewModels()
     private val historyListViewModel: HistoryListViewModel by activityViewModels()
     var state: Parcelable? = null
-    private lateinit var mAdView : AdView
-    lateinit var mAdViewTop : AdView
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -67,12 +66,7 @@ class HistoryListFragment : Fragment(), StoryListener {
         fragBinding.recyclerViewHistory.layoutManager = activity?.let { LinearLayoutManager(it) }
 
         MobileAds.initialize(this.context!!) {}
-        mAdView = fragBinding.adViewHistoryBot
-        mAdViewTop = fragBinding.adViewHistoryTop
-        val adRequest = AdRequest.Builder().build()
-        val adRequestTop = AdRequest.Builder().build()
-        mAdView.loadAd(adRequest)
-        mAdViewTop.loadAd(adRequestTop)
+
 
         historyListViewModel.observableHistoryList.observe(viewLifecycleOwner) { story ->
             story?.let {
@@ -82,12 +76,14 @@ class HistoryListFragment : Fragment(), StoryListener {
 
         val swipeDeleteHandler = object : SwipeToDeleteCallback(requireContext()) {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                val adapter = fragBinding.recyclerViewHistory.adapter as StoryAdapter
-                adapter.removeAt(viewHolder.absoluteAdapterPosition)
-                historyListViewModel.delete(
-                    historyListViewModel.liveFirebaseUser.value?.uid!!,
-                    (viewHolder.itemView.tag as StoryModel).title
-                )
+                if (viewHolder.itemViewType != 1) {
+                    val adapter = fragBinding.recyclerViewHistory.adapter as StoryAdapter
+                    adapter.removeAt(viewHolder.absoluteAdapterPosition)
+                    historyListViewModel.delete(
+                        historyListViewModel.liveFirebaseUser.value?.uid!!,
+                        (viewHolder.itemView.tag as StoryModel).title
+                    )
+                }
             }
         }
         val itemTouchDeleteHelper = ItemTouchHelper(swipeDeleteHandler)

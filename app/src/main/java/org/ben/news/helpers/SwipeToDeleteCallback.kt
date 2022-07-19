@@ -56,31 +56,54 @@ abstract class SwipeToDeleteCallback(context: Context) : ItemTouchHelper.SimpleC
         val isCanceled = dX == 0f && !isCurrentlyActive
 
         if (isCanceled) {
-            clearCanvas(c, itemView.right + dX, itemView.top.toFloat(), itemView.right.toFloat(), itemView.bottom.toFloat())
-            super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
+            clearCanvas(
+                c,
+                itemView.right + dX,
+                itemView.top.toFloat(),
+                itemView.right.toFloat(),
+                itemView.bottom.toFloat()
+            )
+            super.onChildDraw(
+                c,
+                recyclerView,
+                viewHolder,
+                dX,
+                dY,
+                actionState,
+                isCurrentlyActive
+            )
             return
         }
+        if (viewHolder.itemViewType != 1) {
+            // Draw the delete background
+            background.color = backgroundColor
+            background.setBounds(
+                itemView.right + dX.toInt(),
+                itemView.top,
+                itemView.right,
+                itemView.bottom
+            )
+            background.draw(c)
 
-        // Draw the delete background
-        background.color = backgroundColor
-        background.setBounds(itemView.right + dX.toInt(), itemView.top, itemView.right, itemView.bottom)
-        background.draw(c)
-
-        // Calculate position of delete icon
-        val deleteIconTop = itemView.top + (itemHeight - intrinsicHeight!!) - 450
-        //val deleteIconMargin = (itemHeight - intrinsicHeight)
-        val deleteIconLeft = itemView.right  - intrinsicWidth!! - 200
-        val deleteIconRight = itemView.right - 50
-        val deleteIconBottom = deleteIconTop + intrinsicHeight + 200
+            // Calculate position of delete icon
+            val deleteIconTop = itemView.top + (itemHeight - intrinsicHeight!!) - 450
+            //val deleteIconMargin = (itemHeight - intrinsicHeight)
+            val deleteIconLeft = itemView.right - intrinsicWidth!! - 200
+            val deleteIconRight = itemView.right - 50
+            val deleteIconBottom = deleteIconTop + intrinsicHeight + 200
 
 
-        // Draw the delete icon
-        deleteIcon?.setBounds(deleteIconLeft, deleteIconTop,
-            deleteIconRight.toInt(), deleteIconBottom)
-        deleteIcon?.draw(c)
+            // Draw the delete icon
+            deleteIcon?.setBounds(
+                deleteIconLeft, deleteIconTop,
+                deleteIconRight.toInt(), deleteIconBottom
+            )
+            deleteIcon?.draw(c)
 
-        super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
+            super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
+        }
     }
+
 
     /**
      * Clear the canvas by drawing a rectangle with the clearPaint.

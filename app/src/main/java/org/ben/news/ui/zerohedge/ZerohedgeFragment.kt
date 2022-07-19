@@ -39,8 +39,7 @@ class ZerohedgeFragment : Fragment(), StoryListener {
     private val loggedInViewModel : LoggedInViewModel by activityViewModels()
     private val zeroViewModel: ZerohedgeViewModel by activityViewModels()
     var state: Parcelable? = null
-    private lateinit var mAdView : AdView
-    lateinit var mAdViewTop : AdView
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -61,12 +60,6 @@ class ZerohedgeFragment : Fragment(), StoryListener {
         activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.zero)
 
         MobileAds.initialize(this.context!!) {}
-        mAdView = fragBinding.adViewZeroBot
-        mAdViewTop = fragBinding.adViewZeroTop
-        val adRequest = AdRequest.Builder().build()
-        val adRequestTop = AdRequest.Builder().build()
-        mAdView.loadAd(adRequest)
-        mAdViewTop.loadAd(adRequestTop)
 
         zeroViewModel.observableZeroList.observe(viewLifecycleOwner) { story ->
             story?.let {

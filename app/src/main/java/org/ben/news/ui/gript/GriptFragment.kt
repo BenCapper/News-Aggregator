@@ -43,8 +43,7 @@ class GriptFragment : Fragment(), StoryListener {
     private val loggedInViewModel : LoggedInViewModel by activityViewModels()
     private val griptViewModel: GriptViewModel by activityViewModels()
     var state: Parcelable? = null
-    private lateinit var mAdView : AdView
-    lateinit var mAdViewTop : AdView
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -65,12 +64,7 @@ class GriptFragment : Fragment(), StoryListener {
         activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.gript)
 
         MobileAds.initialize(this.context!!) {}
-        mAdView = fragBinding.adViewGriptBot
-        mAdViewTop = fragBinding.adViewGriptTop
-        val adRequest = AdRequest.Builder().build()
-        val adRequestTop = AdRequest.Builder().build()
-        mAdView.loadAd(adRequest)
-        mAdViewTop.loadAd(adRequestTop)
+
 
         griptViewModel.observableGriptList.observe(viewLifecycleOwner) { story ->
             story?.let {

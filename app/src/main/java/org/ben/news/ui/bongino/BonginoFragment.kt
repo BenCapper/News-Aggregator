@@ -43,8 +43,7 @@ class BonginoFragment : Fragment(), StoryListener {
     private val loggedInViewModel : LoggedInViewModel by activityViewModels()
     private val bonginoViewModel: BonginoViewModel by activityViewModels()
     var state: Parcelable? = null
-    private lateinit var mAdView : AdView
-    lateinit var mAdViewTop : AdView
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -65,12 +64,7 @@ class BonginoFragment : Fragment(), StoryListener {
         activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.bong)
 
         MobileAds.initialize(this.context!!) {}
-        mAdView = fragBinding.adViewBongBot
-        mAdViewTop = fragBinding.adViewBongTop
-        val adRequest = AdRequest.Builder().build()
-        val adRequestTop = AdRequest.Builder().build()
-        mAdView.loadAd(adRequest)
-        mAdViewTop.loadAd(adRequestTop)
+
 
         bonginoViewModel.observableBongList.observe(viewLifecycleOwner) { story ->
             story?.let {
