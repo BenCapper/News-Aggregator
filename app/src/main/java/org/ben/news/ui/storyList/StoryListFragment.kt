@@ -42,8 +42,7 @@ class StoryListFragment : Fragment(), StoryListener {
     private val loggedInViewModel : LoggedInViewModel by activityViewModels()
     private val storyListViewModel: StoryListViewModel by activityViewModels()
     var state: Parcelable? = null
-    private lateinit var mAdView : AdView
-    lateinit var mAdViewTop : AdView
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -62,7 +61,8 @@ class StoryListFragment : Fragment(), StoryListener {
         val root = fragBinding.root
         fragBinding.recyclerView.layoutManager = activity?.let { LinearLayoutManager(it) }
         activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.logo)
-
+        loader = createLoader(requireActivity())
+        showLoader(loader,"")
         MobileAds.initialize(this.context!!) {}
 
 
@@ -70,7 +70,7 @@ class StoryListFragment : Fragment(), StoryListener {
             story?.let {
                 render(story as ArrayList<StoryModel>)
             }
-
+            hideLoader(loader)
         }
 
         return root
@@ -115,6 +115,7 @@ class StoryListFragment : Fragment(), StoryListener {
 
     override fun onResume() {
         super.onResume()
+        showLoader(loader,"")
         loggedInViewModel.liveFirebaseUser.observe(viewLifecycleOwner) { firebaseUser ->
             if (firebaseUser != null) {
                 storyListViewModel.liveFirebaseUser.value = firebaseUser

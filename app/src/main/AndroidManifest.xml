@@ -19,14 +19,22 @@
             android:value="ca-app-pub-7534564032628512~6720499947" />
 
         <activity
-            android:name=".ui.auth.Login"
+            android:name=".ui.splash.Splash"
             android:exported="true"
-            android:windowSoftInputMode="adjustPan" >
+            android:theme="@style/Theme.News.Splash">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".ui.auth.Login"
+            android:exported="true"
+            android:windowSoftInputMode="adjustPan" >
+
         </activity>
         <activity
             android:name=".ui.home.Home"

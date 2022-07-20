@@ -18,12 +18,12 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="150dp">
+            android:layout_height="wrap_content">
 
             <ImageView
                 android:id="@+id/imageView_nosave"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
                 android:scaleType="centerCrop"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -31,7 +31,8 @@
                 app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <RelativeLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/relativeLayout3"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="150dp"
@@ -40,62 +41,60 @@
 
             <Button
                 android:id="@+id/button3_nosave"
-                android:layout_width="209dp"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/headline_nosave"
-                android:layout_marginStart="-55dp"
-                android:layout_marginEnd="0dp"
-                android:layout_toEndOf="@+id/link_nosave"
                 android:background="@android:color/transparent"
                 android:textSize="10sp"
                 app:icon="@drawable/ic_share"
-                app:iconTint="#000000" />
+                app:iconTint="#000000"
+                app:layout_constraintStart_toEndOf="@+id/link_nosave"
+                app:layout_constraintTop_toBottomOf="@+id/headline_nosave" />
 
             <TextView
                 android:id="@+id/link_nosave"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/headline_nosave"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentEnd="true"
                 android:layout_marginStart="0dp"
                 android:layout_marginTop="15dp"
                 android:layout_marginEnd="120dp"
                 android:text="@{story.outlet}"
                 android:textColor="@color/dark"
                 android:textSize="11sp"
-                android:textStyle="italic" />
+                android:textStyle="italic"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/headline_nosave" />
 
             <TextView
                 android:id="@+id/date_nosave"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentEnd="true"
                 android:layout_marginStart="0dp"
                 android:layout_marginTop="0dp"
                 android:layout_marginEnd="0dp"
                 android:text="@{story.date}"
                 android:textColor="@color/dark"
                 android:textSize="10sp"
-                android:textStyle="normal" />
+                android:textStyle="normal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/headline_nosave"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/date_nosave"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentEnd="true"
                 android:layout_marginStart="0dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="3dp"
                 android:text="@{story.title}"
                 android:textColor="@color/black"
                 android:textSize="13sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/date_nosave" />
 
-        </RelativeLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 </layout>

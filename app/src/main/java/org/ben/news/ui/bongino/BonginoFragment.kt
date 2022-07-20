@@ -62,7 +62,8 @@ class BonginoFragment : Fragment(), StoryListener {
         val root = fragBinding.root
         fragBinding.recyclerViewBong.layoutManager = activity?.let { LinearLayoutManager(it) }
         activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.bong)
-
+        loader = createLoader(requireActivity())
+        showLoader(loader,"")
         MobileAds.initialize(this.context!!) {}
 
 
@@ -70,6 +71,7 @@ class BonginoFragment : Fragment(), StoryListener {
             story?.let {
                 render(story as ArrayList<StoryModel>)
             }
+            hideLoader(loader)
         }
 
         return root
@@ -114,6 +116,7 @@ class BonginoFragment : Fragment(), StoryListener {
 
     override fun onResume() {
         super.onResume()
+        showLoader(loader,"")
         loggedInViewModel.liveFirebaseUser.observe(viewLifecycleOwner) { firebaseUser ->
             if (firebaseUser != null) {
                 bonginoViewModel.liveFirebaseUser.value = firebaseUser

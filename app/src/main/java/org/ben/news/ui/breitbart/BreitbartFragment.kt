@@ -62,7 +62,8 @@ class BreitbartFragment : Fragment(), StoryListener {
         val root = fragBinding.root
         fragBinding.recyclerViewBreit.layoutManager = activity?.let { LinearLayoutManager(it) }
         activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.breit)
-
+        loader = createLoader(requireActivity())
+        showLoader(loader,"")
         MobileAds.initialize(this.context!!) {}
 
 
@@ -70,6 +71,7 @@ class BreitbartFragment : Fragment(), StoryListener {
             story?.let {
                 render(story as ArrayList<StoryModel>)
             }
+            hideLoader(loader)
         }
 
         return root
@@ -114,6 +116,7 @@ class BreitbartFragment : Fragment(), StoryListener {
 
     override fun onResume() {
         super.onResume()
+        showLoader(loader,"")
         loggedInViewModel.liveFirebaseUser.observe(viewLifecycleOwner) { firebaseUser ->
             if (firebaseUser != null) {
                 breitbartViewModel.liveFirebaseUser.value = firebaseUser

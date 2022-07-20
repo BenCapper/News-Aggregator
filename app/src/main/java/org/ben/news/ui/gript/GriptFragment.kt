@@ -62,7 +62,8 @@ class GriptFragment : Fragment(), StoryListener {
         val root = fragBinding.root
         fragBinding.recyclerViewGript.layoutManager = activity?.let { LinearLayoutManager(it) }
         activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.gript)
-
+        loader = createLoader(requireActivity())
+        showLoader(loader,"")
         MobileAds.initialize(this.context!!) {}
 
 
@@ -70,6 +71,7 @@ class GriptFragment : Fragment(), StoryListener {
             story?.let {
                 render(story as ArrayList<StoryModel>)
             }
+            hideLoader(loader)
         }
 
         return root
@@ -114,6 +116,7 @@ class GriptFragment : Fragment(), StoryListener {
 
     override fun onResume() {
         super.onResume()
+        showLoader(loader,"")
         loggedInViewModel.liveFirebaseUser.observe(viewLifecycleOwner) { firebaseUser ->
             if (firebaseUser != null) {
                 griptViewModel.liveFirebaseUser.value = firebaseUser

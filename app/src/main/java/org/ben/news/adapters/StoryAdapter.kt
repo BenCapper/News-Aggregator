@@ -93,30 +93,24 @@ class StoryAdapter constructor(
     }
 
 
-    class AdHolder(private var binding : CardAdBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class AdHolder(private var binding : CardAdBinding) : RecyclerView.ViewHolder(binding.root) {
 
-        //val readOnlyRow = readOnly
 
         fun bind() {
+            val nativeAdView = binding.root
+            nativeAdView.mediaView = binding.adMedia
+            nativeAdView.bodyView = binding.body
+            nativeAdView.headlineView = binding.headad
+            nativeAdView.callToActionView = binding.call
 
             val adLoader = AdLoader.Builder(this.itemView.context, "ca-app-pub-3940256099942544/2247696110")
                 .forNativeAd { ad : NativeAd ->
-                    val nativeAdView = binding.root
-                    nativeAdView.mediaView = binding.adMedia
-                    nativeAdView.bodyView = binding.body
-                    nativeAdView.headlineView = binding.headad
-                    nativeAdView.callToActionView = binding.call
-                    nativeAdView.advertiserView = binding.advert
-                    binding.root.tag = ad
                     ad.mediaContent?.let { binding.adMedia.setMediaContent(it) }
                     binding.headad.text = ad.headline
                     binding.body.text = ad.body
                     binding.call.text = ad.callToAction
-                    binding.advert.text = ad.advertiser
                     binding.img.setImageDrawable(ad.mediaContent!!.mainImage)
                     binding.nativeAd.setNativeAd(ad)
-
-                    Timber.i("IM DOING SOMETHING ${binding.nativeAd}")
 
                 }
                 .build()
