@@ -67,7 +67,8 @@ class LikedListFragment : Fragment(), StoryNoSaveListener {
         val root = fragBinding.root
         fragBinding.recyclerViewLiked.layoutManager = activity?.let { LinearLayoutManager(it) }
         activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.saved2)
-
+        loader = createLoader(requireActivity())
+        showLoader(loader,"")
         MobileAds.initialize(this.context!!) {}
 
 
@@ -75,6 +76,7 @@ class LikedListFragment : Fragment(), StoryNoSaveListener {
             story?.let {
                 render(story as ArrayList<StoryModel>)
             }
+            hideLoader(loader)
         }
 
         val swipeDeleteHandler = object : SwipeToDeleteCallback(requireContext()) {
@@ -134,6 +136,7 @@ class LikedListFragment : Fragment(), StoryNoSaveListener {
 
     override fun onResume() {
         super.onResume()
+        showLoader(loader,"")
         loggedInViewModel.liveFirebaseUser.observe(viewLifecycleOwner) { firebaseUser ->
             if (firebaseUser != null) {
                 likedListViewModel.liveFirebaseUser.value = firebaseUser

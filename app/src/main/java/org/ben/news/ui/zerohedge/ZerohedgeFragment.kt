@@ -58,13 +58,15 @@ class ZerohedgeFragment : Fragment(), StoryListener {
         val root = fragBinding.root
         fragBinding.recyclerViewZero.layoutManager = activity?.let { LinearLayoutManager(it) }
         activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.zero)
-
+        loader = createLoader(requireActivity())
+        showLoader(loader,"")
         MobileAds.initialize(this.context!!) {}
 
         zeroViewModel.observableZeroList.observe(viewLifecycleOwner) { story ->
             story?.let {
                 render(story as ArrayList<StoryModel>)
             }
+            hideLoader(loader)
         }
 
         return root
@@ -109,6 +111,7 @@ class ZerohedgeFragment : Fragment(), StoryListener {
 
     override fun onResume() {
         super.onResume()
+        showLoader(loader,"")
         loggedInViewModel.liveFirebaseUser.observe(viewLifecycleOwner) { firebaseUser ->
             if (firebaseUser != null) {
                 zeroViewModel.liveFirebaseUser.value = firebaseUser

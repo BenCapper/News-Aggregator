@@ -64,7 +64,8 @@ class HistoryListFragment : Fragment(), StoryListener {
         loader = createLoader(requireActivity())
         activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.history1)
         fragBinding.recyclerViewHistory.layoutManager = activity?.let { LinearLayoutManager(it) }
-
+        loader = createLoader(requireActivity())
+        showLoader(loader,"")
         MobileAds.initialize(this.context!!) {}
 
 
@@ -72,6 +73,7 @@ class HistoryListFragment : Fragment(), StoryListener {
             story?.let {
                 render(story as ArrayList<StoryModel>)
             }
+            hideLoader(loader)
         }
 
         val swipeDeleteHandler = object : SwipeToDeleteCallback(requireContext()) {
@@ -131,6 +133,7 @@ class HistoryListFragment : Fragment(), StoryListener {
 
     override fun onResume() {
         super.onResume()
+        showLoader(loader,"")
         loggedInViewModel.liveFirebaseUser.observe(viewLifecycleOwner) { firebaseUser ->
             if (firebaseUser != null) {
                 historyListViewModel.liveFirebaseUser.value = firebaseUser

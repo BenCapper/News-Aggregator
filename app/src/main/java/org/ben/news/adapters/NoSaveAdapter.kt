@@ -4,11 +4,15 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.google.android.gms.ads.AdLoader
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.nativead.NativeAd
 import com.google.firebase.storage.FirebaseStorage
 import org.ben.news.databinding.CardAdBinding
 import org.ben.news.databinding.CardStoryBinding
 import org.ben.news.databinding.CardStoryNosaveBinding
 import org.ben.news.models.StoryModel
+import timber.log.Timber
 
 interface StoryNoSaveListener {
     fun onStoryClick(story: StoryModel)
@@ -32,7 +36,7 @@ class NoSaveAdapter constructor(private var stories: ArrayList<StoryModel>, priv
             val binding = CardAdBinding
                 .inflate(LayoutInflater.from(parent.context), parent, false)
 
-            StoryAdapter.AdHolder(binding)
+            AdNoSaveHolder(binding)
 
         }
     }
@@ -47,7 +51,7 @@ class NoSaveAdapter constructor(private var stories: ArrayList<StoryModel>, priv
             val story = stories[holder.absoluteAdapterPosition]
             holder.bind(story, listener)
         }
-        if (holder is StoryAdapter.AdHolder) {
+        if (holder is AdNoSaveHolder) {
             holder.bind()
         }
 
@@ -65,15 +69,42 @@ class NoSaveAdapter constructor(private var stories: ArrayList<StoryModel>, priv
         //val readOnlyRow = readOnly
 
         fun bind(story: StoryModel, listener: StoryNoSaveListener) {
-            var imgRef = storage.child(story.img_name)
 
-            Glide.with(this.itemView.context).load(story.storage_link).into(binding.imageViewNosave)
+
 
             binding.root.setOnClickListener { listener.onStoryClick(story) }
             binding.button3Nosave.setOnClickListener { listener.onShare(story) }
             binding.root.tag = story
             binding.story = story
+            Glide.with(this.itemView.context).load(story.storage_link).into(binding.imageViewNosave)
             binding.executePendingBindings()
+        }
+
+    }
+
+    inner class AdNoSaveHolder(private var binding : CardAdBinding) : RecyclerView.ViewHolder(binding.root) {
+
+        fun bind() {
+            val nativeAdView = binding.root
+            nativeAdView.mediaView = binding.adMedia
+            nativeAdView.bodyView = binding.body
+            nativeAdView.headlineView = binding.headad
+            nativeAdView.callToActionView = binding.call
+
+            val adLoader = AdLoader.Builder(this.itemView.context, "ca-app-pub-3940256099942544/2247696110")
+                .forNativeAd { ad : NativeAd ->
+
+                    ad.mediaContent?.let { binding.adMedia.setMediaContent(it) }
+                    binding.headad.text = ad.headline
+                    binding.body.text = ad.body
+                    binding.call.text = ad.callToAction
+                    binding.img.setImageDrawable(ad.mediaContent!!.mainImage)
+                    binding.nativeAd.setNativeAd(ad)
+
+
+                }
+                .build()
+            adLoader.loadAd(AdRequest.Builder().build())
         }
 
     }
