@@ -49,6 +49,11 @@
         <item name="windowNoTitle">true</item>
     </style>
 
+    <style name="Theme.News.Splash">
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="android:statusBarColor">@color/black</item>
+        <item name="android:colorBackground">@color/black</item>
+    </style>
 
     <!-- Dark Buttons -->
     <style name="ThemeOverlay.MyDarkButton" parent="ThemeOverlay.AppCompat.Dark">

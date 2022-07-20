@@ -20,6 +20,6 @@
         android:layout_weight="4"
         android:gravity="center"
         android:text="@string/messageLoading"
-        android:textColor="#FFAB00"
+        android:textColor="#FACE2C"
         android:textSize="20sp" />
 </LinearLayout>
