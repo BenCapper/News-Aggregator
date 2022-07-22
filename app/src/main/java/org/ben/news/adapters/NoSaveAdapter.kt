@@ -1,18 +1,19 @@
 package org.ben.news.adapters
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.google.android.gms.ads.AdLoader
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.nativead.NativeAd
-import com.google.firebase.storage.FirebaseStorage
 import org.ben.news.databinding.CardAdBinding
-import org.ben.news.databinding.CardStoryBinding
 import org.ben.news.databinding.CardStoryNosaveBinding
 import org.ben.news.models.StoryModel
 import timber.log.Timber
+import kotlin.math.roundToInt
+
 
 interface StoryNoSaveListener {
     fun onStoryClick(story: StoryModel)
@@ -22,11 +23,12 @@ interface StoryNoSaveListener {
 class NoSaveAdapter constructor(private var stories: ArrayList<StoryModel>, private val listener: StoryNoSaveListener, )
     : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    private var storage = FirebaseStorage.getInstance().reference
-
+    private var ITEM = 0
+    private var AD = 1
+    private var FEED = 5
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return if(viewType != 1){
+        return if(viewType == ITEM){
             val binding = CardStoryNosaveBinding
                 .inflate(LayoutInflater.from(parent.context), parent, false)
 
@@ -36,31 +38,52 @@ class NoSaveAdapter constructor(private var stories: ArrayList<StoryModel>, priv
             val binding = CardAdBinding
                 .inflate(LayoutInflater.from(parent.context), parent, false)
 
-            AdNoSaveHolder(binding)
+            AdHolder(binding)
 
         }
     }
 
     fun removeAt(position: Int) {
-        stories.removeAt(position)
-        notifyItemRemoved(position)
+        if (stories.size > 4) {
+            val pos = position - position / FEED
+            Timber.i("Position = $position")
+            Timber.i("Pos = $pos")
+            Timber.i("PosFeed = $FEED")
+            Timber.i("PosSize = ${stories.size}")
+            stories.removeAt(pos)
+            notifyItemRemoved(position)
+        }
+        else{
+            stories.removeAt(position)
+            notifyItemRemoved(position)
+        }
+
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder is MainHolder){
-            val story = stories[holder.absoluteAdapterPosition]
+            val pos = position - position / FEED
+            val story = stories[pos]
             holder.bind(story, listener)
         }
-        if (holder is AdNoSaveHolder) {
+        if (holder is AdHolder) {
             holder.bind()
         }
 
     }
 
-    override fun getItemCount(): Int = stories.size
+    override fun getItemCount(): Int {
+        if (stories.size > 0){
+            return (stories.size + (stories.size / FEED).toDouble().roundToInt())
+        }
+        return stories.size
+    }
 
     override fun getItemViewType(position: Int): Int {
-        return position % 5
+        if ((position + 1) % FEED == 0) {
+            return AD
+        }
+        return ITEM
     }
 
     /* This class binds the building information to the recyclerview card */
@@ -82,32 +105,64 @@ class NoSaveAdapter constructor(private var stories: ArrayList<StoryModel>, priv
 
     }
 
-    inner class AdNoSaveHolder(private var binding : CardAdBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class AdHolder(private var binding : CardAdBinding) : RecyclerView.ViewHolder(binding.root) {
+
 
         fun bind() {
-            val nativeAdView = binding.root
-            nativeAdView.mediaView = binding.adMedia
-            nativeAdView.bodyView = binding.body
-            nativeAdView.headlineView = binding.headad
-            nativeAdView.callToActionView = binding.call
 
             val adLoader = AdLoader.Builder(this.itemView.context, "ca-app-pub-3940256099942544/2247696110")
                 .forNativeAd { ad : NativeAd ->
-
-                    ad.mediaContent?.let { binding.adMedia.setMediaContent(it) }
-                    binding.headad.text = ad.headline
-                    binding.body.text = ad.body
-                    binding.call.text = ad.callToAction
-                    binding.img.setImageDrawable(ad.mediaContent!!.mainImage)
-                    binding.nativeAd.setNativeAd(ad)
-
+                    populateNativeAdView(ad,binding)
 
                 }
                 .build()
             adLoader.loadAd(AdRequest.Builder().build())
         }
-
     }
 
+    private fun populateNativeAdView(nativeAd: NativeAd, binding: CardAdBinding) {
+        val nativeAdView = binding.root
 
+        // Set the media view.
+        nativeAdView.mediaView = binding.adMedia
+
+        // Set other ad assets.
+        nativeAdView.headlineView = binding.headad
+        nativeAdView.bodyView = binding.body
+        nativeAdView.callToActionView = binding.call
+        nativeAdView.advertiserView = binding.advert
+
+        // The headline and media content are guaranteed to be in every UnifiedNativeAd.
+        binding.headad.text = nativeAd.headline
+        binding.img.setImageDrawable(nativeAd.mediaContent!!.mainImage)
+        nativeAd.mediaContent?.let { binding.adMedia.setMediaContent(it) }
+
+        // These assets aren't guaranteed to be in every UnifiedNativeAd, so it's important to
+        // check before trying to display them.
+        if (nativeAd.body == null) {
+            binding.body.visibility = View.INVISIBLE
+        } else {
+            binding.body.visibility = View.VISIBLE
+            binding.body.text = nativeAd.body
+        }
+
+        if (nativeAd.callToAction == null) {
+            binding.call.visibility = View.INVISIBLE
+        } else {
+            binding.call.visibility = View.VISIBLE
+            binding.call.text = nativeAd.callToAction
+        }
+
+
+        if (nativeAd.advertiser == null) {
+            binding.advert.visibility = View.INVISIBLE
+        } else {
+            binding.advert.text = nativeAd.advertiser
+            binding.advert.visibility = View.VISIBLE
+        }
+
+        // This method tells the Google Mobile Ads SDK that you have finished populating your
+        // native ad view with this native ad.
+        nativeAdView.setNativeAd(nativeAd)
+    }
 }
