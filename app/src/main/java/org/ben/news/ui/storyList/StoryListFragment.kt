@@ -108,7 +108,6 @@ class StoryListFragment : Fragment(), StoryListener {
 
 
     private fun render(storyList: ArrayList<StoryModel>) {
-        storyList.add(0,StoryModel("Ad"))
         fragBinding.recyclerView.adapter = StoryAdapter(storyList, this)
         state?.let { fragBinding.recyclerView.layoutManager?.onRestoreInstanceState(it) }
     }
