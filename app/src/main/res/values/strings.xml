@@ -20,6 +20,7 @@
 
     <string name="list_title">360 News</string>
     <string name="filter">Filter</string>
+    <string name="home">Home</string>
     <string name="liked_articles">Saved Articles</string>
     <string name="saved_article">Added to Saved Articles</string>
     <string name="articles">Articles</string>
@@ -32,4 +33,6 @@
     <string name="dailycaller">The Daily Caller</string>
     <string name="gript">Gript</string>
     <string name="gateway">The Gateway Pundit</string>
+    <string name="pmill">The Post Millennial</string>
+    <string name="rev">Revolver News</string>
 </resources>

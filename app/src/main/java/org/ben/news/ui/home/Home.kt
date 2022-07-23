@@ -57,7 +57,19 @@ class Home : AppCompatActivity() {
         // menu should be considered as top level destinations.
 
         appBarConfiguration = AppBarConfiguration(setOf(
-            R.id.storyListFragment), drawerLayout)
+            R.id.storyListFragment,
+            R.id.likedListFragment,
+            R.id.historyListFragment,
+            R.id.griptFragment,
+            R.id.timcastFragment,
+            R.id.zerohedgeFragment,
+            R.id.gbFragment,
+            R.id.breitbartFragment,
+            R.id.revolverFragment,
+            R.id.bonginoFragment,
+            R.id.callerFragment,
+            R.id.gatewayFragment,
+            R.id.pmillFragment), drawerLayout)
         setupActionBarWithNavController(navController, appBarConfiguration)
 
         val navView = homeBinding.navView
@@ -169,6 +181,12 @@ class Home : AppCompatActivity() {
         startActivity(intent)
     }
 
+    fun homeArticles(item: MenuItem) {
+        findNavController(R.id.nav_host_fragment).navigate(R.id.storyListFragment)
+        findViewById<DrawerLayout>(R.id.drawer_layout).closeDrawers()
+        Timber.i("UserId = ${loggedInViewModel.liveFirebaseUser.value!!.uid}")
+    }
+
     fun savedArticles(item: MenuItem) {
         findNavController(R.id.nav_host_fragment).navigate(R.id.likedListFragment)
         findViewById<DrawerLayout>(R.id.drawer_layout).closeDrawers()
@@ -213,6 +231,18 @@ class Home : AppCompatActivity() {
 
     fun griptArticles(item: MenuItem) {
         findNavController(R.id.nav_host_fragment).navigate(R.id.griptFragment)
+        findViewById<DrawerLayout>(R.id.drawer_layout).closeDrawers()
+        Timber.i("UserId = ${loggedInViewModel.liveFirebaseUser.value!!.uid}")
+    }
+
+    fun pMillArticles(item: MenuItem) {
+        findNavController(R.id.nav_host_fragment).navigate(R.id.pmillFragment)
+        findViewById<DrawerLayout>(R.id.drawer_layout).closeDrawers()
+        Timber.i("UserId = ${loggedInViewModel.liveFirebaseUser.value!!.uid}")
+    }
+
+    fun revArticles(item: MenuItem) {
+        findNavController(R.id.nav_host_fragment).navigate(R.id.revolverFragment)
         findViewById<DrawerLayout>(R.id.drawer_layout).closeDrawers()
         Timber.i("UserId = ${loggedInViewModel.liveFirebaseUser.value!!.uid}")
     }

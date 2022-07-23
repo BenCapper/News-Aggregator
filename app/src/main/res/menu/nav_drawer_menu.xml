@@ -2,7 +2,15 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
-
+    <item android:title="@string/home">
+        <menu>
+            <item
+                android:id="@+id/nav_home"
+                android:icon="@drawable/ic_home"
+                android:onClick="homeArticles"
+                android:title="@string/home" />
+        </menu>
+    </item>
 
     <item android:title="@string/account">
         <menu>
@@ -46,6 +54,11 @@
                 android:onClick="breitbartArticles"
                 android:title="@string/breitbart" />
             <item
+                android:id="@+id/menurev"
+                android:icon="@drawable/usicon"
+                android:onClick="revArticles"
+                android:title="@string/rev" />
+            <item
                 android:id="@+id/menubong"
                 android:icon="@drawable/usicon"
                 android:onClick="bongArticles"
@@ -60,6 +73,11 @@
                 android:icon="@drawable/usicon"
                 android:onClick="gatewayArticles"
                 android:title="@string/gateway" />
+            <item
+                android:id="@+id/menumill"
+                android:icon="@drawable/usicon"
+                android:onClick="pMillArticles"
+                android:title="@string/pmill" />
         </menu>
     </item>
     <item android:title="">
