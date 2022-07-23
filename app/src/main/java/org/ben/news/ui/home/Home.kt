@@ -57,7 +57,19 @@ class Home : AppCompatActivity() {
         // menu should be considered as top level destinations.
 
         appBarConfiguration = AppBarConfiguration(setOf(
-            R.id.storyListFragment), drawerLayout)
+            R.id.storyListFragment,
+            R.id.likedListFragment,
+            R.id.historyListFragment,
+            R.id.griptFragment,
+            R.id.timcastFragment,
+            R.id.zerohedgeFragment,
+            R.id.gbFragment,
+            R.id.breitbartFragment,
+            R.id.revolverFragment,
+            R.id.bonginoFragment,
+            R.id.callerFragment,
+            R.id.gatewayFragment,
+            R.id.pmillFragment), drawerLayout)
         setupActionBarWithNavController(navController, appBarConfiguration)
 
         val navView = homeBinding.navView
@@ -167,6 +179,12 @@ class Home : AppCompatActivity() {
         val intent = Intent(this, Login::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
         startActivity(intent)
+    }
+
+    fun homeArticles(item: MenuItem) {
+        findNavController(R.id.nav_host_fragment).navigate(R.id.storyListFragment)
+        findViewById<DrawerLayout>(R.id.drawer_layout).closeDrawers()
+        Timber.i("UserId = ${loggedInViewModel.liveFirebaseUser.value!!.uid}")
     }
 
     fun savedArticles(item: MenuItem) {
