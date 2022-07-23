@@ -60,6 +60,9 @@
             app:destination="@id/zerohedgeFragment"
             app:enterAnim="@anim/nav_default_enter_anim"
             app:exitAnim="@anim/nav_default_exit_anim" />
+        <action
+            android:id="@+id/action_storyListFragment_to_pmillFragment"
+            app:destination="@id/pmillFragment" />
     </fragment>
     <fragment
         android:id="@+id/likedListFragment"
@@ -111,4 +114,9 @@
         android:name="org.ben.news.ui.zerohedge.ZerohedgeFragment"
         android:label="fragment_zerohedge"
         tools:layout="@layout/fragment_zerohedge" />
+    <fragment
+        android:id="@+id/pmillFragment"
+        android:name="org.ben.news.ui.Pmill.PmillFragment"
+        android:label="fragment_pmill"
+        tools:layout="@layout/fragment_pmill" />
 </navigation>
