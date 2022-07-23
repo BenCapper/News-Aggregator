@@ -63,6 +63,9 @@
         <action
             android:id="@+id/action_storyListFragment_to_pmillFragment"
             app:destination="@id/pmillFragment" />
+        <action
+            android:id="@+id/action_storyListFragment_to_revolverFragment"
+            app:destination="@id/revolverFragment" />
     </fragment>
     <fragment
         android:id="@+id/likedListFragment"
@@ -119,4 +122,9 @@
         android:name="org.ben.news.ui.Pmill.PmillFragment"
         android:label="fragment_pmill"
         tools:layout="@layout/fragment_pmill" />
+    <fragment
+        android:id="@+id/revolverFragment"
+        android:name="org.ben.news.ui.revolver.RevolverFragment"
+        android:label="fragment_revolver"
+        tools:layout="@layout/fragment_revolver" />
 </navigation>

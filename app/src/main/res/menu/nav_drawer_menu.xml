@@ -46,6 +46,11 @@
                 android:onClick="breitbartArticles"
                 android:title="@string/breitbart" />
             <item
+                android:id="@+id/menurev"
+                android:icon="@drawable/usicon"
+                android:onClick="revArticles"
+                android:title="@string/rev" />
+            <item
                 android:id="@+id/menubong"
                 android:icon="@drawable/usicon"
                 android:onClick="bongArticles"

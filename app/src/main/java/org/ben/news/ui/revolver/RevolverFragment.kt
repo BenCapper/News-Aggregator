@@ -1,8 +1,9 @@
-package org.ben.news.ui.Pmill
+package org.ben.news.ui.revolver
 
 import android.app.AlertDialog
 import android.content.Intent
 import android.net.Uri
+import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.*
@@ -16,25 +17,27 @@ import org.ben.news.R
 import org.ben.news.adapters.StoryAdapter
 import org.ben.news.adapters.StoryListener
 import org.ben.news.databinding.FragmentPmillBinding
+import org.ben.news.databinding.FragmentRevolverBinding
 import org.ben.news.firebase.StoryManager
 import org.ben.news.helpers.createLoader
 import org.ben.news.helpers.hideLoader
 import org.ben.news.helpers.showLoader
 import org.ben.news.models.StoryModel
+import org.ben.news.ui.Pmill.PmillViewModel
 import org.ben.news.ui.auth.LoggedInViewModel
 import splitties.snackbar.snack
 
-class PmillFragment : Fragment(), StoryListener {
+class RevolverFragment : Fragment(), StoryListener {
 
 
     companion object {
-        fun newInstance() = PmillFragment()
+        fun newInstance() = RevolverFragment()
     }
-    private var _fragBinding: FragmentPmillBinding? = null
+    private var _fragBinding: FragmentRevolverBinding? = null
     private val fragBinding get() = _fragBinding!!
     lateinit var loader : AlertDialog
     private val loggedInViewModel : LoggedInViewModel by activityViewModels()
-    private val millViewModel: PmillViewModel by activityViewModels()
+    private val revViewModel: RevolverViewModel by activityViewModels()
     var state: Parcelable? = null
 
 
@@ -51,16 +54,16 @@ class PmillFragment : Fragment(), StoryListener {
         savedInstanceState: Bundle?
     ): View {
 
-        _fragBinding = FragmentPmillBinding.inflate(inflater, container, false)
+        _fragBinding = FragmentRevolverBinding.inflate(inflater, container, false)
         val root = fragBinding.root
-        fragBinding.recyclerViewMill.layoutManager = activity?.let { LinearLayoutManager(it) }
+        fragBinding.recyclerViewRev.layoutManager = activity?.let { LinearLayoutManager(it) }
         activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.logo)
         loader = createLoader(requireActivity())
         showLoader(loader,"")
         MobileAds.initialize(this.context!!) {}
 
 
-        millViewModel.observableMillList.observe(viewLifecycleOwner) { story ->
+        revViewModel.observableRevList.observe(viewLifecycleOwner) { story ->
             story?.let {
                 render(story as ArrayList<StoryModel>)
             }
@@ -87,12 +90,12 @@ class PmillFragment : Fragment(), StoryListener {
 
             override fun onQueryTextChange(newText: String?): Boolean {
                 if (newText != null) {
-                    millViewModel.search(
+                    revViewModel.search(
                         newText
                     )
                 }
                 else {
-                    millViewModel.load()
+                    revViewModel.load()
                 }
                 return true
             }
@@ -102,8 +105,8 @@ class PmillFragment : Fragment(), StoryListener {
 
 
     private fun render(storyList: ArrayList<StoryModel>) {
-        fragBinding.recyclerViewMill.adapter = StoryAdapter(storyList, this)
-        state?.let { fragBinding.recyclerViewMill.layoutManager?.onRestoreInstanceState(it) }
+        fragBinding.recyclerViewRev.adapter = StoryAdapter(storyList, this)
+        state?.let { fragBinding.recyclerViewRev.layoutManager?.onRestoreInstanceState(it) }
     }
 
 
@@ -112,8 +115,8 @@ class PmillFragment : Fragment(), StoryListener {
         showLoader(loader,"")
         loggedInViewModel.liveFirebaseUser.observe(viewLifecycleOwner) { firebaseUser ->
             if (firebaseUser != null) {
-                millViewModel.liveFirebaseUser.value = firebaseUser
-                millViewModel.load()
+                revViewModel.liveFirebaseUser.value = firebaseUser
+                revViewModel.load()
             }
         }
 
@@ -122,7 +125,7 @@ class PmillFragment : Fragment(), StoryListener {
     override fun onStoryClick(story: StoryModel) {
         StoryManager.create(loggedInViewModel.liveFirebaseUser.value!!.uid,"history", story)
         val intent = Intent(Intent.ACTION_VIEW).setData(Uri.parse(story.link))
-        state = fragBinding.recyclerViewMill.layoutManager?.onSaveInstanceState()
+        state = fragBinding.recyclerViewRev.layoutManager?.onSaveInstanceState()
         startActivity(intent)
     }
 
@@ -140,7 +143,7 @@ class PmillFragment : Fragment(), StoryListener {
         }
 
         val shareIntent = Intent.createChooser(sendIntent, null)
-        state = fragBinding.recyclerViewMill.layoutManager?.onSaveInstanceState()
+        state = fragBinding.recyclerViewRev.layoutManager?.onSaveInstanceState()
         startActivity(shareIntent)
     }
     override fun onDestroyView() {
