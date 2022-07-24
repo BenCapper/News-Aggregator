@@ -1,4 +1,4 @@
-package org.ben.news.ui.Pmill
+package org.ben.news.ui.pmill
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

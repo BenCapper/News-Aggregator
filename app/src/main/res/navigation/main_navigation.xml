@@ -119,7 +119,7 @@
         tools:layout="@layout/fragment_zerohedge" />
     <fragment
         android:id="@+id/pmillFragment"
-        android:name="org.ben.news.ui.Pmill.PmillFragment"
+        android:name="org.ben.news.ui.pmill.PmillFragment"
         android:label="fragment_pmill"
         tools:layout="@layout/fragment_pmill" />
     <fragment

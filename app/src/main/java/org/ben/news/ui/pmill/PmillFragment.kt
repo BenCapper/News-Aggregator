@@ -1,4 +1,4 @@
-package org.ben.news.ui.Pmill
+package org.ben.news.ui.pmill
 
 import android.app.AlertDialog
 import android.content.Intent
@@ -54,7 +54,7 @@ class PmillFragment : Fragment(), StoryListener {
         _fragBinding = FragmentPmillBinding.inflate(inflater, container, false)
         val root = fragBinding.root
         fragBinding.recyclerViewMill.layoutManager = activity?.let { LinearLayoutManager(it) }
-        activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.logo)
+        activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.pmill)
         loader = createLoader(requireActivity())
         showLoader(loader,"")
         MobileAds.initialize(this.context!!) {}
