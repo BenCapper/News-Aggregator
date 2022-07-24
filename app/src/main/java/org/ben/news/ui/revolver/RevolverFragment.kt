@@ -3,7 +3,6 @@ package org.ben.news.ui.revolver
 import android.app.AlertDialog
 import android.content.Intent
 import android.net.Uri
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.*
@@ -16,14 +15,12 @@ import com.google.android.gms.ads.MobileAds
 import org.ben.news.R
 import org.ben.news.adapters.StoryAdapter
 import org.ben.news.adapters.StoryListener
-import org.ben.news.databinding.FragmentPmillBinding
 import org.ben.news.databinding.FragmentRevolverBinding
 import org.ben.news.firebase.StoryManager
 import org.ben.news.helpers.createLoader
 import org.ben.news.helpers.hideLoader
 import org.ben.news.helpers.showLoader
 import org.ben.news.models.StoryModel
-import org.ben.news.ui.Pmill.PmillViewModel
 import org.ben.news.ui.auth.LoggedInViewModel
 import splitties.snackbar.snack
 
@@ -57,7 +54,7 @@ class RevolverFragment : Fragment(), StoryListener {
         _fragBinding = FragmentRevolverBinding.inflate(inflater, container, false)
         val root = fragBinding.root
         fragBinding.recyclerViewRev.layoutManager = activity?.let { LinearLayoutManager(it) }
-        activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.logo)
+        activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.rev)
         loader = createLoader(requireActivity())
         showLoader(loader,"")
         MobileAds.initialize(this.context!!) {}
