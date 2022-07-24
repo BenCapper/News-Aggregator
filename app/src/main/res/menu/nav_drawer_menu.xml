@@ -75,7 +75,7 @@
                 android:title="@string/gateway" />
             <item
                 android:id="@+id/menumill"
-                android:icon="@drawable/usicon"
+                android:icon="@drawable/canicon"
                 android:onClick="pMillArticles"
                 android:title="@string/pmill" />
         </menu>
