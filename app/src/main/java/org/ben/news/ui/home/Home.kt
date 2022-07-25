@@ -57,19 +57,7 @@ class Home : AppCompatActivity() {
         // menu should be considered as top level destinations.
 
         appBarConfiguration = AppBarConfiguration(setOf(
-            R.id.storyListFragment,
-            R.id.likedListFragment,
-            R.id.historyListFragment,
-            R.id.griptFragment,
-            R.id.timcastFragment,
-            R.id.zerohedgeFragment,
-            R.id.gbFragment,
-            R.id.breitbartFragment,
-            R.id.revolverFragment,
-            R.id.bonginoFragment,
-            R.id.callerFragment,
-            R.id.gatewayFragment,
-            R.id.pmillFragment), drawerLayout)
+            R.id.storyListFragment), drawerLayout)
         setupActionBarWithNavController(navController, appBarConfiguration)
 
         val navView = homeBinding.navView
@@ -181,11 +169,6 @@ class Home : AppCompatActivity() {
         startActivity(intent)
     }
 
-    fun homeArticles(item: MenuItem) {
-        findNavController(R.id.nav_host_fragment).navigate(R.id.storyListFragment)
-        findViewById<DrawerLayout>(R.id.drawer_layout).closeDrawers()
-        Timber.i("UserId = ${loggedInViewModel.liveFirebaseUser.value!!.uid}")
-    }
 
     fun savedArticles(item: MenuItem) {
         findNavController(R.id.nav_host_fragment).navigate(R.id.likedListFragment)
@@ -201,6 +184,12 @@ class Home : AppCompatActivity() {
 
     fun breitbartArticles(item: MenuItem) {
         findNavController(R.id.nav_host_fragment).navigate(R.id.breitbartFragment)
+        findViewById<DrawerLayout>(R.id.drawer_layout).closeDrawers()
+        Timber.i("UserId = ${loggedInViewModel.liveFirebaseUser.value!!.uid}")
+    }
+
+    fun rteArticles(item: MenuItem) {
+        findNavController(R.id.nav_host_fragment).navigate(R.id.rteFragment)
         findViewById<DrawerLayout>(R.id.drawer_layout).closeDrawers()
         Timber.i("UserId = ${loggedInViewModel.liveFirebaseUser.value!!.uid}")
     }
