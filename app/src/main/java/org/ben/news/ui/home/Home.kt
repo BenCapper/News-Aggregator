@@ -205,6 +205,12 @@ class Home : AppCompatActivity() {
         Timber.i("UserId = ${loggedInViewModel.liveFirebaseUser.value!!.uid}")
     }
 
+    fun blazeArticles(item: MenuItem) {
+        findNavController(R.id.nav_host_fragment).navigate(R.id.blazeFragment)
+        findViewById<DrawerLayout>(R.id.drawer_layout).closeDrawers()
+        Timber.i("UserId = ${loggedInViewModel.liveFirebaseUser.value!!.uid}")
+    }
+
     fun callerArticles(item: MenuItem) {
         findNavController(R.id.nav_host_fragment).navigate(R.id.callerFragment)
         findViewById<DrawerLayout>(R.id.drawer_layout).closeDrawers()
