@@ -59,7 +59,7 @@ class RteFragment : Fragment(), StoryListener {
         _fragBinding = FragmentRteBinding.inflate(inflater, container, false)
         val root = fragBinding.root
         fragBinding.recyclerViewRte.layoutManager = activity?.let { LinearLayoutManager(it) }
-        activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.gript)
+        activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.rte)
         loader = createLoader(requireActivity())
         showLoader(loader,"")
         MobileAds.initialize(this.context!!) {}
