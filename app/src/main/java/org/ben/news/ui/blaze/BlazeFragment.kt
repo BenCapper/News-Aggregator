@@ -1,4 +1,4 @@
-package org.ben.news.ui.gbnews
+package org.ben.news.ui.blaze
 
 import android.app.AlertDialog
 import android.content.Intent
@@ -11,14 +11,11 @@ import android.widget.ImageView
 import android.widget.SearchView
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.gms.ads.AdRequest
-import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.MobileAds
-import com.google.firebase.storage.FirebaseStorage
 import org.ben.news.R
 import org.ben.news.adapters.StoryAdapter
 import org.ben.news.adapters.StoryListener
-import org.ben.news.databinding.FragmentGbBinding
+import org.ben.news.databinding.FragmentBlazeBinding
 import org.ben.news.firebase.StoryManager
 import org.ben.news.helpers.createLoader
 import org.ben.news.helpers.hideLoader
@@ -27,17 +24,18 @@ import org.ben.news.models.StoryModel
 import org.ben.news.ui.auth.LoggedInViewModel
 import splitties.snackbar.snack
 
-class GbFragment : Fragment(), StoryListener {
+
+class BlazeFragment : Fragment(), StoryListener {
 
 
     companion object {
-        fun newInstance() = GbFragment()
+        fun newInstance() = BlazeFragment()
     }
-    private var _fragBinding: FragmentGbBinding? = null
+    private var _fragBinding: FragmentBlazeBinding? = null
     private val fragBinding get() = _fragBinding!!
     lateinit var loader : AlertDialog
     private val loggedInViewModel : LoggedInViewModel by activityViewModels()
-    private val gbViewModel: GbViewModel by activityViewModels()
+    private val blazeViewModel: BlazeViewModel by activityViewModels()
     var state: Parcelable? = null
 
 
@@ -54,16 +52,16 @@ class GbFragment : Fragment(), StoryListener {
         savedInstanceState: Bundle?
     ): View {
 
-        _fragBinding = FragmentGbBinding.inflate(inflater, container, false)
+        _fragBinding = FragmentBlazeBinding.inflate(inflater, container, false)
         val root = fragBinding.root
-        fragBinding.recyclerViewGb.layoutManager = activity?.let { LinearLayoutManager(it) }
-        activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.gb)
+        fragBinding.recyclerViewBlaze.layoutManager = activity?.let { LinearLayoutManager(it) }
+        activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.blaze)
         loader = createLoader(requireActivity())
         showLoader(loader,"")
         MobileAds.initialize(this.context!!) {}
 
 
-        gbViewModel.observableGbList.observe(viewLifecycleOwner) { story ->
+        blazeViewModel.observableBlazeList.observe(viewLifecycleOwner) { story ->
             story?.let {
                 render(story as ArrayList<StoryModel>)
             }
@@ -90,12 +88,12 @@ class GbFragment : Fragment(), StoryListener {
 
             override fun onQueryTextChange(newText: String?): Boolean {
                 if (newText != null) {
-                    gbViewModel.search(
+                    blazeViewModel.search(
                         newText
                     )
                 }
                 else {
-                    gbViewModel.load()
+                    blazeViewModel.load()
                 }
                 return true
             }
@@ -105,8 +103,8 @@ class GbFragment : Fragment(), StoryListener {
 
 
     private fun render(storyList: ArrayList<StoryModel>) {
-        fragBinding.recyclerViewGb.adapter = StoryAdapter(storyList, this)
-        state?.let { fragBinding.recyclerViewGb.layoutManager?.onRestoreInstanceState(it) }
+        fragBinding.recyclerViewBlaze.adapter = StoryAdapter(storyList, this)
+        state?.let { fragBinding.recyclerViewBlaze.layoutManager?.onRestoreInstanceState(it) }
     }
 
 
@@ -115,21 +113,21 @@ class GbFragment : Fragment(), StoryListener {
         showLoader(loader,"")
         loggedInViewModel.liveFirebaseUser.observe(viewLifecycleOwner) { firebaseUser ->
             if (firebaseUser != null) {
-                gbViewModel.liveFirebaseUser.value = firebaseUser
-                gbViewModel.load()
+                blazeViewModel.liveFirebaseUser.value = firebaseUser
+                blazeViewModel.load()
             }
         }
     }
 
     override fun onPause() {
-        state = fragBinding.recyclerViewGb.layoutManager?.onSaveInstanceState()
+        state = fragBinding.recyclerViewBlaze.layoutManager?.onSaveInstanceState()
         super.onPause()
     }
 
     override fun onStoryClick(story: StoryModel) {
         StoryManager.create(loggedInViewModel.liveFirebaseUser.value!!.uid,"history", story)
         val intent = Intent(Intent.ACTION_VIEW).setData(Uri.parse(story.link))
-        state = fragBinding.recyclerViewGb.layoutManager?.onSaveInstanceState()
+        state = fragBinding.recyclerViewBlaze.layoutManager?.onSaveInstanceState()
         startActivity(intent)
     }
 
@@ -147,7 +145,7 @@ class GbFragment : Fragment(), StoryListener {
         }
 
         val shareIntent = Intent.createChooser(sendIntent, null)
-        state = fragBinding.recyclerViewGb.layoutManager?.onSaveInstanceState()
+        state = fragBinding.recyclerViewBlaze.layoutManager?.onSaveInstanceState()
         startActivity(shareIntent)
     }
     override fun onDestroyView() {

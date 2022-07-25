@@ -66,6 +66,9 @@
         <action
             android:id="@+id/action_storyListFragment_to_revolverFragment"
             app:destination="@id/revolverFragment" />
+        <action
+            android:id="@+id/action_storyListFragment_to_blazeFragment"
+            app:destination="@id/blazeFragment" />
     </fragment>
     <fragment
         android:id="@+id/likedListFragment"
@@ -127,4 +130,9 @@
         android:name="org.ben.news.ui.revolver.RevolverFragment"
         android:label="fragment_revolver"
         tools:layout="@layout/fragment_revolver" />
+    <fragment
+        android:id="@+id/blazeFragment"
+        android:name="org.ben.news.ui.blaze.BlazeFragment"
+        android:label="fragment_blaze"
+        tools:layout="@layout/fragment_blaze" />
 </navigation>

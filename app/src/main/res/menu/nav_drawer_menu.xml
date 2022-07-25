@@ -34,6 +34,16 @@
                 android:onClick="griptArticles"
                 android:title="@string/gript" />
             <item
+                android:id="@+id/menugbn"
+                android:icon="@drawable/gbicon"
+                android:onClick="gbArticles"
+                android:title="@string/gbnews" />
+            <item
+                android:id="@+id/menublaze"
+                android:icon="@drawable/usicon"
+                android:onClick="blazeArticles"
+                android:title="@string/blaze" />
+            <item
                 android:id="@+id/menutim"
                 android:icon="@drawable/usicon"
                 android:onClick="timArticles"
@@ -43,11 +53,7 @@
                 android:icon="@drawable/usicon"
                 android:onClick="zeroArticles"
                 android:title="@string/zerohedge" />
-            <item
-                android:id="@+id/menugbn"
-                android:icon="@drawable/gbicon"
-                android:onClick="gbArticles"
-                android:title="@string/gbnews" />
+
             <item
                 android:id="@+id/menubreit"
                 android:icon="@drawable/usicon"

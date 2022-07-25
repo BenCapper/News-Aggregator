@@ -123,7 +123,11 @@ class BonginoFragment : Fragment(), StoryListener {
                 bonginoViewModel.load()
             }
         }
+    }
 
+    override fun onPause() {
+        state = fragBinding.recyclerViewBong.layoutManager?.onSaveInstanceState()
+        super.onPause()
     }
 
     override fun onStoryClick(story: StoryModel) {

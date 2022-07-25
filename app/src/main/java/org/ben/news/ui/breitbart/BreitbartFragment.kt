@@ -123,7 +123,11 @@ class BreitbartFragment : Fragment(), StoryListener {
                 breitbartViewModel.load()
             }
         }
+    }
 
+    override fun onPause() {
+        state = fragBinding.recyclerViewBreit.layoutManager?.onSaveInstanceState()
+        super.onPause()
     }
 
     override fun onStoryClick(story: StoryModel) {

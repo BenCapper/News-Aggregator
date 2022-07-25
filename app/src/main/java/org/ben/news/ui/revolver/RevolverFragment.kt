@@ -116,7 +116,11 @@ class RevolverFragment : Fragment(), StoryListener {
                 revViewModel.load()
             }
         }
+    }
 
+    override fun onPause() {
+        state = fragBinding.recyclerViewRev.layoutManager?.onSaveInstanceState()
+        super.onPause()
     }
 
     override fun onStoryClick(story: StoryModel) {

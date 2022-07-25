@@ -122,7 +122,11 @@ class CallerFragment : Fragment(), StoryListener {
                 callerViewModel.load()
             }
         }
+    }
 
+    override fun onPause() {
+        state = fragBinding.recyclerViewCaller.layoutManager?.onSaveInstanceState()
+        super.onPause()
     }
 
     override fun onStoryClick(story: StoryModel) {
