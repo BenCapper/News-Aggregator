@@ -169,11 +169,6 @@ class Home : AppCompatActivity() {
         startActivity(intent)
     }
 
-    fun homeArticles(item: MenuItem) {
-        findNavController(R.id.nav_host_fragment).navigate(R.id.storyListFragment)
-        findViewById<DrawerLayout>(R.id.drawer_layout).closeDrawers()
-        Timber.i("UserId = ${loggedInViewModel.liveFirebaseUser.value!!.uid}")
-    }
 
     fun savedArticles(item: MenuItem) {
         findNavController(R.id.nav_host_fragment).navigate(R.id.likedListFragment)
