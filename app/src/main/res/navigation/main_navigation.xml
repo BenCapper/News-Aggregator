@@ -69,6 +69,9 @@
         <action
             android:id="@+id/action_storyListFragment_to_blazeFragment"
             app:destination="@id/blazeFragment" />
+        <action
+            android:id="@+id/action_storyListFragment_to_rteFragment"
+            app:destination="@id/rteFragment" />
     </fragment>
     <fragment
         android:id="@+id/likedListFragment"
@@ -135,4 +138,9 @@
         android:name="org.ben.news.ui.blaze.BlazeFragment"
         android:label="fragment_blaze"
         tools:layout="@layout/fragment_blaze" />
+    <fragment
+        android:id="@+id/rteFragment"
+        android:name="org.ben.news.ui.rte.RteFragment"
+        android:label="fragment_rte"
+        tools:layout="@layout/fragment_rte" />
 </navigation>

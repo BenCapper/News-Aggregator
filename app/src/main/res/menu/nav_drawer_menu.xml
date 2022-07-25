@@ -34,6 +34,11 @@
                 android:onClick="griptArticles"
                 android:title="@string/gript" />
             <item
+                android:id="@+id/menurte"
+                android:icon="@drawable/ieicon"
+                android:onClick="rteArticles"
+                android:title="@string/rte" />
+            <item
                 android:id="@+id/menugbn"
                 android:icon="@drawable/gbicon"
                 android:onClick="gbArticles"
