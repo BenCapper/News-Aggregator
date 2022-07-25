@@ -72,6 +72,9 @@
         <action
             android:id="@+id/action_storyListFragment_to_rteFragment"
             app:destination="@id/rteFragment" />
+        <action
+            android:id="@+id/action_storyListFragment_to_skyFragment"
+            app:destination="@id/skyFragment" />
     </fragment>
     <fragment
         android:id="@+id/likedListFragment"
@@ -143,4 +146,9 @@
         android:name="org.ben.news.ui.rte.RteFragment"
         android:label="fragment_rte"
         tools:layout="@layout/fragment_rte" />
+    <fragment
+        android:id="@+id/skyFragment"
+        android:name="org.ben.news.ui.skyuk.SkyFragment"
+        android:label="fragment_sky"
+        tools:layout="@layout/fragment_sky" />
 </navigation>

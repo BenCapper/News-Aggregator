@@ -36,6 +36,11 @@
                 android:onClick="gbArticles"
                 android:title="@string/gbnews" />
             <item
+                android:id="@+id/menusky"
+                android:icon="@drawable/gbicon"
+                android:onClick="skyArticles"
+                android:title="@string/sky" />
+            <item
                 android:id="@+id/menublaze"
                 android:icon="@drawable/usicon"
                 android:onClick="blazeArticles"
