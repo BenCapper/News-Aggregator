@@ -5,6 +5,8 @@ from bs4 import BeautifulSoup
 from firebase_admin import storage
 from utils.utilities import (formatDate, imgFolder, imgTitleFormat, initialise,
                            logFolder, pageSoup, pushToDB, titleFormat)
+
+
 ref_list = []
 log_file_path = "/home/bencapper/src/News-Aggregator/scripts/log/blazedone.log"
 log_folder_path = "/home/bencapper/src/News-Aggregator/scripts/log/"
@@ -16,6 +18,7 @@ img_path = "/home/bencapper/src/News/Blaze"
 storage_path = "https://firebasestorage.googleapis.com/v0/b/news-a3e22.appspot.com/o"
 db_path = "stories"
 outlet = "www.TheBlaze.com"
+
 logFolder(log_folder_path)
 if os.path.exists(log_file_path):
   open_temp = open(log_file_path, "r")
@@ -23,8 +26,10 @@ if os.path.exists(log_file_path):
   ref_list = read_temp.splitlines()
 else:
   os.mknod(log_file_path)
+
 imgFolder(img_path)
 initialise(json_path, db_url, bucket)
+
 soup = pageSoup(page_url)
 articles = soup.find_all("div", "posts-wrapper clearfix")
 #articles = articles.find_all("h1", "widget__headline h1")
