@@ -112,29 +112,29 @@ def addYearAndFormat(date):
 def formatDate(date):
    day = date[0]
    month = date[1]
-   if month == "January":
+   if month in "January":
        month = "01"
-   if month == "February":
+   if month in "February":
        month = "02"
-   if month == "March":
+   if month in "March":
        month = "03"
-   if month == "April":
+   if month in "April":
        month = "04"
-   if month == "May":
+   if month in "May":
        month = "05"
-   if month == "June":
+   if month in "June":
        month = "06"
-   if month == "July":
+   if month in "July":
        month = "07"
-   if month == "August":
+   if month in "August":
        month = "08"
-   if month == "September":
+   if month in "September":
        month = "09"
-   if month == "October":
+   if month in "October":
        month = "10"
-   if month == "November":
+   if month in "November":
        month = "11"
-   if month == "December":
+   if month in "December":
        month = "12"
    year = date[2][2:]
    return f"{month}-{day}-{year}"
