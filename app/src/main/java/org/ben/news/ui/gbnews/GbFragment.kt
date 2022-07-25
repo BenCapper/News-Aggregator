@@ -119,7 +119,11 @@ class GbFragment : Fragment(), StoryListener {
                 gbViewModel.load()
             }
         }
+    }
 
+    override fun onPause() {
+        state = fragBinding.recyclerViewGb.layoutManager?.onSaveInstanceState()
+        super.onPause()
     }
 
     override fun onStoryClick(story: StoryModel) {

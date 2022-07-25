@@ -119,6 +119,11 @@ class PmillFragment : Fragment(), StoryListener {
 
     }
 
+    override fun onPause() {
+        state = fragBinding.recyclerViewMill.layoutManager?.onSaveInstanceState()
+        super.onPause()
+    }
+
     override fun onStoryClick(story: StoryModel) {
         StoryManager.create(loggedInViewModel.liveFirebaseUser.value!!.uid,"history", story)
         val intent = Intent(Intent.ACTION_VIEW).setData(Uri.parse(story.link))

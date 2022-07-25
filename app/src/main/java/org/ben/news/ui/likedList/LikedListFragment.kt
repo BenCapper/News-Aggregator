@@ -143,7 +143,11 @@ class LikedListFragment : Fragment(), StoryNoSaveListener {
                 likedListViewModel.load()
             }
         }
+    }
 
+    override fun onPause() {
+        state = fragBinding.recyclerViewLiked.layoutManager?.onSaveInstanceState()
+        super.onPause()
     }
 
     override fun onStoryClick(story: StoryModel) {

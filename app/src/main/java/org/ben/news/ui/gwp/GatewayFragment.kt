@@ -110,6 +110,11 @@ class GatewayFragment : Fragment(), StoryListener {
     }
 
 
+    override fun onPause() {
+        state = fragBinding.recyclerViewGate.layoutManager?.onSaveInstanceState()
+        super.onPause()
+    }
+
     override fun onResume() {
         super.onResume()
         showLoader(loader,"")

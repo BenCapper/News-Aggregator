@@ -122,7 +122,11 @@ class StoryListFragment : Fragment(), StoryListener {
                 storyListViewModel.load()
             }
         }
+    }
 
+    override fun onPause() {
+        state = fragBinding.recyclerView.layoutManager?.onSaveInstanceState()
+        super.onPause()
     }
 
     override fun onStoryClick(story: StoryModel) {

@@ -140,7 +140,11 @@ class HistoryListFragment : Fragment(), StoryListener {
                 historyListViewModel.load()
             }
         }
+    }
 
+    override fun onPause() {
+        state = fragBinding.recyclerViewHistory.layoutManager?.onSaveInstanceState()
+        super.onPause()
     }
 
     override fun onStoryClick(story: StoryModel) {
