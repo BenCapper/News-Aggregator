@@ -56,7 +56,7 @@ class SkyFragment : Fragment(), StoryListener {
         _fragBinding = FragmentSkyBinding.inflate(inflater, container, false)
         val root = fragBinding.root
         fragBinding.recyclerViewSky.layoutManager = activity?.let { LinearLayoutManager(it) }
-        activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.gript)
+        activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.sky)
         loader = createLoader(requireActivity())
         showLoader(loader,"")
         MobileAds.initialize(this.context!!) {}
