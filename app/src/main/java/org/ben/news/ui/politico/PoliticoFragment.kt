@@ -1,27 +1,21 @@
-package org.ben.news.ui.storyList
+package org.ben.news.ui.politico
 
 import android.app.AlertDialog
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.os.Parcelable
-import android.os.UserManager
 import android.view.*
+import androidx.fragment.app.Fragment
 import android.widget.ImageView
 import android.widget.SearchView
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.gms.ads.AdRequest
-import com.google.android.gms.ads.AdSize
-import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.MobileAds
-import com.google.android.material.snackbar.Snackbar
-import com.google.firebase.storage.FirebaseStorage
 import org.ben.news.R
 import org.ben.news.adapters.StoryAdapter
 import org.ben.news.adapters.StoryListener
-import org.ben.news.databinding.FragmentStoryListBinding
+import org.ben.news.databinding.FragmentPoliticoBinding
 import org.ben.news.firebase.StoryManager
 import org.ben.news.helpers.createLoader
 import org.ben.news.helpers.hideLoader
@@ -31,16 +25,16 @@ import org.ben.news.ui.auth.LoggedInViewModel
 import splitties.snackbar.snack
 
 
-class StoryListFragment : Fragment(), StoryListener {
+class PoliticoFragment : Fragment(), StoryListener {
 
     companion object {
-        fun newInstance() = StoryListFragment()
+        fun newInstance() = PoliticoFragment()
     }
-    private var _fragBinding: FragmentStoryListBinding? = null
+    private var _fragBinding: FragmentPoliticoBinding? = null
     private val fragBinding get() = _fragBinding!!
     lateinit var loader : AlertDialog
     private val loggedInViewModel : LoggedInViewModel by activityViewModels()
-    private val storyListViewModel: StoryListViewModel by activityViewModels()
+    private val politicoViewModel: PoliticoViewModel by activityViewModels()
     var state: Parcelable? = null
 
 
@@ -57,16 +51,16 @@ class StoryListFragment : Fragment(), StoryListener {
         savedInstanceState: Bundle?
     ): View {
 
-        _fragBinding = FragmentStoryListBinding.inflate(inflater, container, false)
+        _fragBinding = FragmentPoliticoBinding.inflate(inflater, container, false)
         val root = fragBinding.root
-        fragBinding.recyclerView.layoutManager = activity?.let { LinearLayoutManager(it) }
+        fragBinding.recyclerViewPol.layoutManager = activity?.let { LinearLayoutManager(it) }
         activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.logo)
         loader = createLoader(requireActivity())
         showLoader(loader,"")
         MobileAds.initialize(this.context!!) {}
 
 
-        storyListViewModel.observableStoryList.observe(viewLifecycleOwner) { story ->
+        politicoViewModel.observablePolList.observe(viewLifecycleOwner) { story ->
             story?.let {
                 render(story as ArrayList<StoryModel>)
             }
@@ -93,12 +87,12 @@ class StoryListFragment : Fragment(), StoryListener {
 
             override fun onQueryTextChange(newText: String?): Boolean {
                 if (newText != null) {
-                    storyListViewModel.search(
+                    politicoViewModel.search(
                         newText
                     )
                 }
                 else {
-                    storyListViewModel.load()
+                    politicoViewModel.load()
                 }
                 return true
             }
@@ -108,8 +102,8 @@ class StoryListFragment : Fragment(), StoryListener {
 
 
     private fun render(storyList: ArrayList<StoryModel>) {
-        fragBinding.recyclerView.adapter = StoryAdapter(storyList, this)
-        state?.let { fragBinding.recyclerView.layoutManager?.onRestoreInstanceState(it) }
+        fragBinding.recyclerViewPol.adapter = StoryAdapter(storyList, this)
+        state?.let { fragBinding.recyclerViewPol.layoutManager?.onRestoreInstanceState(it) }
     }
 
 
@@ -118,21 +112,21 @@ class StoryListFragment : Fragment(), StoryListener {
         //showLoader(loader,"")
         loggedInViewModel.liveFirebaseUser.observe(viewLifecycleOwner) { firebaseUser ->
             if (firebaseUser != null) {
-                storyListViewModel.liveFirebaseUser.value = firebaseUser
-                storyListViewModel.load()
+                politicoViewModel.liveFirebaseUser.value = firebaseUser
+                politicoViewModel.load()
             }
         }
     }
 
     override fun onPause() {
-        state = fragBinding.recyclerView.layoutManager?.onSaveInstanceState()
+        state = fragBinding.recyclerViewPol.layoutManager?.onSaveInstanceState()
         super.onPause()
     }
 
     override fun onStoryClick(story: StoryModel) {
         StoryManager.create(loggedInViewModel.liveFirebaseUser.value!!.uid,"history", story)
         val intent = Intent(Intent.ACTION_VIEW).setData(Uri.parse(story.link))
-        state = fragBinding.recyclerView.layoutManager?.onSaveInstanceState()
+        state = fragBinding.recyclerViewPol.layoutManager?.onSaveInstanceState()
         startActivity(intent)
     }
 
@@ -150,11 +144,12 @@ class StoryListFragment : Fragment(), StoryListener {
         }
 
         val shareIntent = Intent.createChooser(sendIntent, null)
-        state = fragBinding.recyclerView.layoutManager?.onSaveInstanceState()
+        state = fragBinding.recyclerViewPol.layoutManager?.onSaveInstanceState()
         startActivity(shareIntent)
     }
     override fun onDestroyView() {
         super.onDestroyView()
         _fragBinding = null
     }
+
 }

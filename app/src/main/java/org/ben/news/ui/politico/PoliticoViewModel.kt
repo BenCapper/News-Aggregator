@@ -1,10 +1,9 @@
-package org.ben.news.ui.storyList
+package org.ben.news.ui.politico
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseUser
-import org.ben.news.firebase.FirebaseImageManager
 import org.ben.news.firebase.StoryManager
 import org.ben.news.models.StoryModel
 import timber.log.Timber
@@ -13,13 +12,12 @@ import java.time.LocalDate
 import java.util.*
 import kotlin.collections.ArrayList
 
-class StoryListViewModel : ViewModel() {
-
-    private val storyList =
+class PoliticoViewModel : ViewModel() {
+    private val polList =
         MutableLiveData<List<StoryModel>>()
 
-    val observableStoryList: LiveData<List<StoryModel>>
-        get() = storyList
+    val observablePolList: LiveData<List<StoryModel>>
+        get() = polList
 
     private val story = MutableLiveData<StoryModel>()
 
@@ -33,13 +31,14 @@ class StoryListViewModel : ViewModel() {
 
     init { load() }
 
+    private val outlet = "www.politico.com"
     private val df = SimpleDateFormat("MM.dd.yy")
     private val calDate = Calendar.getInstance().time
     private var formattedDate: String = df.format(calDate)
     private var today = formattedDate.replace(".","-")
     private val now = LocalDate.now()
 
-    fun getDates(n:Int): ArrayList<String> {
+    private fun getDates(n:Int): ArrayList<String> {
         var dates = ArrayList<String>()
         for (i in 0..n) {
             val yesterday = now.minusDays(i.toLong())
@@ -61,25 +60,23 @@ class StoryListViewModel : ViewModel() {
 
 
     fun load() {
-        var list: ArrayList<String>
+        val list: ArrayList<String>
         try {
-            list = getDates(1)
-            list.sortDescending()
-            Timber.i("LISTY : $list")
-            StoryManager.findAll(list,storyList)
-            Timber.i("Load Success : ${storyList.value}")
+            list = getDates(5)
+            StoryManager.findByOutlet(list,outlet,polList)
+            Timber.i("Load Success : ${polList.value}")
         }
         catch (e: Exception) {
-                Timber.i("Load Error : $e.message")
+            Timber.i("Load Error : $e.message")
         }
 
     }
 
     fun search( term: String) {
-        var dates: ArrayList<String>
+        val dates: ArrayList<String>
         try {
             dates = getDates(5)
-            StoryManager.search(term,dates,storyList)
+            StoryManager.searchByOutlet(dates,term,outlet,polList)
             Timber.i("Search Success")
         }
         catch (e: java.lang.Exception) {
