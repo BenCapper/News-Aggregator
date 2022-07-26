@@ -37,5 +37,8 @@
     <string name="sky">Sky News</string>
     <string name="gateway">The Gateway Pundit</string>
     <string name="pmill">The Post Millennial</string>
+    <string name="politico">Politico</string>
     <string name="rev">Revolver News</string>
+    <string name="left">Leans Left</string>
+    <string name="right">Leans Right</string>
 </resources>
