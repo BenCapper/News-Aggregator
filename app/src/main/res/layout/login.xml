@@ -11,7 +11,7 @@
     <Button
         android:id="@+id/emailCreateAccountButton"
         style="@style/Widget.AppCompat.Button.Colored"
-        android:layout_width="155dp"
+        android:layout_width="165dp"
         android:layout_height="48dp"
         android:layout_weight="1"
         android:text="@string/create_acc"
