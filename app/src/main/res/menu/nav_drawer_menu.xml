@@ -18,7 +18,7 @@
                 android:title="@string/view_history" />
         </menu>
     </item>
-    <item android:title="@string/outlets">
+    <item android:title="@string/right">
         <menu>
             <item
                 android:id="@+id/menugript"
@@ -26,20 +26,10 @@
                 android:onClick="griptArticles"
                 android:title="@string/gript" />
             <item
-                android:id="@+id/menurte"
-                android:icon="@drawable/ieicon"
-                android:onClick="rteArticles"
-                android:title="@string/rte" />
-            <item
                 android:id="@+id/menugbn"
                 android:icon="@drawable/gbicon"
                 android:onClick="gbArticles"
                 android:title="@string/gbnews" />
-            <item
-                android:id="@+id/menusky"
-                android:icon="@drawable/gbicon"
-                android:onClick="skyArticles"
-                android:title="@string/sky" />
             <item
                 android:id="@+id/menublaze"
                 android:icon="@drawable/usicon"
@@ -86,6 +76,25 @@
                 android:icon="@drawable/canicon"
                 android:onClick="pMillArticles"
                 android:title="@string/pmill" />
+        </menu>
+    </item>
+    <item android:title="@string/left">
+        <menu>
+            <item
+                android:id="@+id/menurte"
+                android:icon="@drawable/ieicon"
+                android:onClick="rteArticles"
+                android:title="@string/rte" />
+            <item
+                android:id="@+id/menusky"
+                android:icon="@drawable/gbicon"
+                android:onClick="skyArticles"
+                android:title="@string/sky" />
+            <item
+                android:id="@+id/menupol"
+                android:icon="@drawable/usicon"
+                android:onClick="politicoArticles"
+                android:title="@string/politico" />
         </menu>
     </item>
     <item android:title="">
