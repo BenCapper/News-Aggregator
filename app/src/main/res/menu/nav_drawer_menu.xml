@@ -95,6 +95,16 @@
                 android:icon="@drawable/usicon"
                 android:onClick="politicoArticles"
                 android:title="@string/politico" />
+            <item
+                android:id="@+id/menucbs"
+                android:icon="@drawable/usicon"
+                android:onClick="cbsArticles"
+                android:title="@string/cbs" />
+            <item
+                android:id="@+id/menuabc"
+                android:icon="@drawable/usicon"
+                android:onClick="abcArticles"
+                android:title="@string/abc" />
         </menu>
     </item>
     <item android:title="">
