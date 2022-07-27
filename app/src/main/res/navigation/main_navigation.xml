@@ -90,6 +90,12 @@
             app:destination="@id/politicoFragment"
             app:enterAnim="@anim/nav_default_enter_anim"
             app:exitAnim="@anim/nav_default_exit_anim" />
+        <action
+            android:id="@+id/action_storyListFragment_to_abcFragment"
+            app:destination="@id/abcFragment" />
+        <action
+            android:id="@+id/action_storyListFragment_to_cbsFragment"
+            app:destination="@id/cbsFragment" />
     </fragment>
     <fragment
         android:id="@+id/likedListFragment"
@@ -171,4 +177,14 @@
         android:name="org.ben.news.ui.politico.PoliticoFragment"
         android:label="fragment_politico"
         tools:layout="@layout/fragment_politico" />
+    <fragment
+        android:id="@+id/abcFragment"
+        android:name="org.ben.news.ui.abc.AbcFragment"
+        android:label="fragment_abc"
+        tools:layout="@layout/fragment_abc" />
+    <fragment
+        android:id="@+id/cbsFragment"
+        android:name="org.ben.news.ui.cbs.CbsFragment"
+        android:label="fragment_cbs"
+        tools:layout="@layout/fragment_cbs" />
 </navigation>
