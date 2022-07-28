@@ -105,6 +105,11 @@
                 android:icon="@drawable/usicon"
                 android:onClick="abcArticles"
                 android:title="@string/abc" />
+            <item
+                android:id="@+id/menunpr"
+                android:icon="@drawable/usicon"
+                android:onClick="nprArticles"
+                android:title="@string/npr" />
         </menu>
     </item>
     <item android:title="">
