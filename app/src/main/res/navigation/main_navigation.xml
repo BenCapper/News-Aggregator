@@ -96,6 +96,9 @@
         <action
             android:id="@+id/action_storyListFragment_to_cbsFragment"
             app:destination="@id/cbsFragment" />
+        <action
+            android:id="@+id/action_storyListFragment_to_nprFragment"
+            app:destination="@id/nprFragment" />
     </fragment>
     <fragment
         android:id="@+id/likedListFragment"
@@ -187,4 +190,9 @@
         android:name="org.ben.news.ui.cbs.CbsFragment"
         android:label="fragment_cbs"
         tools:layout="@layout/fragment_cbs" />
+    <fragment
+        android:id="@+id/nprFragment"
+        android:name="org.ben.news.ui.npr.NprFragment"
+        android:label="fragment_npr"
+        tools:layout="@layout/fragment_npr" />
 </navigation>

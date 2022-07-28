@@ -141,8 +141,9 @@ class StoryAdapter constructor(
 
         // The headline and media content are guaranteed to be in every UnifiedNativeAd.
         binding.headad.text = nativeAd.headline
+        binding.adMedia.setMediaContent(nativeAd.mediaContent!!)
         binding.img.setImageDrawable(nativeAd.mediaContent!!.mainImage)
-        nativeAd.mediaContent?.let { binding.adMedia.setMediaContent(it) }
+        //nativeAd.mediaContent?.let { binding.adMedia.setMediaContent(it) }
 
         // These assets aren't guaranteed to be in every UnifiedNativeAd, so it's important to
         // check before trying to display them.
