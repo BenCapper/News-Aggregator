@@ -46,7 +46,7 @@ for article in articles:
    title = articleSoup.select("h1")
    title = str(title).split('">')[1].split('</')[0]
    title = titleFormat(title)
-   img_title = imgTitleFormat(title)
+   img_title = ""
    date = list()
    dates = articleSoup.select("time")
    monthDay = str(dates).split('">')[1].split(',')[0].split(' ')
@@ -56,27 +56,11 @@ for article in articles:
    date.append(year)
    date = formatDate(date)
 
-   img_src = articleSoup.find("img","caas-img has-preview")
+   img_src = ""
    if title not in ref_list:
       ref_list.append(title)
       open_temp = open(log_file_path, "a")
-      if img_src is None:
-         storage_link = f"https://firebasestorage.googleapis.com/v0/b/news-a3e22.appspot.com/o/Yahoo%2Fyahoo-news.png?alt=media&token=6ea70d79-fbaf-442d-b952-babb2fb3f6d7"
-         img_src = ""
-         img_title = ""
-      else:
-         img_src = str(img_src).split('src="')[1].split('"/>')[0]
-
-         bucket = storage.bucket()
-         token = ""
-                # use images from folder to upload to storage
-         with open(f"{img_path}/{img_title}", "wb") as img:
-             img.write(requests.get(img_src).content)
-             blob = bucket.blob(f"Yahoo/{img_title}")
-             token = uuid4()
-             metadata = {"firebaseStorageDownloadTokens": token}
-             blob.upload_from_filename(f"{img_path}/{img_title}")
-         storage_link = f"https://firebasestorage.googleapis.com/v0/b/news-a3e22.appspot.com/o/Yahoo%2F{img_title}?alt=media&token={token}"
+      storage_link = f"https://firebasestorage.googleapis.com/v0/b/news-a3e22.appspot.com/o/Yahoo%2Fyahoo-news.png?alt=media&token=6ea70d79-fbaf-442d-b952-babb2fb3f6d7"
 
 
       pushToDB(
