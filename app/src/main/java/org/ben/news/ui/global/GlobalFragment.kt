@@ -1,4 +1,4 @@
-package org.ben.news.ui.yahoo
+package org.ben.news.ui.global
 
 import android.app.AlertDialog
 import android.content.Intent
@@ -15,7 +15,7 @@ import com.google.android.gms.ads.MobileAds
 import org.ben.news.R
 import org.ben.news.adapters.StoryAdapter
 import org.ben.news.adapters.StoryListener
-import org.ben.news.databinding.FragmentYahooBinding
+import org.ben.news.databinding.FragmentGlobalBinding
 import org.ben.news.firebase.StoryManager
 import org.ben.news.helpers.createLoader
 import org.ben.news.helpers.hideLoader
@@ -24,16 +24,16 @@ import org.ben.news.models.StoryModel
 import org.ben.news.ui.auth.LoggedInViewModel
 import splitties.snackbar.snack
 
-class YahooFragment : Fragment(), StoryListener {
+class GlobalFragment : Fragment(), StoryListener {
 
     companion object {
-        fun newInstance() = YahooFragment()
+        fun newInstance() = GlobalFragment()
     }
-    private var _fragBinding: FragmentYahooBinding? = null
+    private var _fragBinding: FragmentGlobalBinding? = null
     private val fragBinding get() = _fragBinding!!
     lateinit var loader : AlertDialog
     private val loggedInViewModel : LoggedInViewModel by activityViewModels()
-    private val yahooViewModel: YahooViewModel by activityViewModels()
+    private val gloViewModel: GlobalViewModel by activityViewModels()
     var state: Parcelable? = null
 
 
@@ -50,16 +50,16 @@ class YahooFragment : Fragment(), StoryListener {
         savedInstanceState: Bundle?
     ): View {
 
-        _fragBinding = FragmentYahooBinding.inflate(inflater, container, false)
+        _fragBinding = FragmentGlobalBinding.inflate(inflater, container, false)
         val root = fragBinding.root
-        fragBinding.recyclerViewYahoo.layoutManager = activity?.let { LinearLayoutManager(it) }
-        activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.yahoo)
+        fragBinding.recyclerViewGlo.layoutManager = activity?.let { LinearLayoutManager(it) }
+        activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.glo)
         loader = createLoader(requireActivity())
         showLoader(loader,"")
         MobileAds.initialize(this.context!!) {}
 
 
-        yahooViewModel.observableYahList.observe(viewLifecycleOwner) { story ->
+        gloViewModel.observableGloList.observe(viewLifecycleOwner) { story ->
             story?.let {
                 render(story as ArrayList<StoryModel>)
             }
@@ -86,12 +86,12 @@ class YahooFragment : Fragment(), StoryListener {
 
             override fun onQueryTextChange(newText: String?): Boolean {
                 if (newText != null) {
-                    yahooViewModel.search(
+                    gloViewModel.search(
                         newText
                     )
                 }
                 else {
-                    yahooViewModel.load()
+                    gloViewModel.load()
                 }
                 return true
             }
@@ -101,8 +101,8 @@ class YahooFragment : Fragment(), StoryListener {
 
 
     private fun render(storyList: ArrayList<StoryModel>) {
-        fragBinding.recyclerViewYahoo.adapter = StoryAdapter(storyList, this)
-        state?.let { fragBinding.recyclerViewYahoo.layoutManager?.onRestoreInstanceState(it) }
+        fragBinding.recyclerViewGlo.adapter = StoryAdapter(storyList, this)
+        state?.let { fragBinding.recyclerViewGlo.layoutManager?.onRestoreInstanceState(it) }
     }
 
 
@@ -111,21 +111,21 @@ class YahooFragment : Fragment(), StoryListener {
         //showLoader(loader,"")
         loggedInViewModel.liveFirebaseUser.observe(viewLifecycleOwner) { firebaseUser ->
             if (firebaseUser != null) {
-                yahooViewModel.liveFirebaseUser.value = firebaseUser
-                yahooViewModel.load()
+                gloViewModel.liveFirebaseUser.value = firebaseUser
+                gloViewModel.load()
             }
         }
     }
 
     override fun onPause() {
-        state = fragBinding.recyclerViewYahoo.layoutManager?.onSaveInstanceState()
+        state = fragBinding.recyclerViewGlo.layoutManager?.onSaveInstanceState()
         super.onPause()
     }
 
     override fun onStoryClick(story: StoryModel) {
         StoryManager.create(loggedInViewModel.liveFirebaseUser.value!!.uid,"history", story)
         val intent = Intent(Intent.ACTION_VIEW).setData(Uri.parse(story.link))
-        state = fragBinding.recyclerViewYahoo.layoutManager?.onSaveInstanceState()
+        state = fragBinding.recyclerViewGlo.layoutManager?.onSaveInstanceState()
         startActivity(intent)
     }
 
@@ -143,7 +143,7 @@ class YahooFragment : Fragment(), StoryListener {
         }
 
         val shareIntent = Intent.createChooser(sendIntent, null)
-        state = fragBinding.recyclerViewYahoo.layoutManager?.onSaveInstanceState()
+        state = fragBinding.recyclerViewGlo.layoutManager?.onSaveInstanceState()
         startActivity(shareIntent)
     }
     override fun onDestroyView() {

@@ -106,10 +106,15 @@
                 android:onClick="abcArticles"
                 android:title="@string/abc" />
             <item
-                android:id="@+id/menunpr"
+                android:id="@+id/menuyah"
                 android:icon="@drawable/usicon"
                 android:onClick="yahArticles"
                 android:title="@string/yah" />
+            <item
+                android:id="@+id/menuglo"
+                android:icon="@drawable/canicon"
+                android:onClick="gloArticles"
+                android:title="@string/glo" />
         </menu>
     </item>
     <item android:title="">
