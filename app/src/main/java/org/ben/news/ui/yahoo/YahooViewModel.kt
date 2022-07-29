@@ -1,4 +1,4 @@
-package org.ben.news.ui.npr
+package org.ben.news.ui.yahoo
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -12,12 +12,12 @@ import java.time.LocalDate
 import java.util.*
 import kotlin.collections.ArrayList
 
-class NprViewModel : ViewModel() {
-    private val nprList =
+class YahooViewModel : ViewModel() {
+    private val yahList =
         MutableLiveData<List<StoryModel>>()
 
-    val observableNprList: LiveData<List<StoryModel>>
-        get() = nprList
+    val observableYahList: LiveData<List<StoryModel>>
+        get() = yahList
 
     private val story = MutableLiveData<StoryModel>()
 
@@ -31,7 +31,7 @@ class NprViewModel : ViewModel() {
 
     init { load() }
 
-    private val outlet = "www.npr.com"
+    private val outlet = "news.yahoo.com"
     private val df = SimpleDateFormat("MM.dd.yy")
     private val calDate = Calendar.getInstance().time
     private var formattedDate: String = df.format(calDate)
@@ -63,8 +63,8 @@ class NprViewModel : ViewModel() {
         val list: ArrayList<String>
         try {
             list = getDates(5)
-            StoryManager.findByOutlet(list,outlet,nprList)
-            Timber.i("Load Success : ${nprList.value}")
+            StoryManager.findByOutlet(list,outlet,yahList)
+            Timber.i("Load Success : ${yahList.value}")
         }
         catch (e: Exception) {
             Timber.i("Load Error : $e.message")
@@ -76,7 +76,7 @@ class NprViewModel : ViewModel() {
         val dates: ArrayList<String>
         try {
             dates = getDates(5)
-            StoryManager.searchByOutlet(dates,term,outlet,nprList)
+            StoryManager.searchByOutlet(dates,term,outlet,yahList)
             Timber.i("Search Success")
         }
         catch (e: java.lang.Exception) {

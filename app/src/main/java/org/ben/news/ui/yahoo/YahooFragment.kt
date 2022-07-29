@@ -1,9 +1,8 @@
-package org.ben.news.ui.npr
+package org.ben.news.ui.yahoo
 
 import android.app.AlertDialog
 import android.content.Intent
 import android.net.Uri
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.*
@@ -16,28 +15,25 @@ import com.google.android.gms.ads.MobileAds
 import org.ben.news.R
 import org.ben.news.adapters.StoryAdapter
 import org.ben.news.adapters.StoryListener
-import org.ben.news.databinding.FragmentNprBinding
-import org.ben.news.databinding.FragmentPoliticoBinding
+import org.ben.news.databinding.FragmentYahooBinding
 import org.ben.news.firebase.StoryManager
 import org.ben.news.helpers.createLoader
 import org.ben.news.helpers.hideLoader
 import org.ben.news.helpers.showLoader
 import org.ben.news.models.StoryModel
 import org.ben.news.ui.auth.LoggedInViewModel
-import org.ben.news.ui.politico.PoliticoFragment
-import org.ben.news.ui.politico.PoliticoViewModel
 import splitties.snackbar.snack
 
-class NprFragment : Fragment(), StoryListener {
+class YahooFragment : Fragment(), StoryListener {
 
     companion object {
-        fun newInstance() = NprFragment()
+        fun newInstance() = YahooFragment()
     }
-    private var _fragBinding: FragmentNprBinding? = null
+    private var _fragBinding: FragmentYahooBinding? = null
     private val fragBinding get() = _fragBinding!!
     lateinit var loader : AlertDialog
     private val loggedInViewModel : LoggedInViewModel by activityViewModels()
-    private val nprViewModel: NprViewModel by activityViewModels()
+    private val yahooViewModel: YahooViewModel by activityViewModels()
     var state: Parcelable? = null
 
 
@@ -54,16 +50,16 @@ class NprFragment : Fragment(), StoryListener {
         savedInstanceState: Bundle?
     ): View {
 
-        _fragBinding = FragmentNprBinding.inflate(inflater, container, false)
+        _fragBinding = FragmentYahooBinding.inflate(inflater, container, false)
         val root = fragBinding.root
-        fragBinding.recyclerViewNpr.layoutManager = activity?.let { LinearLayoutManager(it) }
+        fragBinding.recyclerViewYahoo.layoutManager = activity?.let { LinearLayoutManager(it) }
         activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.politico)
         loader = createLoader(requireActivity())
         showLoader(loader,"")
         MobileAds.initialize(this.context!!) {}
 
 
-        nprViewModel.observableNprList.observe(viewLifecycleOwner) { story ->
+        yahooViewModel.observableYahList.observe(viewLifecycleOwner) { story ->
             story?.let {
                 render(story as ArrayList<StoryModel>)
             }
@@ -90,12 +86,12 @@ class NprFragment : Fragment(), StoryListener {
 
             override fun onQueryTextChange(newText: String?): Boolean {
                 if (newText != null) {
-                    nprViewModel.search(
+                    yahooViewModel.search(
                         newText
                     )
                 }
                 else {
-                    nprViewModel.load()
+                    yahooViewModel.load()
                 }
                 return true
             }
@@ -105,8 +101,8 @@ class NprFragment : Fragment(), StoryListener {
 
 
     private fun render(storyList: ArrayList<StoryModel>) {
-        fragBinding.recyclerViewNpr.adapter = StoryAdapter(storyList, this)
-        state?.let { fragBinding.recyclerViewNpr.layoutManager?.onRestoreInstanceState(it) }
+        fragBinding.recyclerViewYahoo.adapter = StoryAdapter(storyList, this)
+        state?.let { fragBinding.recyclerViewYahoo.layoutManager?.onRestoreInstanceState(it) }
     }
 
 
@@ -115,21 +111,21 @@ class NprFragment : Fragment(), StoryListener {
         //showLoader(loader,"")
         loggedInViewModel.liveFirebaseUser.observe(viewLifecycleOwner) { firebaseUser ->
             if (firebaseUser != null) {
-                nprViewModel.liveFirebaseUser.value = firebaseUser
-                nprViewModel.load()
+                yahooViewModel.liveFirebaseUser.value = firebaseUser
+                yahooViewModel.load()
             }
         }
     }
 
     override fun onPause() {
-        state = fragBinding.recyclerViewNpr.layoutManager?.onSaveInstanceState()
+        state = fragBinding.recyclerViewYahoo.layoutManager?.onSaveInstanceState()
         super.onPause()
     }
 
     override fun onStoryClick(story: StoryModel) {
         StoryManager.create(loggedInViewModel.liveFirebaseUser.value!!.uid,"history", story)
         val intent = Intent(Intent.ACTION_VIEW).setData(Uri.parse(story.link))
-        state = fragBinding.recyclerViewNpr.layoutManager?.onSaveInstanceState()
+        state = fragBinding.recyclerViewYahoo.layoutManager?.onSaveInstanceState()
         startActivity(intent)
     }
 
@@ -147,7 +143,7 @@ class NprFragment : Fragment(), StoryListener {
         }
 
         val shareIntent = Intent.createChooser(sendIntent, null)
-        state = fragBinding.recyclerViewNpr.layoutManager?.onSaveInstanceState()
+        state = fragBinding.recyclerViewYahoo.layoutManager?.onSaveInstanceState()
         startActivity(shareIntent)
     }
     override fun onDestroyView() {

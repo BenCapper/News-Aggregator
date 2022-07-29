@@ -34,7 +34,7 @@
     <string name="gript">Gript</string>
     <string name="blaze">Blaze</string>
     <string name="rte">RTE</string>
-    <string name="npr">NPR</string>
+    <string name="yah">Yahoo News</string>
     <string name="sky">Sky News</string>
     <string name="gateway">The Gateway Pundit</string>
     <string name="pmill">The Post Millennial</string>
@@ -44,4 +44,5 @@
     <string name="rev">Revolver News</string>
     <string name="left">Leans Left</string>
     <string name="right">Leans Right</string>
+    <string name="promoted">Ad</string>
 </resources>
