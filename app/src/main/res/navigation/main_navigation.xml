@@ -99,6 +99,9 @@
         <action
             android:id="@+id/action_storyListFragment_to_yahooFragment"
             app:destination="@id/yahooFragment" />
+        <action
+            android:id="@+id/action_storyListFragment_to_globalFragment"
+            app:destination="@id/globalFragment" />
     </fragment>
     <fragment
         android:id="@+id/likedListFragment"
@@ -195,4 +198,9 @@
         android:name="org.ben.news.ui.yahoo.YahooFragment"
         android:label="fragment_yahoo"
         tools:layout="@layout/fragment_yahoo" />
+    <fragment
+        android:id="@+id/globalFragment"
+        android:name="org.ben.news.ui.global.GlobalFragment"
+        android:label="fragment_global"
+        tools:layout="@layout/fragment_global" />
 </navigation>
