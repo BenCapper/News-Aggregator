@@ -91,6 +91,11 @@
                 android:onClick="skyArticles"
                 android:title="@string/sky" />
             <item
+                android:id="@+id/menueuron"
+                android:icon="@drawable/euicon"
+                android:onClick="euronArticles"
+                android:title="@string/euron" />
+            <item
                 android:id="@+id/menupol"
                 android:icon="@drawable/usicon"
                 android:onClick="politicoArticles"

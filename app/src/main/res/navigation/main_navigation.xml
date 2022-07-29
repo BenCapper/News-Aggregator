@@ -105,6 +105,9 @@
         <action
             android:id="@+id/action_storyListFragment_to_voxFragment"
             app:destination="@id/voxFragment" />
+        <action
+            android:id="@+id/action_storyListFragment_to_euronFragment"
+            app:destination="@id/euronFragment" />
     </fragment>
     <fragment
         android:id="@+id/likedListFragment"
@@ -211,4 +214,9 @@
         android:name="org.ben.news.ui.vox.VoxFragment"
         android:label="fragment_vox"
         tools:layout="@layout/fragment_vox" />
+    <fragment
+        android:id="@+id/euronFragment"
+        android:name="org.ben.news.ui.euronews.EuronFragment"
+        android:label="fragment_euron"
+        tools:layout="@layout/fragment_euron" />
 </navigation>
