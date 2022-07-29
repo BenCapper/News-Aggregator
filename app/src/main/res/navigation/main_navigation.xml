@@ -102,6 +102,9 @@
         <action
             android:id="@+id/action_storyListFragment_to_globalFragment"
             app:destination="@id/globalFragment" />
+        <action
+            android:id="@+id/action_storyListFragment_to_voxFragment"
+            app:destination="@id/voxFragment" />
     </fragment>
     <fragment
         android:id="@+id/likedListFragment"
@@ -203,4 +206,9 @@
         android:name="org.ben.news.ui.global.GlobalFragment"
         android:label="fragment_global"
         tools:layout="@layout/fragment_global" />
+    <fragment
+        android:id="@+id/voxFragment"
+        android:name="org.ben.news.ui.vox.VoxFragment"
+        android:label="fragment_vox"
+        tools:layout="@layout/fragment_vox" />
 </navigation>
