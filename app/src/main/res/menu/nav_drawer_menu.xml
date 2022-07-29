@@ -108,8 +108,8 @@
             <item
                 android:id="@+id/menunpr"
                 android:icon="@drawable/usicon"
-                android:onClick="nprArticles"
-                android:title="@string/npr" />
+                android:onClick="yahArticles"
+                android:title="@string/yah" />
         </menu>
     </item>
     <item android:title="">

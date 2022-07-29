@@ -97,8 +97,8 @@
             android:id="@+id/action_storyListFragment_to_cbsFragment"
             app:destination="@id/cbsFragment" />
         <action
-            android:id="@+id/action_storyListFragment_to_nprFragment"
-            app:destination="@id/nprFragment" />
+            android:id="@+id/action_storyListFragment_to_yahooFragment"
+            app:destination="@id/yahooFragment" />
     </fragment>
     <fragment
         android:id="@+id/likedListFragment"
@@ -191,8 +191,8 @@
         android:label="fragment_cbs"
         tools:layout="@layout/fragment_cbs" />
     <fragment
-        android:id="@+id/nprFragment"
-        android:name="org.ben.news.ui.npr.NprFragment"
-        android:label="fragment_npr"
-        tools:layout="@layout/fragment_npr" />
+        android:id="@+id/yahooFragment"
+        android:name="org.ben.news.ui.yahoo.YahooFragment"
+        android:label="fragment_yahoo"
+        tools:layout="@layout/fragment_yahoo" />
 </navigation>

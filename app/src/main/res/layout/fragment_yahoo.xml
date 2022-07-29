@@ -5,11 +5,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FFECEAEA"
-    tools:context=".ui.npr.NprFragment">
+    tools:context=".ui.yahoo.YahooFragment">
 
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerViewNpr"
+        android:id="@+id/recyclerViewYahoo"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginLeft="20dp"
