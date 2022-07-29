@@ -76,7 +76,7 @@ for article in articles:
              token = uuid4()
              metadata = {"firebaseStorageDownloadTokens": token}
              blob.upload_from_filename(f"{img_path}/{img_title}")
-         storage_link = f"https://firebasestorage.googleapis.com/v0/b/news-a3e22.appspot.com/o/PMill%2F{img_title}?alt=media&token={token}"
+         storage_link = f"https://firebasestorage.googleapis.com/v0/b/news-a3e22.appspot.com/o/Yahoo%2F{img_title}?alt=media&token={token}"
 
 
       pushToDB(
