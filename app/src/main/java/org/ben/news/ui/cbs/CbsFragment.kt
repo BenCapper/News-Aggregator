@@ -53,13 +53,13 @@ class CbsFragment : Fragment(), StoryListener {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
+        loader = createLoader(requireActivity())
+        showLoader(loader,"")
         _fragBinding = FragmentCbsBinding.inflate(inflater, container, false)
         val root = fragBinding.root
         fragBinding.recyclerViewCbs.layoutManager = activity?.let { LinearLayoutManager(it) }
         activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.cbs)
-        loader = createLoader(requireActivity())
-        showLoader(loader,"")
+
         MobileAds.initialize(this.context!!) {}
 
 

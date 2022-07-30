@@ -52,13 +52,13 @@ class SkyFragment : Fragment(), StoryListener {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
+        loader = createLoader(requireActivity())
+        showLoader(loader,"")
         _fragBinding = FragmentSkyBinding.inflate(inflater, container, false)
         val root = fragBinding.root
         fragBinding.recyclerViewSky.layoutManager = activity?.let { LinearLayoutManager(it) }
         activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.sky)
-        loader = createLoader(requireActivity())
-        showLoader(loader,"")
+
         MobileAds.initialize(this.context!!) {}
 
 

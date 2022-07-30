@@ -55,14 +55,14 @@ class IeFragment : Fragment(), StoryListener {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
+        loader = createLoader(requireActivity())
+        showLoader(loader,"")
         _fragBinding = FragmentIeBinding.inflate(inflater, container, false)
         val root = fragBinding.root
         fragBinding.recyclerViewIe.layoutManager = activity?.let { LinearLayoutManager(it) }
-        activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.breit)
+        activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.irish)
         activity?.findViewById<BottomNavigationView>(R.id.bottom_nav)?.visibility = View.INVISIBLE
-        loader = createLoader(requireActivity())
-        showLoader(loader,"")
+
         MobileAds.initialize(this.context!!) {}
 
 

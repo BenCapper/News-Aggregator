@@ -58,14 +58,13 @@ class HistoryListFragment : Fragment(), StoryListener {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
-        _fragBinding = FragmentHistoryListBinding.inflate(inflater, container, false)
-        val root = fragBinding.root
-        loader = createLoader(requireActivity())
-        activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.history1)
-        fragBinding.recyclerViewHistory.layoutManager = activity?.let { LinearLayoutManager(it) }
         loader = createLoader(requireActivity())
         showLoader(loader,"")
+        _fragBinding = FragmentHistoryListBinding.inflate(inflater, container, false)
+        val root = fragBinding.root
+        activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.history1)
+        fragBinding.recyclerViewHistory.layoutManager = activity?.let { LinearLayoutManager(it) }
+
         MobileAds.initialize(this.context!!) {}
 
 

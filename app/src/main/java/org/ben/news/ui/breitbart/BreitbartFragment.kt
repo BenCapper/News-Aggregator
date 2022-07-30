@@ -57,13 +57,13 @@ class BreitbartFragment : Fragment(), StoryListener {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
+        loader = createLoader(requireActivity())
+        showLoader(loader,"")
         _fragBinding = FragmentBreitbartBinding.inflate(inflater, container, false)
         val root = fragBinding.root
         fragBinding.recyclerViewBreit.layoutManager = activity?.let { LinearLayoutManager(it) }
         activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.breit)
-        loader = createLoader(requireActivity())
-        showLoader(loader,"")
+
         MobileAds.initialize(this.context!!) {}
 
 

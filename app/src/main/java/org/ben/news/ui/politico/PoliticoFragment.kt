@@ -50,13 +50,13 @@ class PoliticoFragment : Fragment(), StoryListener {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
+        loader = createLoader(requireActivity())
+        showLoader(loader,"")
         _fragBinding = FragmentPoliticoBinding.inflate(inflater, container, false)
         val root = fragBinding.root
         fragBinding.recyclerViewPol.layoutManager = activity?.let { LinearLayoutManager(it) }
         activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.politico)
-        loader = createLoader(requireActivity())
-        showLoader(loader,"")
+
         MobileAds.initialize(this.context!!) {}
 
 

@@ -57,15 +57,15 @@ class StoryListFragment : Fragment(), StoryListener {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
+        loader = createLoader(requireActivity())
+        showLoader(loader,"")
         _fragBinding = FragmentStoryListBinding.inflate(inflater, container, false)
         val root = fragBinding.root
         fragBinding.recyclerView.layoutManager = activity?.let { LinearLayoutManager(it) }
         activity?.findViewById<BottomNavigationView>(R.id.bottom_nav)?.itemIconTintList = null
         activity?.findViewById<BottomNavigationView>(R.id.bottom_nav)?.visibility = View.VISIBLE
         activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.logo)
-        loader = createLoader(requireActivity())
-        showLoader(loader,"")
+
         MobileAds.initialize(this.context!!) {}
 
 
