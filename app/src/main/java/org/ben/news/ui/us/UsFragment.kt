@@ -13,6 +13,7 @@ import android.widget.SearchView
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.gms.ads.MobileAds
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import org.ben.news.R
 import org.ben.news.adapters.StoryAdapter
 import org.ben.news.adapters.StoryListener
@@ -59,6 +60,7 @@ class UsFragment : Fragment(), StoryListener {
         val root = fragBinding.root
         fragBinding.recyclerViewUs.layoutManager = activity?.let { LinearLayoutManager(it) }
         activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.breit)
+        activity?.findViewById<BottomNavigationView>(R.id.bottom_nav)?.visibility = View.INVISIBLE
         loader = createLoader(requireActivity())
         showLoader(loader,"")
         MobileAds.initialize(this.context!!) {}

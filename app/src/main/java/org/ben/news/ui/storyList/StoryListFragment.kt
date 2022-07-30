@@ -62,6 +62,7 @@ class StoryListFragment : Fragment(), StoryListener {
         val root = fragBinding.root
         fragBinding.recyclerView.layoutManager = activity?.let { LinearLayoutManager(it) }
         activity?.findViewById<BottomNavigationView>(R.id.bottom_nav)?.itemIconTintList = null
+        activity?.findViewById<BottomNavigationView>(R.id.bottom_nav)?.visibility = View.VISIBLE
         activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.logo)
         loader = createLoader(requireActivity())
         showLoader(loader,"")

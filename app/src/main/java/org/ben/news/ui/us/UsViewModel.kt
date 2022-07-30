@@ -31,7 +31,18 @@ class UsViewModel : ViewModel() {
 
     init { load() }
 
-    private val outlet = "www.Breitbart.com"
+    private val outlets = listOf("www.TheBlaze.com",
+        "www.Timcast.com",
+        "www.Zerohedge.com",
+        "www.Breitbart.com",
+        "www.Revolver.news",
+        "www.Dailycaller.com",
+        "www.TheGatewayPundit.com",
+        "www.politico.com",
+        "www.Cbsnews.com",
+        "abcnews.go.com",
+        "news.yahoo.com",
+        "www.vox.com")
     private val df = SimpleDateFormat("MM.dd.yy")
     private val calDate = Calendar.getInstance().time
     private var formattedDate: String = df.format(calDate)
@@ -63,7 +74,7 @@ class UsViewModel : ViewModel() {
         val list: ArrayList<String>
         try {
             list = getDates(5)
-            StoryManager.findByOutlet(list,outlet,usList)
+            StoryManager.findByOutlets(list,outlets,usList)
             Timber.i("Load Success : ${usList.value}")
         }
         catch (e: Exception) {
@@ -76,7 +87,7 @@ class UsViewModel : ViewModel() {
         val dates: ArrayList<String>
         try {
             dates = getDates(5)
-            StoryManager.searchByOutlet(dates,term,outlet,usList)
+            StoryManager.searchByOutlets(dates,term,outlets,usList)
             Timber.i("Search Success")
         }
         catch (e: java.lang.Exception) {

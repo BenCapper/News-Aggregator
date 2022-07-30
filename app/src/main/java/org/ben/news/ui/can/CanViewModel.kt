@@ -31,7 +31,7 @@ class CanViewModel : ViewModel() {
 
     init { load() }
 
-    private val outlet = "www.Breitbart.com"
+    private val outlets = listOf("www.ThePostMillennial.com", "www.globalnews.ca")
     private val df = SimpleDateFormat("MM.dd.yy")
     private val calDate = Calendar.getInstance().time
     private var formattedDate: String = df.format(calDate)
@@ -63,7 +63,7 @@ class CanViewModel : ViewModel() {
         val list: ArrayList<String>
         try {
             list = getDates(5)
-            StoryManager.findByOutlet(list,outlet,canList)
+            StoryManager.findByOutlets(list,outlets,canList)
             Timber.i("Load Success : ${canList.value}")
         }
         catch (e: Exception) {
@@ -76,7 +76,7 @@ class CanViewModel : ViewModel() {
         val dates: ArrayList<String>
         try {
             dates = getDates(5)
-            StoryManager.searchByOutlet(dates,term,outlet,canList)
+            StoryManager.searchByOutlets(dates,term,outlets,canList)
             Timber.i("Search Success")
         }
         catch (e: java.lang.Exception) {

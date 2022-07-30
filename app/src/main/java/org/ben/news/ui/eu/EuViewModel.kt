@@ -31,7 +31,7 @@ class EuViewModel : ViewModel() {
 
     init { load() }
 
-    private val outlet = "www.Breitbart.com"
+    private val outlets = listOf("www.euronews.com")
     private val df = SimpleDateFormat("MM.dd.yy")
     private val calDate = Calendar.getInstance().time
     private var formattedDate: String = df.format(calDate)
@@ -63,7 +63,7 @@ class EuViewModel : ViewModel() {
         val list: ArrayList<String>
         try {
             list = getDates(5)
-            StoryManager.findByOutlet(list,outlet,euList)
+            StoryManager.findByOutlets(list,outlets,euList)
             Timber.i("Load Success : ${euList.value}")
         }
         catch (e: Exception) {
@@ -76,7 +76,7 @@ class EuViewModel : ViewModel() {
         val dates: ArrayList<String>
         try {
             dates = getDates(5)
-            StoryManager.searchByOutlet(dates,term,outlet,euList)
+            StoryManager.searchByOutlets(dates,term,outlets,euList)
             Timber.i("Search Success")
         }
         catch (e: java.lang.Exception) {
