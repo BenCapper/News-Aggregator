@@ -16,7 +16,7 @@
     <item
         android:id="@+id/usnav"
         android:icon="@drawable/usicon"
-        android:onClick=""
+        android:onClick="usArticles"
         tools:ignore="MenuTitle" />
     <item
         android:id="@+id/ienav"
