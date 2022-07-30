@@ -78,10 +78,10 @@ class BreitbartViewModel : ViewModel() {
         try {
             dates = getDates(5)
             StoryManager.searchByOutlet(dates,term,outlet,breitList)
-            Timber.i("Building Search Success")
+            Timber.i("Search Success")
         }
         catch (e: java.lang.Exception) {
-            Timber.i("Building Search Error : $e.message")
+            Timber.i("Search Error : $e.message")
         }
     }
 

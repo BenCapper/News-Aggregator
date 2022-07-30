@@ -42,8 +42,20 @@
     <string name="politico">Politico</string>
     <string name="cbs">CBS</string>
     <string name="abc">ABC</string>
+    <string name="vox">Vox</string>
+    <string name="euron">Euronews</string>
     <string name="rev">Revolver News</string>
     <string name="left">Leans Left</string>
     <string name="right">Leans Right</string>
     <string name="promoted">Ad</string>
+    <string name="us">US</string>
+    <string name="eu">EU</string>
+    <string name="ie">IE</string>
+    <string name="gb">GB</string>
+    <string name="can">CA</string>
+    <string name="canadian">Canadian</string>
+    <string name="irish">Irish</string>
+    <string name="american">American</string>
+    <string name="british">British</string>
+    <string name="european">European</string>
 </resources>

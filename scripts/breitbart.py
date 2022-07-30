@@ -89,12 +89,12 @@ for article in articles:
        else:
           with open(f"{img_path}/{img_title}", "wb") as img:
             img.write(requests.get(img_src).content)
-            blob = bucket.blob(f"GB/{img_title}")
+            blob = bucket.blob(f"Breitbart/{img_title}")
             token = uuid4()
             metadata = {"firebaseStorageDownloadTokens": token}
             blob.upload_from_filename(f"{img_path}/{img_title}")
 
-            storage_link = f"https://firebasestorage.googleapis.com/v0/b/news-a3e22.appspot.com/o/GB%2F{img_title}?alt=media&token={token}"
+            storage_link = f"https://firebasestorage.googleapis.com/v0/b/news-a3e22.appspot.com/o/Breitbart%2F{img_title}?alt=media&token={token}"
 
             pushToDB(
                 db_path,

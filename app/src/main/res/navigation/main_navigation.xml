@@ -102,6 +102,27 @@
         <action
             android:id="@+id/action_storyListFragment_to_globalFragment"
             app:destination="@id/globalFragment" />
+        <action
+            android:id="@+id/action_storyListFragment_to_voxFragment"
+            app:destination="@id/voxFragment" />
+        <action
+            android:id="@+id/action_storyListFragment_to_euronFragment"
+            app:destination="@id/euronFragment" />
+        <action
+            android:id="@+id/action_storyListFragment_to_canFragment"
+            app:destination="@id/canFragment" />
+        <action
+            android:id="@+id/action_storyListFragment_to_euFragment"
+            app:destination="@id/euFragment" />
+        <action
+            android:id="@+id/action_storyListFragment_to_ieFragment"
+            app:destination="@id/ieFragment" />
+        <action
+            android:id="@+id/action_storyListFragment_to_ukFragment"
+            app:destination="@id/ukFragment" />
+        <action
+            android:id="@+id/action_storyListFragment_to_usFragment"
+            app:destination="@id/usFragment" />
     </fragment>
     <fragment
         android:id="@+id/likedListFragment"
@@ -203,4 +224,39 @@
         android:name="org.ben.news.ui.global.GlobalFragment"
         android:label="fragment_global"
         tools:layout="@layout/fragment_global" />
+    <fragment
+        android:id="@+id/voxFragment"
+        android:name="org.ben.news.ui.vox.VoxFragment"
+        android:label="fragment_vox"
+        tools:layout="@layout/fragment_vox" />
+    <fragment
+        android:id="@+id/euronFragment"
+        android:name="org.ben.news.ui.euronews.EuronFragment"
+        android:label="fragment_euron"
+        tools:layout="@layout/fragment_euron" />
+    <fragment
+        android:id="@+id/canFragment"
+        android:name="org.ben.news.ui.can.CanFragment"
+        android:label="fragment_can"
+        tools:layout="@layout/fragment_can" />
+    <fragment
+        android:id="@+id/euFragment"
+        android:name="org.ben.news.ui.eu.EuFragment"
+        android:label="fragment_eu"
+        tools:layout="@layout/fragment_eu" />
+    <fragment
+        android:id="@+id/ieFragment"
+        android:name="org.ben.news.ui.ie.IeFragment"
+        android:label="fragment_ie"
+        tools:layout="@layout/fragment_ie" />
+    <fragment
+        android:id="@+id/ukFragment"
+        android:name="org.ben.news.ui.uk.UkFragment"
+        android:label="fragment_uk"
+        tools:layout="@layout/fragment_uk" />
+    <fragment
+        android:id="@+id/usFragment"
+        android:name="org.ben.news.ui.us.UsFragment"
+        android:label="fragment_us"
+        tools:layout="@layout/fragment_us" />
 </navigation>

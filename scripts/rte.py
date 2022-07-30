@@ -75,7 +75,7 @@ for article in articles:
 
                if empty is True:
                    img_title = "rte.jpg"
-                   storage_link = f"https://firebasestorage.googleapis.com/v0/b/news-a3e22.appspot.com/o/Rte%2Frte.png?alt=media&token=850879db-27dd-4e87-9163-66f9088465b0"
+                   storage_link = f"https://firebasestorage.googleapis.com/v0/b/news-a3e22.appspot.com/o/Rte%2Frte2.jpg?alt=media&token=ef07119d-f1bc-4823-a037-47d4e8947707"
                    pushToDB(
                       db_path,
                       title,
