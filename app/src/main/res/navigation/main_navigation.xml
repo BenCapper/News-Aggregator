@@ -117,6 +117,9 @@
         <action
             android:id="@+id/action_storyListFragment_to_ieFragment"
             app:destination="@id/ieFragment" />
+        <action
+            android:id="@+id/action_storyListFragment_to_ukFragment"
+            app:destination="@id/ukFragment" />
     </fragment>
     <fragment
         android:id="@+id/likedListFragment"
@@ -243,4 +246,9 @@
         android:name="org.ben.news.ui.ie.IeFragment"
         android:label="fragment_ie"
         tools:layout="@layout/fragment_ie" />
+    <fragment
+        android:id="@+id/ukFragment"
+        android:name="org.ben.news.ui.uk.UkFragment"
+        android:label="fragment_uk"
+        tools:layout="@layout/fragment_uk" />
 </navigation>
