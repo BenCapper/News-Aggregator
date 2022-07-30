@@ -53,4 +53,9 @@
     <string name="ie">IE</string>
     <string name="gb">GB</string>
     <string name="can">CA</string>
+    <string name="canadian">Canadian</string>
+    <string name="irish">Irish</string>
+    <string name="american">American</string>
+    <string name="british">British</string>
+    <string name="european">European</string>
 </resources>

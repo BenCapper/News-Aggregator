@@ -6,12 +6,12 @@
     <item
         android:id="@+id/eunav"
         android:icon="@drawable/euicon"
-        android:onClick=""
+        android:onClick="euArticles"
         tools:ignore="MenuTitle" />
     <item
         android:id="@+id/cannav"
         android:icon="@drawable/canicon"
-        android:onClick=""
+        android:onClick="canArticles"
         tools:ignore="MenuTitle" />
     <item
         android:id="@+id/usnav"
@@ -21,7 +21,7 @@
     <item
         android:id="@+id/ienav"
         android:icon="@drawable/ieicon"
-        android:onClick=""
+        android:onClick="ieArticles"
         tools:ignore="MenuTitle" />
     <item
         android:id="@+id/gbnav"

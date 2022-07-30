@@ -188,6 +188,24 @@ class Home : AppCompatActivity() {
         Timber.i("UserId = ${loggedInViewModel.liveFirebaseUser.value!!.uid}")
     }
 
+    fun canArticles(item: MenuItem) {
+        findNavController(R.id.nav_host_fragment).navigate(R.id.canFragment)
+        findViewById<DrawerLayout>(R.id.drawer_layout).closeDrawers()
+        Timber.i("UserId = ${loggedInViewModel.liveFirebaseUser.value!!.uid}")
+    }
+
+    fun euArticles(item: MenuItem) {
+        findNavController(R.id.nav_host_fragment).navigate(R.id.euFragment)
+        findViewById<DrawerLayout>(R.id.drawer_layout).closeDrawers()
+        Timber.i("UserId = ${loggedInViewModel.liveFirebaseUser.value!!.uid}")
+    }
+
+    fun ieArticles(item: MenuItem) {
+        findNavController(R.id.nav_host_fragment).navigate(R.id.ieFragment)
+        findViewById<DrawerLayout>(R.id.drawer_layout).closeDrawers()
+        Timber.i("UserId = ${loggedInViewModel.liveFirebaseUser.value!!.uid}")
+    }
+
     fun voxArticles(item: MenuItem) {
         findNavController(R.id.nav_host_fragment).navigate(R.id.voxFragment)
         findViewById<DrawerLayout>(R.id.drawer_layout).closeDrawers()

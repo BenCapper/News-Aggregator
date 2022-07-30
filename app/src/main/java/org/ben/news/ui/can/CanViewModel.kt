@@ -1,4 +1,4 @@
-package org.ben.news.ui.breitbart
+package org.ben.news.ui.can
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -12,13 +12,12 @@ import java.time.LocalDate
 import java.util.*
 import kotlin.collections.ArrayList
 
-class BreitbartViewModel : ViewModel() {
-
-    private val breitList =
+class CanViewModel : ViewModel() {
+    private val canList =
         MutableLiveData<List<StoryModel>>()
 
-    val observableBreitList: LiveData<List<StoryModel>>
-        get() = breitList
+    val observableCanList: LiveData<List<StoryModel>>
+        get() = canList
 
     private val story = MutableLiveData<StoryModel>()
 
@@ -64,8 +63,8 @@ class BreitbartViewModel : ViewModel() {
         val list: ArrayList<String>
         try {
             list = getDates(5)
-            StoryManager.findByOutlet(list,outlet,breitList)
-            Timber.i("Load Success : ${breitList.value}")
+            StoryManager.findByOutlet(list,outlet,canList)
+            Timber.i("Load Success : ${canList.value}")
         }
         catch (e: Exception) {
             Timber.i("Load Error : $e.message")
@@ -77,7 +76,7 @@ class BreitbartViewModel : ViewModel() {
         val dates: ArrayList<String>
         try {
             dates = getDates(5)
-            StoryManager.searchByOutlet(dates,term,outlet,breitList)
+            StoryManager.searchByOutlet(dates,term,outlet,canList)
             Timber.i("Search Success")
         }
         catch (e: java.lang.Exception) {
