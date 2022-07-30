@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <item
+        android:id="@+id/eunav"
+        android:icon="@drawable/euicon"
+        android:onClick=""
+        tools:ignore="MenuTitle" />
+    <item
+        android:id="@+id/cannav"
+        android:icon="@drawable/canicon"
+        android:onClick=""
+        tools:ignore="MenuTitle" />
+    <item
+        android:id="@+id/usnav"
+        android:icon="@drawable/usicon"
+        android:onClick=""
+        tools:ignore="MenuTitle" />
+    <item
+        android:id="@+id/ienav"
+        android:icon="@drawable/ieicon"
+        android:onClick=""
+        tools:ignore="MenuTitle" />
+    <item
+        android:id="@+id/gbnav"
+        android:icon="@drawable/gbicon"
+        android:onClick=""
+        tools:ignore="MenuTitle" />
+
+</menu>

@@ -48,4 +48,9 @@
     <string name="left">Leans Left</string>
     <string name="right">Leans Right</string>
     <string name="promoted">Ad</string>
+    <string name="us">US</string>
+    <string name="eu">EU</string>
+    <string name="ie">IE</string>
+    <string name="gb">GB</string>
+    <string name="can">CA</string>
 </resources>
