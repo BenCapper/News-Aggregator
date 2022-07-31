@@ -12,7 +12,9 @@ import java.time.LocalDate
 import java.util.*
 import kotlin.collections.ArrayList
 
+
 class BlazeViewModel : ViewModel() {
+
     private val blazeList =
         MutableLiveData<List<StoryModel>>()
 
@@ -27,7 +29,6 @@ class BlazeViewModel : ViewModel() {
 
     var liveFirebaseUser = MutableLiveData<FirebaseUser>()
 
-    //var readOnly = MutableLiveData(false)
 
     init { load() }
 
@@ -38,9 +39,9 @@ class BlazeViewModel : ViewModel() {
     private var today = formattedDate.replace(".","-")
     private val now = LocalDate.now()
 
-    private fun getDates(n:Int): ArrayList<String> {
-        var dates = ArrayList<String>()
-        for (i in 0..n) {
+    private fun getDates(numDays:Int): ArrayList<String> {
+        val dates = ArrayList<String>()
+        for (i in 0..numDays) {
             val yesterday = now.minusDays(i.toLong())
             val year = yesterday.year.toString().substring(2)
             var month = yesterday.month.value.toString()

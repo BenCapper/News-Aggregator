@@ -3,7 +3,6 @@ package org.ben.news.ui.gript
 import android.app.AlertDialog
 import android.content.Intent
 import android.net.Uri
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.*
@@ -12,14 +11,10 @@ import android.widget.ImageView
 import android.widget.SearchView
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.gms.ads.AdRequest
-import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.MobileAds
-import com.google.firebase.storage.FirebaseStorage
 import org.ben.news.R
 import org.ben.news.adapters.StoryAdapter
 import org.ben.news.adapters.StoryListener
-import org.ben.news.databinding.FragmentGbBinding
 import org.ben.news.databinding.FragmentGriptBinding
 import org.ben.news.firebase.StoryManager
 import org.ben.news.helpers.createLoader
@@ -27,12 +22,10 @@ import org.ben.news.helpers.hideLoader
 import org.ben.news.helpers.showLoader
 import org.ben.news.models.StoryModel
 import org.ben.news.ui.auth.LoggedInViewModel
-import org.ben.news.ui.gbnews.GbFragment
-import org.ben.news.ui.gbnews.GbViewModel
 import splitties.snackbar.snack
 
-class GriptFragment : Fragment(), StoryListener {
 
+class GriptFragment : Fragment(), StoryListener {
 
     companion object {
         fun newInstance() = GriptFragment()
@@ -44,14 +37,10 @@ class GriptFragment : Fragment(), StoryListener {
     private val griptViewModel: GriptViewModel by activityViewModels()
     var state: Parcelable? = null
 
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
-
     }
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -66,14 +55,12 @@ class GriptFragment : Fragment(), StoryListener {
 
         MobileAds.initialize(this.context!!) {}
 
-
         griptViewModel.observableGriptList.observe(viewLifecycleOwner) { story ->
             story?.let {
                 render(story as ArrayList<StoryModel>)
             }
             hideLoader(loader)
         }
-
         return root
     }
 
@@ -107,12 +94,10 @@ class GriptFragment : Fragment(), StoryListener {
         super.onCreateOptionsMenu(menu, inflater)
     }
 
-
     private fun render(storyList: ArrayList<StoryModel>) {
         fragBinding.recyclerViewGript.adapter = StoryAdapter(storyList, this)
         state?.let { fragBinding.recyclerViewGript.layoutManager?.onRestoreInstanceState(it) }
     }
-
 
     override fun onResume() {
         super.onResume()
@@ -158,6 +143,4 @@ class GriptFragment : Fragment(), StoryListener {
         super.onDestroyView()
         _fragBinding = null
     }
-
-
 }

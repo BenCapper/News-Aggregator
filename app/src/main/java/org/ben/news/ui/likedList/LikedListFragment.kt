@@ -36,6 +36,7 @@ import org.ben.news.ui.storyList.StoryListFragment
 import org.ben.news.ui.storyList.StoryListViewModel
 import splitties.snackbar.snack
 
+
 class LikedListFragment : Fragment(), StoryNoSaveListener {
 
     companion object {
@@ -49,14 +50,10 @@ class LikedListFragment : Fragment(), StoryNoSaveListener {
     private var storage = FirebaseStorage.getInstance().reference
     var state: Parcelable? = null
 
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
-
     }
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -70,7 +67,6 @@ class LikedListFragment : Fragment(), StoryNoSaveListener {
         activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.saved2)
 
         MobileAds.initialize(this.context!!) {}
-
 
         likedListViewModel.observableLikedList.observe(viewLifecycleOwner) { story ->
             story?.let {
@@ -104,7 +100,6 @@ class LikedListFragment : Fragment(), StoryNoSaveListener {
         val item = menu.findItem(R.id.app_bar_search)
         val searchView = item.actionView as SearchView
 
-
         /* This is the code that is executed when the search bar is used. It searches the database for
         the building that the user is searching for. */
         searchView.setOnQueryTextListener(object :  SearchView.OnQueryTextListener {
@@ -127,12 +122,10 @@ class LikedListFragment : Fragment(), StoryNoSaveListener {
         super.onCreateOptionsMenu(menu, inflater)
     }
 
-
     private fun render(storyList: ArrayList<StoryModel>) {
         fragBinding.recyclerViewLiked.adapter = NoSaveAdapter(storyList, this)
         state?.let { fragBinding.recyclerViewLiked.layoutManager?.onRestoreInstanceState(it) }
     }
-
 
     override fun onResume() {
         super.onResume()

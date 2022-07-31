@@ -37,14 +37,10 @@ class EuronFragment : Fragment(), StoryListener {
     private val euViewModel: EuronViewModel by activityViewModels()
     var state: Parcelable? = null
 
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
-
     }
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -58,7 +54,6 @@ class EuronFragment : Fragment(), StoryListener {
         activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.euron)
 
         MobileAds.initialize(this.context!!) {}
-
 
         euViewModel.observableEuList.observe(viewLifecycleOwner) { story ->
             story?.let {
@@ -100,12 +95,10 @@ class EuronFragment : Fragment(), StoryListener {
         super.onCreateOptionsMenu(menu, inflater)
     }
 
-
     private fun render(storyList: ArrayList<StoryModel>) {
         fragBinding.recyclerViewEu.adapter = StoryAdapter(storyList, this)
         state?.let { fragBinding.recyclerViewEu.layoutManager?.onRestoreInstanceState(it) }
     }
-
 
     override fun onResume() {
         super.onResume()

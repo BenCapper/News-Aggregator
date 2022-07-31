@@ -11,10 +11,7 @@ import android.widget.ImageView
 import android.widget.SearchView
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.gms.ads.AdRequest
-import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.MobileAds
-import com.google.firebase.storage.FirebaseStorage
 import org.ben.news.R
 import org.ben.news.adapters.StoryAdapter
 import org.ben.news.adapters.StoryListener
@@ -27,8 +24,8 @@ import org.ben.news.models.StoryModel
 import org.ben.news.ui.auth.LoggedInViewModel
 import splitties.snackbar.snack
 
-class ZerohedgeFragment : Fragment(), StoryListener {
 
+class ZerohedgeFragment : Fragment(), StoryListener {
 
     companion object {
         fun newInstance() = ZerohedgeFragment()
@@ -40,14 +37,10 @@ class ZerohedgeFragment : Fragment(), StoryListener {
     private val zeroViewModel: ZerohedgeViewModel by activityViewModels()
     var state: Parcelable? = null
 
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
-
     }
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -68,7 +61,6 @@ class ZerohedgeFragment : Fragment(), StoryListener {
             }
             hideLoader(loader)
         }
-
         return root
     }
 
@@ -78,7 +70,6 @@ class ZerohedgeFragment : Fragment(), StoryListener {
         /* Finding the search bar in the menu and setting it to the search view. */
         val item = menu.findItem(R.id.app_bar_search)
         val searchView = item.actionView as SearchView
-
 
         /* This is the code that is executed when the search bar is used. It searches the database for
         the building that the user is searching for. */
@@ -102,12 +93,10 @@ class ZerohedgeFragment : Fragment(), StoryListener {
         super.onCreateOptionsMenu(menu, inflater)
     }
 
-
     private fun render(storyList: ArrayList<StoryModel>) {
         fragBinding.recyclerViewZero.adapter = StoryAdapter(storyList, this)
         state?.let { fragBinding.recyclerViewZero.layoutManager?.onRestoreInstanceState(it) }
     }
-
 
     override fun onResume() {
         super.onResume()
@@ -118,7 +107,6 @@ class ZerohedgeFragment : Fragment(), StoryListener {
                 zeroViewModel.load()
             }
         }
-
     }
 
     override fun onStoryClick(story: StoryModel) {
@@ -149,6 +137,4 @@ class ZerohedgeFragment : Fragment(), StoryListener {
         super.onDestroyView()
         _fragBinding = null
     }
-
-
 }

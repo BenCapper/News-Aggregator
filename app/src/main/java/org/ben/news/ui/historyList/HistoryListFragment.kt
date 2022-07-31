@@ -3,7 +3,6 @@ package org.ben.news.ui.historyList
 import android.app.AlertDialog
 import android.content.Intent
 import android.net.Uri
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.*
@@ -14,15 +13,11 @@ import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.gms.ads.AdRequest
-import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.MobileAds
-import com.google.firebase.storage.FirebaseStorage
 import org.ben.news.R
 import org.ben.news.adapters.StoryAdapter
 import org.ben.news.adapters.StoryListener
 import org.ben.news.databinding.FragmentHistoryListBinding
-import org.ben.news.databinding.FragmentLikedListBinding
 import org.ben.news.firebase.StoryManager
 import org.ben.news.helpers.SwipeToDeleteCallback
 import org.ben.news.helpers.createLoader
@@ -30,11 +25,12 @@ import org.ben.news.helpers.hideLoader
 import org.ben.news.helpers.showLoader
 import org.ben.news.models.StoryModel
 import org.ben.news.ui.auth.LoggedInViewModel
-import org.ben.news.ui.likedList.LikedListViewModel
 import org.ben.news.ui.storyList.StoryListFragment
 import splitties.snackbar.snack
 
+
 class HistoryListFragment : Fragment(), StoryListener {
+
     companion object {
         fun newInstance() = StoryListFragment()
     }
@@ -45,14 +41,10 @@ class HistoryListFragment : Fragment(), StoryListener {
     private val historyListViewModel: HistoryListViewModel by activityViewModels()
     var state: Parcelable? = null
 
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
-
     }
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -66,7 +58,6 @@ class HistoryListFragment : Fragment(), StoryListener {
         fragBinding.recyclerViewHistory.layoutManager = activity?.let { LinearLayoutManager(it) }
 
         MobileAds.initialize(this.context!!) {}
-
 
         historyListViewModel.observableHistoryList.observe(viewLifecycleOwner) { story ->
             story?.let {
@@ -89,7 +80,6 @@ class HistoryListFragment : Fragment(), StoryListener {
         }
         val itemTouchDeleteHelper = ItemTouchHelper(swipeDeleteHandler)
         itemTouchDeleteHelper.attachToRecyclerView(fragBinding.recyclerViewHistory)
-
         return root
     }
 
@@ -99,7 +89,6 @@ class HistoryListFragment : Fragment(), StoryListener {
         /* Finding the search bar in the menu and setting it to the search view. */
         val item = menu.findItem(R.id.app_bar_search)
         val searchView = item.actionView as SearchView
-
 
         /* This is the code that is executed when the search bar is used. It searches the database for
         the building that the user is searching for. */
@@ -128,7 +117,6 @@ class HistoryListFragment : Fragment(), StoryListener {
         fragBinding.recyclerViewHistory.adapter = StoryAdapter(storyList, this)
         state?.let { fragBinding.recyclerViewHistory.layoutManager?.onRestoreInstanceState(it) }
     }
-
 
     override fun onResume() {
         super.onResume()

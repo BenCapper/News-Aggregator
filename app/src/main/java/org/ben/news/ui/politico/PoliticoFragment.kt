@@ -37,14 +37,10 @@ class PoliticoFragment : Fragment(), StoryListener {
     private val politicoViewModel: PoliticoViewModel by activityViewModels()
     var state: Parcelable? = null
 
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
-
     }
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -59,14 +55,12 @@ class PoliticoFragment : Fragment(), StoryListener {
 
         MobileAds.initialize(this.context!!) {}
 
-
         politicoViewModel.observablePolList.observe(viewLifecycleOwner) { story ->
             story?.let {
                 render(story as ArrayList<StoryModel>)
             }
             hideLoader(loader)
         }
-
         return root
     }
 
@@ -76,7 +70,6 @@ class PoliticoFragment : Fragment(), StoryListener {
         /* Finding the search bar in the menu and setting it to the search view. */
         val item = menu.findItem(R.id.app_bar_search)
         val searchView = item.actionView as SearchView
-
 
         /* This is the code that is executed when the search bar is used. It searches the database for
         the building that the user is searching for. */
@@ -105,7 +98,6 @@ class PoliticoFragment : Fragment(), StoryListener {
         fragBinding.recyclerViewPol.adapter = StoryAdapter(storyList, this)
         state?.let { fragBinding.recyclerViewPol.layoutManager?.onRestoreInstanceState(it) }
     }
-
 
     override fun onResume() {
         super.onResume()

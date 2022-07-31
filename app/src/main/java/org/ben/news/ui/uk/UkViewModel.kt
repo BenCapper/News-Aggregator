@@ -13,6 +13,7 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 class UkViewModel : ViewModel() {
+
     private val ukList =
         MutableLiveData<List<StoryModel>>()
 
@@ -27,8 +28,6 @@ class UkViewModel : ViewModel() {
 
     var liveFirebaseUser = MutableLiveData<FirebaseUser>()
 
-    //var readOnly = MutableLiveData(false)
-
     init { load() }
 
     private val outlets = listOf("www.GBNews.uk", "news.sky.com")
@@ -39,7 +38,7 @@ class UkViewModel : ViewModel() {
     private val now = LocalDate.now()
 
     fun getDates(n:Int): ArrayList<String> {
-        var dates = ArrayList<String>()
+        val dates = ArrayList<String>()
         for (i in 0..n) {
             val yesterday = now.minusDays(i.toLong())
             val year = yesterday.year.toString().substring(2)
@@ -54,10 +53,8 @@ class UkViewModel : ViewModel() {
             val date = "$month-$day-$year"
             dates.add(date)
         }
-
         return dates
     }
-
 
     fun load() {
         val list: ArrayList<String>
@@ -69,7 +66,6 @@ class UkViewModel : ViewModel() {
         catch (e: Exception) {
             Timber.i("Load Error : $e.message")
         }
-
     }
 
     fun search( term: String) {
@@ -83,5 +79,4 @@ class UkViewModel : ViewModel() {
             Timber.i("Search Error : $e.message")
         }
     }
-
 }

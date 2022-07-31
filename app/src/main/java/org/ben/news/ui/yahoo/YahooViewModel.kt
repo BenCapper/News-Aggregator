@@ -12,7 +12,9 @@ import java.time.LocalDate
 import java.util.*
 import kotlin.collections.ArrayList
 
+
 class YahooViewModel : ViewModel() {
+
     private val yahList =
         MutableLiveData<List<StoryModel>>()
 
@@ -27,8 +29,6 @@ class YahooViewModel : ViewModel() {
 
     var liveFirebaseUser = MutableLiveData<FirebaseUser>()
 
-    //var readOnly = MutableLiveData(false)
-
     init { load() }
 
     private val outlet = "news.yahoo.com"
@@ -39,7 +39,7 @@ class YahooViewModel : ViewModel() {
     private val now = LocalDate.now()
 
     private fun getDates(n:Int): ArrayList<String> {
-        var dates = ArrayList<String>()
+        val dates = ArrayList<String>()
         for (i in 0..n) {
             val yesterday = now.minusDays(i.toLong())
             val year = yesterday.year.toString().substring(2)
@@ -54,10 +54,8 @@ class YahooViewModel : ViewModel() {
             val date = "$month-$day-$year"
             dates.add(date)
         }
-
         return dates
     }
-
 
     fun load() {
         val list: ArrayList<String>
@@ -69,7 +67,6 @@ class YahooViewModel : ViewModel() {
         catch (e: Exception) {
             Timber.i("Load Error : $e.message")
         }
-
     }
 
     fun search( term: String) {
@@ -83,5 +80,4 @@ class YahooViewModel : ViewModel() {
             Timber.i("Search Error : $e.message")
         }
     }
-
 }

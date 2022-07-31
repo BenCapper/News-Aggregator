@@ -12,6 +12,7 @@ import java.time.LocalDate
 import java.util.*
 import kotlin.collections.ArrayList
 
+
 class BonginoViewModel : ViewModel() {
 
     private val bongList =
@@ -28,7 +29,6 @@ class BonginoViewModel : ViewModel() {
 
     var liveFirebaseUser = MutableLiveData<FirebaseUser>()
 
-    //var readOnly = MutableLiveData(false)
 
     init { load() }
 
@@ -40,7 +40,7 @@ class BonginoViewModel : ViewModel() {
     private val now = LocalDate.now()
 
     fun getDates(n:Int): ArrayList<String> {
-        var dates = ArrayList<String>()
+        val dates = ArrayList<String>()
         for (i in 0..n) {
             val yesterday = now.minusDays(i.toLong())
             val year = yesterday.year.toString().substring(2)

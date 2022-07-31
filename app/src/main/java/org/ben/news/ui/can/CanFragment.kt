@@ -3,7 +3,6 @@ package org.ben.news.ui.can
 import android.app.AlertDialog
 import android.content.Intent
 import android.net.Uri
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.*
@@ -17,7 +16,6 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import org.ben.news.R
 import org.ben.news.adapters.StoryAdapter
 import org.ben.news.adapters.StoryListener
-import org.ben.news.databinding.FragmentBreitbartBinding
 import org.ben.news.databinding.FragmentCanBinding
 import org.ben.news.firebase.StoryManager
 import org.ben.news.helpers.createLoader
@@ -27,8 +25,8 @@ import org.ben.news.models.StoryModel
 import org.ben.news.ui.auth.LoggedInViewModel
 import splitties.snackbar.snack
 
-class CanFragment : Fragment(), StoryListener {
 
+class CanFragment : Fragment(), StoryListener {
 
     companion object {
         fun newInstance() = CanFragment()
@@ -41,13 +39,11 @@ class CanFragment : Fragment(), StoryListener {
     var state: Parcelable? = null
 
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
 
     }
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -104,12 +100,10 @@ class CanFragment : Fragment(), StoryListener {
         super.onCreateOptionsMenu(menu, inflater)
     }
 
-
     private fun render(storyList: ArrayList<StoryModel>) {
         fragBinding.recyclerViewCan.adapter = StoryAdapter(storyList, this)
         state?.let { fragBinding.recyclerViewCan.layoutManager?.onRestoreInstanceState(it) }
     }
-
 
     override fun onResume() {
         super.onResume()

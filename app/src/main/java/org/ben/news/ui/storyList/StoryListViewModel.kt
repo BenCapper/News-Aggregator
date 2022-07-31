@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseUser
-import org.ben.news.firebase.FirebaseImageManager
 import org.ben.news.firebase.StoryManager
 import org.ben.news.models.StoryModel
 import timber.log.Timber
@@ -12,6 +11,7 @@ import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.util.*
 import kotlin.collections.ArrayList
+
 
 class StoryListViewModel : ViewModel() {
 
@@ -29,8 +29,6 @@ class StoryListViewModel : ViewModel() {
 
     var liveFirebaseUser = MutableLiveData<FirebaseUser>()
 
-    //var readOnly = MutableLiveData(false)
-
     init { load() }
 
     private val df = SimpleDateFormat("MM.dd.yy")
@@ -40,7 +38,7 @@ class StoryListViewModel : ViewModel() {
     private val now = LocalDate.now()
 
     fun getDates(n:Int): ArrayList<String> {
-        var dates = ArrayList<String>()
+        val dates = ArrayList<String>()
         for (i in 0..n) {
             val yesterday = now.minusDays(i.toLong())
             val year = yesterday.year.toString().substring(2)
@@ -55,28 +53,24 @@ class StoryListViewModel : ViewModel() {
             val date = "$month-$day-$year"
             dates.add(date)
         }
-
         return dates
     }
 
-
     fun load() {
-        var list: ArrayList<String>
+        val list: ArrayList<String>
         try {
             list = getDates(1)
             list.sortDescending()
-            Timber.i("LISTY : $list")
             StoryManager.findAll(list,storyList)
             Timber.i("Load Success : ${storyList.value}")
         }
         catch (e: Exception) {
                 Timber.i("Load Error : $e.message")
         }
-
     }
 
     fun search( term: String) {
-        var dates: ArrayList<String>
+        val dates: ArrayList<String>
         try {
             dates = getDates(5)
             StoryManager.search(term,dates,storyList)
@@ -86,5 +80,4 @@ class StoryListViewModel : ViewModel() {
             Timber.i("Search Error : $e.message")
         }
     }
-
 }

@@ -12,6 +12,7 @@ import java.time.LocalDate
 import java.util.*
 import kotlin.collections.ArrayList
 
+
 class CallerViewModel : ViewModel() {
 
     private val callerList =
@@ -28,8 +29,6 @@ class CallerViewModel : ViewModel() {
 
     var liveFirebaseUser = MutableLiveData<FirebaseUser>()
 
-    //var readOnly = MutableLiveData(false)
-
     init { load() }
 
     private val outlet = "www.Dailycaller.com"
@@ -40,7 +39,7 @@ class CallerViewModel : ViewModel() {
     private val now = LocalDate.now()
 
     fun getDates(n:Int): ArrayList<String> {
-        var dates = ArrayList<String>()
+        val dates = ArrayList<String>()
         for (i in 0..n) {
             val yesterday = now.minusDays(i.toLong())
             val year = yesterday.year.toString().substring(2)
@@ -55,10 +54,8 @@ class CallerViewModel : ViewModel() {
             val date = "$month-$day-$year"
             dates.add(date)
         }
-
         return dates
     }
-
 
     fun load() {
         val list: ArrayList<String>

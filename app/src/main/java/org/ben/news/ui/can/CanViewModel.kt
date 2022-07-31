@@ -12,7 +12,9 @@ import java.time.LocalDate
 import java.util.*
 import kotlin.collections.ArrayList
 
+
 class CanViewModel : ViewModel() {
+
     private val canList =
         MutableLiveData<List<StoryModel>>()
 
@@ -26,8 +28,6 @@ class CanViewModel : ViewModel() {
         set(value) {story.value = value.value}
 
     var liveFirebaseUser = MutableLiveData<FirebaseUser>()
-
-    //var readOnly = MutableLiveData(false)
 
     init { load() }
 
@@ -58,7 +58,6 @@ class CanViewModel : ViewModel() {
         return dates
     }
 
-
     fun load() {
         val list: ArrayList<String>
         try {
@@ -69,7 +68,6 @@ class CanViewModel : ViewModel() {
         catch (e: Exception) {
             Timber.i("Load Error : $e.message")
         }
-
     }
 
     fun search( term: String) {

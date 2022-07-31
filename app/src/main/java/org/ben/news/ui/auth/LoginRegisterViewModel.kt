@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import com.google.firebase.auth.FirebaseUser
 import org.ben.news.firebase.FirebaseAuthManager
 
+
 class LoginRegisterViewModel (app: Application) : AndroidViewModel(app) {
 
     var firebaseAuthManager : FirebaseAuthManager = FirebaseAuthManager(app)

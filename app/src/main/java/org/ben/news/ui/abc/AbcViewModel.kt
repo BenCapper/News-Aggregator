@@ -12,6 +12,7 @@ import java.time.LocalDate
 import java.util.*
 import kotlin.collections.ArrayList
 
+
 class AbcViewModel : ViewModel() {
     private val abcList =
         MutableLiveData<List<StoryModel>>()
@@ -27,7 +28,6 @@ class AbcViewModel : ViewModel() {
 
     var liveFirebaseUser = MutableLiveData<FirebaseUser>()
 
-    //var readOnly = MutableLiveData(false)
 
     init { load() }
 

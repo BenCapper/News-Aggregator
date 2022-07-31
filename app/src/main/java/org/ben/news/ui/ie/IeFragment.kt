@@ -3,7 +3,6 @@ package org.ben.news.ui.ie
 import android.app.AlertDialog
 import android.content.Intent
 import android.net.Uri
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.*
@@ -17,7 +16,6 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import org.ben.news.R
 import org.ben.news.adapters.StoryAdapter
 import org.ben.news.adapters.StoryListener
-import org.ben.news.databinding.FragmentEuBinding
 import org.ben.news.databinding.FragmentIeBinding
 import org.ben.news.firebase.StoryManager
 import org.ben.news.helpers.createLoader
@@ -25,12 +23,10 @@ import org.ben.news.helpers.hideLoader
 import org.ben.news.helpers.showLoader
 import org.ben.news.models.StoryModel
 import org.ben.news.ui.auth.LoggedInViewModel
-import org.ben.news.ui.eu.EuFragment
-import org.ben.news.ui.eu.EuViewModel
 import splitties.snackbar.snack
 
-class IeFragment : Fragment(), StoryListener {
 
+class IeFragment : Fragment(), StoryListener {
 
     companion object {
         fun newInstance() = IeFragment()
@@ -42,14 +38,10 @@ class IeFragment : Fragment(), StoryListener {
     private val ieViewModel: IeViewModel by activityViewModels()
     var state: Parcelable? = null
 
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
-
     }
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -65,14 +57,12 @@ class IeFragment : Fragment(), StoryListener {
 
         MobileAds.initialize(this.context!!) {}
 
-
         ieViewModel.observableIeList.observe(viewLifecycleOwner) { story ->
             story?.let {
                 render(story as ArrayList<StoryModel>)
             }
             hideLoader(loader)
         }
-
         return root
     }
 
@@ -82,7 +72,6 @@ class IeFragment : Fragment(), StoryListener {
         /* Finding the search bar in the menu and setting it to the search view. */
         val item = menu.findItem(R.id.app_bar_search)
         val searchView = item.actionView as SearchView
-
 
         /* This is the code that is executed when the search bar is used. It searches the database for
         the building that the user is searching for. */
@@ -111,7 +100,6 @@ class IeFragment : Fragment(), StoryListener {
         fragBinding.recyclerViewIe.adapter = StoryAdapter(storyList, this)
         state?.let { fragBinding.recyclerViewIe.layoutManager?.onRestoreInstanceState(it) }
     }
-
 
     override fun onResume() {
         super.onResume()
@@ -157,7 +145,4 @@ class IeFragment : Fragment(), StoryListener {
         super.onDestroyView()
         _fragBinding = null
     }
-
-
-
 }

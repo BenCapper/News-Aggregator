@@ -24,10 +24,7 @@ class LikedListViewModel : ViewModel() {
 
     var liveFirebaseUser = MutableLiveData<FirebaseUser>()
 
-    //var readOnly = MutableLiveData(false)
-
     init { load() }
-
 
     fun load() {
         try {

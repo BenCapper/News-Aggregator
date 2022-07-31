@@ -12,6 +12,7 @@ import java.time.LocalDate
 import java.util.*
 import kotlin.collections.ArrayList
 
+
 class PmillViewModel : ViewModel() {
     private val millList =
         MutableLiveData<List<StoryModel>>()
@@ -26,8 +27,6 @@ class PmillViewModel : ViewModel() {
         set(value) {story.value = value.value}
 
     var liveFirebaseUser = MutableLiveData<FirebaseUser>()
-
-    //var readOnly = MutableLiveData(false)
 
     init { load() }
 
@@ -58,7 +57,6 @@ class PmillViewModel : ViewModel() {
         return dates
     }
 
-
     fun load() {
         val list: ArrayList<String>
         try {
@@ -69,7 +67,6 @@ class PmillViewModel : ViewModel() {
         catch (e: Exception) {
             Timber.i("Load Error : $e.message")
         }
-
     }
 
     fun search( term: String) {
