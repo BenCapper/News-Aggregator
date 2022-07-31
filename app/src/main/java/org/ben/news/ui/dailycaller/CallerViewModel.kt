@@ -31,7 +31,7 @@ class CallerViewModel : ViewModel() {
 
     init { load() }
 
-    private val outlet = "www.Dailycaller.com"
+    private val outlet = "www.DailyCaller.com"
     private val df = SimpleDateFormat("MM.dd.yy")
     private val calDate = Calendar.getInstance().time
     private var formattedDate: String = df.format(calDate)

@@ -30,7 +30,7 @@ class GlobalViewModel : ViewModel() {
 
     init { load() }
 
-    private val outlet = "www.globalnews.ca"
+    private val outlet = "www.GlobalNews.ca"
     private val df = SimpleDateFormat("MM.dd.yy")
     private val calDate = Calendar.getInstance().time
     private var formattedDate: String = df.format(calDate)

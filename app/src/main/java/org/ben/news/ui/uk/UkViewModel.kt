@@ -30,7 +30,7 @@ class UkViewModel : ViewModel() {
 
     init { load() }
 
-    private val outlets = listOf("www.GBNews.uk", "news.sky.com")
+    private val outlets = listOf("www.GBNews.uk", "news.Sky.com")
     private val df = SimpleDateFormat("MM.dd.yy")
     private val calDate = Calendar.getInstance().time
     private var formattedDate: String = df.format(calDate)

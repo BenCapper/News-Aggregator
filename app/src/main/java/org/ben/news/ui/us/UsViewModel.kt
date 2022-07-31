@@ -36,13 +36,13 @@ class UsViewModel : ViewModel() {
         "www.Zerohedge.com",
         "www.Breitbart.com",
         "www.Revolver.news",
-        "www.Dailycaller.com",
+        "www.DailyCaller.com",
         "www.TheGatewayPundit.com",
-        "www.politico.com",
-        "www.Cbsnews.com",
-        "abcnews.go.com",
-        "news.yahoo.com",
-        "www.vox.com")
+        "www.Politico.com",
+        "www.CbsNews.com",
+        "AbcNews.go.com",
+        "news.Yahoo.com",
+        "www.Vox.com")
     private val df = SimpleDateFormat("MM.dd.yy")
     private val calDate = Calendar.getInstance().time
     private var formattedDate: String = df.format(calDate)

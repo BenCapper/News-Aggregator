@@ -31,7 +31,7 @@ class PoliticoViewModel : ViewModel() {
 
     init { load() }
 
-    private val outlet = "www.politico.com"
+    private val outlet = "www.Politico.com"
     private val df = SimpleDateFormat("MM.dd.yy")
     private val calDate = Calendar.getInstance().time
     private var formattedDate: String = df.format(calDate)

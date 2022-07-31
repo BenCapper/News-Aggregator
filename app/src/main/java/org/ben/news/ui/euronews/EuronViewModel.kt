@@ -31,7 +31,7 @@ class EuronViewModel : ViewModel() {
 
     init { load() }
 
-    private val outlet = "www.euronews.com"
+    private val outlet = "www.Euronews.com"
     private val df = SimpleDateFormat("MM.dd.yy")
     private val calDate = Calendar.getInstance().time
     private var formattedDate: String = df.format(calDate)

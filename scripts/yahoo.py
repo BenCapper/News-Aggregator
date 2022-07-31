@@ -18,7 +18,7 @@ page_url = "https://news.yahoo.com"
 img_path = "/home/bencapper/src/News/Yahoo"
 storage_path = "https://firebasestorage.googleapis.com/v0/b/news-a3e22.appspot.com/o"
 db_path = "stories"
-outlet = "news.yahoo.com"
+outlet = "news.Yahoo.com"
  
 logFolder(log_folder_path)
  

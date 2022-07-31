@@ -31,7 +31,7 @@ class EuViewModel : ViewModel() {
 
     init { load() }
 
-    private val outlets = listOf("www.euronews.com")
+    private val outlets = listOf("www.Euronews.com")
     private val df = SimpleDateFormat("MM.dd.yy")
     private val calDate = Calendar.getInstance().time
     private var formattedDate: String = df.format(calDate)

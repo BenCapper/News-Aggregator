@@ -30,7 +30,7 @@ class SkyViewModel : ViewModel() {
 
     init { load() }
 
-    private val outlet = "news.sky.com"
+    private val outlet = "news.Sky.com"
     private val df = SimpleDateFormat("MM.dd.yy")
     private val calDate = Calendar.getInstance().time
     private var formattedDate: String = df.format(calDate)

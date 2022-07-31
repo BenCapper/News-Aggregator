@@ -31,7 +31,7 @@ class AbcViewModel : ViewModel() {
 
     init { load() }
 
-    private val outlet = "abcnews.go.com"
+    private val outlet = "AbcNews.go.com"
     private val df = SimpleDateFormat("MM.dd.yy")
     private val calDate = Calendar.getInstance().time
     private var formattedDate: String = df.format(calDate)

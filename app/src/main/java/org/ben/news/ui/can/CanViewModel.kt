@@ -31,7 +31,7 @@ class CanViewModel : ViewModel() {
 
     init { load() }
 
-    private val outlets = listOf("www.ThePostMillennial.com", "www.globalnews.ca")
+    private val outlets = listOf("www.ThePostMillennial.com", "www.GlobalNews.ca")
     private val df = SimpleDateFormat("MM.dd.yy")
     private val calDate = Calendar.getInstance().time
     private var formattedDate: String = df.format(calDate)
@@ -39,7 +39,7 @@ class CanViewModel : ViewModel() {
     private val now = LocalDate.now()
 
     fun getDates(n:Int): ArrayList<String> {
-        var dates = ArrayList<String>()
+        val dates = ArrayList<String>()
         for (i in 0..n) {
             val yesterday = now.minusDays(i.toLong())
             val year = yesterday.year.toString().substring(2)

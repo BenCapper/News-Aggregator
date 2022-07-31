@@ -17,7 +17,7 @@ page_url = "https://www.euronews.com/news/international"
 img_path = "/home/bencapper/src/News/Euronews"
 storage_path = "https://firebasestorage.googleapis.com/v0/b/news-a3e22.appspot.com/o"
 db_path = "stories"
-outlet = "www.euronews.com"
+outlet = "www.Euronews.com"
 prefix = "https://www.euronews.com"
 
 

@@ -31,7 +31,7 @@ class RteViewModel : ViewModel() {
 
     init { load() }
 
-    private val outlet = "www.Rte.ie"
+    private val outlet = "www.RTE.ie"
     private val df = SimpleDateFormat("MM.dd.yy")
     private val calDate = Calendar.getInstance().time
     private var formattedDate: String = df.format(calDate)

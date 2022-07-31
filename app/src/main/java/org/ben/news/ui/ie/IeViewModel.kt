@@ -31,7 +31,7 @@ class IeViewModel : ViewModel() {
 
     init { load() }
 
-    private val outlets = listOf("www.Rte.ie", "www.Gript.ie")
+    private val outlets = listOf("www.RTE.ie", "www.Gript.ie")
     private val df = SimpleDateFormat("MM.dd.yy")
     private val calDate = Calendar.getInstance().time
     private var formattedDate: String = df.format(calDate)

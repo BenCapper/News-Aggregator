@@ -17,7 +17,7 @@ page_url = "https://dailycaller.com/section/world/"
 img_path = "/home/bencapper/src/News/DailyCaller"
 storage_path = "https://firebasestorage.googleapis.com/v0/b/news-a3e22.appspot.com/o"
 db_path = "stories"
-outlet = "www.Dailycaller.com"
+outlet = "www.DailyCaller.com"
  
 logFolder(log_folder_path)
  

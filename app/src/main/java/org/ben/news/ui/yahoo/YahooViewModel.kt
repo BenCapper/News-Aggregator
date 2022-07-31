@@ -31,7 +31,7 @@ class YahooViewModel : ViewModel() {
 
     init { load() }
 
-    private val outlet = "news.yahoo.com"
+    private val outlet = "news.Yahoo.com"
     private val df = SimpleDateFormat("MM.dd.yy")
     private val calDate = Calendar.getInstance().time
     private var formattedDate: String = df.format(calDate)

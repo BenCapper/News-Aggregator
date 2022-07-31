@@ -31,7 +31,7 @@ class VoxViewModel : ViewModel() {
 
     init { load() }
 
-    private val outlet = "www.vox.com"
+    private val outlet = "www.Vox.com"
     private val df = SimpleDateFormat("MM.dd.yy")
     private val calDate = Calendar.getInstance().time
     private var formattedDate: String = df.format(calDate)

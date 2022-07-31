@@ -31,7 +31,7 @@ class CbsViewModel : ViewModel() {
 
     init { load() }
 
-    private val outlet = "www.Cbsnews.com"
+    private val outlet = "www.CbsNews.com"
     private val df = SimpleDateFormat("MM.dd.yy")
     private val calDate = Calendar.getInstance().time
     private var formattedDate: String = df.format(calDate)
