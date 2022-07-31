@@ -20,7 +20,7 @@ page_url = "https://news.sky.com/uk"
 img_path = "/home/bencapper/src/News/Skyuk"
 storage_path = "https://firebasestorage.googleapis.com/v0/b/news-a3e22.appspot.com/o"
 db_path = "stories"
-outlet = "news.sky.com"
+outlet = "news.Sky.com"
 url = "https://news.sky.com"
  
  

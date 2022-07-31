@@ -20,7 +20,7 @@ page_url = "https://www.rte.ie/news/"
 img_path = "/home/bencapper/src/News/Rte"
 storage_path = "https://firebasestorage.googleapis.com/v0/b/news-a3e22.appspot.com/o"
 db_path = "stories"
-outlet = "www.Rte.ie"
+outlet = "www.RTE.ie"
 prefix = "https://www.rte.ie"
  
  

@@ -11,10 +11,7 @@ import android.widget.ImageView
 import android.widget.SearchView
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.gms.ads.AdRequest
-import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.MobileAds
-import com.google.firebase.storage.FirebaseStorage
 import org.ben.news.R
 import org.ben.news.adapters.StoryAdapter
 import org.ben.news.adapters.StoryListener
@@ -27,8 +24,8 @@ import org.ben.news.models.StoryModel
 import org.ben.news.ui.auth.LoggedInViewModel
 import splitties.snackbar.snack
 
-class TimcastFragment : Fragment(), StoryListener {
 
+class TimcastFragment : Fragment(), StoryListener {
 
     companion object {
         fun newInstance() = TimcastFragment()
@@ -40,14 +37,10 @@ class TimcastFragment : Fragment(), StoryListener {
     private val timViewModel: TimcastViewModel by activityViewModels()
     var state: Parcelable? = null
 
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
-
     }
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -62,14 +55,12 @@ class TimcastFragment : Fragment(), StoryListener {
 
         MobileAds.initialize(this.context!!) {}
 
-
         timViewModel.observableTimList.observe(viewLifecycleOwner) { story ->
             story?.let {
                 render(story as ArrayList<StoryModel>)
             }
             hideLoader(loader)
         }
-
         return root
     }
 
@@ -103,12 +94,10 @@ class TimcastFragment : Fragment(), StoryListener {
         super.onCreateOptionsMenu(menu, inflater)
     }
 
-
     private fun render(storyList: ArrayList<StoryModel>) {
         fragBinding.recyclerViewTim.adapter = StoryAdapter(storyList, this)
         state?.let { fragBinding.recyclerViewTim.layoutManager?.onRestoreInstanceState(it) }
     }
-
 
     override fun onResume() {
         super.onResume()
@@ -119,7 +108,6 @@ class TimcastFragment : Fragment(), StoryListener {
                 timViewModel.load()
             }
         }
-
     }
 
     override fun onStoryClick(story: StoryModel) {

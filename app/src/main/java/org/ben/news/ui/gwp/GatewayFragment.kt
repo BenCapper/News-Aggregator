@@ -11,10 +11,7 @@ import android.widget.ImageView
 import android.widget.SearchView
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.gms.ads.AdRequest
-import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.MobileAds
-import com.google.firebase.storage.FirebaseStorage
 import org.ben.news.R
 import org.ben.news.adapters.StoryAdapter
 import org.ben.news.adapters.StoryListener
@@ -27,8 +24,8 @@ import org.ben.news.models.StoryModel
 import org.ben.news.ui.auth.LoggedInViewModel
 import splitties.snackbar.snack
 
-class GatewayFragment : Fragment(), StoryListener {
 
+class GatewayFragment : Fragment(), StoryListener {
 
     companion object {
         fun newInstance() = GatewayFragment()
@@ -40,14 +37,10 @@ class GatewayFragment : Fragment(), StoryListener {
     private val gateViewModel: GatewayViewModel by activityViewModels()
     var state: Parcelable? = null
 
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
-
     }
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -62,14 +55,12 @@ class GatewayFragment : Fragment(), StoryListener {
 
         MobileAds.initialize(this.context!!) {}
 
-
         gateViewModel.observableGateList.observe(viewLifecycleOwner) { story ->
             story?.let {
                 render(story as ArrayList<StoryModel>)
             }
             hideLoader(loader)
         }
-
         return root
     }
 
@@ -79,7 +70,6 @@ class GatewayFragment : Fragment(), StoryListener {
         /* Finding the search bar in the menu and setting it to the search view. */
         val item = menu.findItem(R.id.app_bar_search)
         val searchView = item.actionView as SearchView
-
 
         /* This is the code that is executed when the search bar is used. It searches the database for
         the building that the user is searching for. */
@@ -109,7 +99,6 @@ class GatewayFragment : Fragment(), StoryListener {
         state?.let { fragBinding.recyclerViewGate.layoutManager?.onRestoreInstanceState(it) }
     }
 
-
     override fun onPause() {
         state = fragBinding.recyclerViewGate.layoutManager?.onSaveInstanceState()
         super.onPause()
@@ -124,7 +113,6 @@ class GatewayFragment : Fragment(), StoryListener {
                 gateViewModel.load()
             }
         }
-
     }
 
     override fun onStoryClick(story: StoryModel) {
@@ -155,5 +143,4 @@ class GatewayFragment : Fragment(), StoryListener {
         super.onDestroyView()
         _fragBinding = null
     }
-
 }

@@ -15,7 +15,6 @@ import com.google.android.gms.ads.MobileAds
 import org.ben.news.R
 import org.ben.news.adapters.StoryAdapter
 import org.ben.news.adapters.StoryListener
-import org.ben.news.databinding.FragmentGriptBinding
 import org.ben.news.databinding.FragmentSkyBinding
 import org.ben.news.firebase.StoryManager
 import org.ben.news.helpers.createLoader
@@ -28,7 +27,6 @@ import splitties.snackbar.snack
 
 class SkyFragment : Fragment(), StoryListener {
 
-
     companion object {
         fun newInstance() = SkyFragment()
     }
@@ -39,14 +37,11 @@ class SkyFragment : Fragment(), StoryListener {
     private val skyViewModel: SkyViewModel by activityViewModels()
     var state: Parcelable? = null
 
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
 
     }
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -61,14 +56,12 @@ class SkyFragment : Fragment(), StoryListener {
 
         MobileAds.initialize(this.context!!) {}
 
-
         skyViewModel.observableSkyList.observe(viewLifecycleOwner) { story ->
             story?.let {
                 render(story as ArrayList<StoryModel>)
             }
             hideLoader(loader)
         }
-
         return root
     }
 
@@ -78,7 +71,6 @@ class SkyFragment : Fragment(), StoryListener {
         /* Finding the search bar in the menu and setting it to the search view. */
         val item = menu.findItem(R.id.app_bar_search)
         val searchView = item.actionView as SearchView
-
 
         /* This is the code that is executed when the search bar is used. It searches the database for
         the building that the user is searching for. */
@@ -102,12 +94,10 @@ class SkyFragment : Fragment(), StoryListener {
         super.onCreateOptionsMenu(menu, inflater)
     }
 
-
     private fun render(storyList: ArrayList<StoryModel>) {
         fragBinding.recyclerViewSky.adapter = StoryAdapter(storyList, this)
         state?.let { fragBinding.recyclerViewSky.layoutManager?.onRestoreInstanceState(it) }
     }
-
 
     override fun onResume() {
         super.onResume()
@@ -153,6 +143,4 @@ class SkyFragment : Fragment(), StoryListener {
         super.onDestroyView()
         _fragBinding = null
     }
-
-
 }

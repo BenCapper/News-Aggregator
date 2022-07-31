@@ -12,6 +12,7 @@ import org.ben.news.R
 import org.ben.news.ui.home.Home
 import timber.log.Timber
 
+
 class Login : AppCompatActivity() {
 
     private lateinit var loginRegisterViewModel : LoginRegisterViewModel

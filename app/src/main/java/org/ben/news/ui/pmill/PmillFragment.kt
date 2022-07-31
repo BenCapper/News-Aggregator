@@ -24,8 +24,8 @@ import org.ben.news.models.StoryModel
 import org.ben.news.ui.auth.LoggedInViewModel
 import splitties.snackbar.snack
 
-class PmillFragment : Fragment(), StoryListener {
 
+class PmillFragment : Fragment(), StoryListener {
 
     companion object {
         fun newInstance() = PmillFragment()
@@ -37,14 +37,11 @@ class PmillFragment : Fragment(), StoryListener {
     private val millViewModel: PmillViewModel by activityViewModels()
     var state: Parcelable? = null
 
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
 
     }
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -59,14 +56,12 @@ class PmillFragment : Fragment(), StoryListener {
 
         MobileAds.initialize(this.context!!) {}
 
-
         millViewModel.observableMillList.observe(viewLifecycleOwner) { story ->
             story?.let {
                 render(story as ArrayList<StoryModel>)
             }
             hideLoader(loader)
         }
-
         return root
     }
 
@@ -116,7 +111,6 @@ class PmillFragment : Fragment(), StoryListener {
                 millViewModel.load()
             }
         }
-
     }
 
     override fun onPause() {

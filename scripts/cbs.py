@@ -18,7 +18,7 @@ page_url = "https://www.cbsnews.com/us/"
 img_path = "/home/bencapper/src/News/Cbs"
 storage_path = "https://firebasestorage.googleapis.com/v0/b/news-a3e22.appspot.com/o"
 db_path = "stories"
-outlet = "www.Cbsnews.com"
+outlet = "www.CbsNews.com"
  
 logFolder(log_folder_path)
  

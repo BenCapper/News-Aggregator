@@ -3,7 +3,6 @@ package org.ben.news.ui.cbs
 import android.app.AlertDialog
 import android.content.Intent
 import android.net.Uri
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.*
@@ -17,16 +16,14 @@ import org.ben.news.R
 import org.ben.news.adapters.StoryAdapter
 import org.ben.news.adapters.StoryListener
 import org.ben.news.databinding.FragmentCbsBinding
-import org.ben.news.databinding.FragmentPoliticoBinding
 import org.ben.news.firebase.StoryManager
 import org.ben.news.helpers.createLoader
 import org.ben.news.helpers.hideLoader
 import org.ben.news.helpers.showLoader
 import org.ben.news.models.StoryModel
 import org.ben.news.ui.auth.LoggedInViewModel
-import org.ben.news.ui.politico.PoliticoFragment
-import org.ben.news.ui.politico.PoliticoViewModel
 import splitties.snackbar.snack
+
 
 class CbsFragment : Fragment(), StoryListener {
 
@@ -41,13 +38,11 @@ class CbsFragment : Fragment(), StoryListener {
     var state: Parcelable? = null
 
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
 
     }
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

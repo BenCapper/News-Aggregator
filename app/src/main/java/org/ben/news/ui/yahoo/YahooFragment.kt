@@ -24,6 +24,7 @@ import org.ben.news.models.StoryModel
 import org.ben.news.ui.auth.LoggedInViewModel
 import splitties.snackbar.snack
 
+
 class YahooFragment : Fragment(), StoryListener {
 
     companion object {
@@ -36,14 +37,10 @@ class YahooFragment : Fragment(), StoryListener {
     private val yahooViewModel: YahooViewModel by activityViewModels()
     var state: Parcelable? = null
 
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
-
     }
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -58,14 +55,12 @@ class YahooFragment : Fragment(), StoryListener {
 
         MobileAds.initialize(this.context!!) {}
 
-
         yahooViewModel.observableYahList.observe(viewLifecycleOwner) { story ->
             story?.let {
                 render(story as ArrayList<StoryModel>)
             }
             hideLoader(loader)
         }
-
         return root
     }
 
@@ -75,7 +70,6 @@ class YahooFragment : Fragment(), StoryListener {
         /* Finding the search bar in the menu and setting it to the search view. */
         val item = menu.findItem(R.id.app_bar_search)
         val searchView = item.actionView as SearchView
-
 
         /* This is the code that is executed when the search bar is used. It searches the database for
         the building that the user is searching for. */
@@ -99,12 +93,10 @@ class YahooFragment : Fragment(), StoryListener {
         super.onCreateOptionsMenu(menu, inflater)
     }
 
-
     private fun render(storyList: ArrayList<StoryModel>) {
         fragBinding.recyclerViewYahoo.adapter = StoryAdapter(storyList, this)
         state?.let { fragBinding.recyclerViewYahoo.layoutManager?.onRestoreInstanceState(it) }
     }
-
 
     override fun onResume() {
         super.onResume()
@@ -146,10 +138,9 @@ class YahooFragment : Fragment(), StoryListener {
         state = fragBinding.recyclerViewYahoo.layoutManager?.onSaveInstanceState()
         startActivity(shareIntent)
     }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _fragBinding = null
     }
-
-
 }

@@ -7,12 +7,10 @@ import com.google.firebase.auth.FirebaseUser
 import org.ben.news.firebase.StoryManager
 import org.ben.news.models.StoryModel
 import timber.log.Timber
-import java.text.SimpleDateFormat
-import java.time.LocalDate
-import java.util.*
-import kotlin.collections.ArrayList
+
 
 class HistoryListViewModel : ViewModel() {
+
     private val historyList =
         MutableLiveData<List<StoryModel>>()
 
@@ -27,10 +25,7 @@ class HistoryListViewModel : ViewModel() {
 
     var liveFirebaseUser = MutableLiveData<FirebaseUser>()
 
-    //var readOnly = MutableLiveData(false)
-
     init { load() }
-
 
     fun load() {
         try {
@@ -40,7 +35,6 @@ class HistoryListViewModel : ViewModel() {
         catch (e: Exception) {
             Timber.i("Load Error : $e.message")
         }
-
     }
 
     fun search( term: String) {

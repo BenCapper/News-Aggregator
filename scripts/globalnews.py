@@ -18,7 +18,7 @@ page_url = "https://globalnews.ca/canada"
 img_path = "/home/bencapper/src/News/Global"
 storage_path = "https://firebasestorage.googleapis.com/v0/b/news-a3e22.appspot.com/o"
 db_path = "stories"
-outlet = "www.globalnews.ca"
+outlet = "www.GlobalNews.ca"
  
 logFolder(log_folder_path)
  

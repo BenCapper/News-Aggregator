@@ -17,7 +17,7 @@ page_url = "https://www.politico.com"
 img_path = "/home/bencapper/src/News/Politico"
 storage_path = "https://firebasestorage.googleapis.com/v0/b/news-a3e22.appspot.com/o"
 db_path = "stories"
-outlet = "www.politico.com"
+outlet = "www.Politico.com"
 url = "https://www.politico.com"
 
 

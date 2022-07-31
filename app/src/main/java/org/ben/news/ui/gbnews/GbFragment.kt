@@ -11,10 +11,7 @@ import android.widget.ImageView
 import android.widget.SearchView
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.gms.ads.AdRequest
-import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.MobileAds
-import com.google.firebase.storage.FirebaseStorage
 import org.ben.news.R
 import org.ben.news.adapters.StoryAdapter
 import org.ben.news.adapters.StoryListener
@@ -27,8 +24,8 @@ import org.ben.news.models.StoryModel
 import org.ben.news.ui.auth.LoggedInViewModel
 import splitties.snackbar.snack
 
-class GbFragment : Fragment(), StoryListener {
 
+class GbFragment : Fragment(), StoryListener {
 
     companion object {
         fun newInstance() = GbFragment()
@@ -40,14 +37,11 @@ class GbFragment : Fragment(), StoryListener {
     private val gbViewModel: GbViewModel by activityViewModels()
     var state: Parcelable? = null
 
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
 
     }
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -61,7 +55,6 @@ class GbFragment : Fragment(), StoryListener {
         activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.gb)
 
         MobileAds.initialize(this.context!!) {}
-
 
         gbViewModel.observableGbList.observe(viewLifecycleOwner) { story ->
             story?.let {
@@ -109,7 +102,6 @@ class GbFragment : Fragment(), StoryListener {
         state?.let { fragBinding.recyclerViewGb.layoutManager?.onRestoreInstanceState(it) }
     }
 
-
     override fun onResume() {
         super.onResume()
         showLoader(loader,"")
@@ -150,6 +142,7 @@ class GbFragment : Fragment(), StoryListener {
         state = fragBinding.recyclerViewGb.layoutManager?.onSaveInstanceState()
         startActivity(shareIntent)
     }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _fragBinding = null

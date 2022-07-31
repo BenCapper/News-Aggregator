@@ -27,7 +27,6 @@ import splitties.snackbar.snack
 
 class BlazeFragment : Fragment(), StoryListener {
 
-
     companion object {
         fun newInstance() = BlazeFragment()
     }

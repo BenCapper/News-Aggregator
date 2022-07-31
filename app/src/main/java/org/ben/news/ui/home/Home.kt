@@ -1,19 +1,16 @@
 package org.ben.news.ui.home
 
-
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
-import android.widget.ImageView
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
@@ -65,7 +62,6 @@ class Home : AppCompatActivity() {
         navView.setupWithNavController(navController)
 
         initNavHeader()
-
     }
 
     @SuppressLint("MissingPermission")
@@ -92,7 +88,6 @@ class Home : AppCompatActivity() {
                 navHeaderBinding.navHeaderEmail.text = loggedInViewModel.liveFirebaseUser.value?.email!!.split("@")[0]
             }
         }
-
         loggedInViewModel.loggedOut.observe(this) { loggedOut ->
             if (loggedOut) {
                 startActivity(Intent(this, Login::class.java))
@@ -151,7 +146,6 @@ class Home : AppCompatActivity() {
             navHeaderBinding.navHeaderEmail.text = currentUser.displayName
     }
 
-
     override fun onSupportNavigateUp(): Boolean {
         val navController = findNavController(R.id.nav_host_fragment)
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
@@ -168,7 +162,6 @@ class Home : AppCompatActivity() {
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
         startActivity(intent)
     }
-
 
     fun savedArticles(item: MenuItem) {
         findNavController(R.id.nav_host_fragment).navigate(R.id.likedListFragment)

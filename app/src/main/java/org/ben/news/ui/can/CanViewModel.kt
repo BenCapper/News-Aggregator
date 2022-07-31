@@ -12,7 +12,9 @@ import java.time.LocalDate
 import java.util.*
 import kotlin.collections.ArrayList
 
+
 class CanViewModel : ViewModel() {
+
     private val canList =
         MutableLiveData<List<StoryModel>>()
 
@@ -27,11 +29,9 @@ class CanViewModel : ViewModel() {
 
     var liveFirebaseUser = MutableLiveData<FirebaseUser>()
 
-    //var readOnly = MutableLiveData(false)
-
     init { load() }
 
-    private val outlets = listOf("www.ThePostMillennial.com", "www.globalnews.ca")
+    private val outlets = listOf("www.ThePostMillennial.com", "www.GlobalNews.ca")
     private val df = SimpleDateFormat("MM.dd.yy")
     private val calDate = Calendar.getInstance().time
     private var formattedDate: String = df.format(calDate)
@@ -39,7 +39,7 @@ class CanViewModel : ViewModel() {
     private val now = LocalDate.now()
 
     fun getDates(n:Int): ArrayList<String> {
-        var dates = ArrayList<String>()
+        val dates = ArrayList<String>()
         for (i in 0..n) {
             val yesterday = now.minusDays(i.toLong())
             val year = yesterday.year.toString().substring(2)
@@ -58,7 +58,6 @@ class CanViewModel : ViewModel() {
         return dates
     }
 
-
     fun load() {
         val list: ArrayList<String>
         try {
@@ -69,7 +68,6 @@ class CanViewModel : ViewModel() {
         catch (e: Exception) {
             Timber.i("Load Error : $e.message")
         }
-
     }
 
     fun search( term: String) {

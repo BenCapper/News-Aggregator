@@ -3,7 +3,6 @@ package org.ben.news.ui.eu
 import android.app.AlertDialog
 import android.content.Intent
 import android.net.Uri
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.*
@@ -17,7 +16,6 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import org.ben.news.R
 import org.ben.news.adapters.StoryAdapter
 import org.ben.news.adapters.StoryListener
-import org.ben.news.databinding.FragmentCanBinding
 import org.ben.news.databinding.FragmentEuBinding
 import org.ben.news.firebase.StoryManager
 import org.ben.news.helpers.createLoader
@@ -25,12 +23,10 @@ import org.ben.news.helpers.hideLoader
 import org.ben.news.helpers.showLoader
 import org.ben.news.models.StoryModel
 import org.ben.news.ui.auth.LoggedInViewModel
-import org.ben.news.ui.can.CanFragment
-import org.ben.news.ui.can.CanViewModel
 import splitties.snackbar.snack
 
-class EuFragment : Fragment(), StoryListener {
 
+class EuFragment : Fragment(), StoryListener {
 
     companion object {
         fun newInstance() = EuFragment()
@@ -42,14 +38,11 @@ class EuFragment : Fragment(), StoryListener {
     private val euViewModel: EuViewModel by activityViewModels()
     var state: Parcelable? = null
 
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
 
     }
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -110,7 +103,6 @@ class EuFragment : Fragment(), StoryListener {
         fragBinding.recyclerViewEu.adapter = StoryAdapter(storyList, this)
         state?.let { fragBinding.recyclerViewEu.layoutManager?.onRestoreInstanceState(it) }
     }
-
 
     override fun onResume() {
         super.onResume()

@@ -24,8 +24,8 @@ import org.ben.news.models.StoryModel
 import org.ben.news.ui.auth.LoggedInViewModel
 import splitties.snackbar.snack
 
-class RevolverFragment : Fragment(), StoryListener {
 
+class RevolverFragment : Fragment(), StoryListener {
 
     companion object {
         fun newInstance() = RevolverFragment()
@@ -37,14 +37,10 @@ class RevolverFragment : Fragment(), StoryListener {
     private val revViewModel: RevolverViewModel by activityViewModels()
     var state: Parcelable? = null
 
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
-
     }
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -59,14 +55,12 @@ class RevolverFragment : Fragment(), StoryListener {
 
         MobileAds.initialize(this.context!!) {}
 
-
         revViewModel.observableRevList.observe(viewLifecycleOwner) { story ->
             story?.let {
                 render(story as ArrayList<StoryModel>)
             }
             hideLoader(loader)
         }
-
         return root
     }
 
@@ -100,12 +94,10 @@ class RevolverFragment : Fragment(), StoryListener {
         super.onCreateOptionsMenu(menu, inflater)
     }
 
-
     private fun render(storyList: ArrayList<StoryModel>) {
         fragBinding.recyclerViewRev.adapter = StoryAdapter(storyList, this)
         state?.let { fragBinding.recyclerViewRev.layoutManager?.onRestoreInstanceState(it) }
     }
-
 
     override fun onResume() {
         super.onResume()
@@ -151,6 +143,4 @@ class RevolverFragment : Fragment(), StoryListener {
         super.onDestroyView()
         _fragBinding = null
     }
-
-
 }

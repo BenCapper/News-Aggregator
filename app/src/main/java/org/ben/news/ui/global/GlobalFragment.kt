@@ -24,6 +24,7 @@ import org.ben.news.models.StoryModel
 import org.ben.news.ui.auth.LoggedInViewModel
 import splitties.snackbar.snack
 
+
 class GlobalFragment : Fragment(), StoryListener {
 
     companion object {
@@ -36,14 +37,11 @@ class GlobalFragment : Fragment(), StoryListener {
     private val gloViewModel: GlobalViewModel by activityViewModels()
     var state: Parcelable? = null
 
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
 
     }
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -57,7 +55,6 @@ class GlobalFragment : Fragment(), StoryListener {
         activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.glo)
 
         MobileAds.initialize(this.context!!) {}
-
 
         gloViewModel.observableGloList.observe(viewLifecycleOwner) { story ->
             story?.let {
@@ -99,12 +96,10 @@ class GlobalFragment : Fragment(), StoryListener {
         super.onCreateOptionsMenu(menu, inflater)
     }
 
-
     private fun render(storyList: ArrayList<StoryModel>) {
         fragBinding.recyclerViewGlo.adapter = StoryAdapter(storyList, this)
         state?.let { fragBinding.recyclerViewGlo.layoutManager?.onRestoreInstanceState(it) }
     }
-
 
     override fun onResume() {
         super.onResume()

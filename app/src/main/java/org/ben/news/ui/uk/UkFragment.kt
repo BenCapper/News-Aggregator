@@ -28,7 +28,6 @@ import splitties.snackbar.snack
 
 class UkFragment : Fragment(), StoryListener {
 
-
     companion object {
         fun newInstance() = UkFragment()
     }
@@ -39,14 +38,10 @@ class UkFragment : Fragment(), StoryListener {
     private val ukViewModel: UkViewModel by activityViewModels()
     var state: Parcelable? = null
 
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
-
     }
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -62,14 +57,12 @@ class UkFragment : Fragment(), StoryListener {
 
         MobileAds.initialize(this.context!!) {}
 
-
         ukViewModel.observableUkList.observe(viewLifecycleOwner) { story ->
             story?.let {
                 render(story as ArrayList<StoryModel>)
             }
             hideLoader(loader)
         }
-
         return root
     }
 
@@ -79,7 +72,6 @@ class UkFragment : Fragment(), StoryListener {
         /* Finding the search bar in the menu and setting it to the search view. */
         val item = menu.findItem(R.id.app_bar_search)
         val searchView = item.actionView as SearchView
-
 
         /* This is the code that is executed when the search bar is used. It searches the database for
         the building that the user is searching for. */
@@ -103,12 +95,10 @@ class UkFragment : Fragment(), StoryListener {
         super.onCreateOptionsMenu(menu, inflater)
     }
 
-
     private fun render(storyList: ArrayList<StoryModel>) {
         fragBinding.recyclerViewUk.adapter = StoryAdapter(storyList, this)
         state?.let { fragBinding.recyclerViewUk.layoutManager?.onRestoreInstanceState(it) }
     }
-
 
     override fun onResume() {
         super.onResume()
@@ -154,6 +144,4 @@ class UkFragment : Fragment(), StoryListener {
         super.onDestroyView()
         _fragBinding = null
     }
-
-
 }

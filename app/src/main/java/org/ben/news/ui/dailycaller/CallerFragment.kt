@@ -3,7 +3,6 @@ package org.ben.news.ui.dailycaller
 import android.app.AlertDialog
 import android.content.Intent
 import android.net.Uri
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.*
@@ -12,14 +11,10 @@ import android.widget.ImageView
 import android.widget.SearchView
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.gms.ads.AdRequest
-import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.MobileAds
-import com.google.firebase.storage.FirebaseStorage
 import org.ben.news.R
 import org.ben.news.adapters.StoryAdapter
 import org.ben.news.adapters.StoryListener
-import org.ben.news.databinding.FragmentBreitbartBinding
 import org.ben.news.databinding.FragmentCallerBinding
 import org.ben.news.firebase.StoryManager
 import org.ben.news.helpers.createLoader
@@ -27,12 +22,10 @@ import org.ben.news.helpers.hideLoader
 import org.ben.news.helpers.showLoader
 import org.ben.news.models.StoryModel
 import org.ben.news.ui.auth.LoggedInViewModel
-import org.ben.news.ui.breitbart.BreitbartFragment
-import org.ben.news.ui.breitbart.BreitbartViewModel
 import splitties.snackbar.snack
 
-class CallerFragment : Fragment(), StoryListener {
 
+class CallerFragment : Fragment(), StoryListener {
 
     companion object {
         fun newInstance() = CallerFragment()
@@ -44,13 +37,11 @@ class CallerFragment : Fragment(), StoryListener {
     private val callerViewModel: CallerViewModel by activityViewModels()
     var state: Parcelable? = null
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
 
     }
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -111,7 +102,6 @@ class CallerFragment : Fragment(), StoryListener {
         fragBinding.recyclerViewCaller.adapter = StoryAdapter(storyList, this)
         state?.let { fragBinding.recyclerViewCaller.layoutManager?.onRestoreInstanceState(it) }
     }
-
 
     override fun onResume() {
         super.onResume()

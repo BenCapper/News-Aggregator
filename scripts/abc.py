@@ -18,7 +18,7 @@ page_url = "https://abcnews.go.com/US"
 img_path = "/home/bencapper/src/News/Abc"
 storage_path = "https://firebasestorage.googleapis.com/v0/b/news-a3e22.appspot.com/o"
 db_path = "stories"
-outlet = "abcnews.go.com"
+outlet = "AbcNews.go.com"
  
 logFolder(log_folder_path)
  

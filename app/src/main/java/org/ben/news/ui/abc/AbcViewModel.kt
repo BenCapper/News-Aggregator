@@ -12,6 +12,7 @@ import java.time.LocalDate
 import java.util.*
 import kotlin.collections.ArrayList
 
+
 class AbcViewModel : ViewModel() {
     private val abcList =
         MutableLiveData<List<StoryModel>>()
@@ -27,11 +28,10 @@ class AbcViewModel : ViewModel() {
 
     var liveFirebaseUser = MutableLiveData<FirebaseUser>()
 
-    //var readOnly = MutableLiveData(false)
 
     init { load() }
 
-    private val outlet = "abcnews.go.com"
+    private val outlet = "AbcNews.go.com"
     private val df = SimpleDateFormat("MM.dd.yy")
     private val calDate = Calendar.getInstance().time
     private var formattedDate: String = df.format(calDate)

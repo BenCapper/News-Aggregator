@@ -18,7 +18,7 @@ page_url = "https://www.vox.com/"
 img_path = "/home/bencapper/src/News/Vox"
 storage_path = "https://firebasestorage.googleapis.com/v0/b/news-a3e22.appspot.com/o"
 db_path = "stories"
-outlet = "www.vox.com"
+outlet = "www.Vox.com"
  
 logFolder(log_folder_path)
  
