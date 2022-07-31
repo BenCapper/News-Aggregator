@@ -39,77 +39,75 @@ articles = soup.find_all("div", "article-block")
  
  
 for article in articles:
-   # Get article date, format day if < 10
-   found_date = ""
-   match_pattern1 = "[0-9]{2}.[0-9]{1}.[0-9]{2}"
-   match_pattern2 = "[0-9]{2}.[0-9]{2}.[0-9]{2}"
-   date = article.find("div", "summary")
-   date = str(date)
-   found_date = re.findall(match_pattern1, date)
-   found_date = str(found_date).replace(".", "-")
-   found_date = found_date.lstrip("['").rstrip("']")
-   if found_date == "":
-       found_date = re.findall(match_pattern2, date)
-       found_date = str(found_date).replace(".", "-").lstrip("['").rstrip("']")
-   else:
-       days = found_date.split("-")
-       day = f"0{days[1]}"
-       found_date = f"{days[0]}-{day}-{days[2]}"
- 
-   # Get link to article
-   link = article.find("a")
-   link = str(link)[23:]
-   link = link.split('"')
-   link = link[0]
- 
-
-   # Use img tag to get the Headline and src location
-   image = article.find("img")
-   image = str(image)
-   img_list = image.split(" src=")
-   title = img_list[0][10:-1]
-   img_link = img_list[1][1:-3]
- 
-   bucket = storage.bucket()
-   img_title = imgTitleFormat(title)
-   title = titleFormat(title)
- 
-   if title not in ref_list:
- 
-       # add to log list and open file
-       ref_list.append(title)
-       open_temp = open(log_file_path, "a")
- 
- 
-       # Try except in case of no image error on source page
-       try:
-           # upload the image to storage
-           with open(f"{img_path}/{img_title}", "wb") as img:
-               img.write(requests.get(img_link).content)
-               blob = bucket.blob(f"Timcast/{img_title}")
-               token = uuid4()
-               metadata = {"firebaseStorageDownloadTokens": token}
-               blob.upload_from_filename(f"{img_path}/{img_title}")
-           storage_link = f"{storage_path}/Timcast%2F{img_title}?alt=media&token={token}"
-       except:
-           print("Image error")
- 
-       # Push the article to firebase as json
-       pushToDB(
-           db_path,
-           title,
-           found_date,
-           img_link,
-           img_title,
-           link,
-           outlet,
-           storage_link,
-       )
- 
-       # write title to log file
- 
-       open_temp.write(str(title) + "\n")
-       print("Timcast story added to the database")
-   else:
-       print("Already in the database")
- 
+    try:
+        # Get article date, format day if < 10
+        found_date = ""
+        match_pattern1 = "[0-9]{2}.[0-9]{1}.[0-9]{2}"
+        match_pattern2 = "[0-9]{2}.[0-9]{2}.[0-9]{2}"
+        date = article.find("div", "summary")
+        date = str(date)
+        found_date = re.findall(match_pattern1, date)
+        found_date = str(found_date).replace(".", "-")
+        found_date = found_date.lstrip("['").rstrip("']")
+        if found_date == "":
+            found_date = re.findall(match_pattern2, date)
+            found_date = str(found_date).replace(".", "-").lstrip("['").rstrip("']")
+        else:
+            days = found_date.split("-")
+            day = f"0{days[1]}"
+            found_date = f"{days[0]}-{day}-{days[2]}"
+    
+        # Get link to article
+        link = article.find("a")
+        link = str(link)[23:]
+        link = link.split('"')
+        link = link[0]
+    
+    
+        # Use img tag to get the Headline and src location
+        image = article.find("img")
+        image = str(image)
+        img_list = image.split(" src=")
+        title = img_list[0][10:-1]
+        img_link = img_list[1][1:-3]
+    
+        bucket = storage.bucket()
+        img_title = imgTitleFormat(title)
+        title = titleFormat(title)
+    
+        if title not in ref_list:
+        
+            # add to log list and open file
+            ref_list.append(title)
+            open_temp = open(log_file_path, "a")
+    
+    
+            # upload the image to storage
+            with open(f"{img_path}/{img_title}", "wb") as img:
+                img.write(requests.get(img_link).content)
+                blob = bucket.blob(f"Timcast/{img_title}")
+                token = uuid4()
+                metadata = {"firebaseStorageDownloadTokens": token}
+                blob.upload_from_filename(f"{img_path}/{img_title}")
+            storage_link = f"{storage_path}/Timcast%2F{img_title}?alt=media&token={token}"
+    
+            # Push the article to firebase as json
+            pushToDB(
+                db_path,
+                title,
+                found_date,
+                img_link,
+                img_title,
+                link,
+                outlet,
+                storage_link,
+            )
+    
+            # write title to log file
+    
+            open_temp.write(str(title) + "\n")
+            print("Timcast Article Added to DB")
+        else:
+            print("Timcast Article Already in DB")
+    except:
+        print("Timcast Article Error")

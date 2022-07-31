@@ -1,11 +1,10 @@
 import os
-from uuid import uuid4
  
 import datetime
 from firebase_admin import storage
  
-from utils.utilities import (formatDate, imgFolder, imgTitleFormat, initialise,
-                            logFolder, pageSoup, pushToDB, pushToDbNoImg, titleFormat)
+from utils.utilities import (imgFolder, imgTitleFormat, initialise,
+                            logFolder, pageSoup, pushToDbNoImg, titleFormat)
  
 ref_list = []
 log_file_path = "/home/bencapper/src/News-Aggregator/scripts/log/bonginodone.log"
@@ -46,33 +45,34 @@ sport_8 = articles[51:57]
 health_9 = articles[57:63]
 
 for article in articles:
-    a = article.select("a")
-    url = str(a).split(' href="')[1].split('" target')[0]
-    title = str(a).split('">')[1].split('</a')[0]
-    title = titleFormat(title)
-    img_title = imgTitleFormat(title)
-    date = datetime.datetime.now().strftime("%m-%d-%y")
-    date = f"Found on: {date}"
+   try:
+      a = article.select("a")
+      url = str(a).split(' href="')[1].split('" target')[0]
+      title = str(a).split('">')[1].split('</a')[0]
+      title = titleFormat(title)
+      img_title = imgTitleFormat(title)
+      date = datetime.datetime.now().strftime("%m-%d-%y")
+      date = f"Found on: {date}" 
+      bucket = storage.bucket()
+      token = ""
 
-    bucket = storage.bucket()
-    token = ""
- 
-    if title not in ref_list:
-       ref_list.append(title)
-       open_temp = open(log_file_path, "a")
-       storage_link = f"https://firebasestorage.googleapis.com/v0/b/news-a3e22.appspot.com/o/Bongino%2Fbongino.jpg?alt=media&token=c347bc71-7d59-45bf-b1eb-a1f98ab0965f"
- 
-       pushToDbNoImg(
-            db_path,
-            title,
-            date,
-            url,
-            outlet,
-            storage_link,
-        )
- 
-       open_temp.write(str(title) + "\n")
-       print("Bongino story added to the database")
-    else:
-       print("Already in the database")
- 
+      if title not in ref_list:
+         ref_list.append(title)
+         open_temp = open(log_file_path, "a")
+         storage_link = f"https://firebasestorage.googleapis.com/v0/b/news-a3e22.appspot.com/o/Bongino%2Fbongino.jpg?alt=media&token=c347bc71-7d59-45bf-b1eb-a1f98ab0965f"
+
+         pushToDbNoImg(
+              db_path,
+              title,
+              date,
+              url,
+              outlet,
+              storage_link,
+          )
+
+         open_temp.write(str(title) + "\n")
+         print("Bongino Article Added to DB")
+      else:
+         print("Bongino Article Already in DB")
+   except:
+      print("Bongino Article Error")

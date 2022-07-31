@@ -41,48 +41,51 @@ soup = pageSoup(page_url)
 articles = soup.find_all("h3", "sdc-site-tile__headline")
  
 for article in articles:
-    href = str(article).split('href="')[1].split('">')[0]
-    link = f"{url}{href}"
+    try:
+        href = str(article).split('href="')[1].split('">')[0]
+        link = f"{url}{href}"
 
-    full_page = requests.get(link).content
-    articleSoup = BeautifulSoup(full_page, features="lxml")
+        full_page = requests.get(link).content
+        articleSoup = BeautifulSoup(full_page, features="lxml")
 
-    title = articleSoup.find("span", "sdc-article-header__long-title")
-    title = str(title).split('">')[1].split("</")[0]
-    title = titleFormat(title)
-    img_title = imgTitleFormat(title)
+        title = articleSoup.find("span", "sdc-article-header__long-title")
+        title = str(title).split('">')[1].split("</")[0]
+        title = titleFormat(title)
+        img_title = imgTitleFormat(title)
 
-    date = articleSoup.find("p", "sdc-article-date__date-time")
-    if date is None:
-        pass
-    else:
-        date = str(date).split('day ')[1].split(":")[0][:-3].split(" ")
-        date = formatDate(date)
-        img_src = articleSoup.find("img", "sdc-article-image__item")
-        if img_src is None:
+        date = articleSoup.find("p", "sdc-article-date__date-time")
+        if date is None:
             pass
         else:
-            img_src = str(img_src).split('src="')[1].split('" srcset')[0]
-            bucket = storage.bucket()
-            token = ""
-            if title not in ref_list:
-                ref_list.append(title)
-                open_temp = open(log_file_path, "a")
-                # use images from folder to upload to storage
-                with open(f"{img_path}/{img_title}", "wb") as img:
-                    img.write(requests.get(img_src).content)
-                    blob = bucket.blob(f"Skyuk/{img_title}")
-                    token = uuid4()
-                    metadata = {"firebaseStorageDownloadTokens": token}
-                    blob.upload_from_filename(f"{img_path}/{img_title}")
-
-                storage_link = f"https://firebasestorage.googleapis.com/v0/b/news-a3e22.appspot.com/o/Skyuk%2F{img_title}?alt=media&token={token}"
-
-                pushToDB(
-                    db_path, title, date, img_src, img_title, link, outlet, storage_link
-                )
-
-                open_temp.write(str(title) + "\n")
-                print("Skyuk story added to the database")
+            date = str(date).split('day ')[1].split(":")[0][:-3].split(" ")
+            date = formatDate(date)
+            img_src = articleSoup.find("img", "sdc-article-image__item")
+            if img_src is None:
+                pass
             else:
-                print("Already in the database")
+                img_src = str(img_src).split('src="')[1].split('" srcset')[0]
+                bucket = storage.bucket()
+                token = ""
+                if title not in ref_list:
+                    ref_list.append(title)
+                    open_temp = open(log_file_path, "a")
+                    # use images from folder to upload to storage
+                    with open(f"{img_path}/{img_title}", "wb") as img:
+                        img.write(requests.get(img_src).content)
+                        blob = bucket.blob(f"Skyuk/{img_title}")
+                        token = uuid4()
+                        metadata = {"firebaseStorageDownloadTokens": token}
+                        blob.upload_from_filename(f"{img_path}/{img_title}")
+
+                    storage_link = f"https://firebasestorage.googleapis.com/v0/b/news-a3e22.appspot.com/o/Skyuk%2F{img_title}?alt=media&token={token}"
+
+                    pushToDB(
+                        db_path, title, date, img_src, img_title, link, outlet, storage_link
+                    )
+
+                    open_temp.write(str(title) + "\n")
+                    print("Sky UK Article Added to DB")
+                else:
+                    print("Sky UK Article Already in DB")
+    except:
+        print("Sky UK Article Error")

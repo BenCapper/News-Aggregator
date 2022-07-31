@@ -5,7 +5,7 @@ import requests
 from bs4 import BeautifulSoup
 from firebase_admin import storage
  
-from utils.utilities import (addYearAndFormat, formatDate, imgFolder, imgTitleFormat, initialise,
+from utils.utilities import (formatDate, imgFolder, imgTitleFormat, initialise,
                             logFolder, pageSoup, pushToDB, titleFormat)
  
 ref_list = []
@@ -37,53 +37,56 @@ soup = pageSoup(page_url)
 articles = soup.find_all("section", "ContentRoll__Item")
 
 for article in articles:
-   link = article.select("a")
-   link = str(link).split('href="')[1].split('" ')[0]
-   if "/video/" in link:
-      pass
-   else:
-      dates = list()
-      full_page = requests.get(link).content
-      articleSoup = BeautifulSoup(full_page, features="lxml")
-      img_src = articleSoup.find("div", "InlineImage fnIPT")
-      if len(str(img_src)) < 500:
+   try:
+      link = article.select("a")
+      link = str(link).split('href="')[1].split('" ')[0]
+      if "/video/" in link:
          pass
       else:
-         img_src = str(img_src).split('src="')[1].split('"/>')[0]
-
-         date = articleSoup.find('div', 'xTlfF')
-         monthDay = str(date).split('">')[1].split(', ')[0].split(' ')
-         year = str(date).split('">')[1].split(', ')[1]
-         dates.append(monthDay[1])
-         dates.append(monthDay[0])
-         dates.append(year)
-         date = formatDate(dates)
-         title = articleSoup.select('h1')
-         title = str(title).split('">')[1].split('</h')[0]
-         title = titleFormat(title)
-         img_title = imgTitleFormat(title)
-
-         bucket = storage.bucket()
-         token = ""
-
-         if title not in ref_list:
-             ref_list.append(title)
-             open_temp = open(log_file_path, "a")
-             # use images from folder to upload to storage
-             with open(f"{img_path}/{img_title}", "wb") as img:
-                 img.write(requests.get(img_src).content)
-                 blob = bucket.blob(f"Abc/{img_title}")
-                 token = uuid4()
-                 metadata = {"firebaseStorageDownloadTokens": token}
-                 blob.upload_from_filename(f"{img_path}/{img_title}")
-
-             storage_link = f"https://firebasestorage.googleapis.com/v0/b/news-a3e22.appspot.com/o/Abc%2F{img_title}?alt=media&token={token}"
-
-             pushToDB(
-                 db_path, title, date, img_src, img_title, link, outlet, storage_link
-             )
-
-             open_temp.write(str(title) + "\n")
-             print("ABC story added to the database")
+         dates = list()
+         full_page = requests.get(link).content
+         articleSoup = BeautifulSoup(full_page, features="lxml")
+         img_src = articleSoup.find("div", "InlineImage fnIPT")
+         if len(str(img_src)) < 500:
+            pass
          else:
-             print("Already in the database")
+            img_src = str(img_src).split('src="')[1].split('"/>')[0]
+
+            date = articleSoup.find('div', 'xTlfF')
+            monthDay = str(date).split('">')[1].split(', ')[0].split(' ')
+            year = str(date).split('">')[1].split(', ')[1]
+            dates.append(monthDay[1])
+            dates.append(monthDay[0])
+            dates.append(year)
+            date = formatDate(dates)
+            title = articleSoup.select('h1')
+            title = str(title).split('">')[1].split('</h')[0]
+            title = titleFormat(title)
+            img_title = imgTitleFormat(title)
+
+            bucket = storage.bucket()
+            token = ""
+
+            if title not in ref_list:
+                ref_list.append(title)
+                open_temp = open(log_file_path, "a")
+                # use images from folder to upload to storage
+                with open(f"{img_path}/{img_title}", "wb") as img:
+                    img.write(requests.get(img_src).content)
+                    blob = bucket.blob(f"Abc/{img_title}")
+                    token = uuid4()
+                    metadata = {"firebaseStorageDownloadTokens": token}
+                    blob.upload_from_filename(f"{img_path}/{img_title}")
+
+                storage_link = f"https://firebasestorage.googleapis.com/v0/b/news-a3e22.appspot.com/o/Abc%2F{img_title}?alt=media&token={token}"
+
+                pushToDB(
+                    db_path, title, date, img_src, img_title, link, outlet, storage_link
+                )
+
+                open_temp.write(str(title) + "\n")
+                print("ABC Article Added to DB")
+            else:
+                print("ABC Article Already in DB")
+   except:
+      print("Abc Article Error")

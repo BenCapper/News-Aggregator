@@ -1,12 +1,9 @@
 import os
-from uuid import uuid4
  
-import requests
 import datetime
-from bs4 import BeautifulSoup
 from firebase_admin import storage
  
-from utils.utilities import (formatDate, imgFolder, imgTitleFormat, initialise,
+from utils.utilities import (imgFolder, initialise,
                             logFolder, pageSoup, pushToDbNoImg, titleFormat)
  
 ref_list = []
@@ -44,47 +41,44 @@ articles = soup.find_all("h2", "title")
  
  
 for article in articles:
-    a = article.select("a")
-    url = str(a).split(' href="')[1].split('" ')[0].split('">')[0]
-    check = url.split('https://')
-    if len(check) == 1:
-        pass
-    else:
-        check = check[1].split('/')[0]
-        twitter = check.find("twitter")
-        archive = check.find("archive")
-        if twitter == 0 or archive == 0:
+    try:
+        a = article.select("a")
+        url = str(a).split(' href="')[1].split('" ')[0].split('">')[0]
+        check = url.split('https://')
+        if len(check) == 1:
             pass
         else:
-            print(url)
-            title = str(a).split('">')[1].split('</a')[0]
-            title = titleFormat(title)
-            date = datetime.datetime.now().strftime("%m-%d-%y")
-            date = f"Found on: {date}"
-            print(title)
-            print(date)
-
-            bucket = storage.bucket()
-            token = ""
-
-            if title not in ref_list:
-               ref_list.append(title)
-               open_temp = open(log_file_path, "a")
-               storage_link = f"https://firebasestorage.googleapis.com/v0/b/news-a3e22.appspot.com/o/Rev%2Frevolver.png?alt=media&token=fb623780-8bc9-45fd-a681-5dbd791cc988"
-
-               pushToDbNoImg(
-                    db_path,
-                    title,
-                    date,
-                    url,
-                    outlet,
-                    storage_link,
-                )
-
-               open_temp.write(str(title) + "\n")
-               print("Revolver story added to the database")
+            check = check[1].split('/')[0]
+            twitter = check.find("twitter")
+            archive = check.find("archive")
+            if twitter == 0 or archive == 0:
+                pass
             else:
-               print("Already in the database")
-            
-            
+                title = str(a).split('">')[1].split('</a')[0]
+                title = titleFormat(title)
+                date = datetime.datetime.now().strftime("%m-%d-%y")
+                date = f"Found on: {date}"
 
+                bucket = storage.bucket()
+                token = ""
+
+                if title not in ref_list:
+                   ref_list.append(title)
+                   open_temp = open(log_file_path, "a")
+                   storage_link = f"https://firebasestorage.googleapis.com/v0/b/news-a3e22.appspot.com/o/Rev%2Frevolver.png?alt=media&token=fb623780-8bc9-45fd-a681-5dbd791cc988"
+
+                   pushToDbNoImg(
+                        db_path,
+                        title,
+                        date,
+                        url,
+                        outlet,
+                        storage_link,
+                    )
+
+                   open_temp.write(str(title) + "\n")
+                   print("Revolver Article Added to DB")
+                else:
+                   print("Revolver Article Already in DB")
+    except:
+        print("Revolver Article Error")
