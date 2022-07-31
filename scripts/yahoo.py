@@ -1,11 +1,10 @@
 import os
-from uuid import uuid4
  
 import requests
 from bs4 import BeautifulSoup
 from firebase_admin import storage
  
-from utils.utilities import (addYearAndFormat, formatDate, imgFolder, imgTitleFormat, initialise,
+from utils.utilities import (formatDate, imgFolder, initialise,
                             logFolder, pageSoup, pushToDB, titleFormat)
  
 ref_list = []
@@ -37,37 +36,39 @@ soup = pageSoup(page_url)
 articles = soup.find_all("div", "Cf")
 
 for article in articles:
+   try:
+      a = article.select("a")
+      link = str(a).split('href="')[1].split('">')[0]
+      link = f"{page_url}/{link}"
+      full_page = requests.get(link).content
+      articleSoup = BeautifulSoup(full_page, features="lxml")
+      title = articleSoup.select("h1")
+      title = str(title).split('">')[1].split('</')[0]
+      title = titleFormat(title)
+      img_title = ""
+      date = list()
+      dates = articleSoup.select("time")
+      monthDay = str(dates).split('">')[1].split(',')[0].split(' ')
+      year = str(dates).split('">')[1].split(',')[1].rstrip().lstrip()
+      date.append(monthDay[1])
+      date.append(monthDay[0])
+      date.append(year)
+      date = formatDate(date)
 
-   a = article.select("a")
-   link = str(a).split('href="')[1].split('">')[0]
-   link = f"{page_url}/{link}"
-   full_page = requests.get(link).content
-   articleSoup = BeautifulSoup(full_page, features="lxml")
-   title = articleSoup.select("h1")
-   title = str(title).split('">')[1].split('</')[0]
-   title = titleFormat(title)
-   img_title = ""
-   date = list()
-   dates = articleSoup.select("time")
-   monthDay = str(dates).split('">')[1].split(',')[0].split(' ')
-   year = str(dates).split('">')[1].split(',')[1].rstrip().lstrip()
-   date.append(monthDay[1])
-   date.append(monthDay[0])
-   date.append(year)
-   date = formatDate(date)
-
-   img_src = ""
-   if title not in ref_list:
-      ref_list.append(title)
-      open_temp = open(log_file_path, "a")
-      storage_link = f"https://firebasestorage.googleapis.com/v0/b/news-a3e22.appspot.com/o/Yahoo%2Fyahoo-news.png?alt=media&token=6ea70d79-fbaf-442d-b952-babb2fb3f6d7"
+      img_src = ""
+      if title not in ref_list:
+         ref_list.append(title)
+         open_temp = open(log_file_path, "a")
+         storage_link = f"https://firebasestorage.googleapis.com/v0/b/news-a3e22.appspot.com/o/Yahoo%2Fyahoo-news.png?alt=media&token=6ea70d79-fbaf-442d-b952-babb2fb3f6d7"
 
 
-      pushToDB(
-           db_path, title, date, img_src, img_title, link, outlet, storage_link
-       )
+         pushToDB(
+              db_path, title, date, img_src, img_title, link, outlet, storage_link
+          )
 
-      open_temp.write(str(title) + "\n")
-      print("Yahoo story added to the database")
-   else:
-      print("Already in the database")
+         open_temp.write(str(title) + "\n")
+         print("Yahoo Article Added to the database")
+      else:
+         print("Yahoo Article Already in the database")
+   except:
+      print("Yahoo Article Error")
