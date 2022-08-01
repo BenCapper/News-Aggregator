@@ -6,7 +6,7 @@ import requests
 from firebase_admin import storage
  
 from utils.utilities import (imgFolder, imgTitleFormat, initialise, logFolder,
-                            pageSoup, pushToDB, titleFormat)
+                            pageSoup, pushToDB, titleFormat, similar)
  
 ref_list = []
 token = ""
@@ -75,7 +75,13 @@ for article in articles:
         img_title = imgTitleFormat(title)
         title = titleFormat(title)
     
-        if title not in ref_list:
+        check = False
+        for ref in ref_list:
+           similarity = similar(ref,title)
+           if similarity > .8:
+              check = True
+              break
+        if title not in ref_list and check is False:
         
             # add to log list and open file
             ref_list.append(title)

@@ -4,7 +4,7 @@ import datetime
 from firebase_admin import storage
  
 from utils.utilities import (imgFolder, imgTitleFormat, initialise,
-                            logFolder, pageSoup, pushToDbNoImg, titleFormat)
+                            logFolder, pageSoup, pushToDbNoImg, titleFormat, similar)
  
 ref_list = []
 log_file_path = "/home/bencapper/src/News-Aggregator/scripts/log/bonginodone.log"
@@ -55,8 +55,13 @@ for article in articles:
       date = f"Found on: {date}" 
       bucket = storage.bucket()
       token = ""
-
-      if title not in ref_list:
+      check = False
+      for ref in ref_list:
+         similarity = similar(ref,title)
+         if similarity > .8:
+            check = True
+            break
+      if title not in ref_list and check is False:
          ref_list.append(title)
          open_temp = open(log_file_path, "a")
          storage_link = f"https://firebasestorage.googleapis.com/v0/b/news-a3e22.appspot.com/o/Bongino%2Fbongino.jpg?alt=media&token=c347bc71-7d59-45bf-b1eb-a1f98ab0965f"

@@ -172,5 +172,6 @@ class StoryAdapter constructor(
         // This method tells the Google Mobile Ads SDK that you have finished populating your
         // native ad view with this native ad.
         nativeAdView.setNativeAd(nativeAd)
+
     }
 }

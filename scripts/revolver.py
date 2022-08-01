@@ -4,7 +4,7 @@ import datetime
 from firebase_admin import storage
  
 from utils.utilities import (imgFolder, initialise,
-                            logFolder, pageSoup, pushToDbNoImg, titleFormat)
+                            logFolder, pageSoup, pushToDbNoImg, titleFormat, similar)
  
 ref_list = []
 token = ""
@@ -61,8 +61,13 @@ for article in articles:
 
                 bucket = storage.bucket()
                 token = ""
-
-                if title not in ref_list:
+                check = False
+                for ref in ref_list:
+                   similarity = similar(ref,title)
+                   if similarity > .8:
+                      check = True
+                      break
+                if title not in ref_list and check is False:
                    ref_list.append(title)
                    open_temp = open(log_file_path, "a")
                    storage_link = f"https://firebasestorage.googleapis.com/v0/b/news-a3e22.appspot.com/o/Rev%2Frevolver.png?alt=media&token=fb623780-8bc9-45fd-a681-5dbd791cc988"

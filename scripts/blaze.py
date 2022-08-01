@@ -4,7 +4,7 @@ import requests
 from bs4 import BeautifulSoup
 from firebase_admin import storage
 from utils.utilities import (formatDate, imgFolder, imgTitleFormat, initialise,
-                           logFolder, pageSoup, pushToDB, titleFormat)
+                           logFolder, pageSoup, pushToDB, titleFormat, similar)
 
 
 ref_list = []
@@ -74,7 +74,14 @@ for article in articles:
       
                 bucket = storage.bucket()
                 token = ""
-                if title not in ref_list:
+                check = False
+                for ref in ref_list:
+                   similarity = similar(ref,title)
+                   if similarity > .8:
+                      check = True
+                      break
+
+                if title not in ref_list and check is False:
                     ref_list.append(title)
                     open_temp = open(log_file_path, "a")
                     # use images from folder to upload to storage

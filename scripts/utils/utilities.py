@@ -4,6 +4,7 @@ import os
 import firebase_admin
 import requests
 from bs4 import BeautifulSoup
+from difflib import SequenceMatcher
 from firebase_admin import credentials, db
 from datetime import datetime
  
@@ -28,7 +29,9 @@ def pageSoup(page_url):
    page = requests.get(page_url).content
    soup = BeautifulSoup(page, features="lxml")
    return soup
- 
+
+def similar(a,b):
+    return SequenceMatcher(None, a, b).ratio() 
  
 def titleFormat(string):
    string = (
