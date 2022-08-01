@@ -4,7 +4,7 @@ import requests
 from bs4 import BeautifulSoup
 from firebase_admin import storage
 from utils.utilities import (formatDate, imgFolder, imgTitleFormat, initialise,
-                           logFolder, pageSoup, pushToDB, titleFormat)
+                           logFolder, pageSoup, pushToDB, titleFormat, similar)
 
 
 ref_list = []
@@ -59,7 +59,13 @@ for article in articles:
           img_title = "eu.png"
           img_src = ""
           storage_link = f"https://firebasestorage.googleapis.com/v0/b/news-a3e22.appspot.com/o/Euronews%2Feun.jpg?alt=media&token=1fc82731-59b7-41cb-b1e5-07f936a0322f"
-          if title not in ref_list:
+          check = False
+          for ref in ref_list:
+             similarity = similar(ref,title)
+             if similarity > .8:
+                check = True
+                break
+          if title not in ref_list and check is False:
               ref_list.append(title)
               open_temp = open(log_file_path, "a")
               pushToDB(
@@ -72,14 +78,19 @@ for article in articles:
                      outlet,
                      storage_link,
                    )
-
               open_temp.write(str(title) + "\n")
               print("Euronews Article Added to DB - (No Image)")
           else:
               print("Euronews Article Already in DB - (No Image)")
       else:
           img_src = str(img).split('src="')[1].split('" ')[0]
-          if title not in ref_list:
+          check = False
+          for ref in ref_list:
+             similarity = similar(ref,title)
+             if similarity > .8:
+                check = True
+                break
+          if title not in ref_list and check is False:
               with open(f"{img_path}/{img_title}", "wb") as img:
                   img.write(requests.get(img_src).content)
                   blob = bucket.blob(f"Euronews/{img_title}")
