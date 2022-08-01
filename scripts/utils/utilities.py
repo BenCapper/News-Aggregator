@@ -139,5 +139,7 @@ def formatDate(date):
        month = "11"
    if month in "December":
        month = "12"
+   if len(day) > 2:
+       day = f"0{day}"
    year = date[2][2:]
    return f"{month}-{day}-{year}"
