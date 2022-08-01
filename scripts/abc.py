@@ -4,10 +4,9 @@ from uuid import uuid4
 import requests
 from bs4 import BeautifulSoup
 from firebase_admin import storage
-from scripts.utils.utilities import similar
  
 from utils.utilities import (formatDate, imgFolder, imgTitleFormat, initialise,
-                            logFolder, pageSoup, pushToDB, titleFormat)
+                            logFolder, pageSoup, pushToDB, titleFormat, similar)
  
 ref_list = []
 log_file_path = "/home/bencapper/src/News-Aggregator/scripts/log/abcdone.log"
