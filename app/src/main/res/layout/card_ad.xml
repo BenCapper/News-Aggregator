@@ -4,6 +4,8 @@
     android:id="@+id/nativeAd"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginTop="1dp"
+    android:layout_marginBottom="4dp"
     app:layout_constraintBottom_toTopOf="@+id/relativeLayout2"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
@@ -23,7 +25,7 @@
             android:layout_width="match_parent"
             android:layout_height="150dp"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="0dp" >
+            android:layout_marginTop="0dp">
 
         </com.google.android.gms.ads.nativead.MediaView>
 
@@ -112,7 +114,6 @@
                 app:layout_constraintEnd_toEndOf="@id/body"
                 app:layout_constraintStart_toEndOf="@+id/call"
                 app:layout_constraintTop_toBottomOf="@+id/body" />
-
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
