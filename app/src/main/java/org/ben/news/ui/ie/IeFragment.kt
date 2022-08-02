@@ -86,10 +86,20 @@ class IeFragment : Fragment(), StoryListener {
                         newText
                     )
                 }
-                else {
+                else{
                     ieViewModel.load()
                 }
+                if (newText == "") {
+                    ieViewModel.load()
+                }
+
                 return true
+            }
+        })
+        searchView.setOnCloseListener ( object : SearchView.OnCloseListener{
+            override fun onClose(): Boolean {
+                ieViewModel.load()
+                return false
             }
         })
         super.onCreateOptionsMenu(menu, inflater)

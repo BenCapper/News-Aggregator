@@ -85,10 +85,20 @@ class RevolverFragment : Fragment(), StoryListener {
                         newText
                     )
                 }
-                else {
+                else{
                     revViewModel.load()
                 }
+                if (newText == "") {
+                    revViewModel.load()
+                }
+
                 return true
+            }
+        })
+        searchView.setOnCloseListener ( object : SearchView.OnCloseListener{
+            override fun onClose(): Boolean {
+                revViewModel.load()
+                return false
             }
         })
         super.onCreateOptionsMenu(menu, inflater)

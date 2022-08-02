@@ -84,10 +84,20 @@ class VoxFragment : Fragment(), StoryListener {
                         newText
                     )
                 }
-                else {
+                else{
                     voxViewModel.load()
                 }
+                if (newText == "") {
+                    voxViewModel.load()
+                }
+
                 return true
+            }
+        })
+        searchView.setOnCloseListener ( object : SearchView.OnCloseListener{
+            override fun onClose(): Boolean {
+                voxViewModel.load()
+                return false
             }
         })
         super.onCreateOptionsMenu(menu, inflater)

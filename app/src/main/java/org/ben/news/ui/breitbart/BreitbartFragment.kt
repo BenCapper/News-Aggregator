@@ -89,11 +89,22 @@ class BreitbartFragment : Fragment(), StoryListener {
                         newText
                     )
                 }
-                else {
+                else{
                     breitbartViewModel.load()
                 }
+                if (newText == "") {
+                    breitbartViewModel.load()
+                }
+
                 return true
             }
+        })
+        searchView.setOnCloseListener ( object : SearchView.OnCloseListener{
+            override fun onClose(): Boolean {
+                breitbartViewModel.load()
+                return false
+            }
+
         })
         super.onCreateOptionsMenu(menu, inflater)
     }

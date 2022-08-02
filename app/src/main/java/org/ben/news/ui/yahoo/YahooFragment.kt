@@ -84,10 +84,20 @@ class YahooFragment : Fragment(), StoryListener {
                         newText
                     )
                 }
-                else {
+                else{
                     yahooViewModel.load()
                 }
+                if (newText == "") {
+                    yahooViewModel.load()
+                }
+
                 return true
+            }
+        })
+        searchView.setOnCloseListener ( object : SearchView.OnCloseListener{
+            override fun onClose(): Boolean {
+                yahooViewModel.load()
+                return false
             }
         })
         super.onCreateOptionsMenu(menu, inflater)

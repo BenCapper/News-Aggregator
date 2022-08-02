@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseUser
 import org.ben.news.firebase.StoryManager
+import org.ben.news.firebase.StoryManager.getDates
 import org.ben.news.models.StoryModel
 import timber.log.Timber
 import java.text.SimpleDateFormat
@@ -33,37 +34,13 @@ class BlazeViewModel : ViewModel() {
     init { load() }
 
     private val outlet = "www.TheBlaze.com"
-    private val df = SimpleDateFormat("MM.dd.yy")
-    private val calDate = Calendar.getInstance().time
-    private var formattedDate: String = df.format(calDate)
-    private var today = formattedDate.replace(".","-")
-    private val now = LocalDate.now()
-
-    private fun getDates(numDays:Int): ArrayList<String> {
-        val dates = ArrayList<String>()
-        for (i in 0..numDays) {
-            val yesterday = now.minusDays(i.toLong())
-            val year = yesterday.year.toString().substring(2)
-            var month = yesterday.month.value.toString()
-            if (month.length == 1) {
-                month = "0$month"
-            }
-            var day = yesterday.dayOfMonth.toString()
-            if (day.length == 1) {
-                day = "0$day"
-            }
-            val date = "$month-$day-$year"
-            dates.add(date)
-        }
-
-        return dates
-    }
 
 
     fun load() {
         val list: ArrayList<String>
         try {
             list = getDates(5)
+            list.sortDescending()
             StoryManager.findByOutlet(list,outlet,blazeList)
             Timber.i("Load Success : ${blazeList.value}")
         }
@@ -77,6 +54,7 @@ class BlazeViewModel : ViewModel() {
         val dates: ArrayList<String>
         try {
             dates = getDates(5)
+            dates.sortDescending()
             StoryManager.searchByOutlet(dates,term,outlet,blazeList)
             Timber.i("Search Success")
         }

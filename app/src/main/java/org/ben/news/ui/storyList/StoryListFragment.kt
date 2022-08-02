@@ -87,11 +87,22 @@ class StoryListFragment : Fragment(), StoryListener {
                         newText
                     )
                 }
-                else {
+                else{
                     storyListViewModel.load()
                 }
+                if (newText == "") {
+                    storyListViewModel.load()
+                }
+
                 return true
             }
+        })
+        searchView.setOnCloseListener ( object : SearchView.OnCloseListener{
+            override fun onClose(): Boolean {
+                storyListViewModel.load()
+                return false
+            }
+
         })
         super.onCreateOptionsMenu(menu, inflater)
     }

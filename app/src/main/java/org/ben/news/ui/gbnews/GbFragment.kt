@@ -87,10 +87,20 @@ class GbFragment : Fragment(), StoryListener {
                         newText
                     )
                 }
-                else {
+                else{
                     gbViewModel.load()
                 }
+                if (newText == "") {
+                    gbViewModel.load()
+                }
+
                 return true
+            }
+        })
+        searchView.setOnCloseListener ( object : SearchView.OnCloseListener{
+            override fun onClose(): Boolean {
+                gbViewModel.load()
+                return false
             }
         })
         super.onCreateOptionsMenu(menu, inflater)

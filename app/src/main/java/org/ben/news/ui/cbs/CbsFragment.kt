@@ -89,10 +89,20 @@ class CbsFragment : Fragment(), StoryListener {
                         newText
                     )
                 }
-                else {
+                else{
                     cbsViewModel.load()
                 }
+                if (newText == "") {
+                    cbsViewModel.load()
+                }
+
                 return true
+            }
+        })
+        searchView.setOnCloseListener ( object : SearchView.OnCloseListener{
+            override fun onClose(): Boolean {
+                cbsViewModel.load()
+                return false
             }
         })
         super.onCreateOptionsMenu(menu, inflater)

@@ -91,11 +91,22 @@ class BlazeFragment : Fragment(), StoryListener {
                         newText
                     )
                 }
-                else {
+                else{
                     blazeViewModel.load()
                 }
+                if (newText == "") {
+                    blazeViewModel.load()
+                }
+
                 return true
             }
+        })
+        searchView.setOnCloseListener ( object : SearchView.OnCloseListener{
+            override fun onClose(): Boolean {
+                blazeViewModel.load()
+                return false
+            }
+
         })
         super.onCreateOptionsMenu(menu, inflater)
     }

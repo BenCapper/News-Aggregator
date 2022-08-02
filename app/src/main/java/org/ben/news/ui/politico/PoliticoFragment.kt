@@ -84,10 +84,20 @@ class PoliticoFragment : Fragment(), StoryListener {
                         newText
                     )
                 }
-                else {
+                else{
                     politicoViewModel.load()
                 }
+                if (newText == "") {
+                    politicoViewModel.load()
+                }
+
                 return true
+            }
+        })
+        searchView.setOnCloseListener ( object : SearchView.OnCloseListener{
+            override fun onClose(): Boolean {
+                politicoViewModel.load()
+                return false
             }
         })
         super.onCreateOptionsMenu(menu, inflater)

@@ -91,10 +91,20 @@ class CanFragment : Fragment(), StoryListener {
                         newText
                     )
                 }
-                else {
+                else{
                     canViewModel.load()
                 }
+                if (newText == "") {
+                    canViewModel.load()
+                }
+
                 return true
+            }
+        })
+        searchView.setOnCloseListener ( object : SearchView.OnCloseListener{
+            override fun onClose(): Boolean {
+                canViewModel.load()
+                return false
             }
         })
         super.onCreateOptionsMenu(menu, inflater)

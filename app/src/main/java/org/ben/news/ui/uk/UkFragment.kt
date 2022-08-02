@@ -86,10 +86,20 @@ class UkFragment : Fragment(), StoryListener {
                         newText
                     )
                 }
-                else {
+                else{
                     ukViewModel.load()
                 }
+                if (newText == "") {
+                    ukViewModel.load()
+                }
+
                 return true
+            }
+        })
+        searchView.setOnCloseListener ( object : SearchView.OnCloseListener{
+            override fun onClose(): Boolean {
+                ukViewModel.load()
+                return false
             }
         })
         super.onCreateOptionsMenu(menu, inflater)

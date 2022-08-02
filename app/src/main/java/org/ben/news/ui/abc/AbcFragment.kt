@@ -91,12 +91,20 @@ class AbcFragment : Fragment(), StoryListener {
                         newText
                     )
                 }
-                else {
+                else{
                     abcViewModel.load()
                 }
+                if (newText == "") {
+                    abcViewModel.load()
+                }
+
                 return true
             }
         })
+        searchView.setOnCloseListener {
+            abcViewModel.load()
+            false
+        }
         super.onCreateOptionsMenu(menu, inflater)
     }
 
