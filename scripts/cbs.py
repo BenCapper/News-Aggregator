@@ -35,12 +35,14 @@ initialise(json_path, db_url, bucket)
  
 soup = pageSoup(page_url)
 articles = soup.find_all("article")
-
+order = 0
 for article in articles:
     try:
         if "item--type-video" in str(article):
             pass
         else:
+            if order == 7:
+                order = 0
             title = article.select("h4")
             title = str(title).split('">')[1].split('</')[0].lstrip().rstrip()
             title = titleFormat(title)
@@ -90,9 +92,9 @@ for article in articles:
                 storage_link = f"https://firebasestorage.googleapis.com/v0/b/news-a3e22.appspot.com/o/Cbs%2F{img_title}?alt=media&token={token}"
 
                 pushToDB(
-                    db_path, title, date, img_src, img_title, link, outlet, storage_link
+                    db_path, title, date, img_src, img_title, link, outlet, storage_link, order
                 )
-
+                order = order + 1
                 open_temp.write(str(title) + "\n")
                 print("CBS Article Added to DB")
             else:

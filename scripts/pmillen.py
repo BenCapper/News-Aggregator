@@ -37,9 +37,11 @@ initialise(json_path, db_url, bucket)
  
 soup = pageSoup(page_url)
 articles = soup.find_all("div", "post-card-inner")
- 
+order = 0
 for article in articles:
     try:
+        if order == 7:
+            order = 0
         url = "https://www.ThePostMillennial.com"
         a = article.select("a")
         url = url + str(a).split('href="')[1].split('">')[0]
@@ -85,9 +87,9 @@ for article in articles:
             storage_link = f"https://firebasestorage.googleapis.com/v0/b/news-a3e22.appspot.com/o/PMill%2F{img_title}?alt=media&token={token}"
     
             pushToDB(
-                db_path, title, date, img_src, img_title, url, outlet, storage_link
+                db_path, title, date, img_src, img_title, url, outlet, storage_link, order
             )
-    
+            order = order + 1
             open_temp.write(str(title) + "\n")
             print("Post Millennial Article Added to DB")
         else:

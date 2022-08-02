@@ -40,9 +40,11 @@ initialise(json_path, db_url, bucket)
  
 soup = pageSoup(page_url)
 articles = soup.find_all("article")
-
+order = 0
 for article in articles:
     try:
+        if order == 7:
+            order = 0
         empty = False
         time.sleep(5)
         url = str(article).split(' href="')[1].split('" title="')[0].split('">')[0]
@@ -91,6 +93,7 @@ for article in articles:
                 )
 
                open_temp.write(str(title) + "\n")
+               order = order + 1
                print("Breitbart Article Added to DB - (No Image)")
            else:
               with open(f"{img_path}/{img_title}", "wb") as img:
@@ -111,8 +114,9 @@ for article in articles:
                     url,
                     outlet,
                     storage_link,
+                    order
                 )
-
+                order = order + 1
                 open_temp.write(str(title) + "\n")
                 print("Breitbart Article Added to DB")
         else:

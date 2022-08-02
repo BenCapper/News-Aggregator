@@ -32,7 +32,7 @@ initialise(json_path, db_url, bucket)
 
 soup = pageSoup(page_url)
 articles = soup.find_all("div", "posts-wrapper clearfix")
-#articles = articles.find_all("h1", "widget__headline h1")
+order = 0
 for article in articles:
     try:
         a = article.find_all("a")
@@ -53,6 +53,8 @@ for article in articles:
                 urls.append(url)
       
         for link in urls:
+            if order == 7:
+                order = 0
             full_page = requests.get(link).content
             articleSoup = BeautifulSoup(full_page, features="lxml")
             d = articleSoup.find("span","post-date")
@@ -95,9 +97,9 @@ for article in articles:
                     storage_link = f"https://firebasestorage.googleapis.com/v0/b/news-a3e22.appspot.com/o/Blaze%2F{img_title}?alt=media&token={token}"
       
                     pushToDB(
-                        db_path, title, date, img_src, img_title, link, outlet, storage_link
+                        db_path, title, date, img_src, img_title, link, outlet, storage_link, order
                     )
-      
+                    order = order + 1
                     open_temp.write(str(title) + "\n")
                     print("Blaze Article Added to DB")
                 else:

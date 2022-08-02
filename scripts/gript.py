@@ -37,8 +37,11 @@ soup = pageSoup(page_url)
  
 articles = soup.find_all("archive-card")
 articles = str(articles).split(" post-image")[1:-1]
+order = 0
 for article in articles:
     try:
+        if order == 7:
+            order = 0
         date = (
             article.split(' post-date="')[1]
             .split('" post')[0]
@@ -84,7 +87,9 @@ for article in articles:
                   url,
                   outlet,
                   storage_link,
-                )   
+                  order
+                )
+               order = order + 1  
                open_temp.write(str(title) + "\n")
                print("Gript Article Added to DB - (No Image)")
            else:
@@ -104,7 +109,9 @@ for article in articles:
                     url,
                     outlet,
                     storage_link,
-                )   
+                    order
+                )
+                order = order + 1   
                 open_temp.write(str(title) + "\n")
                 print("Gript Article Added to DB")
         else:

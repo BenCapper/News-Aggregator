@@ -35,9 +35,11 @@ initialise(json_path, db_url, bucket)
  
 soup = pageSoup(page_url)
 articles = soup.find_all("div","tgp-post")
-
+order = 0
 for article in articles:
    try:
+      if order == 7:
+         order = 0
       a = article.select("a")
       img_src = str(a).split(' data-src="')[1].split('" data-src')[0].split('" height')[0]
       url = str(article).split(' href="')[1].split('">')[0]
@@ -86,8 +88,9 @@ for article in articles:
               url,
               outlet,
               storage_link,
+              order
           )
-
+         order = order + 1
          open_temp.write(str(title) + "\n")
          print("GatewayPundit Article Added to DB")
       else:

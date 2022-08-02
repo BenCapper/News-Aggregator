@@ -39,12 +39,14 @@ initialise(json_path, db_url, bucket)
  
 soup = pageSoup(page_url)
 articles = soup.find_all("div", "article-meta")
- 
+order = 0
 for article in articles:
     try:
         empty = False
         url = article.select("a")
         if url != []:
+            if order == 7:
+                order = 0
             url = str(url).split(' href="')[1].split('">')[0]
             url = f"{prefix}{url}"
             full_page = requests.get(url).content
@@ -91,8 +93,9 @@ for article in articles:
                           url,
                           outlet,
                           storage_link,
+                          order
                         )
-
+                       order = order + 1
                        open_temp.write(str(title) + "\n")
                        print("RTE Article Added to DB - (No Image)")
                    else:
@@ -114,8 +117,9 @@ for article in articles:
                             url,
                             outlet,
                             storage_link,
+                            order
                         )
-
+                        order = order + 1
                         open_temp.write(str(title) + "\n")
                         print("RTE Article Added to DB")
                 else:

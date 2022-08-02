@@ -36,7 +36,7 @@ class StoryListViewModel : ViewModel() {
     fun load() {
         val list: ArrayList<String>
         try {
-            list = getDates(1)
+            list = getDates(0)
             list.sortDescending()
             StoryManager.findAll(list,storyList)
             Timber.i("Load Success : ${storyList.value}")
@@ -49,7 +49,7 @@ class StoryListViewModel : ViewModel() {
     fun search( term: String) {
         val dates: ArrayList<String>
         try {
-            dates = getDates(1)
+            dates = getDates(0)
             dates.sortDescending()
             StoryManager.search(term,dates,storyList)
             Timber.i("Search Success")

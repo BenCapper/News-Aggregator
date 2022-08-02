@@ -36,7 +36,7 @@ initialise(json_path, db_url, bucket)
 
 soup = pageSoup(page_url)
 articles = soup.find_all("h1", "headline is-standard-typeface")
-
+order = 0
 for article in articles:
     try:
         link = str(article).split('href="')[1].split('" tar')[0]
@@ -48,6 +48,8 @@ for article in articles:
         if title is None:
             pass
         else:
+            if order == 7:
+                order = 0
             title = str(title).split('">')[1].split('</')[0]
             title = title.rstrip().lstrip()
             title = titleFormat(title)
@@ -88,9 +90,9 @@ for article in articles:
                     storage_link = f"https://firebasestorage.googleapis.com/v0/b/news-a3e22.appspot.com/o/Politico%2F{img_title}?alt=media&token={token}"
     
                     pushToDB(
-                        db_path, title, date, img_src, img_title, link, outlet, storage_link
+                        db_path, title, date, img_src, img_title, link, outlet, storage_link, order
                     )
-    
+                    order = order + 1
                     open_temp.write(str(title) + "\n")
                     print("Politico Article Added to DB")
                 else:
