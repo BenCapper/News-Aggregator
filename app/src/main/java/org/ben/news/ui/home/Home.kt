@@ -197,6 +197,12 @@ class Home : AppCompatActivity() {
         Timber.i("UserId = ${loggedInViewModel.liveFirebaseUser.value!!.uid}")
     }
 
+    fun homeArticles(item: MenuItem) {
+        findNavController(R.id.nav_host_fragment).navigate(R.id.storyListFragment)
+        findViewById<DrawerLayout>(R.id.drawer_layout).closeDrawers()
+        Timber.i("UserId = ${loggedInViewModel.liveFirebaseUser.value!!.uid}")
+    }
+
     fun yahArticles(item: MenuItem) {
         findNavController(R.id.nav_host_fragment).navigate(R.id.yahooFragment)
         findViewById<DrawerLayout>(R.id.drawer_layout).closeDrawers()
