@@ -29,7 +29,9 @@ class HistoryListViewModel : ViewModel() {
 
     fun load() {
         try {
-            StoryManager.find(liveFirebaseUser.value!!.uid,"history",historyList)
+            val list = StoryManager.getDates(31)
+            list.sortDescending()
+            StoryManager.find(liveFirebaseUser.value!!.uid,"history",list,historyList)
             Timber.i("Load Success : ${historyList.value}")
         }
         catch (e: Exception) {
@@ -39,7 +41,9 @@ class HistoryListViewModel : ViewModel() {
 
     fun search( term: String) {
         try {
-            StoryManager.search(term,liveFirebaseUser.value!!.uid,"history",historyList)
+            val list = StoryManager.getDates(5)
+            list.sortDescending()
+            StoryManager.search(term,liveFirebaseUser.value!!.uid,"history",list,historyList)
             Timber.i("Search Success")
         }
         catch (e: java.lang.Exception) {
