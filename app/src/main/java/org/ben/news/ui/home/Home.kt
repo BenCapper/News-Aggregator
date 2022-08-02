@@ -54,7 +54,29 @@ class Home : AppCompatActivity() {
         // menu should be considered as top level destinations.
 
         appBarConfiguration = AppBarConfiguration(setOf(
-            R.id.storyListFragment), drawerLayout)
+            R.id.storyListFragment,
+            R.id.likedListFragment,
+            R.id.historyListFragment,
+            R.id.abcFragment,
+            R.id.blazeFragment,
+            R.id.bonginoFragment,
+            R.id.breitbartFragment,
+            R.id.cbsFragment,
+            R.id.callerFragment,
+            R.id.euronFragment,
+            R.id.gbFragment,
+            R.id.globalFragment,
+            R.id.griptFragment,
+            R.id.gatewayFragment,
+            R.id.pmillFragment,
+            R.id.politicoFragment,
+            R.id.revolverFragment,
+            R.id.rteFragment,
+            R.id.skyFragment,
+            R.id.timcastFragment,
+            R.id.voxFragment,
+            R.id.yahooFragment,
+            R.id.zerohedgeFragment), drawerLayout)
         setupActionBarWithNavController(navController, appBarConfiguration)
 
         val navView = homeBinding.navView
