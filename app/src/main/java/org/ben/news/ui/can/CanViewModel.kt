@@ -62,6 +62,7 @@ class CanViewModel : ViewModel() {
         val list: ArrayList<String>
         try {
             list = getDates(5)
+            list.sortDescending()
             StoryManager.findByOutlets(list,outlets,canList)
             Timber.i("Load Success : ${canList.value}")
         }
@@ -74,6 +75,7 @@ class CanViewModel : ViewModel() {
         val dates: ArrayList<String>
         try {
             dates = getDates(5)
+            dates.sortDescending()
             StoryManager.searchByOutlets(dates,term,outlets,canList)
             Timber.i("Search Success")
         }
