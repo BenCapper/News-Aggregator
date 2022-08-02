@@ -89,10 +89,20 @@ class EuFragment : Fragment(), StoryListener {
                         newText
                     )
                 }
-                else {
+                else{
                     euViewModel.load()
                 }
+                if (newText == "") {
+                    euViewModel.load()
+                }
+
                 return true
+            }
+        })
+        searchView.setOnCloseListener ( object : SearchView.OnCloseListener{
+            override fun onClose(): Boolean {
+                euViewModel.load()
+                return false
             }
         })
         super.onCreateOptionsMenu(menu, inflater)

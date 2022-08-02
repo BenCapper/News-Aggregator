@@ -86,10 +86,20 @@ class PmillFragment : Fragment(), StoryListener {
                         newText
                     )
                 }
-                else {
+                else{
                     millViewModel.load()
                 }
+                if (newText == "") {
+                    millViewModel.load()
+                }
+
                 return true
+            }
+        })
+        searchView.setOnCloseListener ( object : SearchView.OnCloseListener{
+            override fun onClose(): Boolean {
+                millViewModel.load()
+                return false
             }
         })
         super.onCreateOptionsMenu(menu, inflater)

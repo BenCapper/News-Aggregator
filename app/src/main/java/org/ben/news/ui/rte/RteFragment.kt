@@ -85,10 +85,20 @@ class RteFragment : Fragment(), StoryListener {
                         newText
                     )
                 }
-                else {
+                else{
                     rteViewModel.load()
                 }
+                if (newText == "") {
+                    rteViewModel.load()
+                }
+
                 return true
+            }
+        })
+        searchView.setOnCloseListener ( object : SearchView.OnCloseListener{
+            override fun onClose(): Boolean {
+                rteViewModel.load()
+                return false
             }
         })
         super.onCreateOptionsMenu(menu, inflater)

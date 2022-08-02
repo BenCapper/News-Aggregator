@@ -87,10 +87,20 @@ class GlobalFragment : Fragment(), StoryListener {
                         newText
                     )
                 }
-                else {
+                else{
                     gloViewModel.load()
                 }
+                if (newText == "") {
+                    gloViewModel.load()
+                }
+
                 return true
+            }
+        })
+        searchView.setOnCloseListener ( object : SearchView.OnCloseListener{
+            override fun onClose(): Boolean {
+                gloViewModel.load()
+                return false
             }
         })
         super.onCreateOptionsMenu(menu, inflater)

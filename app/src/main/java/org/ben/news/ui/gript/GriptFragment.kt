@@ -85,10 +85,20 @@ class GriptFragment : Fragment(), StoryListener {
                         newText
                     )
                 }
-                else {
+                else{
                     griptViewModel.load()
                 }
+                if (newText == "") {
+                    griptViewModel.load()
+                }
+
                 return true
+            }
+        })
+        searchView.setOnCloseListener ( object : SearchView.OnCloseListener{
+            override fun onClose(): Boolean {
+                griptViewModel.load()
+                return false
             }
         })
         super.onCreateOptionsMenu(menu, inflater)

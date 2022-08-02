@@ -84,10 +84,20 @@ class GatewayFragment : Fragment(), StoryListener {
                         newText
                     )
                 }
-                else {
+                else{
                     gateViewModel.load()
                 }
+                if (newText == "") {
+                    gateViewModel.load()
+                }
+
                 return true
+            }
+        })
+        searchView.setOnCloseListener ( object : SearchView.OnCloseListener{
+            override fun onClose(): Boolean {
+                gateViewModel.load()
+                return false
             }
         })
         super.onCreateOptionsMenu(menu, inflater)

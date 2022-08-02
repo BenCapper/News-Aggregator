@@ -85,10 +85,20 @@ class SkyFragment : Fragment(), StoryListener {
                         newText
                     )
                 }
-                else {
+                else{
                     skyViewModel.load()
                 }
+                if (newText == "") {
+                    skyViewModel.load()
+                }
+
                 return true
+            }
+        })
+        searchView.setOnCloseListener ( object : SearchView.OnCloseListener{
+            override fun onClose(): Boolean {
+                skyViewModel.load()
+                return false
             }
         })
         super.onCreateOptionsMenu(menu, inflater)

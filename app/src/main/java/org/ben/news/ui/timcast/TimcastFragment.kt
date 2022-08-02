@@ -85,10 +85,20 @@ class TimcastFragment : Fragment(), StoryListener {
                         newText
                     )
                 }
-                else {
+                else{
                     timViewModel.load()
                 }
+                if (newText == "") {
+                    timViewModel.load()
+                }
+
                 return true
+            }
+        })
+        searchView.setOnCloseListener ( object : SearchView.OnCloseListener{
+            override fun onClose(): Boolean {
+                timViewModel.load()
+                return false
             }
         })
         super.onCreateOptionsMenu(menu, inflater)

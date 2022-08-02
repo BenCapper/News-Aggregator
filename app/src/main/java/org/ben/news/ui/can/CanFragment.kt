@@ -106,7 +106,6 @@ class CanFragment : Fragment(), StoryListener {
                 canViewModel.load()
                 return false
             }
-
         })
         super.onCreateOptionsMenu(menu, inflater)
     }
