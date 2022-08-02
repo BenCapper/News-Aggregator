@@ -65,6 +65,7 @@ class BreitbartViewModel : ViewModel() {
         val list: ArrayList<String>
         try {
             list = getDates(5)
+            list.sortDescending()
             StoryManager.findByOutlet(list,outlet,breitList)
             Timber.i("Load Success : ${breitList.value}")
         }
@@ -78,6 +79,7 @@ class BreitbartViewModel : ViewModel() {
         val dates: ArrayList<String>
         try {
             dates = getDates(5)
+            dates.sortDescending()
             StoryManager.searchByOutlet(dates,term,outlet,breitList)
             Timber.i("Search Success")
         }
