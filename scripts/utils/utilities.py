@@ -37,6 +37,7 @@ def titleFormat(string):
    string = (
        string.replace(".", "(dot)")
        .replace("%", "(pc)")
+       .replace("+", "(plus)")
        .replace(":", "(colon)")
        .replace("#", "(hash)")
        .replace("?", "(quest)")
@@ -53,6 +54,7 @@ def imgTitleFormat(string):
    string = (
        string.replace(".", "(dot)")
        .replace("%", "(pc)")
+       .replace("+", "(plus)")
        .replace(":", "(colon)")
        .replace("#", "(hash)")
        .replace("?", "(quest)")

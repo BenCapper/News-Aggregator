@@ -17,6 +17,7 @@ object StoryManager : StoryStore {
     private fun formatTitle(title: String): String {
         return title.replace("(dot)", ".")
             .replace("(pc)", "%")
+            .replace("(plus)", "+")
             .replace("(colon)", ":")
             .replace("(hash)", "#")
             .replace("(quest)", "?")
@@ -27,6 +28,7 @@ object StoryManager : StoryStore {
     private fun formatTitleIllegal(title: String): String {
         return title.replace(".", "(dot)")
             .replace("%", "(pc)")
+            .replace("(plus)", "+")
             .replace(":", "(colon)")
             .replace("#", "(hash)")
             .replace("?", "(quest)")
@@ -48,7 +50,7 @@ object StoryManager : StoryStore {
                         override fun onDataChange(snapshot: DataSnapshot) {
                             val children = snapshot.children
                             children.forEach {
-                                var story = it.getValue(StoryModel::class.java)
+                                val story = it.getValue(StoryModel::class.java)
                                 story?.title = story?.title?.let { it -> formatTitle(it) }.toString()
                                 totalList.add(story!!)
                             }
