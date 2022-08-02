@@ -72,7 +72,8 @@ class StoryListViewModel : ViewModel() {
     fun search( term: String) {
         val dates: ArrayList<String>
         try {
-            dates = getDates(5)
+            dates = getDates(1)
+            dates.sortDescending()
             StoryManager.search(term,dates,storyList)
             Timber.i("Search Success")
         }
