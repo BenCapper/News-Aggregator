@@ -64,6 +64,7 @@ class BlazeViewModel : ViewModel() {
         val list: ArrayList<String>
         try {
             list = getDates(5)
+            list.sortDescending()
             StoryManager.findByOutlet(list,outlet,blazeList)
             Timber.i("Load Success : ${blazeList.value}")
         }
@@ -77,6 +78,7 @@ class BlazeViewModel : ViewModel() {
         val dates: ArrayList<String>
         try {
             dates = getDates(5)
+            dates.sortDescending()
             StoryManager.searchByOutlet(dates,term,outlet,blazeList)
             Timber.i("Search Success")
         }
