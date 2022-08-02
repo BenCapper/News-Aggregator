@@ -28,9 +28,7 @@ class LikedListViewModel : ViewModel() {
 
     fun load() {
         try {
-            val list = StoryManager.getDates(31)
-            list.sortDescending()
-            StoryManager.find(liveFirebaseUser.value!!.uid,"likes",list,likedList)
+            StoryManager.find(liveFirebaseUser.value!!.uid,"likes",likedList)
             Timber.i("Load Success : ${likedList.value}")
         }
         catch (e: Exception) {
@@ -41,9 +39,7 @@ class LikedListViewModel : ViewModel() {
 
     fun search( term: String) {
         try {
-            val list = StoryManager.getDates(31)
-            list.sortDescending()
-            StoryManager.search(term,liveFirebaseUser.value!!.uid,"likes",list,likedList)
+            StoryManager.search(term,liveFirebaseUser.value!!.uid,"likes",likedList)
             Timber.i("Search Success")
         }
         catch (e: java.lang.Exception) {
