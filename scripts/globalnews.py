@@ -35,9 +35,11 @@ initialise(json_path, db_url, bucket)
  
 soup = pageSoup(page_url)
 articles = soup.find_all("li", "c-posts__item c-posts__loadmore")
-
+order = 0
 for article in articles:
     try:
+        if order == 7:
+            order = 0
         link = str(article).split(' href="')[1].split('">')[0]
         title = str(article).split('data-title="">')[1].split('</span')[0]
         title = titleFormat(title)
@@ -76,9 +78,9 @@ for article in articles:
             storage_link = f"https://firebasestorage.googleapis.com/v0/b/news-a3e22.appspot.com/o/Global%2F{img_title}?alt=media&token={token}"
     
             pushToDB(
-                db_path, title, date, img_src, img_title, link, outlet, storage_link
+                db_path, title, date, img_src, img_title, link, outlet, storage_link, order
             )
-    
+            order = order + 1
             open_temp.write(str(title) + "\n")
             print("Global News Article Added to DB")
         else:

@@ -74,7 +74,7 @@ def imgFolder(img_path):
  
  
 def pushToDB(
-   db_path, title, date, img_src, img_name, link, outlet, storage_link
+   db_path, title, date, img_src, img_name, link, outlet, storage_link, order
 ):
    ref = db.reference(f"{db_path}/{date}/{title}")
    ref.set(
@@ -86,11 +86,12 @@ def pushToDB(
            "link": link,
            "outlet": outlet,
            "storage_link": storage_link,
+           "order": order
        }
    )
 
 def pushToDbNoImg(
-   db_path, title, date, link, outlet, storage_link
+   db_path, title, date, link, outlet, storage_link, order
 ):
    ref = db.reference(f"{db_path}/{date}/{title}")
    ref.set(
@@ -100,6 +101,7 @@ def pushToDbNoImg(
            "link": link,
            "outlet": outlet,
            "storage_link": storage_link,
+           "order": order
        }
    )
  

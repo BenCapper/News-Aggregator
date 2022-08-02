@@ -34,9 +34,11 @@ initialise(json_path, db_url, bucket)
  
 soup = pageSoup(page_url)
 articles = soup.find_all("div","Article_nonStickyContainer__XQgbr")
- 
+order = 0
 for article in articles:
     try:
+        if order == 7:
+            order = 0
         a = article.select("a")
         url = str(a).split('href="')[1].split('"')[0]
         url = f"https://{outlet}{url}"
@@ -72,9 +74,9 @@ for article in articles:
             storage_link = f"https://firebasestorage.googleapis.com/v0/b/news-a3e22.appspot.com/o/Zerohedge%2F{img_title}?alt=media&token={token}"
     
             pushToDB(
-                db_path, title, date, img_src, img_title, url, outlet, storage_link
+                db_path, title, date, img_src, img_title, url, outlet, storage_link, order
             )
-    
+            order = order + 1
             open_temp.write(str(title) + "\n")
             print("Zerohedge Article Added to DB")
         else:

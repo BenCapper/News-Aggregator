@@ -39,9 +39,11 @@ initialise(json_path, db_url, bucket)
  
 soup = pageSoup(page_url)
 articles = soup.find_all("h3", "sdc-site-tile__headline")
- 
+order = 0
 for article in articles:
     try:
+        if order == 7:
+            order = 0
         href = str(article).split('href="')[1].split('">')[0]
         link = f"{url}{href}"
 
@@ -86,9 +88,9 @@ for article in articles:
                     storage_link = f"https://firebasestorage.googleapis.com/v0/b/news-a3e22.appspot.com/o/Skyuk%2F{img_title}?alt=media&token={token}"
 
                     pushToDB(
-                        db_path, title, date, img_src, img_title, link, outlet, storage_link
+                        db_path, title, date, img_src, img_title, link, outlet, storage_link, order
                     )
-
+                    order = order + 1
                     open_temp.write(str(title) + "\n")
                     print("Sky UK Article Added to DB")
                 else:

@@ -37,9 +37,11 @@ initialise(json_path, db_url, bucket)
 soup = pageSoup(page_url)
 articles = soup.find_all("div", "article-block")
  
- 
+order = 0
 for article in articles:
     try:
+        if order == 7:
+            order = 0
         # Get article date, format day if < 10
         found_date = ""
         match_pattern1 = "[0-9]{2}.[0-9]{1}.[0-9]{2}"
@@ -107,10 +109,11 @@ for article in articles:
                 link,
                 outlet,
                 storage_link,
+                order
             )
     
             # write title to log file
-    
+            order = order + 1
             open_temp.write(str(title) + "\n")
             print("Timcast Article Added to DB")
         else:

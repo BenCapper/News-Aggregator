@@ -79,7 +79,7 @@ object StoryManager : StoryStore {
                                 story?.title = story?.title?.let { it -> formatTitle(it) }.toString()
                                 todayList.add(story!!)
                             }
-                            todayList = todayList.sortedBy{it.storage_link}.toMutableList()
+                            todayList = todayList.sortedBy{it.order}.toMutableList()
                             database.child("stories").child(date)
                                 .removeEventListener(this)
                             totalList.addAll(todayList)

@@ -43,9 +43,11 @@ opin_6 = articles[38:45]
 ent_7 = articles[45:51]
 sport_8 = articles[51:57]
 health_9 = articles[57:63]
-
+order = 0
 for article in articles:
    try:
+      if order == 7:
+         order = 0
       a = article.select("a")
       url = str(a).split(' href="')[1].split('" target')[0]
       title = str(a).split('">')[1].split('</a')[0]
@@ -73,8 +75,9 @@ for article in articles:
               url,
               outlet,
               storage_link,
+              order
           )
-
+         order = order + 1
          open_temp.write(str(title) + "\n")
          print("Bongino Article Added to DB")
       else:
