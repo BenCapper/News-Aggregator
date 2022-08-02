@@ -39,7 +39,7 @@ class AbcViewModel : ViewModel() {
     private val now = LocalDate.now()
 
     private fun getDates(n:Int): ArrayList<String> {
-        var dates = ArrayList<String>()
+        val dates = ArrayList<String>()
         for (i in 0..n) {
             val yesterday = now.minusDays(i.toLong())
             val year = yesterday.year.toString().substring(2)

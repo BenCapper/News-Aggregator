@@ -253,6 +253,7 @@ object StoryManager : StoryStore {
 
         val totalList = ArrayList<StoryModel>()
         for (date in dates) {
+            var todayList = mutableListOf<StoryModel>()
             database.child("stories").child(date)
                 .addValueEventListener(object : ValueEventListener {
                     override fun onCancelled(error: DatabaseError) {
@@ -264,13 +265,15 @@ object StoryManager : StoryStore {
                             if (it.getValue(StoryModel::class.java)?.title!!.contains(term, true) &&
                                 it.getValue(StoryModel::class.java)?.outlet!! == outlet
                             ) {
-                                var story = it.getValue(StoryModel::class.java)
+                                val story = it.getValue(StoryModel::class.java)
                                 story?.title = story?.title?.let { it -> formatTitle(it) }.toString()
-                                totalList.add(story!!)
+                                todayList.add(story!!)
                             }
                         }
+                        todayList = todayList.sortedBy{it.storage_link}.toMutableList()
                         database.child("stories").child(date)
                             .removeEventListener(this)
+                        totalList.addAll(todayList)
                         storyList.value = totalList
                     }
                 })
@@ -281,6 +284,7 @@ object StoryManager : StoryStore {
 
         val totalList = ArrayList<StoryModel>()
         for (date in dates) {
+            var todayList = mutableListOf<StoryModel>()
             database.child("stories").child(date)
                 .addValueEventListener(object : ValueEventListener {
                     override fun onCancelled(error: DatabaseError) {
@@ -292,13 +296,15 @@ object StoryManager : StoryStore {
                             if (it.getValue(StoryModel::class.java)?.title!!.contains(term, true) &&
                                 it.getValue(StoryModel::class.java)?.outlet!! in outlets
                             ) {
-                                var story = it.getValue(StoryModel::class.java)
+                                val story = it.getValue(StoryModel::class.java)
                                 story?.title = story?.title?.let { it -> formatTitle(it) }.toString()
-                                totalList.add(story!!)
+                                todayList.add(story!!)
                             }
                         }
+                        todayList = todayList.sortedBy{it.storage_link}.toMutableList()
                         database.child("stories").child(date)
                             .removeEventListener(this)
+                        totalList.addAll(todayList)
                         storyList.value = totalList
                     }
                 })
@@ -309,6 +315,7 @@ object StoryManager : StoryStore {
 
         val totalList = ArrayList<StoryModel>()
         for (date in dates) {
+            var todayList = mutableListOf<StoryModel>()
             database.child("stories").child("Found on: $date")
                 .addValueEventListener(object : ValueEventListener {
                     override fun onCancelled(error: DatabaseError) {
@@ -320,13 +327,15 @@ object StoryManager : StoryStore {
                             if (it.getValue(StoryModel::class.java)?.title!!.contains(term, true) &&
                                 it.getValue(StoryModel::class.java)?.outlet!! == outlet
                             ) {
-                                var story = it.getValue(StoryModel::class.java)
+                                val story = it.getValue(StoryModel::class.java)
                                 story?.title = story?.title?.let { it -> formatTitle(it) }.toString()
-                                totalList.add(story!!)
+                                todayList.add(story!!)
                             }
                         }
+                        todayList = todayList.sortedBy{it.storage_link}.toMutableList()
                         database.child("stories").child("Found on: $date")
                             .removeEventListener(this)
+                        totalList.addAll(todayList)
                         storyList.value = totalList
                     }
                 })
