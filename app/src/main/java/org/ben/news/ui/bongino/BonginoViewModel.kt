@@ -64,6 +64,7 @@ class BonginoViewModel : ViewModel() {
         val list: ArrayList<String>
         try {
             list = getDates(5)
+            list.sortDescending()
             StoryManager.findOutletNoImage(list,outlet,bongList)
             Timber.i("Load Success : ${bongList.value}")
         }
@@ -77,6 +78,7 @@ class BonginoViewModel : ViewModel() {
         val dates: ArrayList<String>
         try {
             dates = getDates(5)
+            dates.sortDescending()
             StoryManager.searchOutletNoImage(dates,term,outlet,bongList)
             Timber.i("Search Success")
         }

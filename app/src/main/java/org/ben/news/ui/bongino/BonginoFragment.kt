@@ -90,11 +90,22 @@ class BonginoFragment : Fragment(), StoryListener {
                         newText
                     )
                 }
-                else {
+                else{
                     bonginoViewModel.load()
                 }
+                if (newText == "") {
+                    bonginoViewModel.load()
+                }
+
                 return true
             }
+        })
+        searchView.setOnCloseListener ( object : SearchView.OnCloseListener{
+            override fun onClose(): Boolean {
+                bonginoViewModel.load()
+                return false
+            }
+
         })
         super.onCreateOptionsMenu(menu, inflater)
     }
