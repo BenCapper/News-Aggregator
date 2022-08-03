@@ -96,6 +96,11 @@
         <item name="android:colorBackground">@color/black</item>
     </style>
 
+    <style name="Theme.News.Load">
+        <item name="android:colorBackground">@color/white</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
     <!-- Dark Buttons -->
     <style name="ThemeOverlay.MyDarkButton" parent="ThemeOverlay.AppCompat.Dark">
         <item name="colorButtonNormal">#FFECEAEA</item>
