@@ -2,15 +2,18 @@
     <!-- Base application theme. -->
     <style name="Theme.News" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/black</item>
-        <item name="colorPrimaryVariant">@color/black</item>
-        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorPrimary">@color/white</item>
+        <item name="colorPrimaryVariant">@color/white</item>
+        <item name="colorOnPrimary">@color/black</item>
         <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/white</item>
-        <item name="colorSecondaryVariant">@color/white</item>
+        <item name="colorSecondary">@color/black</item>
+        <item name="colorSecondaryVariant">@color/black</item>
         <item name="colorOnSecondary">@color/black</item>
+        <item name="android:textColorHint">@color/grey_500</item>
+        <item name="android:textColorPrimary">@color/black</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
+        <item name="android:windowLightStatusBar">true</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <!-- Customize your theme here. -->
@@ -21,10 +24,36 @@
         <item name="windowNoTitle">true</item>
     </style>
 
+    <style name="Theme.News.Login">
+        <item name="android:textColor">@color/white</item>
+    </style>
+
     <style name="Theme.News.bold">
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">@color/orange</item>
     </style>
+
+    <style name="Theme.News.email">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="Theme.News.bg">
+        <item name="android:background">@color/white</item>
+        <item name="android:editTextColor">@color/black</item>
+    </style>
+
+    <style name="Theme.News.nav">
+        <item name="colorControlNormal">@color/grey_500</item>
+        <item name="colorControlHighlight">@color/black</item>
+        <item name="actionMenuTextColor">@color/black</item>
+        <item name="android:background">@color/white</item>
+        <item name="android:itemBackground">@color/white</item>
+        <item name="android:colorButtonNormal">@color/black</item>
+        <item name="android:subtitleTextColor">@color/orange</item>
+        <item name="colorAccent">@color/grey_500</item>
+    </style>
+
     <style name="Theme.News.AdAttribution">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
@@ -38,11 +67,13 @@
     </style>
 
     <style name="Theme.News.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
-        <item name="colorControlNormal">@color/white</item>"
-        <item name="colorControlHighlight">@color/grey_500</item>"
-        <item name="actionMenuTextColor">@color/white</item>"
-        <item name="android:editTextColor">@color/white</item>
-        <item name="colorAccent">@color/white</item>
+        <item name="colorControlNormal">@color/black</item>
+        <item name="colorControlHighlight">@color/grey_500</item>
+        <item name="actionMenuTextColor">@color/black</item>
+        <item name="android:editTextColor">@color/black</item>
+        <item name="android:background">@color/white</item>
+        <item name="android:itemBackground">@color/white</item>
+        <item name="colorAccent">@color/black</item>
     </style>
     <style name="SearchViewStyle" parent="Widget.AppCompat.SearchView">
         <item name="android:textColor">@color/dark</item>
@@ -67,11 +98,12 @@
 
     <!-- Dark Buttons -->
     <style name="ThemeOverlay.MyDarkButton" parent="ThemeOverlay.AppCompat.Dark">
-        <item name="colorButtonNormal">@color/grey_500</item>
+        <item name="colorButtonNormal">#FFECEAEA</item>
         <item name="colorAccent">@color/orange</item>
         <item name="android:layout_marginRight">4dp</item>
         <item name="android:layout_marginLeft">4dp</item>
-        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textColor">@android:color/black</item>
+        <item name="android:textStyle">bold</item>
     </style>
 
     <!-- Light EditTexts -->
@@ -91,6 +123,12 @@
     <style name="ThemeOverlay.FirebaseIcon" parent="Theme.News">
         <item name="android:layout_marginTop">@dimen/icon_top_margin</item>
         <item name="android:layout_marginBottom">@dimen/icon_bottom_margin</item>
+    </style>
+
+
+    <style name="Widget.AppCompat.Button.Colored" parent="Theme.News">
+        <item name="android:backgroundTint">@color/grey_700</item>
+        <item name="android:textStyle">bold</item>
     </style>
 
     <style name="ThemeOverlay.MyTitleText" parent="Theme.News">
