@@ -22,6 +22,7 @@
         android:fitsSystemWindows="true"
         android:theme="@style/Theme.News.nav"
         app:headerLayout="@layout/nav_header"
+        app:itemRippleColor="#FFAB00"
         app:menu="@menu/nav_drawer_menu"
         app:subheaderColor="#FFAB00" />
 </androidx.drawerlayout.widget.DrawerLayout>
