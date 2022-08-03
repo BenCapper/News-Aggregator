@@ -16,7 +16,7 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="@color/black"
+            android:theme="@style/Theme.News.AppBarOverlay"
             app:navigationIcon="@drawable/ic_menu_orange"
             app:titleTextColor="@color/orange">
 
@@ -38,6 +38,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:background="#000000"
+        android:theme="@style/Theme.News.AppBarOverlay"
         app:itemRippleColor="#FFAB00"
         app:labelVisibilityMode="unlabeled"
         app:layout_behavior="@string/hide_bottom_view_on_scroll_behavior"
