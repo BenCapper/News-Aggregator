@@ -14,10 +14,10 @@
         android:weightSum="1">
 
         <pl.droidsonroids.gif.GifImageView
+            android:id="@+id/splashy"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight=".5"
-            android:src="@drawable/glitch"
             android:theme="@style/Theme.News.Splash" />
 
     </LinearLayout>
