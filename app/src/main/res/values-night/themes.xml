@@ -18,6 +18,13 @@
         <!-- Customize your theme here. -->
     </style>
 
+    <style name="Theme.News.Splash" parent="Theme.News">
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="android:background">@color/black</item>
+
+    </style>
+
+
     <style name="Theme.News.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
