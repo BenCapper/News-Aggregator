@@ -21,7 +21,7 @@
         <activity
             android:name=".ui.splash.Splash"
             android:exported="true"
-            android:theme="@style/Theme.News.Splash">
+            android:theme="@style/Theme.News">
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -17,8 +17,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight=".5"
-            android:background="@color/black"
-            android:src="@drawable/glitch" />
+            android:src="@drawable/glitch"
+            android:theme="@style/Theme.News.Splash" />
 
     </LinearLayout>
 
