@@ -20,7 +20,7 @@ class Splash : AppCompatActivity() {
         val imageView = findViewById<GifImageView>(R.id.splashy)
         when (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) {
             Configuration.UI_MODE_NIGHT_YES -> {
-                Glide.with(this).load(R.drawable.animb).into(imageView)
+                Glide.with(this).load(R.drawable.animbla).into(imageView)
             }
             Configuration.UI_MODE_NIGHT_NO -> {
                 Glide.with(this).load(R.drawable.animw).into(imageView)
