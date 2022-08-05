@@ -136,7 +136,12 @@ class LikedListFragment : Fragment(), StoryNoSaveListener {
 
     override fun onResume() {
         super.onResume()
-        likedListViewModel.load()
+        loggedInViewModel.liveFirebaseUser.observe(viewLifecycleOwner) { firebaseUser ->
+            if (firebaseUser != null) {
+                likedListViewModel.liveFirebaseUser.value = firebaseUser
+                likedListViewModel.load()
+            }
+        }
     }
 
     override fun onPause() {

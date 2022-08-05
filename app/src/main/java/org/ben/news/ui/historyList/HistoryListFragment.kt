@@ -136,7 +136,12 @@ class HistoryListFragment : Fragment(), StoryListener {
 
     override fun onResume() {
         super.onResume()
-        historyListViewModel.load()
+        loggedInViewModel.liveFirebaseUser.observe(viewLifecycleOwner) { firebaseUser ->
+            if (firebaseUser != null) {
+                historyListViewModel.liveFirebaseUser.value = firebaseUser
+                historyListViewModel.load()
+            }
+        }
     }
 
     override fun onPause() {
