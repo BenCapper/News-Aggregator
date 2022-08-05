@@ -60,11 +60,26 @@ class IeFragment : Fragment(), StoryListener {
         ieViewModel.observableIeList.observe(viewLifecycleOwner) { story ->
             story?.let {
                 render(story as ArrayList<StoryModel>)
+                checkSwipeRefresh()
             }
             hideLoader(loader)
         }
+        setSwipeRefresh()
         return root
     }
+
+    private fun setSwipeRefresh() {
+        fragBinding.swipe.setOnRefreshListener {
+            fragBinding.swipe.isRefreshing = true
+            ieViewModel.load()
+        }
+    }
+
+    private fun checkSwipeRefresh() {
+        if (fragBinding.swipe.isRefreshing)
+            fragBinding.swipe.isRefreshing = false
+    }
+
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu_home, menu)

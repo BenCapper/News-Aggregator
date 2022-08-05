@@ -71,9 +71,11 @@ class LikedListFragment : Fragment(), StoryNoSaveListener {
         likedListViewModel.observableLikedList.observe(viewLifecycleOwner) { story ->
             story?.let {
                 render(story as ArrayList<StoryModel>)
+                checkSwipeRefresh()
             }
             hideLoader(loader)
         }
+        setSwipeRefresh()
 
         val swipeDeleteHandler = object : SwipeToDeleteCallback(requireContext()) {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
@@ -91,6 +93,18 @@ class LikedListFragment : Fragment(), StoryNoSaveListener {
         itemTouchDeleteHelper.attachToRecyclerView(fragBinding.recyclerViewLiked)
 
         return root
+    }
+
+    private fun setSwipeRefresh() {
+        fragBinding.swipe.setOnRefreshListener {
+            fragBinding.swipe.isRefreshing = true
+            likedListViewModel.load()
+        }
+    }
+
+    private fun checkSwipeRefresh() {
+        if (fragBinding.swipe.isRefreshing)
+            fragBinding.swipe.isRefreshing = false
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
