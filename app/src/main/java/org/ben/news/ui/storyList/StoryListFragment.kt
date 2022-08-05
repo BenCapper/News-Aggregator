@@ -2,17 +2,20 @@ package org.ben.news.ui.storyList
 
 import android.app.AlertDialog
 import android.content.Intent
+import android.content.res.ColorStateList
+import android.content.res.Configuration
+
 import android.net.Uri
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.*
-import android.widget.Button
 import android.widget.ImageView
 import android.widget.SearchView
+import androidx.appcompat.view.menu.MenuView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
 import com.google.android.gms.ads.MobileAds
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import org.ben.news.R
@@ -87,6 +90,12 @@ class StoryListFragment : Fragment(), StoryListener {
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu_home, menu)
+        when (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) {
+            Configuration.UI_MODE_NIGHT_YES -> {
+                menu.findItem(R.id.app_bar_shuffle).iconTintList = null
+            }
+        }
+
 
         /* Finding the search bar in the menu and setting it to the search view. */
         val item = menu.findItem(R.id.app_bar_search)
@@ -163,7 +172,7 @@ class StoryListFragment : Fragment(), StoryListener {
         } else{
             fragBinding.recyclerView.layoutManager?.onSaveInstanceState()
         }
-        
+
         startActivity(intent)
     }
 
