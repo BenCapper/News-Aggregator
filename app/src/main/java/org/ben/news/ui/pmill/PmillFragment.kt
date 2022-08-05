@@ -59,14 +59,29 @@ class PmillFragment : Fragment(), StoryListener {
         millViewModel.observableMillList.observe(viewLifecycleOwner) { story ->
             story?.let {
                 render(story as ArrayList<StoryModel>)
+                checkSwipeRefresh()
             }
             hideLoader(loader)
         }
+        setSwipeRefresh()
         return root
     }
 
+    private fun setSwipeRefresh() {
+        fragBinding.swipe.setOnRefreshListener {
+            fragBinding.swipe.isRefreshing = true
+            state = fragBinding.recyclerViewMill.layoutManager?.onSaveInstanceState()
+            millViewModel.load()
+        }
+    }
+
+    private fun checkSwipeRefresh() {
+        if (fragBinding.swipe.isRefreshing)
+            fragBinding.swipe.isRefreshing = false
+    }
+
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.menu_home, menu)
+        inflater.inflate(R.menu.menu_all, menu)
 
         /* Finding the search bar in the menu and setting it to the search view. */
         val item = menu.findItem(R.id.app_bar_search)
@@ -114,13 +129,7 @@ class PmillFragment : Fragment(), StoryListener {
 
     override fun onResume() {
         super.onResume()
-        showLoader(loader,"")
-        loggedInViewModel.liveFirebaseUser.observe(viewLifecycleOwner) { firebaseUser ->
-            if (firebaseUser != null) {
-                millViewModel.liveFirebaseUser.value = firebaseUser
-                millViewModel.load()
-            }
-        }
+        millViewModel.load()
     }
 
     override fun onPause() {

@@ -3,7 +3,6 @@ package org.ben.news.ui.likedList
 import android.app.AlertDialog
 import android.content.Intent
 import android.net.Uri
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.*
@@ -14,17 +13,12 @@ import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.gms.ads.AdRequest
-import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.MobileAds
 import com.google.firebase.storage.FirebaseStorage
 import org.ben.news.R
 import org.ben.news.adapters.NoSaveAdapter
-import org.ben.news.adapters.StoryAdapter
-import org.ben.news.adapters.StoryListener
 import org.ben.news.adapters.StoryNoSaveListener
 import org.ben.news.databinding.FragmentLikedListBinding
-import org.ben.news.databinding.FragmentStoryListBinding
 import org.ben.news.firebase.StoryManager
 import org.ben.news.helpers.SwipeToDeleteCallback
 import org.ben.news.helpers.createLoader
@@ -33,8 +27,6 @@ import org.ben.news.helpers.showLoader
 import org.ben.news.models.StoryModel
 import org.ben.news.ui.auth.LoggedInViewModel
 import org.ben.news.ui.storyList.StoryListFragment
-import org.ben.news.ui.storyList.StoryListViewModel
-import splitties.snackbar.snack
 
 
 class LikedListFragment : Fragment(), StoryNoSaveListener {
@@ -71,9 +63,11 @@ class LikedListFragment : Fragment(), StoryNoSaveListener {
         likedListViewModel.observableLikedList.observe(viewLifecycleOwner) { story ->
             story?.let {
                 render(story as ArrayList<StoryModel>)
+                checkSwipeRefresh()
             }
             hideLoader(loader)
         }
+        setSwipeRefresh()
 
         val swipeDeleteHandler = object : SwipeToDeleteCallback(requireContext()) {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
@@ -93,8 +87,21 @@ class LikedListFragment : Fragment(), StoryNoSaveListener {
         return root
     }
 
+    private fun setSwipeRefresh() {
+        fragBinding.swipe.setOnRefreshListener {
+            fragBinding.swipe.isRefreshing = true
+            state = fragBinding.recyclerViewLiked.layoutManager?.onSaveInstanceState()
+            likedListViewModel.load()
+        }
+    }
+
+    private fun checkSwipeRefresh() {
+        if (fragBinding.swipe.isRefreshing)
+            fragBinding.swipe.isRefreshing = false
+    }
+
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.menu_home, menu)
+        inflater.inflate(R.menu.menu_all, menu)
 
         /* Finding the search bar in the menu and setting it to the search view. */
         val item = menu.findItem(R.id.app_bar_search)
@@ -129,7 +136,6 @@ class LikedListFragment : Fragment(), StoryNoSaveListener {
 
     override fun onResume() {
         super.onResume()
-        showLoader(loader,"")
         loggedInViewModel.liveFirebaseUser.observe(viewLifecycleOwner) { firebaseUser ->
             if (firebaseUser != null) {
                 likedListViewModel.liveFirebaseUser.value = firebaseUser

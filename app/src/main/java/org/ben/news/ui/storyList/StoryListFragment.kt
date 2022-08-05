@@ -6,10 +6,12 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.*
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.gms.ads.MobileAds
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -54,17 +56,31 @@ class StoryListFragment : Fragment(), StoryListener {
         fragBinding.recyclerView.layoutManager = activity?.let { LinearLayoutManager(it) }
         activity?.findViewById<BottomNavigationView>(R.id.bottom_nav)?.itemIconTintList = null
         activity?.findViewById<BottomNavigationView>(R.id.bottom_nav)?.visibility = View.VISIBLE
-        activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.logo)
-
+        activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.logohead)
         MobileAds.initialize(this.context!!) {}
 
         storyListViewModel.observableStoryList.observe(viewLifecycleOwner) { story ->
             story?.let {
                 render(story as ArrayList<StoryModel>)
+                checkSwipeRefresh()
             }
             hideLoader(loader)
         }
+        setSwipeRefresh()
         return root
+    }
+
+    private fun setSwipeRefresh() {
+        fragBinding.swipe.setOnRefreshListener {
+            fragBinding.swipe.isRefreshing = true
+            state = fragBinding.recyclerView.layoutManager?.onSaveInstanceState()
+            storyListViewModel.load()
+        }
+    }
+
+    private fun checkSwipeRefresh() {
+        if (fragBinding.swipe.isRefreshing)
+            fragBinding.swipe.isRefreshing = false
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -107,6 +123,22 @@ class StoryListFragment : Fragment(), StoryListener {
         super.onCreateOptionsMenu(menu, inflater)
     }
 
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        val id = item.itemId
+        if (id == R.id.app_bar_shuffle){
+            storyListViewModel.loadShuffle()
+            storyListViewModel.observableStoryList.observe(viewLifecycleOwner) { story ->
+                story?.let {
+                    render(story as ArrayList<StoryModel>)
+                    checkSwipeRefresh()
+                }
+                hideLoader(loader)
+            }
+            setSwipeRefresh()
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
     private fun render(storyList: ArrayList<StoryModel>) {
         fragBinding.recyclerView.adapter = StoryAdapter(storyList, this)
         state?.let { fragBinding.recyclerView.layoutManager?.onRestoreInstanceState(it) }
@@ -114,13 +146,7 @@ class StoryListFragment : Fragment(), StoryListener {
 
     override fun onResume() {
         super.onResume()
-        //showLoader(loader,"")
-        loggedInViewModel.liveFirebaseUser.observe(viewLifecycleOwner) { firebaseUser ->
-            if (firebaseUser != null) {
-                storyListViewModel.liveFirebaseUser.value = firebaseUser
-                storyListViewModel.load()
-            }
-        }
+        storyListViewModel.load()
     }
 
     override fun onPause() {
