@@ -59,10 +59,24 @@ class PmillFragment : Fragment(), StoryListener {
         millViewModel.observableMillList.observe(viewLifecycleOwner) { story ->
             story?.let {
                 render(story as ArrayList<StoryModel>)
+                checkSwipeRefresh()
             }
             hideLoader(loader)
         }
+        setSwipeRefresh()
         return root
+    }
+
+    private fun setSwipeRefresh() {
+        fragBinding.swipe.setOnRefreshListener {
+            fragBinding.swipe.isRefreshing = true
+            millViewModel.load()
+        }
+    }
+
+    private fun checkSwipeRefresh() {
+        if (fragBinding.swipe.isRefreshing)
+            fragBinding.swipe.isRefreshing = false
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
