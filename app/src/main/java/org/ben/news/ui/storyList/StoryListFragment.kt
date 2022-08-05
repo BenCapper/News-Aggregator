@@ -55,16 +55,29 @@ class StoryListFragment : Fragment(), StoryListener {
         activity?.findViewById<BottomNavigationView>(R.id.bottom_nav)?.itemIconTintList = null
         activity?.findViewById<BottomNavigationView>(R.id.bottom_nav)?.visibility = View.VISIBLE
         activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.logo)
-
         MobileAds.initialize(this.context!!) {}
 
         storyListViewModel.observableStoryList.observe(viewLifecycleOwner) { story ->
             story?.let {
                 render(story as ArrayList<StoryModel>)
+                checkSwipeRefresh()
             }
             hideLoader(loader)
         }
+        setSwipeRefresh()
         return root
+    }
+
+    private fun setSwipeRefresh() {
+        fragBinding.swipe.setOnRefreshListener {
+            fragBinding.swipe.isRefreshing = true
+            storyListViewModel.load()
+        }
+    }
+
+    private fun checkSwipeRefresh() {
+        if (fragBinding.swipe.isRefreshing)
+            fragBinding.swipe.isRefreshing = false
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
