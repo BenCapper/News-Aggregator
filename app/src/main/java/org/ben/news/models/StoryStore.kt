@@ -5,6 +5,7 @@ import com.google.firebase.auth.FirebaseUser
 
 interface StoryStore {
     fun findAll(dates: ArrayList<String>, storyList: MutableLiveData<List<StoryModel>>)
+    fun findAllShuffle(dates: ArrayList<String>, storyList: MutableLiveData<List<StoryModel>>)
     fun find(userId: String, path:String, storyList: MutableLiveData<List<StoryModel>>)
     fun findByOutlet(dates: ArrayList<String>, outlet:String, storyList: MutableLiveData<List<StoryModel>>)
     fun findByOutlets(dates: ArrayList<String>, outlets: List<String>, storyList: MutableLiveData<List<StoryModel>>)

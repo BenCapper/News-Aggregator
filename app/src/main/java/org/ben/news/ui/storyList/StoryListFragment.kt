@@ -6,10 +6,12 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.*
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.gms.ads.MobileAds
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -54,7 +56,7 @@ class StoryListFragment : Fragment(), StoryListener {
         fragBinding.recyclerView.layoutManager = activity?.let { LinearLayoutManager(it) }
         activity?.findViewById<BottomNavigationView>(R.id.bottom_nav)?.itemIconTintList = null
         activity?.findViewById<BottomNavigationView>(R.id.bottom_nav)?.visibility = View.VISIBLE
-        activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.logo)
+        activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.logohead)
         MobileAds.initialize(this.context!!) {}
 
         storyListViewModel.observableStoryList.observe(viewLifecycleOwner) { story ->
@@ -119,6 +121,22 @@ class StoryListFragment : Fragment(), StoryListener {
 
         })
         super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        val id = item.itemId
+        if (id == R.id.app_bar_shuffle){
+            storyListViewModel.loadShuffle()
+            storyListViewModel.observableStoryList.observe(viewLifecycleOwner) { story ->
+                story?.let {
+                    render(story as ArrayList<StoryModel>)
+                    checkSwipeRefresh()
+                }
+                hideLoader(loader)
+            }
+            setSwipeRefresh()
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     private fun render(storyList: ArrayList<StoryModel>) {

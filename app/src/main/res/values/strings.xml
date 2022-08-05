@@ -20,6 +20,7 @@
 
     <string name="list_title">360 News</string>
     <string name="filter">Filter</string>
+    <string name="shuffle">Shuffle</string>
     <string name="home">Home</string>
     <string name="liked_articles">Saved Articles</string>
     <string name="saved_article">Added to Saved Articles</string>

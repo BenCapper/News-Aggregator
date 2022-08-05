@@ -46,6 +46,19 @@ class StoryListViewModel : ViewModel() {
         }
     }
 
+    fun loadShuffle() {
+        val list: ArrayList<String>
+        try {
+            list = getDates(1)
+            list.sortDescending()
+            StoryManager.findAllShuffle(list,storyList)
+            Timber.i("Load Success : ${storyList.value}")
+        }
+        catch (e: Exception) {
+            Timber.i("Load Error : $e.message")
+        }
+    }
+
     fun search( term: String) {
         val dates: ArrayList<String>
         try {

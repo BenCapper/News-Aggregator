@@ -90,6 +90,35 @@ object StoryManager : StoryStore {
         }
     }
 
+    override fun findAllShuffle(dates: ArrayList<String>, storyList: MutableLiveData<List<StoryModel>>) {
+
+        val totalList = ArrayList<StoryModel>()
+        for (date in dates) {
+            var todayList = mutableListOf<StoryModel>()
+            database.child("stories").child(date)
+                .addValueEventListener(object : ValueEventListener {
+                    override fun onCancelled(error: DatabaseError) {
+                        Timber.i("Firebase Timcast error : ${error.message}")
+                    }
+
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        val children = snapshot.children
+                        children.forEach {
+                            val story = it.getValue(StoryModel::class.java)
+                            story?.title = story?.title?.let { it -> formatTitle(it) }.toString()
+                            todayList.add(story!!)
+                        }
+                        database.child("stories").child(date)
+                            .removeEventListener(this)
+                        totalList.addAll(todayList)
+                        totalList.shuffle()
+                        storyList.value = totalList
+
+                    }
+                })
+        }
+    }
+
     override fun search(term: String, dates: ArrayList<String>, storyList: MutableLiveData<List<StoryModel>>) {
         val totalList = ArrayList<StoryModel>()
         for (date in dates) {
