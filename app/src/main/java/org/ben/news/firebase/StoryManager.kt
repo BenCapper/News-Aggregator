@@ -108,10 +108,10 @@ object StoryManager : StoryStore {
                             story?.title = story?.title?.let { it -> formatTitle(it) }.toString()
                             todayList.add(story!!)
                         }
+                        todayList.shuffle()
                         database.child("stories").child(date)
                             .removeEventListener(this)
                         totalList.addAll(todayList)
-                        totalList.shuffle()
                         storyList.value = totalList
 
                     }
