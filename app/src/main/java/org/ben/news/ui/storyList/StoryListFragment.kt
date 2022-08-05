@@ -2,17 +2,20 @@ package org.ben.news.ui.storyList
 
 import android.app.AlertDialog
 import android.content.Intent
+import android.content.res.ColorStateList
+import android.content.res.Configuration
+
 import android.net.Uri
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.*
-import android.widget.Button
 import android.widget.ImageView
 import android.widget.SearchView
+import androidx.appcompat.view.menu.MenuView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
 import com.google.android.gms.ads.MobileAds
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import org.ben.news.R
@@ -26,6 +29,7 @@ import org.ben.news.helpers.showLoader
 import org.ben.news.models.StoryModel
 import org.ben.news.ui.auth.LoggedInViewModel
 import splitties.snackbar.snack
+import timber.log.Timber
 
 
 class StoryListFragment : Fragment(), StoryListener {
@@ -39,6 +43,7 @@ class StoryListFragment : Fragment(), StoryListener {
     private val loggedInViewModel : LoggedInViewModel by activityViewModels()
     private val storyListViewModel: StoryListViewModel by activityViewModels()
     var state: Parcelable? = null
+    var shuffle: Boolean? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -85,6 +90,12 @@ class StoryListFragment : Fragment(), StoryListener {
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu_home, menu)
+        when (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) {
+            Configuration.UI_MODE_NIGHT_YES -> {
+                menu.findItem(R.id.app_bar_shuffle).iconTintList = null
+            }
+        }
+
 
         /* Finding the search bar in the menu and setting it to the search view. */
         val item = menu.findItem(R.id.app_bar_search)
@@ -125,16 +136,10 @@ class StoryListFragment : Fragment(), StoryListener {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
-        if (id == R.id.app_bar_shuffle){
+        if (id == R.id.app_bar_shuffle) {
             storyListViewModel.loadShuffle()
-            storyListViewModel.observableStoryList.observe(viewLifecycleOwner) { story ->
-                story?.let {
-                    render(story as ArrayList<StoryModel>)
-                    checkSwipeRefresh()
-                }
-                hideLoader(loader)
-            }
-            setSwipeRefresh()
+            shuffle = true
+            state = null
         }
         return super.onOptionsItemSelected(item)
     }
@@ -150,14 +155,24 @@ class StoryListFragment : Fragment(), StoryListener {
     }
 
     override fun onPause() {
-        state = fragBinding.recyclerView.layoutManager?.onSaveInstanceState()
+        state = if (shuffle == true) {
+            null
+        } else{
+            fragBinding.recyclerView.layoutManager?.onSaveInstanceState()
+        }
         super.onPause()
     }
 
     override fun onStoryClick(story: StoryModel) {
         StoryManager.create(loggedInViewModel.liveFirebaseUser.value!!.uid,"history", story)
         val intent = Intent(Intent.ACTION_VIEW).setData(Uri.parse(story.link))
-        state = fragBinding.recyclerView.layoutManager?.onSaveInstanceState()
+
+        state = if (shuffle == true) {
+            null
+        } else{
+            fragBinding.recyclerView.layoutManager?.onSaveInstanceState()
+        }
+
         startActivity(intent)
     }
 
