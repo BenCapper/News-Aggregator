@@ -98,6 +98,7 @@ class LikedListFragment : Fragment(), StoryNoSaveListener {
     private fun setSwipeRefresh() {
         fragBinding.swipe.setOnRefreshListener {
             fragBinding.swipe.isRefreshing = true
+            state = fragBinding.recyclerViewLiked.layoutManager?.onSaveInstanceState()
             likedListViewModel.load()
         }
     }
@@ -143,13 +144,7 @@ class LikedListFragment : Fragment(), StoryNoSaveListener {
 
     override fun onResume() {
         super.onResume()
-        showLoader(loader,"")
-        loggedInViewModel.liveFirebaseUser.observe(viewLifecycleOwner) { firebaseUser ->
-            if (firebaseUser != null) {
-                likedListViewModel.liveFirebaseUser.value = firebaseUser
-                likedListViewModel.load()
-            }
-        }
+        likedListViewModel.load()
     }
 
     override fun onPause() {

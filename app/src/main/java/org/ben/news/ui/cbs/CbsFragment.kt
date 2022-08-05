@@ -73,6 +73,7 @@ class CbsFragment : Fragment(), StoryListener {
     private fun setSwipeRefresh() {
         fragBinding.swipe.setOnRefreshListener {
             fragBinding.swipe.isRefreshing = true
+            state = fragBinding.recyclerViewCbs.layoutManager?.onSaveInstanceState()
             cbsViewModel.load()
         }
     }
@@ -132,13 +133,7 @@ class CbsFragment : Fragment(), StoryListener {
 
     override fun onResume() {
         super.onResume()
-        //showLoader(loader,"")
-        loggedInViewModel.liveFirebaseUser.observe(viewLifecycleOwner) { firebaseUser ->
-            if (firebaseUser != null) {
-                cbsViewModel.liveFirebaseUser.value = firebaseUser
-                cbsViewModel.load()
-            }
-        }
+        cbsViewModel.load()
     }
 
     override fun onPause() {

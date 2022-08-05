@@ -69,6 +69,7 @@ class ZerohedgeFragment : Fragment(), StoryListener {
     private fun setSwipeRefresh() {
         fragBinding.swipe.setOnRefreshListener {
             fragBinding.swipe.isRefreshing = true
+            state = fragBinding.recyclerViewZero.layoutManager?.onSaveInstanceState()
             zeroViewModel.load()
         }
     }
@@ -125,13 +126,7 @@ class ZerohedgeFragment : Fragment(), StoryListener {
 
     override fun onResume() {
         super.onResume()
-        showLoader(loader,"")
-        loggedInViewModel.liveFirebaseUser.observe(viewLifecycleOwner) { firebaseUser ->
-            if (firebaseUser != null) {
-                zeroViewModel.liveFirebaseUser.value = firebaseUser
-                zeroViewModel.load()
-            }
-        }
+        zeroViewModel.load()
     }
 
     override fun onStoryClick(story: StoryModel) {

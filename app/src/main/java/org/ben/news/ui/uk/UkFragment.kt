@@ -71,6 +71,7 @@ class UkFragment : Fragment(), StoryListener {
     private fun setSwipeRefresh() {
         fragBinding.swipe.setOnRefreshListener {
             fragBinding.swipe.isRefreshing = true
+            state = fragBinding.recyclerViewUk.layoutManager?.onSaveInstanceState()
             ukViewModel.load()
         }
     }
@@ -127,13 +128,7 @@ class UkFragment : Fragment(), StoryListener {
 
     override fun onResume() {
         super.onResume()
-        showLoader(loader,"")
-        loggedInViewModel.liveFirebaseUser.observe(viewLifecycleOwner) { firebaseUser ->
-            if (firebaseUser != null) {
-                ukViewModel.liveFirebaseUser.value = firebaseUser
-                ukViewModel.load()
-            }
-        }
+        ukViewModel.load()
     }
 
     override fun onPause() {

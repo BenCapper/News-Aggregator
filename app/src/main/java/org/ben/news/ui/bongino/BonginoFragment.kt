@@ -73,6 +73,7 @@ class BonginoFragment : Fragment(), StoryListener {
     private fun setSwipeRefresh() {
         fragBinding.swipe.setOnRefreshListener {
             fragBinding.swipe.isRefreshing = true
+            state = fragBinding.recyclerViewBong.layoutManager?.onSaveInstanceState()
             bonginoViewModel.load()
         }
     }
@@ -132,13 +133,7 @@ class BonginoFragment : Fragment(), StoryListener {
 
     override fun onResume() {
         super.onResume()
-        showLoader(loader,"")
-        loggedInViewModel.liveFirebaseUser.observe(viewLifecycleOwner) { firebaseUser ->
-            if (firebaseUser != null) {
-                bonginoViewModel.liveFirebaseUser.value = firebaseUser
-                bonginoViewModel.load()
-            }
-        }
+        bonginoViewModel.load()
     }
 
     override fun onPause() {

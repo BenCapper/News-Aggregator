@@ -73,6 +73,7 @@ class EuFragment : Fragment(), StoryListener {
     private fun setSwipeRefresh() {
         fragBinding.swipe.setOnRefreshListener {
             fragBinding.swipe.isRefreshing = true
+            state = fragBinding.recyclerViewEu.layoutManager?.onSaveInstanceState()
             euViewModel.load()
         }
     }
@@ -130,13 +131,7 @@ class EuFragment : Fragment(), StoryListener {
 
     override fun onResume() {
         super.onResume()
-        showLoader(loader,"")
-        loggedInViewModel.liveFirebaseUser.observe(viewLifecycleOwner) { firebaseUser ->
-            if (firebaseUser != null) {
-                euViewModel.liveFirebaseUser.value = firebaseUser
-                euViewModel.load()
-            }
-        }
+        euViewModel.load()
     }
 
     override fun onPause() {

@@ -74,6 +74,7 @@ class CanFragment : Fragment(), StoryListener {
     private fun setSwipeRefresh() {
         fragBinding.swipe.setOnRefreshListener {
             fragBinding.swipe.isRefreshing = true
+            state = fragBinding.recyclerViewCan.layoutManager?.onSaveInstanceState()
             canViewModel.load()
         }
     }
@@ -131,13 +132,7 @@ class CanFragment : Fragment(), StoryListener {
 
     override fun onResume() {
         super.onResume()
-        showLoader(loader,"")
-        loggedInViewModel.liveFirebaseUser.observe(viewLifecycleOwner) { firebaseUser ->
-            if (firebaseUser != null) {
-                canViewModel.liveFirebaseUser.value = firebaseUser
-                canViewModel.load()
-            }
-        }
+        canViewModel.load()
     }
 
     override fun onPause() {

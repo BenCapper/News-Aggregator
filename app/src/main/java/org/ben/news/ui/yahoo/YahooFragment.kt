@@ -69,6 +69,7 @@ class YahooFragment : Fragment(), StoryListener {
     private fun setSwipeRefresh() {
         fragBinding.swipe.setOnRefreshListener {
             fragBinding.swipe.isRefreshing = true
+            state = fragBinding.recyclerViewYahoo.layoutManager?.onSaveInstanceState()
             yahooViewModel.load()
         }
     }
@@ -125,13 +126,7 @@ class YahooFragment : Fragment(), StoryListener {
 
     override fun onResume() {
         super.onResume()
-        //showLoader(loader,"")
-        loggedInViewModel.liveFirebaseUser.observe(viewLifecycleOwner) { firebaseUser ->
-            if (firebaseUser != null) {
-                yahooViewModel.liveFirebaseUser.value = firebaseUser
-                yahooViewModel.load()
-            }
-        }
+        yahooViewModel.load()
     }
 
     override fun onPause() {

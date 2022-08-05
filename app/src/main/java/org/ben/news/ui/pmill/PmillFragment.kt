@@ -70,6 +70,7 @@ class PmillFragment : Fragment(), StoryListener {
     private fun setSwipeRefresh() {
         fragBinding.swipe.setOnRefreshListener {
             fragBinding.swipe.isRefreshing = true
+            state = fragBinding.recyclerViewMill.layoutManager?.onSaveInstanceState()
             millViewModel.load()
         }
     }
@@ -128,13 +129,7 @@ class PmillFragment : Fragment(), StoryListener {
 
     override fun onResume() {
         super.onResume()
-        showLoader(loader,"")
-        loggedInViewModel.liveFirebaseUser.observe(viewLifecycleOwner) { firebaseUser ->
-            if (firebaseUser != null) {
-                millViewModel.liveFirebaseUser.value = firebaseUser
-                millViewModel.load()
-            }
-        }
+        millViewModel.load()
     }
 
     override fun onPause() {

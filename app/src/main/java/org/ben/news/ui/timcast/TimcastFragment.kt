@@ -69,6 +69,7 @@ class TimcastFragment : Fragment(), StoryListener {
     private fun setSwipeRefresh() {
         fragBinding.swipe.setOnRefreshListener {
             fragBinding.swipe.isRefreshing = true
+            state = fragBinding.recyclerViewTim.layoutManager?.onSaveInstanceState()
             timViewModel.load()
         }
     }
@@ -126,13 +127,7 @@ class TimcastFragment : Fragment(), StoryListener {
 
     override fun onResume() {
         super.onResume()
-        showLoader(loader,"")
-        loggedInViewModel.liveFirebaseUser.observe(viewLifecycleOwner) { firebaseUser ->
-            if (firebaseUser != null) {
-                timViewModel.liveFirebaseUser.value = firebaseUser
-                timViewModel.load()
-            }
-        }
+        timViewModel.load()
     }
 
     override fun onStoryClick(story: StoryModel) {

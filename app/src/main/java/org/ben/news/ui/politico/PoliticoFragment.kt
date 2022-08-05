@@ -69,6 +69,7 @@ class PoliticoFragment : Fragment(), StoryListener {
     private fun setSwipeRefresh() {
         fragBinding.swipe.setOnRefreshListener {
             fragBinding.swipe.isRefreshing = true
+            state = fragBinding.recyclerViewPol.layoutManager?.onSaveInstanceState()
             politicoViewModel.load()
         }
     }
@@ -126,13 +127,7 @@ class PoliticoFragment : Fragment(), StoryListener {
 
     override fun onResume() {
         super.onResume()
-        //showLoader(loader,"")
-        loggedInViewModel.liveFirebaseUser.observe(viewLifecycleOwner) { firebaseUser ->
-            if (firebaseUser != null) {
-                politicoViewModel.liveFirebaseUser.value = firebaseUser
-                politicoViewModel.load()
-            }
-        }
+        politicoViewModel.load()
     }
 
     override fun onPause() {

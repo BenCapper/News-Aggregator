@@ -70,6 +70,7 @@ class SkyFragment : Fragment(), StoryListener {
     private fun setSwipeRefresh() {
         fragBinding.swipe.setOnRefreshListener {
             fragBinding.swipe.isRefreshing = true
+            state = fragBinding.recyclerViewSky.layoutManager?.onSaveInstanceState()
             skyViewModel.load()
         }
     }
@@ -126,13 +127,7 @@ class SkyFragment : Fragment(), StoryListener {
 
     override fun onResume() {
         super.onResume()
-        showLoader(loader,"")
-        loggedInViewModel.liveFirebaseUser.observe(viewLifecycleOwner) { firebaseUser ->
-            if (firebaseUser != null) {
-                skyViewModel.liveFirebaseUser.value = firebaseUser
-                skyViewModel.load()
-            }
-        }
+        skyViewModel.load()
     }
 
     override fun onPause() {

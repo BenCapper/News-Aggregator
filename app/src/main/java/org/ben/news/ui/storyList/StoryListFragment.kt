@@ -71,6 +71,7 @@ class StoryListFragment : Fragment(), StoryListener {
     private fun setSwipeRefresh() {
         fragBinding.swipe.setOnRefreshListener {
             fragBinding.swipe.isRefreshing = true
+            state = fragBinding.recyclerView.layoutManager?.onSaveInstanceState()
             storyListViewModel.load()
         }
     }
@@ -127,13 +128,7 @@ class StoryListFragment : Fragment(), StoryListener {
 
     override fun onResume() {
         super.onResume()
-        //showLoader(loader,"")
-        loggedInViewModel.liveFirebaseUser.observe(viewLifecycleOwner) { firebaseUser ->
-            if (firebaseUser != null) {
-                storyListViewModel.liveFirebaseUser.value = firebaseUser
-                storyListViewModel.load()
-            }
-        }
+        storyListViewModel.load()
     }
 
     override fun onPause() {

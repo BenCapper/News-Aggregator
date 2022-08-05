@@ -71,6 +71,7 @@ class GbFragment : Fragment(), StoryListener {
     private fun setSwipeRefresh() {
         fragBinding.swipe.setOnRefreshListener {
             fragBinding.swipe.isRefreshing = true
+            state = fragBinding.recyclerViewGb.layoutManager?.onSaveInstanceState()
             gbViewModel.load()
         }
     }
@@ -129,13 +130,7 @@ class GbFragment : Fragment(), StoryListener {
 
     override fun onResume() {
         super.onResume()
-        showLoader(loader,"")
-        loggedInViewModel.liveFirebaseUser.observe(viewLifecycleOwner) { firebaseUser ->
-            if (firebaseUser != null) {
-                gbViewModel.liveFirebaseUser.value = firebaseUser
-                gbViewModel.load()
-            }
-        }
+        gbViewModel.load()
     }
 
     override fun onPause() {

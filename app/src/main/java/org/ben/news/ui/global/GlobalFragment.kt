@@ -71,6 +71,7 @@ class GlobalFragment : Fragment(), StoryListener {
     private fun setSwipeRefresh() {
         fragBinding.swipe.setOnRefreshListener {
             fragBinding.swipe.isRefreshing = true
+            state = fragBinding.recyclerViewGlo.layoutManager?.onSaveInstanceState()
             gloViewModel.load()
         }
     }
@@ -127,13 +128,7 @@ class GlobalFragment : Fragment(), StoryListener {
 
     override fun onResume() {
         super.onResume()
-        //showLoader(loader,"")
-        loggedInViewModel.liveFirebaseUser.observe(viewLifecycleOwner) { firebaseUser ->
-            if (firebaseUser != null) {
-                gloViewModel.liveFirebaseUser.value = firebaseUser
-                gloViewModel.load()
-            }
-        }
+        gloViewModel.load()
     }
 
     override fun onPause() {

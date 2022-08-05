@@ -69,6 +69,7 @@ class GriptFragment : Fragment(), StoryListener {
     private fun setSwipeRefresh() {
         fragBinding.swipe.setOnRefreshListener {
             fragBinding.swipe.isRefreshing = true
+            state = fragBinding.recyclerViewGript.layoutManager?.onSaveInstanceState()
             griptViewModel.load()
         }
     }
@@ -126,13 +127,7 @@ class GriptFragment : Fragment(), StoryListener {
 
     override fun onResume() {
         super.onResume()
-        showLoader(loader,"")
-        loggedInViewModel.liveFirebaseUser.observe(viewLifecycleOwner) { firebaseUser ->
-            if (firebaseUser != null) {
-                griptViewModel.liveFirebaseUser.value = firebaseUser
-                griptViewModel.load()
-            }
-        }
+        griptViewModel.load()
     }
 
     override fun onPause() {

@@ -69,6 +69,7 @@ class RevolverFragment : Fragment(), StoryListener {
     private fun setSwipeRefresh() {
         fragBinding.swipe.setOnRefreshListener {
             fragBinding.swipe.isRefreshing = true
+            state = fragBinding.recyclerViewRev.layoutManager?.onSaveInstanceState()
             revViewModel.load()
         }
     }
@@ -126,13 +127,7 @@ class RevolverFragment : Fragment(), StoryListener {
 
     override fun onResume() {
         super.onResume()
-        showLoader(loader,"")
-        loggedInViewModel.liveFirebaseUser.observe(viewLifecycleOwner) { firebaseUser ->
-            if (firebaseUser != null) {
-                revViewModel.liveFirebaseUser.value = firebaseUser
-                revViewModel.load()
-            }
-        }
+        revViewModel.load()
     }
 
     override fun onPause() {

@@ -69,6 +69,7 @@ class VoxFragment : Fragment(), StoryListener {
     private fun setSwipeRefresh() {
         fragBinding.swipe.setOnRefreshListener {
             fragBinding.swipe.isRefreshing = true
+            state = fragBinding.recyclerViewVox.layoutManager?.onSaveInstanceState()
             voxViewModel.load()
         }
     }
@@ -125,13 +126,7 @@ class VoxFragment : Fragment(), StoryListener {
 
     override fun onResume() {
         super.onResume()
-        //showLoader(loader,"")
-        loggedInViewModel.liveFirebaseUser.observe(viewLifecycleOwner) { firebaseUser ->
-            if (firebaseUser != null) {
-                voxViewModel.liveFirebaseUser.value = firebaseUser
-                voxViewModel.load()
-            }
-        }
+        voxViewModel.load()
     }
 
     override fun onPause() {

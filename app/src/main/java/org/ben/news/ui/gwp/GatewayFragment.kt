@@ -69,6 +69,7 @@ class GatewayFragment : Fragment(), StoryListener {
     private fun setSwipeRefresh() {
         fragBinding.swipe.setOnRefreshListener {
             fragBinding.swipe.isRefreshing = true
+            state = fragBinding.recyclerViewGate.layoutManager?.onSaveInstanceState()
             gateViewModel.load()
         }
     }
@@ -131,13 +132,8 @@ class GatewayFragment : Fragment(), StoryListener {
 
     override fun onResume() {
         super.onResume()
-        showLoader(loader,"")
-        loggedInViewModel.liveFirebaseUser.observe(viewLifecycleOwner) { firebaseUser ->
-            if (firebaseUser != null) {
-                gateViewModel.liveFirebaseUser.value = firebaseUser
-                gateViewModel.load()
-            }
-        }
+        gateViewModel.load()
+
     }
 
     override fun onStoryClick(story: StoryModel) {

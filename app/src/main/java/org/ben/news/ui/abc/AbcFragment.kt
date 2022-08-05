@@ -74,6 +74,7 @@ class AbcFragment : Fragment(), StoryListener {
     private fun setSwipeRefresh() {
         fragBinding.swipe.setOnRefreshListener {
             fragBinding.swipe.isRefreshing = true
+            state = fragBinding.recyclerViewAbc.layoutManager?.onSaveInstanceState()
             abcViewModel.load()
         }
     }
@@ -130,13 +131,7 @@ class AbcFragment : Fragment(), StoryListener {
 
     override fun onResume() {
         super.onResume()
-        //showLoader(loader,"")
-        loggedInViewModel.liveFirebaseUser.observe(viewLifecycleOwner) { firebaseUser ->
-            if (firebaseUser != null) {
-                abcViewModel.liveFirebaseUser.value = firebaseUser
-                abcViewModel.load()
-            }
-        }
+        abcViewModel.load()
     }
 
     override fun onPause() {
