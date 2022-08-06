@@ -191,7 +191,7 @@ class StoryListFragment : Fragment(), StoryListener {
                 val params = fragBinding.root.layoutParams as FrameLayout.LayoutParams
                 params.gravity = Gravity.CENTER_HORIZONTAL
                 view?.snack(R.string.saved_article)}
-            cancelButton{ view?.snack(R.string.saved_article)}
+            cancelButton{ view?.snack(R.string.save_can)}
         }?.onShow {
             positiveButton.textColorResource = R.color.black
             negativeButton.textColorResource = splitties.material.colors.R.color.grey_500
