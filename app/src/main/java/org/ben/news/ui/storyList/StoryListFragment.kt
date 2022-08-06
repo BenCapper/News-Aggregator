@@ -4,14 +4,18 @@ import android.app.AlertDialog
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.content.res.Configuration
+import android.graphics.Color.green
 
 import android.net.Uri
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.*
+import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.SearchView
 import androidx.appcompat.view.menu.MenuView
+import androidx.core.graphics.drawable.toDrawable
+import androidx.core.view.allViews
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -28,7 +32,11 @@ import org.ben.news.helpers.hideLoader
 import org.ben.news.helpers.showLoader
 import org.ben.news.models.StoryModel
 import org.ben.news.ui.auth.LoggedInViewModel
+import splitties.alertdialog.appcompat.*
+import splitties.resources.drawable
 import splitties.snackbar.snack
+import splitties.views.textAppearance
+import splitties.views.textColorResource
 import timber.log.Timber
 
 
@@ -177,8 +185,20 @@ class StoryListFragment : Fragment(), StoryListener {
     }
 
     override fun onLike(story: StoryModel) {
-        StoryManager.create(loggedInViewModel.liveFirebaseUser.value!!.uid,"likes", story)
-        view?.snack(R.string.saved_article)
+        activity?.alertDialog {
+            messageResource = R.string.save_art
+            okButton { StoryManager.create(loggedInViewModel.liveFirebaseUser.value!!.uid,"likes", story)
+                val params = fragBinding.root.layoutParams as FrameLayout.LayoutParams
+                params.gravity = Gravity.CENTER_HORIZONTAL
+                view?.snack(R.string.saved_article)}
+            cancelButton{ view?.snack(R.string.save_can)}
+        }?.onShow {
+            positiveButton.textColorResource = R.color.black
+            negativeButton.textColorResource = splitties.material.colors.R.color.grey_500
+            positiveButton.text = "Confirm"
+            negativeButton.text = "Cancel"
+        }?.show()
+
     }
 
     override fun onShare(story: StoryModel) {
