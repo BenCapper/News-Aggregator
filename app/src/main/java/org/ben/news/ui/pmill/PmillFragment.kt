@@ -6,6 +6,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.*
+import android.widget.FrameLayout
 import androidx.fragment.app.Fragment
 import android.widget.ImageView
 import android.widget.SearchView
@@ -22,7 +23,9 @@ import org.ben.news.helpers.hideLoader
 import org.ben.news.helpers.showLoader
 import org.ben.news.models.StoryModel
 import org.ben.news.ui.auth.LoggedInViewModel
+import splitties.alertdialog.appcompat.*
 import splitties.snackbar.snack
+import splitties.views.textColorResource
 
 
 class PmillFragment : Fragment(), StoryListener {
@@ -145,8 +148,19 @@ class PmillFragment : Fragment(), StoryListener {
     }
 
     override fun onLike(story: StoryModel) {
-        StoryManager.create(loggedInViewModel.liveFirebaseUser.value!!.uid,"likes", story)
-        view?.snack(R.string.saved_article)
+        activity?.alertDialog {
+            messageResource = R.string.save_art
+            okButton { StoryManager.create(loggedInViewModel.liveFirebaseUser.value!!.uid,"likes", story)
+                val params = fragBinding.root.layoutParams as FrameLayout.LayoutParams
+                params.gravity = Gravity.CENTER_HORIZONTAL
+                view?.snack(R.string.saved_article)}
+            cancelButton{ view?.snack(R.string.save_can)}
+        }?.onShow {
+            positiveButton.textColorResource = R.color.black
+            negativeButton.textColorResource = splitties.material.colors.R.color.grey_500
+            positiveButton.text = "Confirm"
+            negativeButton.text = "Cancel"
+        }?.show()
     }
 
     override fun onShare(story: StoryModel) {
