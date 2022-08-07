@@ -114,12 +114,10 @@ class SkyFragment : Fragment(), StoryListener {
                 return true
             }
         })
-        searchView.setOnCloseListener ( object : SearchView.OnCloseListener{
-            override fun onClose(): Boolean {
-                skyViewModel.load()
-                return false
-            }
-        })
+        searchView.setOnCloseListener {
+            skyViewModel.load()
+            false
+        }
         super.onCreateOptionsMenu(menu, inflater)
     }
 

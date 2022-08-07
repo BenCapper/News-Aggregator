@@ -116,12 +116,10 @@ class GbFragment : Fragment(), StoryListener {
                 return true
             }
         })
-        searchView.setOnCloseListener ( object : SearchView.OnCloseListener{
-            override fun onClose(): Boolean {
-                gbViewModel.load()
-                return false
-            }
-        })
+        searchView.setOnCloseListener {
+            gbViewModel.load()
+            false
+        }
         super.onCreateOptionsMenu(menu, inflater)
     }
 
