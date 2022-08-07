@@ -114,12 +114,10 @@ class TimcastFragment : Fragment(), StoryListener {
                 return true
             }
         })
-        searchView.setOnCloseListener ( object : SearchView.OnCloseListener{
-            override fun onClose(): Boolean {
-                timViewModel.load()
-                return false
-            }
-        })
+        searchView.setOnCloseListener {
+            timViewModel.load()
+            false
+        }
         super.onCreateOptionsMenu(menu, inflater)
     }
 

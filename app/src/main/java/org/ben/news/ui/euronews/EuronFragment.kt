@@ -115,12 +115,10 @@ class EuronFragment : Fragment(), StoryListener {
                 return true
             }
         })
-        searchView.setOnCloseListener ( object : SearchView.OnCloseListener{
-            override fun onClose(): Boolean {
-                euViewModel.load()
-                return false
-            }
-        })
+        searchView.setOnCloseListener {
+            euViewModel.load()
+            false
+        }
         super.onCreateOptionsMenu(menu, inflater)
     }
 

@@ -115,12 +115,10 @@ class GlobalFragment : Fragment(), StoryListener {
                 return true
             }
         })
-        searchView.setOnCloseListener ( object : SearchView.OnCloseListener{
-            override fun onClose(): Boolean {
-                gloViewModel.load()
-                return false
-            }
-        })
+        searchView.setOnCloseListener {
+            gloViewModel.load()
+            false
+        }
         super.onCreateOptionsMenu(menu, inflater)
     }
 

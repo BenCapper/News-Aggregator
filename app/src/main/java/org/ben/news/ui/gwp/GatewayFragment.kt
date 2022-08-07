@@ -113,12 +113,10 @@ class GatewayFragment : Fragment(), StoryListener {
                 return true
             }
         })
-        searchView.setOnCloseListener ( object : SearchView.OnCloseListener{
-            override fun onClose(): Boolean {
-                gateViewModel.load()
-                return false
-            }
-        })
+        searchView.setOnCloseListener {
+            gateViewModel.load()
+            false
+        }
         super.onCreateOptionsMenu(menu, inflater)
     }
 

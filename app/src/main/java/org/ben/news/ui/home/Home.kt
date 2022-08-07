@@ -2,28 +2,40 @@ package org.ben.news.ui.home
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.content.SharedPreferences
+import android.content.res.Configuration
 import android.net.Uri
 import android.os.Bundle
+import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.Switch
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO
+import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES
 import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.*
+import androidx.preference.PreferenceManager
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.internal.NavigationMenuItemView
 import com.google.firebase.auth.FirebaseUser
-import org.ben.news.ui.auth.LoggedInViewModel
-import org.ben.news.databinding.HomeBinding
 import org.ben.news.R
+import org.ben.news.databinding.HomeBinding
 import org.ben.news.databinding.NavHeaderBinding
 import org.ben.news.firebase.FirebaseImageManager
 import org.ben.news.helpers.readImageUri
 import org.ben.news.helpers.showImagePicker
+import org.ben.news.ui.auth.LoggedInViewModel
 import org.ben.news.ui.auth.Login
+import org.ben.news.ui.storyList.StoryListViewModel
 import timber.log.Timber
 
 
@@ -36,6 +48,7 @@ class Home : AppCompatActivity() {
     private lateinit var loggedInViewModel : LoggedInViewModel
     private lateinit var headerView : View
     private lateinit var intentLauncher : ActivityResultLauncher<Intent>
+    private lateinit var sharedPreferences: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -353,6 +366,23 @@ class Home : AppCompatActivity() {
         Timber.i("UserId = ${loggedInViewModel.liveFirebaseUser.value!!.uid}")
     }
 
+    fun theme(item: MenuItem) {
+        val currentNightMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
+        when (currentNightMode) {
+            Configuration.UI_MODE_NIGHT_NO -> {
+                sharedPreferences.edit().clear().commit()
+                sharedPreferences.edit().putString("night_mode", "night_mode").commit()
+                AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_YES)
+            }
+            Configuration.UI_MODE_NIGHT_YES -> {
+                sharedPreferences.edit().clear().commit()
+                sharedPreferences.edit().putString("light_mode", "light_mode").commit()
+                AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_NO)
+
+            }
+        }
+    }
 
     private fun registerImagePickerCallback() {
         intentLauncher =

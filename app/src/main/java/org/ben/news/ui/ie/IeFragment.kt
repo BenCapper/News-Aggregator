@@ -115,12 +115,10 @@ class IeFragment : Fragment(), StoryListener {
                 return true
             }
         })
-        searchView.setOnCloseListener ( object : SearchView.OnCloseListener{
-            override fun onClose(): Boolean {
-                ieViewModel.load()
-                return false
-            }
-        })
+        searchView.setOnCloseListener {
+            ieViewModel.load()
+            false
+        }
         super.onCreateOptionsMenu(menu, inflater)
     }
 

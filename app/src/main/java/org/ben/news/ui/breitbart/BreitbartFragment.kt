@@ -116,13 +116,10 @@ class BreitbartFragment : Fragment(), StoryListener {
                 return true
             }
         })
-        searchView.setOnCloseListener ( object : SearchView.OnCloseListener{
-            override fun onClose(): Boolean {
-                breitbartViewModel.load()
-                return false
-            }
-
-        })
+        searchView.setOnCloseListener {
+            breitbartViewModel.load()
+            false
+        }
         super.onCreateOptionsMenu(menu, inflater)
     }
 

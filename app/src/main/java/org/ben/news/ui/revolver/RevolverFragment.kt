@@ -114,12 +114,10 @@ class RevolverFragment : Fragment(), StoryListener {
                 return true
             }
         })
-        searchView.setOnCloseListener ( object : SearchView.OnCloseListener{
-            override fun onClose(): Boolean {
-                revViewModel.load()
-                return false
-            }
-        })
+        searchView.setOnCloseListener {
+            revViewModel.load()
+            false
+        }
         super.onCreateOptionsMenu(menu, inflater)
     }
 

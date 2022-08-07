@@ -125,7 +125,12 @@ class LikedListFragment : Fragment(), StoryNoSaveListener {
                 }
                 return true
             }
+
         })
+        searchView.setOnCloseListener {
+            likedListViewModel.load()
+            false
+        }
         super.onCreateOptionsMenu(menu, inflater)
     }
 

@@ -113,12 +113,10 @@ class YahooFragment : Fragment(), StoryListener {
                 return true
             }
         })
-        searchView.setOnCloseListener ( object : SearchView.OnCloseListener{
-            override fun onClose(): Boolean {
-                yahooViewModel.load()
-                return false
-            }
-        })
+        searchView.setOnCloseListener {
+            yahooViewModel.load()
+            false
+        }
         super.onCreateOptionsMenu(menu, inflater)
     }
 

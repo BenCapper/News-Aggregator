@@ -114,12 +114,10 @@ class RteFragment : Fragment(), StoryListener {
                 return true
             }
         })
-        searchView.setOnCloseListener ( object : SearchView.OnCloseListener{
-            override fun onClose(): Boolean {
-                rteViewModel.load()
-                return false
-            }
-        })
+        searchView.setOnCloseListener {
+            rteViewModel.load()
+            false
+        }
         super.onCreateOptionsMenu(menu, inflater)
     }
 

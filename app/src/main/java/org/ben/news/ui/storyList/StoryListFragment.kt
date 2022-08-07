@@ -132,13 +132,10 @@ class StoryListFragment : Fragment(), StoryListener {
                 return true
             }
         })
-        searchView.setOnCloseListener ( object : SearchView.OnCloseListener{
-            override fun onClose(): Boolean {
-                storyListViewModel.load()
-                return false
-            }
-
-        })
+        searchView.setOnCloseListener {
+            storyListViewModel.load()
+            false
+        }
         super.onCreateOptionsMenu(menu, inflater)
     }
 
