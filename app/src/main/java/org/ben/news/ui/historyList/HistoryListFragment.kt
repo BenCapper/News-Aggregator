@@ -128,6 +128,10 @@ class HistoryListFragment : Fragment(), StoryListener {
                 return true
             }
         })
+        searchView.setOnCloseListener {
+            historyListViewModel.load()
+            false
+        }
         super.onCreateOptionsMenu(menu, inflater)
     }
 
