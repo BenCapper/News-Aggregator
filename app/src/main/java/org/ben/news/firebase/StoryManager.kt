@@ -352,7 +352,12 @@ object StoryManager : StoryStore {
                         val children = snapshot.children
                         children.forEach {
                             if (it.getValue(StoryModel::class.java)?.title!!.contains(term, true) &&
+                                it.getValue(StoryModel::class.java)?.outlet!! in outlets ||
+                                it.getValue(StoryModel::class.java)?.outlet!!.contains(term, true) &&
+                                it.getValue(StoryModel::class.java)?.outlet!! in outlets ||
+                                it.getValue(StoryModel::class.java)?.date!!.contains(term, true) &&
                                 it.getValue(StoryModel::class.java)?.outlet!! in outlets
+
                             ) {
                                 val story = it.getValue(StoryModel::class.java)
                                 story?.title = story?.title?.let { it -> formatTitle(it) }.toString()
