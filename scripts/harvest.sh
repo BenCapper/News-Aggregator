@@ -5,6 +5,7 @@ python3 blaze.py;
 python3 bongino.py;
 python3 breitbart.py;
 python3 cbs.py;
+python3 beast.py
 python3 dailycaller.py;
 python3 euronews.py;
 python3 gbnews.py;
