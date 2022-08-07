@@ -123,6 +123,9 @@
         <action
             android:id="@+id/action_storyListFragment_to_usFragment"
             app:destination="@id/usFragment" />
+        <action
+            android:id="@+id/action_storyListFragment_to_spikedFragment"
+            app:destination="@id/spikedFragment" />
     </fragment>
     <fragment
         android:id="@+id/likedListFragment"
@@ -259,4 +262,9 @@
         android:name="org.ben.news.ui.us.UsFragment"
         android:label="fragment_us"
         tools:layout="@layout/fragment_us" />
+    <fragment
+        android:id="@+id/spikedFragment"
+        android:name="org.ben.news.ui.spiked.SpikedFragment"
+        android:label="fragment_spiked"
+        tools:layout="@layout/fragment_spiked" />
 </navigation>

@@ -32,6 +32,7 @@
     <string name="bongino">Bongino Report</string>
     <string name="zerohedge">Zerohedge</string>
     <string name="gbnews">GB News</string>
+    <string name="spiked">Spiked</string>
     <string name="breitbart">Breitbart</string>
     <string name="dailycaller">The Daily Caller</string>
     <string name="gript">Gript</string>
@@ -50,6 +51,7 @@
     <string name="rev">Revolver News</string>
     <string name="left">Leans Left</string>
     <string name="right">Leans Right</string>
+    <string name="your">Your Articles</string>
     <string name="promoted">Ad</string>
     <string name="us">US</string>
     <string name="eu">EU</string>
