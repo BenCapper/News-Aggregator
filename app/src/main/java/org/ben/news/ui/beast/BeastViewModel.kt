@@ -1,26 +1,19 @@
-package org.ben.news.ui.us
+package org.ben.news.ui.beast
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseUser
 import org.ben.news.firebase.StoryManager
-import org.ben.news.firebase.StoryManager.getDates
 import org.ben.news.models.StoryModel
 import timber.log.Timber
-import java.text.SimpleDateFormat
-import java.time.LocalDate
-import java.util.*
-import kotlin.collections.ArrayList
 
-
-class UsViewModel : ViewModel() {
-
-    private val usList =
+class BeastViewModel : ViewModel() {
+    private val beastList =
         MutableLiveData<List<StoryModel>>()
 
-    val observableUsList: LiveData<List<StoryModel>>
-        get() = usList
+    val observableBeastList: LiveData<List<StoryModel>>
+        get() = beastList
 
     private val story = MutableLiveData<StoryModel>()
 
@@ -32,28 +25,16 @@ class UsViewModel : ViewModel() {
 
     init { load() }
 
-    private val outlets = listOf("www.TheBlaze.com",
-        "www.Timcast.com",
-        "www.Zerohedge.com",
-        "www.Breitbart.com",
-        "www.Revolver.news",
-        "www.DailyCaller.com",
-        "www.TheDailyBeast.com",
-        "www.TheGatewayPundit.com",
-        "www.Politico.com",
-        "www.CbsNews.com",
-        "AbcNews.go.com",
-        "news.Yahoo.com",
-        "www.Vox.com")
+    private val outlet = "www.TheDailyBeast.com"
 
 
     fun load() {
         val list: ArrayList<String>
         try {
-            list = getDates(5)
+            list = StoryManager.getDates(5)
             list.sortDescending()
-            StoryManager.findByOutlets(list,outlets,usList)
-            Timber.i("Load Success : ${usList.value}")
+            StoryManager.findByOutlet(list,outlet,beastList)
+            Timber.i("Load Success : ${beastList.value}")
         }
         catch (e: Exception) {
             Timber.i("Load Error : $e.message")
@@ -63,9 +44,9 @@ class UsViewModel : ViewModel() {
     fun search( term: String) {
         val dates: ArrayList<String>
         try {
-            dates = getDates(5)
+            dates = StoryManager.getDates(5)
             dates.sortDescending()
-            StoryManager.searchByOutlets(dates,term,outlets,usList)
+            StoryManager.searchByOutlet(dates,term,outlet,beastList)
             Timber.i("Search Success")
         }
         catch (e: java.lang.Exception) {

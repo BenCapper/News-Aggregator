@@ -110,30 +110,35 @@
                 android:onClick="euronArticles"
                 android:title="@string/euron" />
             <item
-                android:id="@+id/menupol"
+                android:id="@+id/menuabc"
                 android:icon="@drawable/usicon"
-                android:onClick="politicoArticles"
-                android:title="@string/politico" />
+                android:onClick="abcArticles"
+                android:title="@string/abc" />
             <item
                 android:id="@+id/menucbs"
                 android:icon="@drawable/usicon"
                 android:onClick="cbsArticles"
                 android:title="@string/cbs" />
             <item
-                android:id="@+id/menuabc"
+                android:id="@+id/menuvox"
                 android:icon="@drawable/usicon"
-                android:onClick="abcArticles"
-                android:title="@string/abc" />
+                android:onClick="voxArticles"
+                android:title="@string/vox" />
+            <item
+                android:id="@+id/menupol"
+                android:icon="@drawable/usicon"
+                android:onClick="politicoArticles"
+                android:title="@string/politico" />
             <item
                 android:id="@+id/menuyah"
                 android:icon="@drawable/usicon"
                 android:onClick="yahArticles"
                 android:title="@string/yah" />
             <item
-                android:id="@+id/menuvox"
+                android:id="@+id/menubeast"
                 android:icon="@drawable/usicon"
-                android:onClick="voxArticles"
-                android:title="@string/vox" />
+                android:onClick="beastArticles"
+                android:title="@string/beast" />
             <item
                 android:id="@+id/menuglo"
                 android:icon="@drawable/canicon"

@@ -150,6 +150,11 @@
             app:destination="@id/spikedFragment"
             app:enterAnim="@anim/nav_default_enter_anim"
             app:exitAnim="@anim/nav_default_exit_anim" />
+        <action
+            android:id="@+id/action_storyListFragment_to_beastFragment"
+            app:destination="@id/beastFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim" />
     </fragment>
     <fragment
         android:id="@+id/likedListFragment"
@@ -291,4 +296,9 @@
         android:name="org.ben.news.ui.spiked.SpikedFragment"
         android:label="fragment_spiked"
         tools:layout="@layout/fragment_spiked" />
+    <fragment
+        android:id="@+id/beastFragment"
+        android:name="org.ben.news.ui.beast.BeastFragment"
+        android:label="fragment_beast"
+        tools:layout="@layout/fragment_beast" />
 </navigation>
