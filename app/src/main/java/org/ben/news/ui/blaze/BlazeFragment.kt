@@ -118,13 +118,10 @@ class BlazeFragment : Fragment(), StoryListener {
                 return true
             }
         })
-        searchView.setOnCloseListener ( object : SearchView.OnCloseListener{
-            override fun onClose(): Boolean {
-                blazeViewModel.load()
-                return false
-            }
-
-        })
+        searchView.setOnCloseListener {
+            blazeViewModel.load()
+            false
+        }
         super.onCreateOptionsMenu(menu, inflater)
     }
 

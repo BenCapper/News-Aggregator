@@ -113,12 +113,10 @@ class VoxFragment : Fragment(), StoryListener {
                 return true
             }
         })
-        searchView.setOnCloseListener ( object : SearchView.OnCloseListener{
-            override fun onClose(): Boolean {
-                voxViewModel.load()
-                return false
-            }
-        })
+        searchView.setOnCloseListener {
+            voxViewModel.load()
+            false
+        }
         super.onCreateOptionsMenu(menu, inflater)
     }
 

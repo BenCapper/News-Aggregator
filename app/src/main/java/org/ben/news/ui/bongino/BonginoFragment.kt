@@ -117,13 +117,10 @@ class BonginoFragment : Fragment(), StoryListener {
                 return true
             }
         })
-        searchView.setOnCloseListener ( object : SearchView.OnCloseListener{
-            override fun onClose(): Boolean {
-                bonginoViewModel.load()
-                return false
-            }
-
-        })
+        searchView.setOnCloseListener {
+            bonginoViewModel.load()
+            false
+        }
         super.onCreateOptionsMenu(menu, inflater)
     }
 

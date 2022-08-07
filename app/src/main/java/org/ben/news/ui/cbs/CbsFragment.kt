@@ -118,12 +118,10 @@ class CbsFragment : Fragment(), StoryListener {
                 return true
             }
         })
-        searchView.setOnCloseListener ( object : SearchView.OnCloseListener{
-            override fun onClose(): Boolean {
-                cbsViewModel.load()
-                return false
-            }
-        })
+        searchView.setOnCloseListener {
+            cbsViewModel.load()
+            false
+        }
         super.onCreateOptionsMenu(menu, inflater)
     }
 

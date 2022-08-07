@@ -113,12 +113,10 @@ class ZerohedgeFragment : Fragment(), StoryListener {
                 return true
             }
         })
-        searchView.setOnCloseListener ( object : SearchView.OnCloseListener{
-            override fun onClose(): Boolean {
-                zeroViewModel.load()
-                return false
-            }
-        })
+        searchView.setOnCloseListener {
+            zeroViewModel.load()
+            false
+        }
         super.onCreateOptionsMenu(menu, inflater)
     }
 
