@@ -86,6 +86,7 @@ class Home : AppCompatActivity() {
             R.id.revolverFragment,
             R.id.rteFragment,
             R.id.skyFragment,
+            R.id.spikedFragment,
             R.id.timcastFragment,
             R.id.voxFragment,
             R.id.yahooFragment,
@@ -294,6 +295,12 @@ class Home : AppCompatActivity() {
         Timber.i("UserId = ${loggedInViewModel.liveFirebaseUser.value!!.uid}")
     }
 
+    fun spikeArticles(item: MenuItem) {
+        findNavController(R.id.nav_host_fragment).navigate(R.id.spikedFragment)
+        findViewById<DrawerLayout>(R.id.drawer_layout).closeDrawers()
+        Timber.i("UserId = ${loggedInViewModel.liveFirebaseUser.value!!.uid}")
+    }
+
     fun rteArticles(item: MenuItem) {
         findNavController(R.id.nav_host_fragment).navigate(R.id.rteFragment)
         findViewById<DrawerLayout>(R.id.drawer_layout).closeDrawers()
@@ -382,6 +389,8 @@ class Home : AppCompatActivity() {
 
             }
         }
+        findNavController(R.id.nav_host_fragment).navigate(R.id.storyListFragment)
+        findViewById<DrawerLayout>(R.id.drawer_layout).closeDrawers()
     }
 
     private fun registerImagePickerCallback() {

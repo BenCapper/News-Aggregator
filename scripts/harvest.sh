@@ -16,6 +16,7 @@ python3 politico.py;
 python3 revolver.py;
 python3 rte.py;
 python3 skyuk.py;
+python3 spiked.py;
 python3 timcast.py;
 python3 vox.py;
 python3 yahoo.py;

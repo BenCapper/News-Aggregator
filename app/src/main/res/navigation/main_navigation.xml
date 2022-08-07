@@ -92,37 +92,64 @@
             app:exitAnim="@anim/nav_default_exit_anim" />
         <action
             android:id="@+id/action_storyListFragment_to_abcFragment"
-            app:destination="@id/abcFragment" />
+            app:destination="@id/abcFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim" />
         <action
             android:id="@+id/action_storyListFragment_to_cbsFragment"
-            app:destination="@id/cbsFragment" />
+            app:destination="@id/cbsFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim" />
         <action
             android:id="@+id/action_storyListFragment_to_yahooFragment"
-            app:destination="@id/yahooFragment" />
+            app:destination="@id/yahooFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim" />
         <action
             android:id="@+id/action_storyListFragment_to_globalFragment"
-            app:destination="@id/globalFragment" />
+            app:destination="@id/globalFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim" />
         <action
             android:id="@+id/action_storyListFragment_to_voxFragment"
-            app:destination="@id/voxFragment" />
+            app:destination="@id/voxFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim" />
         <action
             android:id="@+id/action_storyListFragment_to_euronFragment"
-            app:destination="@id/euronFragment" />
+            app:destination="@id/euronFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim" />
         <action
             android:id="@+id/action_storyListFragment_to_canFragment"
-            app:destination="@id/canFragment" />
+            app:destination="@id/canFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim" />
         <action
             android:id="@+id/action_storyListFragment_to_euFragment"
-            app:destination="@id/euFragment" />
+            app:destination="@id/euFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim" />
         <action
             android:id="@+id/action_storyListFragment_to_ieFragment"
-            app:destination="@id/ieFragment" />
+            app:destination="@id/ieFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim" />
         <action
             android:id="@+id/action_storyListFragment_to_ukFragment"
-            app:destination="@id/ukFragment" />
+            app:destination="@id/ukFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim" />
         <action
             android:id="@+id/action_storyListFragment_to_usFragment"
-            app:destination="@id/usFragment" />
+            app:destination="@id/usFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim" />
+        <action
+            android:id="@+id/action_storyListFragment_to_spikedFragment"
+            app:destination="@id/spikedFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim" />
     </fragment>
     <fragment
         android:id="@+id/likedListFragment"
@@ -259,4 +286,9 @@
         android:name="org.ben.news.ui.us.UsFragment"
         android:label="fragment_us"
         tools:layout="@layout/fragment_us" />
+    <fragment
+        android:id="@+id/spikedFragment"
+        android:name="org.ben.news.ui.spiked.SpikedFragment"
+        android:label="fragment_spiked"
+        tools:layout="@layout/fragment_spiked" />
 </navigation>

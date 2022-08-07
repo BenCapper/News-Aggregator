@@ -13,7 +13,7 @@
                 android:title="@string/home" />
         </menu>
     </item>
-    <item android:title="@string/account">
+    <item android:title="@string/your">
         <menu>
             <item
                 android:id="@+id/nav_liked"
@@ -34,6 +34,11 @@
                 android:icon="@drawable/ieicon"
                 android:onClick="griptArticles"
                 android:title="@string/gript" />
+            <item
+                android:id="@+id/menuspike"
+                android:icon="@drawable/gbicon"
+                android:onClick="spikeArticles"
+                android:title="@string/spiked" />
             <item
                 android:id="@+id/menugbn"
                 android:icon="@drawable/gbicon"
@@ -136,7 +141,7 @@
                 android:title="@string/glo" />
         </menu>
     </item>
-    <item android:title="">
+    <item android:title="@string/account">
         <menu>
             <item
                 android:id="@+id/nav_dark"
