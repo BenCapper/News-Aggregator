@@ -114,12 +114,10 @@ class GriptFragment : Fragment(), StoryListener {
                 return true
             }
         })
-        searchView.setOnCloseListener ( object : SearchView.OnCloseListener{
-            override fun onClose(): Boolean {
-                griptViewModel.load()
-                return false
-            }
-        })
+        searchView.setOnCloseListener {
+            griptViewModel.load()
+            false
+        }
         super.onCreateOptionsMenu(menu, inflater)
     }
 
