@@ -114,12 +114,10 @@ class PmillFragment : Fragment(), StoryListener {
                 return true
             }
         })
-        searchView.setOnCloseListener ( object : SearchView.OnCloseListener{
-            override fun onClose(): Boolean {
-                millViewModel.load()
-                return false
-            }
-        })
+        searchView.setOnCloseListener {
+            millViewModel.load()
+            false
+        }
         super.onCreateOptionsMenu(menu, inflater)
     }
 
