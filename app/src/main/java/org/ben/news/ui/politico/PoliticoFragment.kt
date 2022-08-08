@@ -13,6 +13,7 @@ import android.widget.SearchView
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.gms.ads.MobileAds
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import org.ben.news.R
 import org.ben.news.adapters.StoryAdapter
 import org.ben.news.adapters.StoryListener
@@ -25,6 +26,7 @@ import org.ben.news.models.StoryModel
 import org.ben.news.ui.auth.LoggedInViewModel
 import splitties.alertdialog.appcompat.*
 import splitties.snackbar.snack
+import splitties.views.onClick
 import splitties.views.textColorResource
 
 
@@ -57,6 +59,12 @@ class PoliticoFragment : Fragment(), StoryListener {
         activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.politico)
 
         MobileAds.initialize(this.context!!) {}
+
+        activity?.findViewById<FloatingActionButton>(R.id.fab)!!.setOnClickListener {
+            it.onClick {
+                fragBinding.recyclerViewPol.smoothScrollToPosition(0)
+            }
+        }
 
         politicoViewModel.observablePolList.observe(viewLifecycleOwner) { story ->
             story?.let {
