@@ -12,6 +12,7 @@ import android.widget.ImageView
 import android.widget.SearchView
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.ads.MobileAds
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -63,9 +64,28 @@ class GlobalFragment : Fragment(), StoryListener {
         MobileAds.initialize(this.context!!) {}
         val fab = activity?.findViewById<FloatingActionButton>(R.id.fab)
         val bot = activity?.findViewById<BottomNavigationView>(R.id.bottom_nav)
+        fab?.visibility = View.INVISIBLE
+        fragBinding.recyclerViewGlo.addOnScrollListener (object : RecyclerView.OnScrollListener(){
+            var y = 0
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                y = dy
+                super.onScrolled(recyclerView, dx, dy)
+
+            }
+
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+                if (y > 0){
+                    fab!!.visibility = View.VISIBLE
+                }
+                else {
+                    fab!!.visibility = View.INVISIBLE
+                }
+            }
+        })
         fab!!.setOnClickListener {
-             fragBinding.recyclerViewGlo.smoothScrollToPosition(0)
-            bot?.visibility = View.VISIBLE
+            fragBinding.recyclerViewGlo.smoothScrollToPosition(0)
+            bot!!.visibility = View.VISIBLE
         }
 
         gloViewModel.observableGloList.observe(viewLifecycleOwner) { story ->
