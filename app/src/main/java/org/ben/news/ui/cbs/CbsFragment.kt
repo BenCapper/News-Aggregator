@@ -61,11 +61,9 @@ class CbsFragment : Fragment(), StoryListener {
         activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.cbs)
 
         MobileAds.initialize(this.context!!) {}
-
-        activity?.findViewById<FloatingActionButton>(R.id.fab)!!.setOnClickListener {
-            it.onClick {
-                fragBinding.recyclerViewCbs.smoothScrollToPosition(0)
-            }
+        val fab = activity?.findViewById<FloatingActionButton>(R.id.fab)
+        fab!!.setOnClickListener {
+            fragBinding.recyclerViewCbs.smoothScrollToPosition(0)
         }
 
         cbsViewModel.observableCbsList.observe(viewLifecycleOwner) { story ->

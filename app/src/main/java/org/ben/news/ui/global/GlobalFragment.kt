@@ -60,11 +60,9 @@ class GlobalFragment : Fragment(), StoryListener {
         activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.glo)
 
         MobileAds.initialize(this.context!!) {}
-
-        activity?.findViewById<FloatingActionButton>(R.id.fab)!!.setOnClickListener {
-            it.onClick {
-                fragBinding.recyclerViewGlo.smoothScrollToPosition(0)
-            }
+        val fab = activity?.findViewById<FloatingActionButton>(R.id.fab)
+        fab!!.setOnClickListener {
+             fragBinding.recyclerViewGlo.smoothScrollToPosition(0)
         }
 
         gloViewModel.observableGloList.observe(viewLifecycleOwner) { story ->

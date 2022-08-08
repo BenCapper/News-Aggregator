@@ -59,11 +59,9 @@ class EuronFragment : Fragment(), StoryListener {
         activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.euron)
 
         MobileAds.initialize(this.context!!) {}
-
-        activity?.findViewById<FloatingActionButton>(R.id.fab)!!.setOnClickListener {
-            it.onClick {
-                fragBinding.recyclerViewEu.smoothScrollToPosition(0)
-            }
+        val fab = activity?.findViewById<FloatingActionButton>(R.id.fab)
+        fab!!.setOnClickListener {
+            fragBinding.recyclerViewEu.smoothScrollToPosition(0)
         }
 
         euViewModel.observableEuList.observe(viewLifecycleOwner) { story ->

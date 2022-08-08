@@ -61,11 +61,9 @@ class UsFragment : Fragment(), StoryListener {
         activity?.findViewById<BottomNavigationView>(R.id.bottom_nav)?.visibility = View.INVISIBLE
 
         MobileAds.initialize(this.context!!) {}
-
-        activity?.findViewById<FloatingActionButton>(R.id.fab)!!.setOnClickListener {
-            it.onClick {
-                fragBinding.recyclerViewUs.smoothScrollToPosition(0)
-            }
+        val fab = activity?.findViewById<FloatingActionButton>(R.id.fab)
+        fab!!.setOnClickListener {
+            fragBinding.recyclerViewUs.smoothScrollToPosition(0)
         }
 
         usViewModel.observableUsList.observe(viewLifecycleOwner) { story ->

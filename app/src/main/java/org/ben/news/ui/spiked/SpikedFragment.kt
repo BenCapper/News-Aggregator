@@ -62,11 +62,9 @@ class SpikedFragment : Fragment(), StoryListener {
         activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.spiked)
 
         MobileAds.initialize(this.context!!) {}
-
-        activity?.findViewById<FloatingActionButton>(R.id.fab)!!.setOnClickListener {
-            it.onClick {
+        val fab = activity?.findViewById<FloatingActionButton>(R.id.fab)
+        fab!!.setOnClickListener {
                 fragBinding.recyclerViewSpike.smoothScrollToPosition(0)
-            }
         }
 
         spikeViewModel.observableSpikeList.observe(viewLifecycleOwner) { story ->

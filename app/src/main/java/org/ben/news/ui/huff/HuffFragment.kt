@@ -59,11 +59,9 @@ class HuffFragment : Fragment(), StoryListener {
         activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.huff)
 
         MobileAds.initialize(this.context!!) {}
-
-        activity?.findViewById<FloatingActionButton>(R.id.fab)!!.setOnClickListener {
-            it.onClick {
+        val fab = activity?.findViewById<FloatingActionButton>(R.id.fab)
+        fab!!.setOnClickListener {
                 fragBinding.recyclerViewHuff.smoothScrollToPosition(0)
-            }
         }
 
         huffViewModel.observableHuffList.observe(viewLifecycleOwner) { story ->

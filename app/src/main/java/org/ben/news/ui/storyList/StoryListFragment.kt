@@ -64,11 +64,9 @@ class StoryListFragment : Fragment(), StoryListener {
         activity?.findViewById<BottomNavigationView>(R.id.bottom_nav)?.itemIconTintList = null
         activity?.findViewById<BottomNavigationView>(R.id.bottom_nav)?.visibility = View.VISIBLE
         MobileAds.initialize(this.context!!) {}
-
-        activity?.findViewById<FloatingActionButton>(R.id.fab)!!.setOnClickListener {
-            it.onClick {
+        val fab = activity?.findViewById<FloatingActionButton>(R.id.fab)
+        fab!!.setOnClickListener {
                 fragBinding.recyclerView.smoothScrollToPosition(0)
-            }
         }
 
         storyListViewModel.observableStoryList.observe(viewLifecycleOwner) { story ->

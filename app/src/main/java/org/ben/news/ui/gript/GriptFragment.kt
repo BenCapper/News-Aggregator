@@ -59,11 +59,9 @@ class GriptFragment : Fragment(), StoryListener {
         activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.gript)
 
         MobileAds.initialize(this.context!!) {}
-
-        activity?.findViewById<FloatingActionButton>(R.id.fab)!!.setOnClickListener {
-            it.onClick {
-                fragBinding.recyclerViewGript.smoothScrollToPosition(0)
-            }
+        val fab = activity?.findViewById<FloatingActionButton>(R.id.fab)
+        fab!!.setOnClickListener {
+            fragBinding.recyclerViewGript.smoothScrollToPosition(0)
         }
 
         griptViewModel.observableGriptList.observe(viewLifecycleOwner) { story ->

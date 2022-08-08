@@ -61,11 +61,9 @@ class CallerFragment : Fragment(), StoryListener {
 
         MobileAds.initialize(this.context!!) {}
 
-
-        activity?.findViewById<FloatingActionButton>(R.id.fab)!!.setOnClickListener {
-            it.onClick {
-                fragBinding.recyclerViewCaller.smoothScrollToPosition(0)
-            }
+        val fab = activity?.findViewById<FloatingActionButton>(R.id.fab)
+        fab!!.setOnClickListener {
+            fragBinding.recyclerViewCaller.smoothScrollToPosition(0)
         }
         callerViewModel.observableCallerList.observe(viewLifecycleOwner) { story ->
             story?.let {

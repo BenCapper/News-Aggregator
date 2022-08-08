@@ -59,11 +59,9 @@ class TimcastFragment : Fragment(), StoryListener {
         activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.tim)
 
         MobileAds.initialize(this.context!!) {}
-
-        activity?.findViewById<FloatingActionButton>(R.id.fab)!!.setOnClickListener {
-            it.onClick {
+        val fab = activity?.findViewById<FloatingActionButton>(R.id.fab)
+        fab!!.setOnClickListener {
                 fragBinding.recyclerViewTim.smoothScrollToPosition(0)
-            }
         }
 
         timViewModel.observableTimList.observe(viewLifecycleOwner) { story ->

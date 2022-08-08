@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.ads.MobileAds
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.storage.FirebaseStorage
 import org.ben.news.R
 import org.ben.news.adapters.NoSaveAdapter
@@ -59,6 +60,11 @@ class LikedListFragment : Fragment(), StoryNoSaveListener {
         activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.saved2)
 
         MobileAds.initialize(this.context!!) {}
+
+        val fab = activity?.findViewById<FloatingActionButton>(R.id.fab)
+        fab!!.setOnClickListener{
+            fragBinding.recyclerViewLiked.smoothScrollToPosition(0)
+        }
 
         likedListViewModel.observableLikedList.observe(viewLifecycleOwner) { story ->
             story?.let {

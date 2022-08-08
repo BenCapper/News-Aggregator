@@ -62,11 +62,9 @@ class BonginoFragment : Fragment(), StoryListener {
         activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.bong)
 
         MobileAds.initialize(this.context!!) {}
-
-        activity?.findViewById<FloatingActionButton>(R.id.fab)!!.setOnClickListener {
-            it.onClick {
+        val fab = activity?.findViewById<FloatingActionButton>(R.id.fab)
+        fab!!.setOnClickListener {
                 fragBinding.recyclerViewBong.smoothScrollToPosition(0)
-            }
         }
 
         bonginoViewModel.observableBongList.observe(viewLifecycleOwner) { story ->

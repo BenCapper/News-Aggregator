@@ -59,11 +59,9 @@ class VoxFragment : Fragment(), StoryListener {
         activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.vox)
 
         MobileAds.initialize(this.context!!) {}
-
-        activity?.findViewById<FloatingActionButton>(R.id.fab)!!.setOnClickListener {
-            it.onClick {
+        val fab = activity?.findViewById<FloatingActionButton>(R.id.fab)
+        fab!!.setOnClickListener {
                 fragBinding.recyclerViewVox.smoothScrollToPosition(0)
-            }
         }
 
         voxViewModel.observableVoxList.observe(viewLifecycleOwner) { story ->
