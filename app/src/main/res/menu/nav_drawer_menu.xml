@@ -140,6 +140,11 @@
                 android:onClick="beastArticles"
                 android:title="@string/beast" />
             <item
+                android:id="@+id/menuhuff"
+                android:icon="@drawable/usicon"
+                android:onClick="huffArticles"
+                android:title="@string/huff" />
+            <item
                 android:id="@+id/menuglo"
                 android:icon="@drawable/canicon"
                 android:onClick="gloArticles"

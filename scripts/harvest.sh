@@ -12,6 +12,7 @@ python3 gbnews.py;
 python3 globalnews.py;
 python3 gript.py;
 python3 gwp.py;
+python3 huff.py;
 python3 pmillen.py;
 python3 politico.py;
 python3 revolver.py;
