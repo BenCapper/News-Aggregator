@@ -9,6 +9,7 @@ import android.graphics.Color.green
 import android.net.Uri
 import android.os.Bundle
 import android.os.Parcelable
+import android.util.DisplayMetrics
 import android.view.*
 import android.widget.FrameLayout
 import android.widget.ImageView
@@ -20,7 +21,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
-import com.google.android.gms.ads.MobileAds
+import com.google.android.gms.ads.*
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import org.ben.news.R
 import org.ben.news.adapters.StoryAdapter
@@ -35,6 +36,7 @@ import org.ben.news.ui.auth.LoggedInViewModel
 import splitties.alertdialog.appcompat.*
 import splitties.resources.drawable
 import splitties.snackbar.snack
+import splitties.systemservices.windowManager
 import splitties.views.textAppearance
 import splitties.views.textColorResource
 import timber.log.Timber
@@ -52,6 +54,7 @@ class StoryListFragment : Fragment(), StoryListener {
     private val storyListViewModel: StoryListViewModel by activityViewModels()
     var state: Parcelable? = null
     var shuffle: Boolean? = null
+    lateinit var adView : AdView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -72,6 +75,10 @@ class StoryListFragment : Fragment(), StoryListener {
         activity?.findViewById<BottomNavigationView>(R.id.bottom_nav)?.visibility = View.VISIBLE
         MobileAds.initialize(this.context!!) {}
 
+
+        adView = fragBinding.adView
+        val adRequest = AdRequest.Builder().build()
+        adView.loadAd(adRequest)
         storyListViewModel.observableStoryList.observe(viewLifecycleOwner) { story ->
             story?.let {
                 render(story as ArrayList<StoryModel>)
@@ -83,6 +90,7 @@ class StoryListFragment : Fragment(), StoryListener {
         return root
     }
 
+
     private fun setSwipeRefresh() {
         fragBinding.swipe.setOnRefreshListener {
             fragBinding.swipe.isRefreshing = true
@@ -90,6 +98,7 @@ class StoryListFragment : Fragment(), StoryListener {
             storyListViewModel.load()
         }
     }
+
 
     private fun checkSwipeRefresh() {
         if (fragBinding.swipe.isRefreshing)

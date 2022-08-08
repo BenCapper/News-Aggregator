@@ -7,6 +7,15 @@
     android:background="#FFECEAEA"
     tools:context=".ui.storyList.StoryListFragment">
 
+    <com.google.android.gms.ads.AdView
+        android:id="@+id/adView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="false"
+        android:layout_centerHorizontal="false"
+        app:adSize="410x55"
+        app:adUnitId="ca-app-pub-3940256099942544/6300978111" />
+
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipe"
         android:layout_width="match_parent"
