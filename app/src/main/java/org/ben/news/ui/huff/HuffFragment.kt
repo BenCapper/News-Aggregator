@@ -1,31 +1,22 @@
-package org.ben.news.ui.storyList
+package org.ben.news.ui.huff
 
 import android.app.AlertDialog
 import android.content.Intent
-import android.content.res.ColorStateList
-import android.content.res.Configuration
-import android.graphics.Color.green
-
 import android.net.Uri
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.*
 import android.widget.FrameLayout
+import androidx.fragment.app.Fragment
 import android.widget.ImageView
 import android.widget.SearchView
-import androidx.appcompat.view.menu.MenuView
-import androidx.core.graphics.drawable.toDrawable
-import androidx.core.view.allViews
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.bumptech.glide.Glide
 import com.google.android.gms.ads.MobileAds
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import org.ben.news.R
 import org.ben.news.adapters.StoryAdapter
 import org.ben.news.adapters.StoryListener
-import org.ben.news.databinding.FragmentStoryListBinding
+import org.ben.news.databinding.FragmentHuffBinding
 import org.ben.news.firebase.StoryManager
 import org.ben.news.helpers.createLoader
 import org.ben.news.helpers.hideLoader
@@ -33,29 +24,25 @@ import org.ben.news.helpers.showLoader
 import org.ben.news.models.StoryModel
 import org.ben.news.ui.auth.LoggedInViewModel
 import splitties.alertdialog.appcompat.*
-import splitties.resources.drawable
 import splitties.snackbar.snack
-import splitties.views.textAppearance
 import splitties.views.textColorResource
-import timber.log.Timber
 
-
-class StoryListFragment : Fragment(), StoryListener {
+class HuffFragment : Fragment(), StoryListener {
 
     companion object {
-        fun newInstance() = StoryListFragment()
+        fun newInstance() = HuffFragment()
     }
-    private var _fragBinding: FragmentStoryListBinding? = null
+    private var _fragBinding: FragmentHuffBinding? = null
     private val fragBinding get() = _fragBinding!!
     lateinit var loader : AlertDialog
     private val loggedInViewModel : LoggedInViewModel by activityViewModels()
-    private val storyListViewModel: StoryListViewModel by activityViewModels()
+    private val huffViewModel: HuffViewModel by activityViewModels()
     var state: Parcelable? = null
-    var shuffle: Boolean? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
+
     }
 
     override fun onCreateView(
@@ -64,15 +51,14 @@ class StoryListFragment : Fragment(), StoryListener {
     ): View {
         loader = createLoader(requireActivity())
         showLoader(loader,"")
-        activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.logohead)
-        _fragBinding = FragmentStoryListBinding.inflate(inflater, container, false)
+        _fragBinding = FragmentHuffBinding.inflate(inflater, container, false)
         val root = fragBinding.root
-        fragBinding.recyclerView.layoutManager = activity?.let { LinearLayoutManager(it) }
-        activity?.findViewById<BottomNavigationView>(R.id.bottom_nav)?.itemIconTintList = null
-        activity?.findViewById<BottomNavigationView>(R.id.bottom_nav)?.visibility = View.VISIBLE
+        fragBinding.recyclerViewHuff.layoutManager = activity?.let { LinearLayoutManager(it) }
+        activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.huff)
+
         MobileAds.initialize(this.context!!) {}
 
-        storyListViewModel.observableStoryList.observe(viewLifecycleOwner) { story ->
+        huffViewModel.observableHuffList.observe(viewLifecycleOwner) { story ->
             story?.let {
                 render(story as ArrayList<StoryModel>)
                 checkSwipeRefresh()
@@ -86,8 +72,8 @@ class StoryListFragment : Fragment(), StoryListener {
     private fun setSwipeRefresh() {
         fragBinding.swipe.setOnRefreshListener {
             fragBinding.swipe.isRefreshing = true
-            state = fragBinding.recyclerView.layoutManager?.onSaveInstanceState()
-            storyListViewModel.load()
+            state = fragBinding.recyclerViewHuff.layoutManager?.onSaveInstanceState()
+            huffViewModel.load()
         }
     }
 
@@ -96,14 +82,9 @@ class StoryListFragment : Fragment(), StoryListener {
             fragBinding.swipe.isRefreshing = false
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.menu_home, menu)
-        when (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) {
-            Configuration.UI_MODE_NIGHT_YES -> {
-                menu.findItem(R.id.app_bar_shuffle).iconTintList = null
-            }
-        }
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu_all, menu)
 
         /* Finding the search bar in the menu and setting it to the search view. */
         val item = menu.findItem(R.id.app_bar_search)
@@ -118,66 +99,46 @@ class StoryListFragment : Fragment(), StoryListener {
 
             override fun onQueryTextChange(newText: String?): Boolean {
                 if (newText != null) {
-                    storyListViewModel.search(
+                    huffViewModel.search(
                         newText
                     )
                 }
                 else{
-                    storyListViewModel.load()
+                    huffViewModel.load()
                 }
                 if (newText == "") {
-                    storyListViewModel.load()
+                    huffViewModel.load()
                 }
 
                 return true
             }
         })
         searchView.setOnCloseListener {
-            storyListViewModel.load()
+            huffViewModel.load()
             false
         }
         super.onCreateOptionsMenu(menu, inflater)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        val id = item.itemId
-        if (id == R.id.app_bar_shuffle) {
-            storyListViewModel.loadShuffle()
-            shuffle = true
-            state = null
-        }
-        return super.onOptionsItemSelected(item)
-    }
-
     private fun render(storyList: ArrayList<StoryModel>) {
-        fragBinding.recyclerView.adapter = StoryAdapter(storyList, this)
-        state?.let { fragBinding.recyclerView.layoutManager?.onRestoreInstanceState(it) }
+        fragBinding.recyclerViewHuff.adapter = StoryAdapter(storyList, this)
+        state?.let { fragBinding.recyclerViewHuff.layoutManager?.onRestoreInstanceState(it) }
     }
 
     override fun onResume() {
         super.onResume()
-        storyListViewModel.load()
+        huffViewModel.load()
     }
 
     override fun onPause() {
-        state = if (shuffle == true) {
-            null
-        } else{
-            fragBinding.recyclerView.layoutManager?.onSaveInstanceState()
-        }
+        state = fragBinding.recyclerViewHuff.layoutManager?.onSaveInstanceState()
         super.onPause()
     }
 
     override fun onStoryClick(story: StoryModel) {
         StoryManager.create(loggedInViewModel.liveFirebaseUser.value!!.uid,"history", story)
         val intent = Intent(Intent.ACTION_VIEW).setData(Uri.parse(story.link))
-
-        state = if (shuffle == true) {
-            null
-        } else{
-            fragBinding.recyclerView.layoutManager?.onSaveInstanceState()
-        }
-
+        state = fragBinding.recyclerViewHuff.layoutManager?.onSaveInstanceState()
         startActivity(intent)
     }
 
@@ -195,7 +156,6 @@ class StoryListFragment : Fragment(), StoryListener {
             positiveButton.text = "Confirm"
             negativeButton.text = "Cancel"
         }?.show()
-
     }
 
     override fun onShare(story: StoryModel) {
@@ -207,11 +167,12 @@ class StoryListFragment : Fragment(), StoryListener {
         }
 
         val shareIntent = Intent.createChooser(sendIntent, null)
-        state = fragBinding.recyclerView.layoutManager?.onSaveInstanceState()
+        state = fragBinding.recyclerViewHuff.layoutManager?.onSaveInstanceState()
         startActivity(shareIntent)
     }
     override fun onDestroyView() {
         super.onDestroyView()
         _fragBinding = null
     }
+
 }

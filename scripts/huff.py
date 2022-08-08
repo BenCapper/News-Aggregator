@@ -12,11 +12,11 @@ log_folder_path = "/home/bencapper/src/News-Aggregator/scripts/log/"
 json_path = "/home/bencapper/src/News-Aggregator/scripts/news.json"
 db_url = "https://news-a3e22-default-rtdb.firebaseio.com/"
 bucket = "news-a3e22.appspot.com"
-page_url = "https://www.huffingtonpost.co.uk/news/"
+page_url = "https://www.huffpost.com/news/"
 img_path = "/home/bencapper/src/News/Huff"
 storage_path = "https://firebasestorage.googleapis.com/v0/b/news-a3e22.appspot.com/o"
 db_path = "stories"
-outlet = "www.HuffingtonPost.co.uk"
+outlet = "www.HuffPost.com"
 
 logFolder(log_folder_path)
 
