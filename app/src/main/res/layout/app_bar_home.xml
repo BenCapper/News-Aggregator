@@ -32,6 +32,20 @@
 
     <include layout="@layout/content_home" />
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center"
+        android:layout_marginBottom="10dp"
+        android:backgroundTint="#FFFFFF"
+        android:src="@drawable/ic_up"
+        app:borderWidth="0dp"
+        app:fabSize="mini"
+        app:maxImageSize="30dp"
+        app:rippleColor="@color/orange" />
+
+
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_nav"
         android:layout_width="match_parent"
