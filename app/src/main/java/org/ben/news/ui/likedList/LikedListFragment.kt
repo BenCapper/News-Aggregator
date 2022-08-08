@@ -61,13 +61,32 @@ class LikedListFragment : Fragment(), StoryNoSaveListener {
         activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.saved2)
         activity?.findViewById<BottomNavigationView>(R.id.bottom_nav)?.visibility = View.VISIBLE
         MobileAds.initialize(this.context!!) {}
-        val bot = activity?.findViewById<BottomNavigationView>(R.id.bottom_nav)
         val fab = activity?.findViewById<FloatingActionButton>(R.id.fab)
-        fab!!.setOnClickListener{
-            fragBinding.recyclerViewLiked.smoothScrollToPosition(0)
-            bot?.visibility = View.VISIBLE
-        }
+        val bot = activity?.findViewById<BottomNavigationView>(R.id.bottom_nav)
+        fab?.visibility = View.INVISIBLE
+        fragBinding.recyclerViewLiked.addOnScrollListener (object : RecyclerView.OnScrollListener(){
+            var y = 0
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                y = dy
+                super.onScrolled(recyclerView, dx, dy)
 
+            }
+
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+                if (y > 0){
+                    fab!!.visibility = View.VISIBLE
+                }
+                else {
+                    fab!!.visibility = View.INVISIBLE
+                }
+            }
+        })
+        fab!!.setOnClickListener {
+            fragBinding.recyclerViewLiked.smoothScrollToPosition(0)
+            bot!!.visibility = View.VISIBLE
+
+        }
         likedListViewModel.observableLikedList.observe(viewLifecycleOwner) { story ->
             story?.let {
                 render(story as ArrayList<StoryModel>)
