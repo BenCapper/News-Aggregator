@@ -15,6 +15,8 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.ads.MobileAds
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import org.ben.news.R
 import org.ben.news.adapters.StoryAdapter
 import org.ben.news.adapters.StoryListener
@@ -59,9 +61,33 @@ class HistoryListFragment : Fragment(), StoryListener {
         val root = fragBinding.root
         activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.history1)
         fragBinding.recyclerViewHistory.layoutManager = activity?.let { LinearLayoutManager(it) }
-
         MobileAds.initialize(this.context!!) {}
+        val fab = activity?.findViewById<FloatingActionButton>(R.id.fab)
+        val bot = activity?.findViewById<BottomNavigationView>(R.id.bottom_nav)
+        fab?.visibility = View.INVISIBLE
+        fragBinding.recyclerViewHistory.addOnScrollListener (object : RecyclerView.OnScrollListener(){
+            var y = 0
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                y = dy
+                super.onScrolled(recyclerView, dx, dy)
 
+            }
+
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+                if (y > 0){
+                    fab!!.visibility = View.VISIBLE
+                }
+                else {
+                    fab!!.visibility = View.INVISIBLE
+                }
+            }
+        })
+        fab!!.setOnClickListener {
+            fragBinding.recyclerViewHistory.smoothScrollToPosition(0)
+            bot!!.visibility = View.VISIBLE
+
+        }
         historyListViewModel.observableHistoryList.observe(viewLifecycleOwner) { story ->
             story?.let {
                 render(story as ArrayList<StoryModel>)

@@ -12,7 +12,10 @@ import android.widget.ImageView
 import android.widget.SearchView
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.ads.MobileAds
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import org.ben.news.R
 import org.ben.news.adapters.StoryAdapter
 import org.ben.news.adapters.StoryListener
@@ -25,6 +28,7 @@ import org.ben.news.models.StoryModel
 import org.ben.news.ui.auth.LoggedInViewModel
 import splitties.alertdialog.appcompat.*
 import splitties.snackbar.snack
+import splitties.views.onClick
 import splitties.views.textColorResource
 
 
@@ -56,8 +60,32 @@ class SkyFragment : Fragment(), StoryListener {
         val root = fragBinding.root
         fragBinding.recyclerViewSky.layoutManager = activity?.let { LinearLayoutManager(it) }
         activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.sky)
-
         MobileAds.initialize(this.context!!) {}
+        val fab = activity?.findViewById<FloatingActionButton>(R.id.fab)
+        val bot = activity?.findViewById<BottomNavigationView>(R.id.bottom_nav)
+        fab?.visibility = View.INVISIBLE
+        fragBinding.recyclerViewSky.addOnScrollListener (object : RecyclerView.OnScrollListener(){
+            var y = 0
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                y = dy
+                super.onScrolled(recyclerView, dx, dy)
+
+            }
+
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+                if (y > 0){
+                    fab!!.visibility = View.VISIBLE
+                }
+                else {
+                    fab!!.visibility = View.INVISIBLE
+                }
+            }
+        })
+        fab!!.setOnClickListener {
+            fragBinding.recyclerViewSky.smoothScrollToPosition(0)
+            bot!!.visibility = View.VISIBLE
+        }
 
         skyViewModel.observableSkyList.observe(viewLifecycleOwner) { story ->
             story?.let {
