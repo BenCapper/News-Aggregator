@@ -58,12 +58,13 @@ class UkFragment : Fragment(), StoryListener {
         val root = fragBinding.root
         fragBinding.recyclerViewUk.layoutManager = activity?.let { LinearLayoutManager(it) }
         activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.british)
-        activity?.findViewById<BottomNavigationView>(R.id.bottom_nav)?.visibility = View.INVISIBLE
-
+        activity?.findViewById<BottomNavigationView>(R.id.bottom_nav)?.visibility = View.VISIBLE
         MobileAds.initialize(this.context!!) {}
         val fab = activity?.findViewById<FloatingActionButton>(R.id.fab)
+        val bot = activity?.findViewById<BottomNavigationView>(R.id.bottom_nav)
         fab!!.setOnClickListener {
             fragBinding.recyclerViewUk.smoothScrollToPosition(0)
+            bot?.visibility = View.VISIBLE
         }
 
         ukViewModel.observableUkList.observe(viewLifecycleOwner) { story ->

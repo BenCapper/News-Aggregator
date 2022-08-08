@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.ads.MobileAds
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import org.ben.news.R
 import org.ben.news.adapters.StoryAdapter
@@ -60,11 +61,13 @@ class HistoryListFragment : Fragment(), StoryListener {
         val root = fragBinding.root
         activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.history1)
         fragBinding.recyclerViewHistory.layoutManager = activity?.let { LinearLayoutManager(it) }
-
+        activity?.findViewById<BottomNavigationView>(R.id.bottom_nav)?.visibility = View.VISIBLE
         MobileAds.initialize(this.context!!) {}
         val fab = activity?.findViewById<FloatingActionButton>(R.id.fab)
+        val bot = activity?.findViewById<BottomNavigationView>(R.id.bottom_nav)
         fab!!.setOnClickListener {
             fragBinding.recyclerViewHistory.smoothScrollToPosition(0)
+            bot?.visibility = View.VISIBLE
         }
         historyListViewModel.observableHistoryList.observe(viewLifecycleOwner) { story ->
             story?.let {

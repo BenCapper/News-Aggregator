@@ -13,6 +13,7 @@ import android.widget.SearchView
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.gms.ads.MobileAds
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import org.ben.news.R
 import org.ben.news.adapters.StoryAdapter
@@ -60,8 +61,11 @@ class RevolverFragment : Fragment(), StoryListener {
 
         MobileAds.initialize(this.context!!) {}
         val fab = activity?.findViewById<FloatingActionButton>(R.id.fab)
+        val bot = activity?.findViewById<BottomNavigationView>(R.id.bottom_nav)
+
         fab!!.setOnClickListener {
             fragBinding.recyclerViewRev.smoothScrollToPosition(0)
+            bot?.visibility = View.VISIBLE
         }
 
         revViewModel.observableRevList.observe(viewLifecycleOwner) { story ->

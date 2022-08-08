@@ -58,12 +58,13 @@ class UsFragment : Fragment(), StoryListener {
         val root = fragBinding.root
         fragBinding.recyclerViewUs.layoutManager = activity?.let { LinearLayoutManager(it) }
         activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.american)
-        activity?.findViewById<BottomNavigationView>(R.id.bottom_nav)?.visibility = View.INVISIBLE
-
+        activity?.findViewById<BottomNavigationView>(R.id.bottom_nav)?.visibility = View.VISIBLE
         MobileAds.initialize(this.context!!) {}
         val fab = activity?.findViewById<FloatingActionButton>(R.id.fab)
+        val bot = activity?.findViewById<BottomNavigationView>(R.id.bottom_nav)
         fab!!.setOnClickListener {
             fragBinding.recyclerViewUs.smoothScrollToPosition(0)
+            bot?.visibility = View.VISIBLE
         }
 
         usViewModel.observableUsList.observe(viewLifecycleOwner) { story ->

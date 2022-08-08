@@ -13,6 +13,7 @@ import android.widget.SearchView
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.gms.ads.MobileAds
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import org.ben.news.R
 import org.ben.news.adapters.StoryAdapter
@@ -58,11 +59,12 @@ class SkyFragment : Fragment(), StoryListener {
         val root = fragBinding.root
         fragBinding.recyclerViewSky.layoutManager = activity?.let { LinearLayoutManager(it) }
         activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.sky)
-
+        val bot = activity?.findViewById<BottomNavigationView>(R.id.bottom_nav)
         MobileAds.initialize(this.context!!) {}
         val fab = activity?.findViewById<FloatingActionButton>(R.id.fab)
         fab!!.setOnClickListener {
             fragBinding.recyclerViewSky.smoothScrollToPosition(0)
+            bot?.visibility = View.VISIBLE
         }
 
         skyViewModel.observableSkyList.observe(viewLifecycleOwner) { story ->

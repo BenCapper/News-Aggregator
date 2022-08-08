@@ -13,6 +13,7 @@ import android.widget.SearchView
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.gms.ads.MobileAds
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import org.ben.news.R
 import org.ben.news.adapters.StoryAdapter
@@ -57,13 +58,14 @@ class HuffFragment : Fragment(), StoryListener {
         val root = fragBinding.root
         fragBinding.recyclerViewHuff.layoutManager = activity?.let { LinearLayoutManager(it) }
         activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.huff)
-
+        activity?.findViewById<BottomNavigationView>(R.id.bottom_nav)?.visibility = View.VISIBLE
         MobileAds.initialize(this.context!!) {}
         val fab = activity?.findViewById<FloatingActionButton>(R.id.fab)
+        val bot = activity?.findViewById<BottomNavigationView>(R.id.bottom_nav)
         fab!!.setOnClickListener {
-                fragBinding.recyclerViewHuff.smoothScrollToPosition(0)
+            fragBinding.recyclerViewHuff.smoothScrollToPosition(0)
+            bot?.visibility = View.VISIBLE
         }
-
         huffViewModel.observableHuffList.observe(viewLifecycleOwner) { story ->
             story?.let {
                 render(story as ArrayList<StoryModel>)

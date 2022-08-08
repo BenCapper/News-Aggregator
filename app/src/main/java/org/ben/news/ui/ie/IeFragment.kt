@@ -58,12 +58,13 @@ class IeFragment : Fragment(), StoryListener {
         val root = fragBinding.root
         fragBinding.recyclerViewIe.layoutManager = activity?.let { LinearLayoutManager(it) }
         activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.irish)
-        activity?.findViewById<BottomNavigationView>(R.id.bottom_nav)?.visibility = View.INVISIBLE
-
+        activity?.findViewById<BottomNavigationView>(R.id.bottom_nav)?.visibility = View.VISIBLE
         MobileAds.initialize(this.context!!) {}
+        val bot = activity?.findViewById<BottomNavigationView>(R.id.bottom_nav)
         val fab = activity?.findViewById<FloatingActionButton>(R.id.fab)
         fab!!.setOnClickListener {
             fragBinding.recyclerViewIe.smoothScrollToPosition(0)
+            bot?.visibility = View.VISIBLE
         }
 
         ieViewModel.observableIeList.observe(viewLifecycleOwner) { story ->

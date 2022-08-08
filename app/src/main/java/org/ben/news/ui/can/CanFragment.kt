@@ -60,12 +60,13 @@ class CanFragment : Fragment(), StoryListener {
         val root = fragBinding.root
         fragBinding.recyclerViewCan.layoutManager = activity?.let { LinearLayoutManager(it) }
         activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.canadian)
-        activity?.findViewById<BottomNavigationView>(R.id.bottom_nav)?.visibility = View.INVISIBLE
-
+        activity?.findViewById<BottomNavigationView>(R.id.bottom_nav)?.visibility = View.VISIBLE
+        val bot = activity?.findViewById<BottomNavigationView>(R.id.bottom_nav)
         MobileAds.initialize(this.context!!) {}
         val fab = activity?.findViewById<FloatingActionButton>(R.id.fab)
         fab!!.setOnClickListener {
             fragBinding.recyclerViewCan.smoothScrollToPosition(0)
+            bot?.visibility = View.VISIBLE
         }
 
 
