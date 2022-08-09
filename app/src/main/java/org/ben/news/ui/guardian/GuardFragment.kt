@@ -2,6 +2,7 @@ package org.ben.news.ui.guardian
 
 import android.app.AlertDialog
 import android.content.Intent
+import android.content.res.Configuration
 import android.net.Uri
 import android.os.Bundle
 import android.os.Parcelable
@@ -42,8 +43,7 @@ class GuardFragment : Fragment(), StoryListener {
     private val loggedInViewModel : LoggedInViewModel by activityViewModels()
     private val guardViewModel: GuardViewModel by activityViewModels()
     var state: Parcelable? = null
-
-
+    var day = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -104,7 +104,7 @@ class GuardFragment : Fragment(), StoryListener {
         fragBinding.swipe.setOnRefreshListener {
             fragBinding.swipe.isRefreshing = true
             state = fragBinding.recyclerViewGua.layoutManager?.onSaveInstanceState()
-            guardViewModel.load()
+            guardViewModel.load(day)
         }
     }
 
@@ -115,7 +115,12 @@ class GuardFragment : Fragment(), StoryListener {
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu_all, menu)
-
+        when (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) {
+            Configuration.UI_MODE_NIGHT_YES -> {
+                menu.findItem(R.id.app_bar_right).iconTintList = null
+                menu.findItem(R.id.app_bar_left).iconTintList = null
+            }
+        }
         /* Finding the search bar in the menu and setting it to the search view. */
         val item = menu.findItem(R.id.app_bar_search)
         val searchView = item.actionView as SearchView
@@ -131,21 +136,22 @@ class GuardFragment : Fragment(), StoryListener {
             override fun onQueryTextChange(newText: String?): Boolean {
                 if (newText != null) {
                     guardViewModel.search(
+                        day,
                         newText
                     )
                 }
                 else{
-                    guardViewModel.load()
+                    guardViewModel.load(day)
                 }
                 if (newText == "") {
-                    guardViewModel.load()
+                    guardViewModel.load(day)
                 }
 
                 return true
             }
         })
         searchView.setOnCloseListener {
-            guardViewModel.load()
+            guardViewModel.load(day)
             false
         }
         super.onCreateOptionsMenu(menu, inflater)
@@ -157,10 +163,25 @@ class GuardFragment : Fragment(), StoryListener {
         state?.let { fragBinding.recyclerViewGua.layoutManager?.onRestoreInstanceState(it) }
     }
 
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if( item.itemId == R.id.app_bar_right) {
+            day += 1
+            guardViewModel.load(day)
+        }
+        if( item.itemId == R.id.app_bar_left) {
+            day -= 1
+            if (day <= 0 ){
+                day = 0
+            }
+            guardViewModel.load(day)
+        }
+        return super.onOptionsItemSelected(item)
+
+    }
 
     override fun onResume() {
+        guardViewModel.load(day)
         super.onResume()
-        guardViewModel.load()
     }
 
     override fun onPause() {

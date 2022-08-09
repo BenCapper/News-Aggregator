@@ -2,6 +2,7 @@ package org.ben.news.ui.blaze
 
 import android.app.AlertDialog
 import android.content.Intent
+import android.content.res.Configuration
 import android.net.Uri
 import android.os.Bundle
 import android.os.Parcelable
@@ -43,7 +44,7 @@ class BlazeFragment : Fragment(), StoryListener {
     private val loggedInViewModel : LoggedInViewModel by activityViewModels()
     private val blazeViewModel: BlazeViewModel by activityViewModels()
     var state: Parcelable? = null
-
+    var day = 0
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -101,11 +102,26 @@ class BlazeFragment : Fragment(), StoryListener {
         return root
     }
 
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if( item.itemId == R.id.app_bar_right) {
+            day += 1
+            blazeViewModel.load(day)
+        }
+        if( item.itemId == R.id.app_bar_left) {
+            day -= 1
+            if (day <= 0 ){
+                day = 0
+            }
+            blazeViewModel.load(day)
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
     private fun setSwipeRefresh() {
         fragBinding.swipe.setOnRefreshListener {
             fragBinding.swipe.isRefreshing = true
             state = fragBinding.recyclerViewBlaze.layoutManager?.onSaveInstanceState()
-            blazeViewModel.load()
+            blazeViewModel.load(day)
         }
     }
 
@@ -116,7 +132,12 @@ class BlazeFragment : Fragment(), StoryListener {
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu_all, menu)
-
+        when (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) {
+            Configuration.UI_MODE_NIGHT_YES -> {
+                menu.findItem(R.id.app_bar_right).iconTintList = null
+                menu.findItem(R.id.app_bar_left).iconTintList = null
+            }
+        }
         /* Finding the search bar in the menu and setting it to the search view. */
         val item = menu.findItem(R.id.app_bar_search)
         val searchView = item.actionView as SearchView
@@ -132,21 +153,22 @@ class BlazeFragment : Fragment(), StoryListener {
             override fun onQueryTextChange(newText: String?): Boolean {
                 if (newText != null) {
                     blazeViewModel.search(
+                        day,
                         newText
                     )
                 }
                 else{
-                    blazeViewModel.load()
+                    blazeViewModel.load(day)
                 }
                 if (newText == "") {
-                    blazeViewModel.load()
+                    blazeViewModel.load(day)
                 }
 
                 return true
             }
         })
         searchView.setOnCloseListener {
-            blazeViewModel.load()
+            blazeViewModel.load(day)
             false
         }
         super.onCreateOptionsMenu(menu, inflater)
@@ -160,9 +182,8 @@ class BlazeFragment : Fragment(), StoryListener {
 
 
     override fun onResume() {
+        blazeViewModel.load(day)
         super.onResume()
-        blazeViewModel.load()
-
     }
 
     override fun onPause() {

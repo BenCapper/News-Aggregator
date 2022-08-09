@@ -23,16 +23,15 @@ class BeastViewModel : ViewModel() {
 
     var liveFirebaseUser = MutableLiveData<FirebaseUser>()
 
-    init { load() }
+    init { load(0) }
 
     private val outlet = "www.TheDailyBeast.com"
 
 
-    fun load() {
-        val list: ArrayList<String>
+    fun load(day: Int) {
+        val list: String
         try {
-            list = StoryManager.getDates(5)
-            list.sortDescending()
+            list = StoryManager.getDate(day)
             StoryManager.findByOutlet(list,outlet,beastList)
             Timber.i("Load Success : ${beastList.value}")
         }
@@ -41,11 +40,9 @@ class BeastViewModel : ViewModel() {
         }
     }
 
-    fun search( term: String) {
-        val dates: ArrayList<String>
+    fun search( day: Int, term: String) {
         try {
-            dates = StoryManager.getDates(5)
-            dates.sortDescending()
+            val dates = StoryManager.getDate(day)
             StoryManager.searchByOutlet(dates,term,outlet,beastList)
             Timber.i("Search Success")
         }

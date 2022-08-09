@@ -29,16 +29,15 @@ class UkViewModel : ViewModel() {
 
     var liveFirebaseUser = MutableLiveData<FirebaseUser>()
 
-    init { load() }
+    init { load(0) }
 
     private val outlets = listOf("www.GBNews.uk", "news.Sky.com", "www.Spiked-Online.com", "www.TheGuardian.com")
 
 
-    fun load() {
-        val list: ArrayList<String>
+    fun load(day: Int) {
+        val list: String
         try {
-            list = getDates(5)
-            list.sortDescending()
+            list = StoryManager.getDate(day)
             StoryManager.findByOutlets(list,outlets,ukList)
             Timber.i("Load Success : ${ukList.value}")
         }
@@ -47,11 +46,9 @@ class UkViewModel : ViewModel() {
         }
     }
 
-    fun search( term: String) {
-        val dates: ArrayList<String>
+    fun search( day: Int, term: String) {
         try {
-            dates = getDates(5)
-            dates.sortDescending()
+            val dates = StoryManager.getDate(day)
             StoryManager.searchByOutlets(dates,term,outlets,ukList)
             Timber.i("Search Success")
         }
@@ -59,4 +56,5 @@ class UkViewModel : ViewModel() {
             Timber.i("Search Error : $e.message")
         }
     }
+
 }

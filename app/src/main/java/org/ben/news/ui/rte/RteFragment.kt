@@ -2,6 +2,7 @@ package org.ben.news.ui.rte
 
 import android.app.AlertDialog
 import android.content.Intent
+import android.content.res.Configuration
 import android.net.Uri
 import android.os.Bundle
 import android.os.Parcelable
@@ -43,6 +44,7 @@ class RteFragment : Fragment(), StoryListener {
     private val loggedInViewModel : LoggedInViewModel by activityViewModels()
     private val rteViewModel: RteViewModel by activityViewModels()
     var state: Parcelable? = null
+    var day = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -102,7 +104,7 @@ class RteFragment : Fragment(), StoryListener {
         fragBinding.swipe.setOnRefreshListener {
             fragBinding.swipe.isRefreshing = true
             state = fragBinding.recyclerViewRte.layoutManager?.onSaveInstanceState()
-            rteViewModel.load()
+            rteViewModel.load(day)
         }
     }
 
@@ -114,7 +116,12 @@ class RteFragment : Fragment(), StoryListener {
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu_all, menu)
-
+        when (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) {
+            Configuration.UI_MODE_NIGHT_YES -> {
+                menu.findItem(R.id.app_bar_right).iconTintList = null
+                menu.findItem(R.id.app_bar_left).iconTintList = null
+            }
+        }
         /* Finding the search bar in the menu and setting it to the search view. */
         val item = menu.findItem(R.id.app_bar_search)
         val searchView = item.actionView as SearchView
@@ -129,24 +136,41 @@ class RteFragment : Fragment(), StoryListener {
             override fun onQueryTextChange(newText: String?): Boolean {
                 if (newText != null) {
                     rteViewModel.search(
+                        day,
                         newText
                     )
                 }
                 else{
-                    rteViewModel.load()
+                    rteViewModel.load(day)
                 }
                 if (newText == "") {
-                    rteViewModel.load()
+                    rteViewModel.load(day)
                 }
 
                 return true
             }
         })
         searchView.setOnCloseListener {
-            rteViewModel.load()
+            rteViewModel.load(day)
             false
         }
         super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if( item.itemId == R.id.app_bar_right) {
+            day += 1
+            rteViewModel.load(day)
+        }
+        if( item.itemId == R.id.app_bar_left) {
+            day -= 1
+            if (day <= 0 ){
+                day = 0
+            }
+            rteViewModel.load(day)
+        }
+        return super.onOptionsItemSelected(item)
+
     }
 
     private fun render(storyList: ArrayList<StoryModel>) {
@@ -155,8 +179,8 @@ class RteFragment : Fragment(), StoryListener {
     }
 
     override fun onResume() {
+        rteViewModel.load(day)
         super.onResume()
-        rteViewModel.load()
     }
 
     override fun onPause() {

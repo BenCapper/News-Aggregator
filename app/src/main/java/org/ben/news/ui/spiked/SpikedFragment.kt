@@ -2,6 +2,7 @@ package org.ben.news.ui.spiked
 
 import android.app.AlertDialog
 import android.content.Intent
+import android.content.res.Configuration
 import android.net.Uri
 import android.os.Bundle
 import android.os.Parcelable
@@ -45,6 +46,7 @@ class SpikedFragment : Fragment(), StoryListener {
     private val loggedInViewModel : LoggedInViewModel by activityViewModels()
     private val spikeViewModel: SpikedViewModel by activityViewModels()
     var state: Parcelable? = null
+    var day = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -100,11 +102,27 @@ class SpikedFragment : Fragment(), StoryListener {
         return root
     }
 
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if( item.itemId == R.id.app_bar_right) {
+            day += 1
+            spikeViewModel.load(day)
+        }
+        if( item.itemId == R.id.app_bar_left) {
+            day -= 1
+            if (day <= 0 ){
+                day = 0
+            }
+            spikeViewModel.load(day)
+        }
+        return super.onOptionsItemSelected(item)
+
+    }
+
     private fun setSwipeRefresh() {
         fragBinding.swipe.setOnRefreshListener {
             fragBinding.swipe.isRefreshing = true
             state = fragBinding.recyclerViewSpike.layoutManager?.onSaveInstanceState()
-            spikeViewModel.load()
+            spikeViewModel.load(day)
         }
     }
 
@@ -116,7 +134,12 @@ class SpikedFragment : Fragment(), StoryListener {
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu_all, menu)
-
+        when (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) {
+            Configuration.UI_MODE_NIGHT_YES -> {
+                menu.findItem(R.id.app_bar_right).iconTintList = null
+                menu.findItem(R.id.app_bar_left).iconTintList = null
+            }
+        }
         /* Finding the search bar in the menu and setting it to the search view. */
         val item = menu.findItem(R.id.app_bar_search)
         val searchView = item.actionView as SearchView
@@ -131,21 +154,22 @@ class SpikedFragment : Fragment(), StoryListener {
             override fun onQueryTextChange(newText: String?): Boolean {
                 if (newText != null) {
                     spikeViewModel.search(
+                        day,
                         newText
                     )
                 }
                 else{
-                    spikeViewModel.load()
+                    spikeViewModel.load(day)
                 }
                 if (newText == "") {
-                    spikeViewModel.load()
+                    spikeViewModel.load(day)
                 }
 
                 return true
             }
         })
         searchView.setOnCloseListener {
-            spikeViewModel.load()
+            spikeViewModel.load(day)
             false
         }
         super.onCreateOptionsMenu(menu, inflater)
@@ -157,8 +181,8 @@ class SpikedFragment : Fragment(), StoryListener {
     }
 
     override fun onResume() {
+        spikeViewModel.load(day)
         super.onResume()
-        spikeViewModel.load()
     }
 
     override fun onPause() {

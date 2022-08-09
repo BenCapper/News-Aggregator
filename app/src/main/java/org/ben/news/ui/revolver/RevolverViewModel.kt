@@ -28,16 +28,15 @@ class RevolverViewModel : ViewModel() {
 
     var liveFirebaseUser = MutableLiveData<FirebaseUser>()
 
-    init { load() }
+    init { load(0) }
 
     private val outlet = "www.Revolver.news"
 
 
-    fun load() {
-        val list: ArrayList<String>
+    fun load(day: Int) {
+        val list: String
         try {
-            list = getDates(5)
-            list.sortDescending()
+            list = StoryManager.getDate(day)
             StoryManager.findOutletNoImage(list,outlet,revList)
             Timber.i("Load Success : ${revList.value}")
         }
@@ -46,11 +45,9 @@ class RevolverViewModel : ViewModel() {
         }
     }
 
-    fun search( term: String) {
-        val dates: ArrayList<String>
+    fun search( day: Int, term: String) {
         try {
-            dates = getDates(5)
-            dates.sortDescending()
+            val dates = StoryManager.getDate(day)
             StoryManager.searchOutletNoImage(dates,term,outlet,revList)
             Timber.i("Search Success")
         }
@@ -58,4 +55,5 @@ class RevolverViewModel : ViewModel() {
             Timber.i("Search Error : $e.message")
         }
     }
+
 }

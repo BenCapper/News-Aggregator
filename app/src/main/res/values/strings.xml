@@ -48,6 +48,8 @@
     <string name="politico">Politico</string>
     <string name="cbs">CBS</string>
     <string name="gua">The Guardian</string>
+    <string name="arr_right">Right</string>
+    <string name="arr_left">Left</string>
     <string name="abc">ABC</string>
     <string name="vox">Vox</string>
     <string name="euron">Euronews</string>

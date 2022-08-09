@@ -2,6 +2,7 @@ package org.ben.news.ui.zerohedge
 
 import android.app.AlertDialog
 import android.content.Intent
+import android.content.res.Configuration
 import android.net.Uri
 import android.os.Bundle
 import android.os.Parcelable
@@ -43,6 +44,7 @@ class ZerohedgeFragment : Fragment(), StoryListener {
     private val loggedInViewModel : LoggedInViewModel by activityViewModels()
     private val zeroViewModel: ZerohedgeViewModel by activityViewModels()
     var state: Parcelable? = null
+    var day = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -97,11 +99,27 @@ class ZerohedgeFragment : Fragment(), StoryListener {
         return root
     }
 
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if( item.itemId == R.id.app_bar_right) {
+            day += 1
+            zeroViewModel.load(day)
+        }
+        if( item.itemId == R.id.app_bar_left) {
+            day -= 1
+            if (day <= 0 ){
+                day = 0
+            }
+            zeroViewModel.load(day)
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+
     private fun setSwipeRefresh() {
         fragBinding.swipe.setOnRefreshListener {
             fragBinding.swipe.isRefreshing = true
             state = fragBinding.recyclerViewZero.layoutManager?.onSaveInstanceState()
-            zeroViewModel.load()
+            zeroViewModel.load(day)
         }
     }
 
@@ -113,7 +131,12 @@ class ZerohedgeFragment : Fragment(), StoryListener {
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu_all, menu)
-
+        when (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) {
+            Configuration.UI_MODE_NIGHT_YES -> {
+                menu.findItem(R.id.app_bar_right).iconTintList = null
+                menu.findItem(R.id.app_bar_left).iconTintList = null
+            }
+        }
         /* Finding the search bar in the menu and setting it to the search view. */
         val item = menu.findItem(R.id.app_bar_search)
         val searchView = item.actionView as SearchView
@@ -128,21 +151,22 @@ class ZerohedgeFragment : Fragment(), StoryListener {
             override fun onQueryTextChange(newText: String?): Boolean {
                 if (newText != null) {
                     zeroViewModel.search(
+                        day,
                         newText
                     )
                 }
                 else{
-                    zeroViewModel.load()
+                    zeroViewModel.load(day)
                 }
                 if (newText == "") {
-                    zeroViewModel.load()
+                    zeroViewModel.load(day)
                 }
 
                 return true
             }
         })
         searchView.setOnCloseListener {
-            zeroViewModel.load()
+            zeroViewModel.load(day)
             false
         }
         super.onCreateOptionsMenu(menu, inflater)
@@ -154,8 +178,8 @@ class ZerohedgeFragment : Fragment(), StoryListener {
     }
 
     override fun onResume() {
+        zeroViewModel.load(day)
         super.onResume()
-        zeroViewModel.load()
     }
 
     override fun onStoryClick(story: StoryModel) {

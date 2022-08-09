@@ -2,6 +2,7 @@ package org.ben.news.ui.politico
 
 import android.app.AlertDialog
 import android.content.Intent
+import android.content.res.Configuration
 import android.net.Uri
 import android.os.Bundle
 import android.os.Parcelable
@@ -43,6 +44,7 @@ class PoliticoFragment : Fragment(), StoryListener {
     private val loggedInViewModel : LoggedInViewModel by activityViewModels()
     private val politicoViewModel: PoliticoViewModel by activityViewModels()
     var state: Parcelable? = null
+    var day = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -97,11 +99,27 @@ class PoliticoFragment : Fragment(), StoryListener {
         return root
     }
 
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if( item.itemId == R.id.app_bar_right) {
+            day += 1
+            politicoViewModel.load(day)
+        }
+        if( item.itemId == R.id.app_bar_left) {
+            day -= 1
+            if (day <= 0 ){
+                day = 0
+            }
+            politicoViewModel.load(day)
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+
     private fun setSwipeRefresh() {
         fragBinding.swipe.setOnRefreshListener {
             fragBinding.swipe.isRefreshing = true
             state = fragBinding.recyclerViewPol.layoutManager?.onSaveInstanceState()
-            politicoViewModel.load()
+            politicoViewModel.load(day)
         }
     }
 
@@ -113,7 +131,12 @@ class PoliticoFragment : Fragment(), StoryListener {
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu_all, menu)
-
+        when (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) {
+            Configuration.UI_MODE_NIGHT_YES -> {
+                menu.findItem(R.id.app_bar_right).iconTintList = null
+                menu.findItem(R.id.app_bar_left).iconTintList = null
+            }
+        }
         /* Finding the search bar in the menu and setting it to the search view. */
         val item = menu.findItem(R.id.app_bar_search)
         val searchView = item.actionView as SearchView
@@ -128,21 +151,22 @@ class PoliticoFragment : Fragment(), StoryListener {
             override fun onQueryTextChange(newText: String?): Boolean {
                 if (newText != null) {
                     politicoViewModel.search(
+                        day,
                         newText
                     )
                 }
                 else{
-                    politicoViewModel.load()
+                    politicoViewModel.load(day)
                 }
                 if (newText == "") {
-                    politicoViewModel.load()
+                    politicoViewModel.load(day)
                 }
 
                 return true
             }
         })
         searchView.setOnCloseListener {
-            politicoViewModel.load()
+            politicoViewModel.load(day)
             false
         }
         super.onCreateOptionsMenu(menu, inflater)
@@ -155,8 +179,8 @@ class PoliticoFragment : Fragment(), StoryListener {
     }
 
     override fun onResume() {
+        politicoViewModel.load(day)
         super.onResume()
-        politicoViewModel.load()
     }
 
     override fun onPause() {

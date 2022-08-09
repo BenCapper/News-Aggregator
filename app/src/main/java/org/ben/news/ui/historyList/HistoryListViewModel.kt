@@ -25,11 +25,13 @@ class HistoryListViewModel : ViewModel() {
 
     var liveFirebaseUser = MutableLiveData<FirebaseUser>()
 
-    init { load() }
+    init { load(0) }
 
-    fun load() {
+    fun load(day: Int) {
+        val dates: String
         try {
-            StoryManager.find(liveFirebaseUser.value!!.uid,"history",historyList)
+            dates = StoryManager.getDate(day)
+            StoryManager.find(dates,liveFirebaseUser.value!!.uid,"history",historyList)
             Timber.i("Load Success : ${historyList.value}")
         }
         catch (e: Exception) {
@@ -37,9 +39,11 @@ class HistoryListViewModel : ViewModel() {
         }
     }
 
-    fun search( term: String) {
+    fun search( day:Int, term: String) {
+        val dates: String
         try {
-            StoryManager.search(term,liveFirebaseUser.value!!.uid,"history",historyList)
+            dates = StoryManager.getDate(day)
+            StoryManager.search(term,dates,liveFirebaseUser.value!!.uid,"history",historyList)
             Timber.i("Search Success")
         }
         catch (e: java.lang.Exception) {
@@ -47,9 +51,10 @@ class HistoryListViewModel : ViewModel() {
         }
     }
 
-    fun delete(userid: String, title: String) {
+    fun delete(day:Int,userid: String, title: String) {
         try {
-            StoryManager.delete(userid,"history",title)
+            val dates = StoryManager.getDate(day)
+            StoryManager.delete(dates,userid,"history",title)
             Timber.i("Delete Success")
         }
         catch (e: java.lang.Exception) {

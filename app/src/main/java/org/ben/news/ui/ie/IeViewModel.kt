@@ -30,16 +30,15 @@ class IeViewModel : ViewModel() {
 
     var liveFirebaseUser = MutableLiveData<FirebaseUser>()
 
-    init { load() }
+    init { load(0) }
 
     private val outlets = listOf("www.RTE.ie", "www.Gript.ie")
 
 
-    fun load() {
-        val list: ArrayList<String>
+    fun load(day: Int) {
+        val list: String
         try {
-            list = getDates(5)
-            list.sortDescending()
+            list = StoryManager.getDate(day)
             StoryManager.findByOutlets(list,outlets,ieList)
             Timber.i("Load Success : ${ieList.value}")
         }
@@ -48,11 +47,9 @@ class IeViewModel : ViewModel() {
         }
     }
 
-    fun search( term: String) {
-        val dates: ArrayList<String>
+    fun search( day: Int, term: String) {
         try {
-            dates = getDates(5)
-            dates.sortDescending()
+            val dates = StoryManager.getDate(day)
             StoryManager.searchByOutlets(dates,term,outlets,ieList)
             Timber.i("Search Success")
         }

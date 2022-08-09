@@ -32,30 +32,26 @@ class BreitbartViewModel : ViewModel() {
 
     //var readOnly = MutableLiveData(false)
 
-    init { load() }
+    init { load(0) }
 
     private val outlet = "www.Breitbart.com"
 
 
-    fun load() {
-        val list: ArrayList<String>
+    fun load(day: Int) {
+        val list: String
         try {
-            list = getDates(5)
-            list.sortDescending()
+            list = StoryManager.getDate(day)
             StoryManager.findByOutlet(list,outlet,breitList)
             Timber.i("Load Success : ${breitList.value}")
         }
         catch (e: Exception) {
             Timber.i("Load Error : $e.message")
         }
-
     }
 
-    fun search( term: String) {
-        val dates: ArrayList<String>
+    fun search( day: Int, term: String) {
         try {
-            dates = getDates(5)
-            dates.sortDescending()
+            val dates = StoryManager.getDate(day)
             StoryManager.searchByOutlet(dates,term,outlet,breitList)
             Timber.i("Search Success")
         }
@@ -63,5 +59,6 @@ class BreitbartViewModel : ViewModel() {
             Timber.i("Search Error : $e.message")
         }
     }
+
 
 }

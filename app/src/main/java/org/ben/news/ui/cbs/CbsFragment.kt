@@ -2,6 +2,7 @@ package org.ben.news.ui.cbs
 
 import android.app.AlertDialog
 import android.content.Intent
+import android.content.res.Configuration
 import android.net.Uri
 import android.os.Bundle
 import android.os.Parcelable
@@ -43,7 +44,7 @@ class CbsFragment : Fragment(), StoryListener {
     private val loggedInViewModel : LoggedInViewModel by activityViewModels()
     private val cbsViewModel: CbsViewModel by activityViewModels()
     var state: Parcelable? = null
-
+    var day = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -100,11 +101,27 @@ class CbsFragment : Fragment(), StoryListener {
         return root
     }
 
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if( item.itemId == R.id.app_bar_right) {
+            day += 1
+            cbsViewModel.load(day)
+        }
+        if( item.itemId == R.id.app_bar_left) {
+            day -= 1
+            if (day <= 0 ){
+                day = 0
+            }
+            cbsViewModel.load(day)
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+
     private fun setSwipeRefresh() {
         fragBinding.swipe.setOnRefreshListener {
             fragBinding.swipe.isRefreshing = true
             state = fragBinding.recyclerViewCbs.layoutManager?.onSaveInstanceState()
-            cbsViewModel.load()
+            cbsViewModel.load(day)
         }
     }
 
@@ -116,7 +133,12 @@ class CbsFragment : Fragment(), StoryListener {
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu_all, menu)
-
+        when (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) {
+            Configuration.UI_MODE_NIGHT_YES -> {
+                menu.findItem(R.id.app_bar_right).iconTintList = null
+                menu.findItem(R.id.app_bar_left).iconTintList = null
+            }
+        }
         /* Finding the search bar in the menu and setting it to the search view. */
         val item = menu.findItem(R.id.app_bar_search)
         val searchView = item.actionView as SearchView
@@ -132,21 +154,22 @@ class CbsFragment : Fragment(), StoryListener {
             override fun onQueryTextChange(newText: String?): Boolean {
                 if (newText != null) {
                     cbsViewModel.search(
+                        day,
                         newText
                     )
                 }
                 else{
-                    cbsViewModel.load()
+                    cbsViewModel.load(day)
                 }
                 if (newText == "") {
-                    cbsViewModel.load()
+                    cbsViewModel.load(day)
                 }
 
                 return true
             }
         })
         searchView.setOnCloseListener {
-            cbsViewModel.load()
+            cbsViewModel.load(day)
             false
         }
         super.onCreateOptionsMenu(menu, inflater)
@@ -160,8 +183,8 @@ class CbsFragment : Fragment(), StoryListener {
 
 
     override fun onResume() {
+        cbsViewModel.load(day)
         super.onResume()
-        cbsViewModel.load()
     }
 
     override fun onPause() {

@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseUser
 import org.ben.news.firebase.StoryManager
+import org.ben.news.firebase.StoryManager.getDate
 import org.ben.news.firebase.StoryManager.getDates
 import org.ben.news.models.StoryModel
 import timber.log.Timber
@@ -30,7 +31,7 @@ class UsViewModel : ViewModel() {
 
     var liveFirebaseUser = MutableLiveData<FirebaseUser>()
 
-    init { load() }
+    init { load(0) }
 
     private val outlets = listOf("www.TheBlaze.com",
         "www.Timcast.com",
@@ -48,11 +49,10 @@ class UsViewModel : ViewModel() {
         "www.HuffPost.com")
 
 
-    fun load() {
-        val list: ArrayList<String>
+    fun load(day: Int) {
+        val list: String
         try {
-            list = getDates(5)
-            list.sortDescending()
+            list = getDate(day)
             StoryManager.findByOutlets(list,outlets,usList)
             Timber.i("Load Success : ${usList.value}")
         }
@@ -61,11 +61,9 @@ class UsViewModel : ViewModel() {
         }
     }
 
-    fun search( term: String) {
-        val dates: ArrayList<String>
+    fun search( day: Int, term: String) {
         try {
-            dates = getDates(5)
-            dates.sortDescending()
+            val dates = getDate(day)
             StoryManager.searchByOutlets(dates,term,outlets,usList)
             Timber.i("Search Success")
         }

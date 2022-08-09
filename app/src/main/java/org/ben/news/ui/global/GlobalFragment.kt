@@ -2,6 +2,7 @@ package org.ben.news.ui.global
 
 import android.app.AlertDialog
 import android.content.Intent
+import android.content.res.Configuration
 import android.net.Uri
 import android.os.Bundle
 import android.os.Parcelable
@@ -43,6 +44,7 @@ class GlobalFragment : Fragment(), StoryListener {
     private val loggedInViewModel : LoggedInViewModel by activityViewModels()
     private val gloViewModel: GlobalViewModel by activityViewModels()
     var state: Parcelable? = null
+    var day = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -99,11 +101,27 @@ class GlobalFragment : Fragment(), StoryListener {
         return root
     }
 
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if( item.itemId == R.id.app_bar_right) {
+            day += 1
+            gloViewModel.load(day)
+        }
+        if( item.itemId == R.id.app_bar_left) {
+            day -= 1
+            if (day <= 0 ){
+                day = 0
+            }
+            gloViewModel.load(day)
+        }
+        return super.onOptionsItemSelected(item)
+
+    }
+
     private fun setSwipeRefresh() {
         fragBinding.swipe.setOnRefreshListener {
             fragBinding.swipe.isRefreshing = true
             state = fragBinding.recyclerViewGlo.layoutManager?.onSaveInstanceState()
-            gloViewModel.load()
+            gloViewModel.load(day)
         }
     }
 
@@ -114,7 +132,12 @@ class GlobalFragment : Fragment(), StoryListener {
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu_all, menu)
-
+        when (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) {
+            Configuration.UI_MODE_NIGHT_YES -> {
+                menu.findItem(R.id.app_bar_right).iconTintList = null
+                menu.findItem(R.id.app_bar_left).iconTintList = null
+            }
+        }
         /* Finding the search bar in the menu and setting it to the search view. */
         val item = menu.findItem(R.id.app_bar_search)
         val searchView = item.actionView as SearchView
@@ -130,21 +153,22 @@ class GlobalFragment : Fragment(), StoryListener {
             override fun onQueryTextChange(newText: String?): Boolean {
                 if (newText != null) {
                     gloViewModel.search(
+                        day,
                         newText
                     )
                 }
                 else{
-                    gloViewModel.load()
+                    gloViewModel.load(day)
                 }
                 if (newText == "") {
-                    gloViewModel.load()
+                    gloViewModel.load(day)
                 }
 
                 return true
             }
         })
         searchView.setOnCloseListener {
-            gloViewModel.load()
+            gloViewModel.load(day)
             false
         }
         super.onCreateOptionsMenu(menu, inflater)
@@ -156,8 +180,8 @@ class GlobalFragment : Fragment(), StoryListener {
     }
 
     override fun onResume() {
+        gloViewModel.load(day)
         super.onResume()
-        gloViewModel.load()
     }
 
     override fun onPause() {

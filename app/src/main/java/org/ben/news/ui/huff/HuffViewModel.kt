@@ -23,16 +23,15 @@ class HuffViewModel : ViewModel() {
 
     var liveFirebaseUser = MutableLiveData<FirebaseUser>()
 
-    init { load() }
+    init { load(0) }
 
     private val outlet = "www.HuffPost.com"
 
 
-    fun load() {
-        val list: ArrayList<String>
+    fun load(day: Int) {
+        val list: String
         try {
-            list = StoryManager.getDates(5)
-            list.sortDescending()
+            list = StoryManager.getDate(day)
             StoryManager.findByOutlet(list,outlet,huffList)
             Timber.i("Load Success : ${huffList.value}")
         }
@@ -41,11 +40,9 @@ class HuffViewModel : ViewModel() {
         }
     }
 
-    fun search( term: String) {
-        val dates: ArrayList<String>
+    fun search( day: Int, term: String) {
         try {
-            dates = StoryManager.getDates(5)
-            dates.sortDescending()
+            val dates = StoryManager.getDate(day)
             StoryManager.searchByOutlet(dates,term,outlet,huffList)
             Timber.i("Search Success")
         }
@@ -53,4 +50,5 @@ class HuffViewModel : ViewModel() {
             Timber.i("Search Error : $e.message")
         }
     }
+
 }
