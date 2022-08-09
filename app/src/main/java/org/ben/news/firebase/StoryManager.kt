@@ -451,11 +451,37 @@ object StoryManager : StoryStore {
                 })
     }
 
-    override fun search(term: String, userId: String, path:String,  storyList: MutableLiveData<List<StoryModel>>) {
+    override fun find(date: String, userId: String, path:String, storyList: MutableLiveData<List<StoryModel>>) {
+        val totalList = ArrayList<StoryModel>()
+        var todayList = mutableListOf<StoryModel>()
+        database.child("user-$path").child(userId).child(date)
+            .addValueEventListener(object : ValueEventListener {
+                override fun onCancelled(error: DatabaseError) {
+                    Timber.i("Firebase error : ${error.message}")
+                }
+
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val children = snapshot.children
+                    children.forEach {
+                        val story = it.getValue(StoryModel::class.java)
+                        story?.title = story?.title?.let { it -> formatTitle(it) }.toString()
+                        todayList.add(story!!)
+                        Timber.i("user-article=$story")
+                    }
+                    todayList = todayList.sortedBy{it.order}.toMutableList()
+                    database.child("user-$path").child(userId).child(date)
+                        .removeEventListener(this)
+                    totalList.addAll(todayList)
+                    storyList.value = totalList
+                }
+            })
+    }
+
+    override fun search(date: String,term: String, userId: String, path:String,  storyList: MutableLiveData<List<StoryModel>>) {
 
         val totalList = ArrayList<StoryModel>()
             var todayList = mutableListOf<StoryModel>()
-            database.child("user-$path").child(userId)
+            database.child("user-$path").child(userId).child(date)
                 .addValueEventListener(object : ValueEventListener {
                     override fun onCancelled(error: DatabaseError) {
                         Timber.i("Firebase error : ${error.message}")
@@ -479,7 +505,7 @@ object StoryManager : StoryStore {
                             }
                         }
                         todayList = todayList.sortedBy{it.order}.toMutableList()
-                        database.child("user-$path").child(userId)
+                        database.child("user-$path").child(userId).child(date)
                             .removeEventListener(this)
                         totalList.addAll(todayList)
                         storyList.value = totalList
@@ -692,17 +718,18 @@ object StoryManager : StoryStore {
         val storyValues = story.toMap()
         val childAdd = HashMap<String, Any>()
         val title = formatTitleIllegal(story.title)
-        childAdd["/user-$path/$userId/$title"] = storyValues
+        val date = story.date
+        childAdd["/user-$path/$userId/$date/$title"] = storyValues
         database.updateChildren(childAdd)
     }
 
 
 
-    override fun delete(userId: String, path: String, title: String) {
+    override fun delete(day:String, userId: String, path: String, title: String) {
 
         val childDelete : MutableMap<String, Any?> = HashMap()
         val new = formatTitleIllegal(title)
-        childDelete["/user-$path/$userId/$new"] = null
+        childDelete["/user-$path/$userId/$day/$new"] = null
 
         database.updateChildren(childDelete)
     }

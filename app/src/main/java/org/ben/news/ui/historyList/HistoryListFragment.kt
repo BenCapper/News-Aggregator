@@ -45,6 +45,7 @@ class HistoryListFragment : Fragment(), StoryListener {
     private val loggedInViewModel : LoggedInViewModel by activityViewModels()
     private val historyListViewModel: HistoryListViewModel by activityViewModels()
     var state: Parcelable? = null
+    var day = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -103,6 +104,7 @@ class HistoryListFragment : Fragment(), StoryListener {
                     val adapter = fragBinding.recyclerViewHistory.adapter as StoryAdapter
                     adapter.removeAt(viewHolder.absoluteAdapterPosition)
                     historyListViewModel.delete(
+                        day,
                         historyListViewModel.liveFirebaseUser.value?.uid!!,
                         (viewHolder.itemView.tag as StoryModel).title
                     )
@@ -114,11 +116,27 @@ class HistoryListFragment : Fragment(), StoryListener {
         return root
     }
 
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if( item.itemId == R.id.app_bar_right) {
+            day += 1
+            historyListViewModel.load(day)
+        }
+        if( item.itemId == R.id.app_bar_left) {
+            day -= 1
+            if (day <= 0 ){
+                day = 0
+            }
+            historyListViewModel.load(day)
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+
     private fun setSwipeRefresh() {
         fragBinding.swipe.setOnRefreshListener {
             fragBinding.swipe.isRefreshing = true
             state = fragBinding.recyclerViewHistory.layoutManager?.onSaveInstanceState()
-            historyListViewModel.load()
+            historyListViewModel.load(day)
         }
     }
 
@@ -145,17 +163,18 @@ class HistoryListFragment : Fragment(), StoryListener {
             override fun onQueryTextChange(newText: String?): Boolean {
                 if (newText != null) {
                     historyListViewModel.search(
+                        day,
                         newText
                     )
                 }
                 else {
-                    historyListViewModel.load()
+                    historyListViewModel.load(day)
                 }
                 return true
             }
         })
         searchView.setOnCloseListener {
-            historyListViewModel.load()
+            historyListViewModel.load(day)
             false
         }
         super.onCreateOptionsMenu(menu, inflater)
@@ -172,7 +191,7 @@ class HistoryListFragment : Fragment(), StoryListener {
         loggedInViewModel.liveFirebaseUser.observe(viewLifecycleOwner) { firebaseUser ->
             if (firebaseUser != null) {
                 historyListViewModel.liveFirebaseUser.value = firebaseUser
-                historyListViewModel.load()
+                historyListViewModel.load(day)
             }
         }
     }
