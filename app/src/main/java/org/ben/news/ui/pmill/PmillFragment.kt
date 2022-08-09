@@ -43,6 +43,7 @@ class PmillFragment : Fragment(), StoryListener {
     private val loggedInViewModel : LoggedInViewModel by activityViewModels()
     private val millViewModel: PmillViewModel by activityViewModels()
     var state: Parcelable? = null
+    var day = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -98,11 +99,27 @@ class PmillFragment : Fragment(), StoryListener {
         return root
     }
 
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if( item.itemId == R.id.app_bar_right) {
+            day += 1
+            millViewModel.load(day)
+        }
+        if( item.itemId == R.id.app_bar_left) {
+            day -= 1
+            if (day <= 0 ){
+                day = 0
+            }
+            millViewModel.load(day)
+        }
+        return super.onOptionsItemSelected(item)
+
+    }
+
     private fun setSwipeRefresh() {
         fragBinding.swipe.setOnRefreshListener {
             fragBinding.swipe.isRefreshing = true
             state = fragBinding.recyclerViewMill.layoutManager?.onSaveInstanceState()
-            millViewModel.load()
+            millViewModel.load(day)
         }
     }
 
@@ -129,21 +146,22 @@ class PmillFragment : Fragment(), StoryListener {
             override fun onQueryTextChange(newText: String?): Boolean {
                 if (newText != null) {
                     millViewModel.search(
+                        day,
                         newText
                     )
                 }
                 else{
-                    millViewModel.load()
+                    millViewModel.load(day)
                 }
                 if (newText == "") {
-                    millViewModel.load()
+                    millViewModel.load(day)
                 }
 
                 return true
             }
         })
         searchView.setOnCloseListener {
-            millViewModel.load()
+            millViewModel.load(day)
             false
         }
         super.onCreateOptionsMenu(menu, inflater)
@@ -157,8 +175,8 @@ class PmillFragment : Fragment(), StoryListener {
 
 
     override fun onResume() {
+        millViewModel.load(day)
         super.onResume()
-        millViewModel.load()
     }
 
     override fun onPause() {

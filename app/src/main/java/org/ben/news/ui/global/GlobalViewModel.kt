@@ -29,30 +29,26 @@ class GlobalViewModel : ViewModel() {
 
     var liveFirebaseUser = MutableLiveData<FirebaseUser>()
 
-    init { load() }
+    init { load(0) }
 
     private val outlet = "www.GlobalNews.ca"
 
 
-    fun load() {
-        val list: ArrayList<String>
+    fun load(day: Int) {
+        val list: String
         try {
-            list = getDates(5)
-            list.sortDescending()
+            list = StoryManager.getDate(day)
             StoryManager.findByOutlet(list,outlet,gloList)
             Timber.i("Load Success : ${gloList.value}")
         }
         catch (e: Exception) {
             Timber.i("Load Error : $e.message")
         }
-
     }
 
-    fun search( term: String) {
-        val dates: ArrayList<String>
+    fun search( day: Int, term: String) {
         try {
-            dates = getDates(5)
-            dates.sortDescending()
+            val dates = StoryManager.getDate(day)
             StoryManager.searchByOutlet(dates,term,outlet,gloList)
             Timber.i("Search Success")
         }
