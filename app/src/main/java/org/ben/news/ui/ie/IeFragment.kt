@@ -2,6 +2,7 @@ package org.ben.news.ui.ie
 
 import android.app.AlertDialog
 import android.content.Intent
+import android.content.res.Configuration
 import android.net.Uri
 import android.os.Bundle
 import android.os.Parcelable
@@ -114,7 +115,12 @@ class IeFragment : Fragment(), StoryListener {
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu_all, menu)
-
+        when (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) {
+            Configuration.UI_MODE_NIGHT_YES -> {
+                menu.findItem(R.id.app_bar_right).iconTintList = null
+                menu.findItem(R.id.app_bar_left).iconTintList = null
+            }
+        }
         /* Finding the search bar in the menu and setting it to the search view. */
         val item = menu.findItem(R.id.app_bar_search)
         val searchView = item.actionView as SearchView

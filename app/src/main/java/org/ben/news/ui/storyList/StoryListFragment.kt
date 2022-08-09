@@ -123,6 +123,8 @@ class StoryListFragment : Fragment(), StoryListener {
         when (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) {
             Configuration.UI_MODE_NIGHT_YES -> {
                 menu.findItem(R.id.app_bar_shuffle).iconTintList = null
+                menu.findItem(R.id.app_bar_r).iconTintList = null
+                menu.findItem(R.id.app_bar_l).iconTintList = null
             }
         }
 
