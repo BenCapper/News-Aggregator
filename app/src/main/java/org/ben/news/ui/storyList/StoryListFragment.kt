@@ -45,6 +45,7 @@ class StoryListFragment : Fragment(), StoryListener {
     private val storyListViewModel: StoryListViewModel by activityViewModels()
     var state: Parcelable? = null
     var shuffle: Boolean? = null
+    var day = 0
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -107,7 +108,7 @@ class StoryListFragment : Fragment(), StoryListener {
         fragBinding.swipe.setOnRefreshListener {
             fragBinding.swipe.isRefreshing = true
             state = fragBinding.recyclerView.layoutManager?.onSaveInstanceState()
-            storyListViewModel.load()
+            storyListViewModel.load(day)
         }
     }
 
@@ -140,21 +141,22 @@ class StoryListFragment : Fragment(), StoryListener {
             override fun onQueryTextChange(newText: String?): Boolean {
                 if (newText != null) {
                     storyListViewModel.search(
+                        day,
                         newText
                     )
                 }
                 else{
-                    storyListViewModel.load()
+                    storyListViewModel.load(day)
                 }
                 if (newText == "") {
-                    storyListViewModel.load()
+                    storyListViewModel.load(day)
                 }
 
                 return true
             }
         })
         searchView.setOnCloseListener {
-            storyListViewModel.load()
+            storyListViewModel.load(day)
             false
         }
         super.onCreateOptionsMenu(menu, inflater)
@@ -163,10 +165,22 @@ class StoryListFragment : Fragment(), StoryListener {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
         if (id == R.id.app_bar_shuffle) {
-            storyListViewModel.loadShuffle()
+            storyListViewModel.loadShuffle(day)
             shuffle = true
             state = null
         }
+        if( item.itemId == R.id.app_bar_r) {
+            day += 1
+            storyListViewModel.load(day)
+        }
+        if( item.itemId == R.id.app_bar_l) {
+            day -= 1
+            if (day <= 0 ){
+                day = 0
+            }
+            storyListViewModel.load(day)
+        }
+
         return super.onOptionsItemSelected(item)
     }
 
@@ -176,8 +190,8 @@ class StoryListFragment : Fragment(), StoryListener {
     }
 
     override fun onResume() {
+        storyListViewModel.load(day)
         super.onResume()
-        storyListViewModel.load()
     }
 
     override fun onPause() {
