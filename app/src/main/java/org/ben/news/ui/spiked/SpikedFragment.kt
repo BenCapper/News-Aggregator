@@ -45,6 +45,7 @@ class SpikedFragment : Fragment(), StoryListener {
     private val loggedInViewModel : LoggedInViewModel by activityViewModels()
     private val spikeViewModel: SpikedViewModel by activityViewModels()
     var state: Parcelable? = null
+    var day = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -100,11 +101,27 @@ class SpikedFragment : Fragment(), StoryListener {
         return root
     }
 
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if( item.itemId == R.id.app_bar_right) {
+            day += 1
+            spikeViewModel.load(day)
+        }
+        if( item.itemId == R.id.app_bar_left) {
+            day -= 1
+            if (day <= 0 ){
+                day = 0
+            }
+            spikeViewModel.load(day)
+        }
+        return super.onOptionsItemSelected(item)
+
+    }
+
     private fun setSwipeRefresh() {
         fragBinding.swipe.setOnRefreshListener {
             fragBinding.swipe.isRefreshing = true
             state = fragBinding.recyclerViewSpike.layoutManager?.onSaveInstanceState()
-            spikeViewModel.load()
+            spikeViewModel.load(day)
         }
     }
 
@@ -131,21 +148,22 @@ class SpikedFragment : Fragment(), StoryListener {
             override fun onQueryTextChange(newText: String?): Boolean {
                 if (newText != null) {
                     spikeViewModel.search(
+                        day,
                         newText
                     )
                 }
                 else{
-                    spikeViewModel.load()
+                    spikeViewModel.load(day)
                 }
                 if (newText == "") {
-                    spikeViewModel.load()
+                    spikeViewModel.load(day)
                 }
 
                 return true
             }
         })
         searchView.setOnCloseListener {
-            spikeViewModel.load()
+            spikeViewModel.load(day)
             false
         }
         super.onCreateOptionsMenu(menu, inflater)
@@ -157,8 +175,8 @@ class SpikedFragment : Fragment(), StoryListener {
     }
 
     override fun onResume() {
+        spikeViewModel.load(day)
         super.onResume()
-        spikeViewModel.load()
     }
 
     override fun onPause() {

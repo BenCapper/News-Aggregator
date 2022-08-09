@@ -43,6 +43,7 @@ class GbFragment : Fragment(), StoryListener {
     private val loggedInViewModel : LoggedInViewModel by activityViewModels()
     private val gbViewModel: GbViewModel by activityViewModels()
     var state: Parcelable? = null
+    var day = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -99,11 +100,27 @@ class GbFragment : Fragment(), StoryListener {
         return root
     }
 
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if( item.itemId == R.id.app_bar_right) {
+            day += 1
+            gbViewModel.load(day)
+        }
+        if( item.itemId == R.id.app_bar_left) {
+            day -= 1
+            if (day <= 0 ){
+                day = 0
+            }
+            gbViewModel.load(day)
+        }
+        return super.onOptionsItemSelected(item)
+
+    }
+
     private fun setSwipeRefresh() {
         fragBinding.swipe.setOnRefreshListener {
             fragBinding.swipe.isRefreshing = true
             state = fragBinding.recyclerViewGb.layoutManager?.onSaveInstanceState()
-            gbViewModel.load()
+            gbViewModel.load(day)
         }
     }
 
@@ -131,21 +148,22 @@ class GbFragment : Fragment(), StoryListener {
             override fun onQueryTextChange(newText: String?): Boolean {
                 if (newText != null) {
                     gbViewModel.search(
+                        day,
                         newText
                     )
                 }
                 else{
-                    gbViewModel.load()
+                    gbViewModel.load(day)
                 }
                 if (newText == "") {
-                    gbViewModel.load()
+                    gbViewModel.load(day)
                 }
 
                 return true
             }
         })
         searchView.setOnCloseListener {
-            gbViewModel.load()
+            gbViewModel.load(day)
             false
         }
         super.onCreateOptionsMenu(menu, inflater)
@@ -158,8 +176,8 @@ class GbFragment : Fragment(), StoryListener {
     }
 
     override fun onResume() {
+        gbViewModel.load(day)
         super.onResume()
-        gbViewModel.load()
     }
 
     override fun onPause() {

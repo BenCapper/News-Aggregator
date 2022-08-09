@@ -43,6 +43,7 @@ class SkyFragment : Fragment(), StoryListener {
     private val loggedInViewModel : LoggedInViewModel by activityViewModels()
     private val skyViewModel: SkyViewModel by activityViewModels()
     var state: Parcelable? = null
+    var day = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -98,11 +99,27 @@ class SkyFragment : Fragment(), StoryListener {
         return root
     }
 
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if( item.itemId == R.id.app_bar_right) {
+            day += 1
+            skyViewModel.load(day)
+        }
+        if( item.itemId == R.id.app_bar_left) {
+            day -= 1
+            if (day <= 0 ){
+                day = 0
+            }
+            skyViewModel.load(day)
+        }
+        return super.onOptionsItemSelected(item)
+
+    }
+
     private fun setSwipeRefresh() {
         fragBinding.swipe.setOnRefreshListener {
             fragBinding.swipe.isRefreshing = true
             state = fragBinding.recyclerViewSky.layoutManager?.onSaveInstanceState()
-            skyViewModel.load()
+            skyViewModel.load(day)
         }
     }
 
@@ -129,21 +146,22 @@ class SkyFragment : Fragment(), StoryListener {
             override fun onQueryTextChange(newText: String?): Boolean {
                 if (newText != null) {
                     skyViewModel.search(
+                        day,
                         newText
                     )
                 }
                 else{
-                    skyViewModel.load()
+                    skyViewModel.load(day)
                 }
                 if (newText == "") {
-                    skyViewModel.load()
+                    skyViewModel.load(day)
                 }
 
                 return true
             }
         })
         searchView.setOnCloseListener {
-            skyViewModel.load()
+            skyViewModel.load(day)
             false
         }
         super.onCreateOptionsMenu(menu, inflater)
@@ -156,7 +174,7 @@ class SkyFragment : Fragment(), StoryListener {
 
     override fun onResume() {
         super.onResume()
-        skyViewModel.load()
+        skyViewModel.load(day)
     }
 
     override fun onPause() {
