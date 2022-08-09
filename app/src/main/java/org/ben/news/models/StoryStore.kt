@@ -12,6 +12,7 @@ interface StoryStore {
     fun findByOutlets(dates: ArrayList<String>, outlets: List<String>, storyList: MutableLiveData<List<StoryModel>>)
     fun findByOutlets(date: String, outlets: List<String>, storyList: MutableLiveData<List<StoryModel>>)
     fun findOutletNoImage(dates: ArrayList<String>, outlet: String, storyList: MutableLiveData<List<StoryModel>>)
+    fun findOutletNoImage(date: String, outlet: String, storyList: MutableLiveData<List<StoryModel>>)
     fun findById(userId:String, storyId: String, story: MutableLiveData<StoryModel>)
     fun create(userId: String, path:String, story: StoryModel)
     fun delete(userId:String, path: String, storyId: String)
@@ -23,4 +24,5 @@ interface StoryStore {
     fun searchByOutlets(dates: ArrayList<String>, term: String, outlets:List<String>, storyList: MutableLiveData<List<StoryModel>>)
     fun searchByOutlets(date: String, term: String, outlets:List<String>, storyList: MutableLiveData<List<StoryModel>>)
     fun searchOutletNoImage(dates: ArrayList<String>, term: String, outlet:String, storyList: MutableLiveData<List<StoryModel>>)
+    fun searchOutletNoImage(date: String, term: String, outlet:String, storyList: MutableLiveData<List<StoryModel>>)
 }

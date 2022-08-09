@@ -37,7 +37,7 @@ class RevolverViewModel : ViewModel() {
         val list: String
         try {
             list = StoryManager.getDate(day)
-            StoryManager.findByOutlet(list,outlet,revList)
+            StoryManager.findOutletNoImage(list,outlet,revList)
             Timber.i("Load Success : ${revList.value}")
         }
         catch (e: Exception) {
@@ -48,7 +48,7 @@ class RevolverViewModel : ViewModel() {
     fun search( day: Int, term: String) {
         try {
             val dates = StoryManager.getDate(day)
-            StoryManager.searchByOutlet(dates,term,outlet,revList)
+            StoryManager.searchOutletNoImage(dates,term,outlet,revList)
             Timber.i("Search Success")
         }
         catch (e: java.lang.Exception) {

@@ -40,7 +40,7 @@ class BonginoViewModel : ViewModel() {
         val list: String
         try {
             list = StoryManager.getDate(day)
-            StoryManager.findByOutlet(list,outlet,bongList)
+            StoryManager.findOutletNoImage(list,outlet,bongList)
             Timber.i("Load Success : ${bongList.value}")
         }
         catch (e: Exception) {
@@ -51,7 +51,7 @@ class BonginoViewModel : ViewModel() {
     fun search( day: Int, term: String) {
         try {
             val dates = StoryManager.getDate(day)
-            StoryManager.searchByOutlet(dates,term,outlet,bongList)
+            StoryManager.searchOutletNoImage(dates,term,outlet,bongList)
             Timber.i("Search Success")
         }
         catch (e: java.lang.Exception) {
