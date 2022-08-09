@@ -43,6 +43,7 @@ class IeFragment : Fragment(), StoryListener {
     private val loggedInViewModel : LoggedInViewModel by activityViewModels()
     private val ieViewModel: IeViewModel by activityViewModels()
     var state: Parcelable? = null
+    var day = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -101,7 +102,7 @@ class IeFragment : Fragment(), StoryListener {
         fragBinding.swipe.setOnRefreshListener {
             fragBinding.swipe.isRefreshing = true
             state = fragBinding.recyclerViewIe.layoutManager?.onSaveInstanceState()
-            ieViewModel.load()
+            ieViewModel.load(day)
         }
     }
 
@@ -128,21 +129,22 @@ class IeFragment : Fragment(), StoryListener {
             override fun onQueryTextChange(newText: String?): Boolean {
                 if (newText != null) {
                     ieViewModel.search(
+                        day,
                         newText
                     )
                 }
                 else{
-                    ieViewModel.load()
+                    ieViewModel.load(day)
                 }
                 if (newText == "") {
-                    ieViewModel.load()
+                    ieViewModel.load(day)
                 }
 
                 return true
             }
         })
         searchView.setOnCloseListener {
-            ieViewModel.load()
+            ieViewModel.load(day)
             false
         }
         super.onCreateOptionsMenu(menu, inflater)
@@ -154,10 +156,24 @@ class IeFragment : Fragment(), StoryListener {
         state?.let { fragBinding.recyclerViewIe.layoutManager?.onRestoreInstanceState(it) }
     }
 
-    override fun onResume() {
-        super.onResume()
-        ieViewModel.load()
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if( item.itemId == R.id.app_bar_right) {
+            day += 1
+            ieViewModel.load(day)
+        }
+        if( item.itemId == R.id.app_bar_left) {
+            day -= 1
+            if (day <= 0 ){
+                day = 0
+            }
+            ieViewModel.load(day)
+        }
+        return super.onOptionsItemSelected(item)
+    }
 
+    override fun onResume() {
+        ieViewModel.load(day)
+        super.onResume()
     }
 
     override fun onPause() {

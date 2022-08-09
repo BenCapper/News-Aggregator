@@ -43,6 +43,7 @@ class UsFragment : Fragment(), StoryListener {
     private val loggedInViewModel : LoggedInViewModel by activityViewModels()
     private val usViewModel: UsViewModel by activityViewModels()
     var state: Parcelable? = null
+    var day = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -101,7 +102,7 @@ class UsFragment : Fragment(), StoryListener {
         fragBinding.swipe.setOnRefreshListener {
             fragBinding.swipe.isRefreshing = true
             state = fragBinding.recyclerViewUs.layoutManager?.onSaveInstanceState()
-            usViewModel.load()
+            usViewModel.load(day)
         }
     }
 
@@ -128,21 +129,22 @@ class UsFragment : Fragment(), StoryListener {
             override fun onQueryTextChange(newText: String?): Boolean {
                 if (newText != null) {
                     usViewModel.search(
+                        day,
                         newText
                     )
                 }
                 else{
-                    usViewModel.load()
+                    usViewModel.load(day)
                 }
                 if (newText == "") {
-                    usViewModel.load()
+                    usViewModel.load(day)
                 }
 
                 return true
             }
         })
         searchView.setOnCloseListener {
-            usViewModel.load()
+            usViewModel.load(day)
             false
         }
         super.onCreateOptionsMenu(menu, inflater)
@@ -154,13 +156,29 @@ class UsFragment : Fragment(), StoryListener {
     }
 
     override fun onResume() {
+        usViewModel.load(day)
         super.onResume()
-        usViewModel.load()
     }
 
     override fun onPause() {
         state = fragBinding.recyclerViewUs.layoutManager?.onSaveInstanceState()
         super.onPause()
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if( item.itemId == R.id.app_bar_right) {
+            day += 1
+            usViewModel.load(day)
+        }
+        if( item.itemId == R.id.app_bar_left) {
+            day -= 1
+            if (day <= 0 ){
+                day = 0
+            }
+            usViewModel.load(day)
+        }
+        return super.onOptionsItemSelected(item)
+
     }
 
     override fun onStoryClick(story: StoryModel) {

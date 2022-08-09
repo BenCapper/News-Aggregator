@@ -30,16 +30,15 @@ class CanViewModel : ViewModel() {
 
     var liveFirebaseUser = MutableLiveData<FirebaseUser>()
 
-    init { load() }
+    init { load(0) }
 
     private val outlets = listOf("www.ThePostMillennial.com", "www.GlobalNews.ca")
 
 
-    fun load() {
-        val list: ArrayList<String>
+    fun load(day: Int) {
+        val list: String
         try {
-            list = getDates(5)
-            list.sortDescending()
+            list = StoryManager.getDate(day)
             StoryManager.findByOutlets(list,outlets,canList)
             Timber.i("Load Success : ${canList.value}")
         }
@@ -48,11 +47,9 @@ class CanViewModel : ViewModel() {
         }
     }
 
-    fun search( term: String) {
-        val dates: ArrayList<String>
+    fun search( day: Int, term: String) {
         try {
-            dates = getDates(5)
-            dates.sortDescending()
+            val dates = StoryManager.getDate(day)
             StoryManager.searchByOutlets(dates,term,outlets,canList)
             Timber.i("Search Success")
         }

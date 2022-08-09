@@ -43,6 +43,7 @@ class UkFragment : Fragment(), StoryListener {
     private val loggedInViewModel : LoggedInViewModel by activityViewModels()
     private val ukViewModel: UkViewModel by activityViewModels()
     var state: Parcelable? = null
+    var day = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -97,11 +98,26 @@ class UkFragment : Fragment(), StoryListener {
         return root
     }
 
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if( item.itemId == R.id.app_bar_right) {
+            day += 1
+            ukViewModel.load(day)
+        }
+        if( item.itemId == R.id.app_bar_left) {
+            day -= 1
+            if (day <= 0 ){
+                day = 0
+            }
+            ukViewModel.load(day)
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
     private fun setSwipeRefresh() {
         fragBinding.swipe.setOnRefreshListener {
             fragBinding.swipe.isRefreshing = true
             state = fragBinding.recyclerViewUk.layoutManager?.onSaveInstanceState()
-            ukViewModel.load()
+            ukViewModel.load(day)
         }
     }
 
@@ -128,21 +144,22 @@ class UkFragment : Fragment(), StoryListener {
             override fun onQueryTextChange(newText: String?): Boolean {
                 if (newText != null) {
                     ukViewModel.search(
+                        day,
                         newText
                     )
                 }
                 else{
-                    ukViewModel.load()
+                    ukViewModel.load(day)
                 }
                 if (newText == "") {
-                    ukViewModel.load()
+                    ukViewModel.load(day)
                 }
 
                 return true
             }
         })
         searchView.setOnCloseListener {
-            ukViewModel.load()
+            ukViewModel.load(day)
             false
         }
         super.onCreateOptionsMenu(menu, inflater)
@@ -154,8 +171,8 @@ class UkFragment : Fragment(), StoryListener {
     }
 
     override fun onResume() {
+        ukViewModel.load(day)
         super.onResume()
-        ukViewModel.load()
     }
 
     override fun onPause() {

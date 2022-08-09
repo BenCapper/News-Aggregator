@@ -43,6 +43,7 @@ class EuFragment : Fragment(), StoryListener {
     private val loggedInViewModel : LoggedInViewModel by activityViewModels()
     private val euViewModel: EuViewModel by activityViewModels()
     var state: Parcelable? = null
+    var day = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -99,11 +100,26 @@ class EuFragment : Fragment(), StoryListener {
         return root
     }
 
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if( item.itemId == R.id.app_bar_right) {
+            day += 1
+            euViewModel.load(day)
+        }
+        if( item.itemId == R.id.app_bar_left) {
+            day -= 1
+            if (day <= 0 ){
+                day = 0
+            }
+            euViewModel.load(day)
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
     private fun setSwipeRefresh() {
         fragBinding.swipe.setOnRefreshListener {
             fragBinding.swipe.isRefreshing = true
             state = fragBinding.recyclerViewEu.layoutManager?.onSaveInstanceState()
-            euViewModel.load()
+            euViewModel.load(day)
         }
     }
 
@@ -130,21 +146,22 @@ class EuFragment : Fragment(), StoryListener {
             override fun onQueryTextChange(newText: String?): Boolean {
                 if (newText != null) {
                     euViewModel.search(
+                        day,
                         newText
                     )
                 }
                 else{
-                    euViewModel.load()
+                    euViewModel.load(day)
                 }
                 if (newText == "") {
-                    euViewModel.load()
+                    euViewModel.load(day)
                 }
 
                 return true
             }
         })
         searchView.setOnCloseListener {
-            euViewModel.load()
+            euViewModel.load(day)
             false
         }
         super.onCreateOptionsMenu(menu, inflater)
@@ -157,8 +174,8 @@ class EuFragment : Fragment(), StoryListener {
     }
 
     override fun onResume() {
+        euViewModel.load(day)
         super.onResume()
-        euViewModel.load()
     }
 
     override fun onPause() {

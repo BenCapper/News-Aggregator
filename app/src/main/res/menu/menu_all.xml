@@ -8,4 +8,14 @@
         android:title="@string/filter"
         app:actionViewClass="android.widget.SearchView"
         app:showAsAction="always" />
+    <item
+        android:id="@+id/app_bar_left"
+        android:icon="@drawable/ic_left"
+        android:title="@string/arr_left"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/app_bar_right"
+        android:icon="@drawable/ic_right"
+        android:title="@string/arr_right"
+        app:showAsAction="always" />
 </menu>
