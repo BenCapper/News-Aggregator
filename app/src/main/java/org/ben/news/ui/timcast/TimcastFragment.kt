@@ -43,6 +43,7 @@ class TimcastFragment : Fragment(), StoryListener {
     private val loggedInViewModel : LoggedInViewModel by activityViewModels()
     private val timViewModel: TimcastViewModel by activityViewModels()
     var state: Parcelable? = null
+    var day = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -97,11 +98,27 @@ class TimcastFragment : Fragment(), StoryListener {
         return root
     }
 
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if( item.itemId == R.id.app_bar_right) {
+            day += 1
+            timViewModel.load(day)
+        }
+        if( item.itemId == R.id.app_bar_left) {
+            day -= 1
+            if (day <= 0 ){
+                day = 0
+            }
+            timViewModel.load(day)
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+
     private fun setSwipeRefresh() {
         fragBinding.swipe.setOnRefreshListener {
             fragBinding.swipe.isRefreshing = true
             state = fragBinding.recyclerViewTim.layoutManager?.onSaveInstanceState()
-            timViewModel.load()
+            timViewModel.load(day)
         }
     }
 
@@ -129,21 +146,22 @@ class TimcastFragment : Fragment(), StoryListener {
             override fun onQueryTextChange(newText: String?): Boolean {
                 if (newText != null) {
                     timViewModel.search(
+                        day,
                         newText
                     )
                 }
                 else{
-                    timViewModel.load()
+                    timViewModel.load(day)
                 }
                 if (newText == "") {
-                    timViewModel.load()
+                    timViewModel.load(day)
                 }
 
                 return true
             }
         })
         searchView.setOnCloseListener {
-            timViewModel.load()
+            timViewModel.load(day)
             false
         }
         super.onCreateOptionsMenu(menu, inflater)
@@ -155,8 +173,8 @@ class TimcastFragment : Fragment(), StoryListener {
     }
 
     override fun onResume() {
+        timViewModel.load(day)
         super.onResume()
-        timViewModel.load()
     }
 
     override fun onStoryClick(story: StoryModel) {

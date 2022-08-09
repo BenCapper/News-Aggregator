@@ -30,34 +30,29 @@ class CallerViewModel : ViewModel() {
 
     var liveFirebaseUser = MutableLiveData<FirebaseUser>()
 
-    init { load() }
+    init { load(0) }
 
     private val outlet = "www.DailyCaller.com"
 
 
-    fun load() {
-        val list: ArrayList<String>
+    fun load(day: Int) {
+        val list: String
         try {
-            list = getDates(5)
-            list.sortDescending()
+            list = StoryManager.getDate(day)
             StoryManager.findByOutlet(list,outlet,callerList)
             Timber.i("Load Success : ${callerList.value}")
         }
         catch (e: Exception) {
             Timber.i("Load Error : $e.message")
         }
-
     }
 
-    fun search( term: String) {
-        val dates: ArrayList<String>
+    fun search( day: Int, term: String) {
         try {
-            dates = getDates(5)
-            dates.sortDescending()
-            StoryManager.searchByOutlet(dates,term,outlet,callerList)
+            val dates = StoryManager.getDate(day)
+            StoryManager.searchByOutlet(dates, term, outlet, callerList)
             Timber.i("Search Success")
-        }
-        catch (e: java.lang.Exception) {
+        } catch (e: java.lang.Exception) {
             Timber.i("Search Error : $e.message")
         }
     }

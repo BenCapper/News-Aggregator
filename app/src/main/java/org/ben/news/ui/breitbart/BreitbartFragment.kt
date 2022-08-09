@@ -43,7 +43,7 @@ class BreitbartFragment : Fragment(), StoryListener {
     private val loggedInViewModel : LoggedInViewModel by activityViewModels()
     private val breitbartViewModel: BreitbartViewModel by activityViewModels()
     var state: Parcelable? = null
-
+    var day = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -99,11 +99,27 @@ class BreitbartFragment : Fragment(), StoryListener {
         return root
     }
 
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if( item.itemId == R.id.app_bar_right) {
+            day += 1
+            breitbartViewModel.load(day)
+        }
+        if( item.itemId == R.id.app_bar_left) {
+            day -= 1
+            if (day <= 0 ){
+                day = 0
+            }
+            breitbartViewModel.load(day)
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+
     private fun setSwipeRefresh() {
         fragBinding.swipe.setOnRefreshListener {
             fragBinding.swipe.isRefreshing = true
             state = fragBinding.recyclerViewBreit.layoutManager?.onSaveInstanceState()
-            breitbartViewModel.load()
+            breitbartViewModel.load(day)
         }
     }
 
@@ -130,21 +146,22 @@ class BreitbartFragment : Fragment(), StoryListener {
             override fun onQueryTextChange(newText: String?): Boolean {
                 if (newText != null) {
                     breitbartViewModel.search(
+                        day,
                         newText
                     )
                 }
                 else{
-                    breitbartViewModel.load()
+                    breitbartViewModel.load(day)
                 }
                 if (newText == "") {
-                    breitbartViewModel.load()
+                    breitbartViewModel.load(day)
                 }
 
                 return true
             }
         })
         searchView.setOnCloseListener {
-            breitbartViewModel.load()
+            breitbartViewModel.load(day)
             false
         }
         super.onCreateOptionsMenu(menu, inflater)
@@ -157,8 +174,8 @@ class BreitbartFragment : Fragment(), StoryListener {
     }
 
     override fun onResume() {
+        breitbartViewModel.load(day)
         super.onResume()
-        breitbartViewModel.load()
     }
 
     override fun onPause() {

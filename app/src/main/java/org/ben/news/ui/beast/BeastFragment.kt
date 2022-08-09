@@ -43,6 +43,7 @@ class BeastFragment : Fragment(), StoryListener {
     private val loggedInViewModel : LoggedInViewModel by activityViewModels()
     private val beastViewModel: BeastViewModel by activityViewModels()
     var state: Parcelable? = null
+    var day = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -98,11 +99,26 @@ class BeastFragment : Fragment(), StoryListener {
         return root
     }
 
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if( item.itemId == R.id.app_bar_right) {
+            day += 1
+            beastViewModel.load(day)
+        }
+        if( item.itemId == R.id.app_bar_left) {
+            day -= 1
+            if (day <= 0 ){
+                day = 0
+            }
+            beastViewModel.load(day)
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
     private fun setSwipeRefresh() {
         fragBinding.swipe.setOnRefreshListener {
             fragBinding.swipe.isRefreshing = true
             state = fragBinding.recyclerViewBeast.layoutManager?.onSaveInstanceState()
-            beastViewModel.load()
+            beastViewModel.load(day)
         }
     }
 
@@ -129,21 +145,22 @@ class BeastFragment : Fragment(), StoryListener {
             override fun onQueryTextChange(newText: String?): Boolean {
                 if (newText != null) {
                     beastViewModel.search(
+                        day,
                         newText
                     )
                 }
                 else{
-                    beastViewModel.load()
+                    beastViewModel.load(day)
                 }
                 if (newText == "") {
-                    beastViewModel.load()
+                    beastViewModel.load(day)
                 }
 
                 return true
             }
         })
         searchView.setOnCloseListener {
-            beastViewModel.load()
+            beastViewModel.load(day)
             false
         }
         super.onCreateOptionsMenu(menu, inflater)
@@ -155,8 +172,8 @@ class BeastFragment : Fragment(), StoryListener {
     }
 
     override fun onResume() {
+        beastViewModel.load(day)
         super.onResume()
-        beastViewModel.load()
     }
 
     override fun onPause() {

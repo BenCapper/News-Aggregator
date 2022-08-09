@@ -42,6 +42,7 @@ class HuffFragment : Fragment(), StoryListener {
     private val loggedInViewModel : LoggedInViewModel by activityViewModels()
     private val huffViewModel: HuffViewModel by activityViewModels()
     var state: Parcelable? = null
+    var day = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -96,11 +97,27 @@ class HuffFragment : Fragment(), StoryListener {
         return root
     }
 
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if( item.itemId == R.id.app_bar_right) {
+            day += 1
+            huffViewModel.load(day)
+        }
+        if( item.itemId == R.id.app_bar_left) {
+            day -= 1
+            if (day <= 0 ){
+                day = 0
+            }
+            huffViewModel.load(day)
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+
     private fun setSwipeRefresh() {
         fragBinding.swipe.setOnRefreshListener {
             fragBinding.swipe.isRefreshing = true
             state = fragBinding.recyclerViewHuff.layoutManager?.onSaveInstanceState()
-            huffViewModel.load()
+            huffViewModel.load(day)
         }
     }
 
@@ -127,21 +144,22 @@ class HuffFragment : Fragment(), StoryListener {
             override fun onQueryTextChange(newText: String?): Boolean {
                 if (newText != null) {
                     huffViewModel.search(
+                        day,
                         newText
                     )
                 }
                 else{
-                    huffViewModel.load()
+                    huffViewModel.load(day)
                 }
                 if (newText == "") {
-                    huffViewModel.load()
+                    huffViewModel.load(day)
                 }
 
                 return true
             }
         })
         searchView.setOnCloseListener {
-            huffViewModel.load()
+            huffViewModel.load(day)
             false
         }
         super.onCreateOptionsMenu(menu, inflater)
@@ -153,8 +171,8 @@ class HuffFragment : Fragment(), StoryListener {
     }
 
     override fun onResume() {
+        huffViewModel.load(day)
         super.onResume()
-        huffViewModel.load()
     }
 
     override fun onPause() {

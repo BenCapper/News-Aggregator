@@ -43,6 +43,7 @@ class PoliticoFragment : Fragment(), StoryListener {
     private val loggedInViewModel : LoggedInViewModel by activityViewModels()
     private val politicoViewModel: PoliticoViewModel by activityViewModels()
     var state: Parcelable? = null
+    var day = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -97,11 +98,27 @@ class PoliticoFragment : Fragment(), StoryListener {
         return root
     }
 
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if( item.itemId == R.id.app_bar_right) {
+            day += 1
+            politicoViewModel.load(day)
+        }
+        if( item.itemId == R.id.app_bar_left) {
+            day -= 1
+            if (day <= 0 ){
+                day = 0
+            }
+            politicoViewModel.load(day)
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+
     private fun setSwipeRefresh() {
         fragBinding.swipe.setOnRefreshListener {
             fragBinding.swipe.isRefreshing = true
             state = fragBinding.recyclerViewPol.layoutManager?.onSaveInstanceState()
-            politicoViewModel.load()
+            politicoViewModel.load(day)
         }
     }
 
@@ -128,21 +145,22 @@ class PoliticoFragment : Fragment(), StoryListener {
             override fun onQueryTextChange(newText: String?): Boolean {
                 if (newText != null) {
                     politicoViewModel.search(
+                        day,
                         newText
                     )
                 }
                 else{
-                    politicoViewModel.load()
+                    politicoViewModel.load(day)
                 }
                 if (newText == "") {
-                    politicoViewModel.load()
+                    politicoViewModel.load(day)
                 }
 
                 return true
             }
         })
         searchView.setOnCloseListener {
-            politicoViewModel.load()
+            politicoViewModel.load(day)
             false
         }
         super.onCreateOptionsMenu(menu, inflater)
@@ -155,8 +173,8 @@ class PoliticoFragment : Fragment(), StoryListener {
     }
 
     override fun onResume() {
+        politicoViewModel.load(day)
         super.onResume()
-        politicoViewModel.load()
     }
 
     override fun onPause() {

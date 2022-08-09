@@ -30,28 +30,26 @@ class AbcViewModel : ViewModel() {
     var liveFirebaseUser = MutableLiveData<FirebaseUser>()
 
 
-    init { load() }
+    init { load(0) }
 
     private val outlet = "AbcNews.go.com"
 
 
-    fun load() {
-        val list: ArrayList<String>
+    fun load(day: Int) {
+        val list: String
         try {
-            list = getDates(5)
+            list = StoryManager.getDate(day)
             StoryManager.findByOutlet(list,outlet,abcList)
             Timber.i("Load Success : ${abcList.value}")
         }
         catch (e: Exception) {
             Timber.i("Load Error : $e.message")
         }
-
     }
 
-    fun search( term: String) {
-        val dates: ArrayList<String>
+    fun search( day: Int, term: String) {
         try {
-            dates = getDates(5)
+            val dates = StoryManager.getDate(day)
             StoryManager.searchByOutlet(dates,term,outlet,abcList)
             Timber.i("Search Success")
         }

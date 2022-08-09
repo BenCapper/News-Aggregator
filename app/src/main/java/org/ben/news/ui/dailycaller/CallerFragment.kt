@@ -43,6 +43,7 @@ class CallerFragment : Fragment(), StoryListener {
     private val loggedInViewModel : LoggedInViewModel by activityViewModels()
     private val callerViewModel: CallerViewModel by activityViewModels()
     var state: Parcelable? = null
+    var day = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -97,11 +98,27 @@ class CallerFragment : Fragment(), StoryListener {
         return root
     }
 
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if( item.itemId == R.id.app_bar_right) {
+            day += 1
+            callerViewModel.load(day)
+        }
+        if( item.itemId == R.id.app_bar_left) {
+            day -= 1
+            if (day <= 0 ){
+                day = 0
+            }
+            callerViewModel.load(day)
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+
     private fun setSwipeRefresh() {
         fragBinding.swipe.setOnRefreshListener {
             fragBinding.swipe.isRefreshing = true
             state = fragBinding.recyclerViewCaller.layoutManager?.onSaveInstanceState()
-            callerViewModel.load()
+            callerViewModel.load(day)
         }
     }
 
@@ -129,21 +146,22 @@ class CallerFragment : Fragment(), StoryListener {
             override fun onQueryTextChange(newText: String?): Boolean {
                 if (newText != null) {
                     callerViewModel.search(
+                        day,
                         newText
                     )
                 }
                 else{
-                    callerViewModel.load()
+                    callerViewModel.load(day)
                 }
                 if (newText == "") {
-                    callerViewModel.load()
+                    callerViewModel.load(day)
                 }
 
                 return true
             }
         })
         searchView.setOnCloseListener {
-            callerViewModel.load()
+            callerViewModel.load(day)
             false
         }
         super.onCreateOptionsMenu(menu, inflater)
@@ -156,8 +174,8 @@ class CallerFragment : Fragment(), StoryListener {
     }
 
     override fun onResume() {
+        callerViewModel.load(day)
         super.onResume()
-        callerViewModel.load()
     }
 
     override fun onPause() {

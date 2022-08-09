@@ -43,7 +43,7 @@ class BonginoFragment : Fragment(), StoryListener {
     private val loggedInViewModel : LoggedInViewModel by activityViewModels()
     private val bonginoViewModel: BonginoViewModel by activityViewModels()
     var state: Parcelable? = null
-
+    var day = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -100,11 +100,27 @@ class BonginoFragment : Fragment(), StoryListener {
         return root
     }
 
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if( item.itemId == R.id.app_bar_right) {
+            day += 1
+            bonginoViewModel.load(day)
+        }
+        if( item.itemId == R.id.app_bar_left) {
+            day -= 1
+            if (day <= 0 ){
+                day = 0
+            }
+            bonginoViewModel.load(day)
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+
     private fun setSwipeRefresh() {
         fragBinding.swipe.setOnRefreshListener {
             fragBinding.swipe.isRefreshing = true
             state = fragBinding.recyclerViewBong.layoutManager?.onSaveInstanceState()
-            bonginoViewModel.load()
+            bonginoViewModel.load(day)
         }
     }
 
@@ -131,21 +147,22 @@ class BonginoFragment : Fragment(), StoryListener {
             override fun onQueryTextChange(newText: String?): Boolean {
                 if (newText != null) {
                     bonginoViewModel.search(
+                        day,
                         newText
                     )
                 }
                 else{
-                    bonginoViewModel.load()
+                    bonginoViewModel.load(day)
                 }
                 if (newText == "") {
-                    bonginoViewModel.load()
+                    bonginoViewModel.load(day)
                 }
 
                 return true
             }
         })
         searchView.setOnCloseListener {
-            bonginoViewModel.load()
+            bonginoViewModel.load(day)
             false
         }
         super.onCreateOptionsMenu(menu, inflater)
@@ -159,8 +176,8 @@ class BonginoFragment : Fragment(), StoryListener {
 
 
     override fun onResume() {
+        bonginoViewModel.load(day)
         super.onResume()
-        bonginoViewModel.load()
     }
 
     override fun onPause() {

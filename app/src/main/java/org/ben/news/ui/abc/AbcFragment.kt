@@ -43,7 +43,7 @@ class AbcFragment : Fragment(), StoryListener {
     private val loggedInViewModel : LoggedInViewModel by activityViewModels()
     private val abcViewModel: AbcViewModel by activityViewModels()
     var state: Parcelable? = null
-
+    var day = 0
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -105,7 +105,7 @@ class AbcFragment : Fragment(), StoryListener {
         fragBinding.swipe.setOnRefreshListener {
             fragBinding.swipe.isRefreshing = true
             state = fragBinding.recyclerViewAbc.layoutManager?.onSaveInstanceState()
-            abcViewModel.load()
+            abcViewModel.load(day)
         }
     }
 
@@ -132,24 +132,40 @@ class AbcFragment : Fragment(), StoryListener {
             override fun onQueryTextChange(newText: String?): Boolean {
                 if (newText != null) {
                     abcViewModel.search(
+                        day,
                         newText
                     )
                 }
                 else{
-                    abcViewModel.load()
+                    abcViewModel.load(day)
                 }
                 if (newText == "") {
-                    abcViewModel.load()
+                    abcViewModel.load(day)
                 }
 
                 return true
             }
         })
         searchView.setOnCloseListener {
-            abcViewModel.load()
+            abcViewModel.load(day)
             false
         }
         super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if( item.itemId == R.id.app_bar_right) {
+            day += 1
+            abcViewModel.load(day)
+        }
+        if( item.itemId == R.id.app_bar_left) {
+            day -= 1
+            if (day <= 0 ){
+                day = 0
+            }
+            abcViewModel.load(day)
+        }
+        return super.onOptionsItemSelected(item)
     }
 
 
@@ -160,8 +176,8 @@ class AbcFragment : Fragment(), StoryListener {
 
 
     override fun onResume() {
+        abcViewModel.load(day)
         super.onResume()
-        abcViewModel.load()
     }
 
     override fun onPause() {

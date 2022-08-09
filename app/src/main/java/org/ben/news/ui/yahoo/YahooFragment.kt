@@ -43,6 +43,7 @@ class YahooFragment : Fragment(), StoryListener {
     private val loggedInViewModel : LoggedInViewModel by activityViewModels()
     private val yahooViewModel: YahooViewModel by activityViewModels()
     var state: Parcelable? = null
+    var day = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -96,11 +97,27 @@ class YahooFragment : Fragment(), StoryListener {
         return root
     }
 
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if( item.itemId == R.id.app_bar_right) {
+            day += 1
+            yahooViewModel.load(day)
+        }
+        if( item.itemId == R.id.app_bar_left) {
+            day -= 1
+            if (day <= 0 ){
+                day = 0
+            }
+            yahooViewModel.load(day)
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+
     private fun setSwipeRefresh() {
         fragBinding.swipe.setOnRefreshListener {
             fragBinding.swipe.isRefreshing = true
             state = fragBinding.recyclerViewYahoo.layoutManager?.onSaveInstanceState()
-            yahooViewModel.load()
+            yahooViewModel.load(day)
         }
     }
 
@@ -127,21 +144,22 @@ class YahooFragment : Fragment(), StoryListener {
             override fun onQueryTextChange(newText: String?): Boolean {
                 if (newText != null) {
                     yahooViewModel.search(
+                        day,
                         newText
                     )
                 }
                 else{
-                    yahooViewModel.load()
+                    yahooViewModel.load(day)
                 }
                 if (newText == "") {
-                    yahooViewModel.load()
+                    yahooViewModel.load(day)
                 }
 
                 return true
             }
         })
         searchView.setOnCloseListener {
-            yahooViewModel.load()
+            yahooViewModel.load(day)
             false
         }
         super.onCreateOptionsMenu(menu, inflater)
@@ -153,8 +171,8 @@ class YahooFragment : Fragment(), StoryListener {
     }
 
     override fun onResume() {
+        yahooViewModel.load(day)
         super.onResume()
-        yahooViewModel.load()
     }
 
     override fun onPause() {

@@ -31,35 +31,32 @@ class BonginoViewModel : ViewModel() {
     var liveFirebaseUser = MutableLiveData<FirebaseUser>()
 
 
-    init { load() }
+    init { load(0) }
 
     private val outlet = "www.BonginoReport.com"
 
 
-    fun load() {
-        val list: ArrayList<String>
+    fun load(day: Int) {
+        val list: String
         try {
-            list = getDates(5)
-            list.sortDescending()
-            StoryManager.findOutletNoImage(list,outlet,bongList)
+            list = StoryManager.getDate(day)
+            StoryManager.findByOutlet(list,outlet,bongList)
             Timber.i("Load Success : ${bongList.value}")
         }
         catch (e: Exception) {
             Timber.i("Load Error : $e.message")
         }
-
     }
 
-    fun search( term: String) {
-        val dates: ArrayList<String>
+    fun search( day: Int, term: String) {
         try {
-            dates = getDates(5)
-            dates.sortDescending()
-            StoryManager.searchOutletNoImage(dates,term,outlet,bongList)
+            val dates = StoryManager.getDate(day)
+            StoryManager.searchByOutlet(dates,term,outlet,bongList)
             Timber.i("Search Success")
         }
         catch (e: java.lang.Exception) {
             Timber.i("Search Error : $e.message")
         }
     }
+
 }
