@@ -61,7 +61,7 @@ class GuardFragment : Fragment(), StoryListener {
         _fragBinding = FragmentGuardBinding.inflate(inflater, container, false)
         val root = fragBinding.root
         fragBinding.recyclerViewGua.layoutManager = activity?.let { LinearLayoutManager(it) }
-        activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.gua)
+        activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.guard)
         MobileAds.initialize(this.context!!) {}
         val fab = activity?.findViewById<FloatingActionButton>(R.id.fab)
         val bot = activity?.findViewById<BottomNavigationView>(R.id.bottom_nav)

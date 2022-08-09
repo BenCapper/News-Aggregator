@@ -61,7 +61,7 @@ class PmillFragment : Fragment(), StoryListener {
         _fragBinding = FragmentPmillBinding.inflate(inflater, container, false)
         val root = fragBinding.root
         fragBinding.recyclerViewMill.layoutManager = activity?.let { LinearLayoutManager(it) }
-        activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.pmill)
+        activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.mill)
         MobileAds.initialize(this.context!!) {}
         val fab = activity?.findViewById<FloatingActionButton>(R.id.fab)
         val bot = activity?.findViewById<BottomNavigationView>(R.id.bottom_nav)

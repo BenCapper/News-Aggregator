@@ -61,7 +61,7 @@ class CallerFragment : Fragment(), StoryListener {
         _fragBinding = FragmentCallerBinding.inflate(inflater, container, false)
         val root = fragBinding.root
         fragBinding.recyclerViewCaller.layoutManager = activity?.let { LinearLayoutManager(it) }
-        activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.dc)
+        activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.call)
         MobileAds.initialize(this.context!!) {}
         val fab = activity?.findViewById<FloatingActionButton>(R.id.fab)
         val bot = activity?.findViewById<BottomNavigationView>(R.id.bottom_nav)
