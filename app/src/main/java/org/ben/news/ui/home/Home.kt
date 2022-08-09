@@ -85,6 +85,7 @@ class Home : AppCompatActivity() {
             R.id.euronFragment,
             R.id.gbFragment,
             R.id.globalFragment,
+            R.id.guardFragment,
             R.id.griptFragment,
             R.id.gatewayFragment,
             R.id.huffFragment,
