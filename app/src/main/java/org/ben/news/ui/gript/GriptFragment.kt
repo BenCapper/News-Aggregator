@@ -43,6 +43,7 @@ class GriptFragment : Fragment(), StoryListener {
     private val loggedInViewModel : LoggedInViewModel by activityViewModels()
     private val griptViewModel: GriptViewModel by activityViewModels()
     var state: Parcelable? = null
+    var day = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -100,7 +101,7 @@ class GriptFragment : Fragment(), StoryListener {
         fragBinding.swipe.setOnRefreshListener {
             fragBinding.swipe.isRefreshing = true
             state = fragBinding.recyclerViewGript.layoutManager?.onSaveInstanceState()
-            griptViewModel.load()
+            griptViewModel.load(day)
         }
     }
 
@@ -128,24 +129,41 @@ class GriptFragment : Fragment(), StoryListener {
             override fun onQueryTextChange(newText: String?): Boolean {
                 if (newText != null) {
                     griptViewModel.search(
+                        day,
                         newText
                     )
                 }
                 else{
-                    griptViewModel.load()
+                    griptViewModel.load(day)
                 }
                 if (newText == "") {
-                    griptViewModel.load()
+                    griptViewModel.load(day)
                 }
 
                 return true
             }
         })
         searchView.setOnCloseListener {
-            griptViewModel.load()
+            griptViewModel.load(day)
             false
         }
         super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if( item.itemId == R.id.app_bar_right) {
+            day += 1
+            griptViewModel.load(day)
+        }
+        if( item.itemId == R.id.app_bar_left) {
+            day -= 1
+            if (day <= 0 ){
+                day = 0
+            }
+            griptViewModel.load(day)
+        }
+        return super.onOptionsItemSelected(item)
+
     }
 
     private fun render(storyList: ArrayList<StoryModel>) {
@@ -154,8 +172,8 @@ class GriptFragment : Fragment(), StoryListener {
     }
 
     override fun onResume() {
+        griptViewModel.load(day)
         super.onResume()
-        griptViewModel.load()
     }
 
     override fun onPause() {
