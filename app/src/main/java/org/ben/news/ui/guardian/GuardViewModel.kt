@@ -1,25 +1,20 @@
-package org.ben.news.ui.uk
+package org.ben.news.ui.guardian
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseUser
 import org.ben.news.firebase.StoryManager
-import org.ben.news.firebase.StoryManager.getDates
 import org.ben.news.models.StoryModel
 import timber.log.Timber
-import java.text.SimpleDateFormat
-import java.time.LocalDate
-import java.util.*
-import kotlin.collections.ArrayList
 
-class UkViewModel : ViewModel() {
 
-    private val ukList =
+class GuardViewModel : ViewModel() {
+    private val guardList =
         MutableLiveData<List<StoryModel>>()
 
-    val observableUkList: LiveData<List<StoryModel>>
-        get() = ukList
+    val observableGuardList: LiveData<List<StoryModel>>
+        get() = guardList
 
     private val story = MutableLiveData<StoryModel>()
 
@@ -29,34 +24,35 @@ class UkViewModel : ViewModel() {
 
     var liveFirebaseUser = MutableLiveData<FirebaseUser>()
 
+
     init { load() }
 
-    private val outlets = listOf("www.GBNews.uk", "news.Sky.com", "www.Spiked-Online.com", "www.TheGuardian.com")
+    private val outlet = "www.TheGuardian.com"
 
 
     fun load() {
         val list: ArrayList<String>
         try {
-            list = getDates(5)
-            list.sortDescending()
-            StoryManager.findByOutlets(list,outlets,ukList)
-            Timber.i("Load Success : ${ukList.value}")
+            list = StoryManager.getDates(5)
+            StoryManager.findByOutlet(list,outlet,guardList)
+            Timber.i("Load Success : ${guardList.value}")
         }
         catch (e: Exception) {
             Timber.i("Load Error : $e.message")
         }
+
     }
 
     fun search( term: String) {
         val dates: ArrayList<String>
         try {
-            dates = getDates(5)
-            dates.sortDescending()
-            StoryManager.searchByOutlets(dates,term,outlets,ukList)
+            dates = StoryManager.getDates(5)
+            StoryManager.searchByOutlet(dates,term,outlet,guardList)
             Timber.i("Search Success")
         }
         catch (e: java.lang.Exception) {
             Timber.i("Search Error : $e.message")
         }
     }
+
 }

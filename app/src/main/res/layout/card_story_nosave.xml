@@ -33,7 +33,7 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/relativeLayout3"
+            android:id="@+id/relativeLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="150dp"
@@ -43,11 +43,16 @@
             <Button
                 android:id="@+id/button3_nosave"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="47dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="-10dp"
                 android:background="@android:color/transparent"
                 android:textSize="10sp"
                 app:icon="@drawable/ic_share"
                 app:iconTint="#000000"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toEndOf="@+id/link_nosave"
                 app:layout_constraintTop_toBottomOf="@+id/headline_nosave" />
 
@@ -55,13 +60,15 @@
                 android:id="@+id/link_nosave"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="0dp"
+                android:layout_marginStart="30dp"
                 android:layout_marginTop="15dp"
                 android:layout_marginEnd="120dp"
+                android:layout_marginBottom="-10dp"
                 android:text="@{story.outlet}"
                 android:textColor="@color/dark"
                 android:textSize="11sp"
                 android:textStyle="italic"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/headline_nosave" />
@@ -95,6 +102,21 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/date_nosave" />
+
+
+
+            <ImageView
+                android:id="@id/imageView3"
+                android:layout_width="20dp"
+                android:layout_height="15dp"
+                android:layout_marginStart="-17dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="-10dp"
+                android:scaleType="fitCenter"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/link_nosave"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/headline_nosave" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>

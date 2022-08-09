@@ -8,6 +8,7 @@ import com.bumptech.glide.Glide
 import com.google.android.gms.ads.AdLoader
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.nativead.NativeAd
+import org.ben.news.R
 import org.ben.news.databinding.CardAdBinding
 import org.ben.news.databinding.CardStoryNosaveBinding
 import org.ben.news.models.StoryModel
@@ -26,6 +27,24 @@ class NoSaveAdapter constructor(private var stories: ArrayList<StoryModel>, priv
     private var ITEM = 0
     private var AD = 1
     private var FEED = 5
+    private val ie = listOf("www.RTE.ie", "www.Gript.ie")
+    private val uk = listOf("www.GBNews.uk", "news.Sky.com", "www.Spiked-Online.com", "www.TheGuardian.com")
+    private val ca = listOf("www.ThePostMillennial.com", "www.GlobalNews.ca")
+    private val eu = listOf("www.Euronews.com")
+    private val us = listOf("www.TheBlaze.com",
+        "www.Timcast.com",
+        "www.Zerohedge.com",
+        "www.Breitbart.com",
+        "www.Revolver.news",
+        "www.DailyCaller.com",
+        "www.TheDailyBeast.com",
+        "www.TheGatewayPundit.com",
+        "www.Politico.com",
+        "www.CbsNews.com",
+        "AbcNews.go.com",
+        "news.Yahoo.com",
+        "www.Vox.com",
+        "www.HuffPost.com")
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return if(viewType == ITEM){
@@ -94,7 +113,21 @@ class NoSaveAdapter constructor(private var stories: ArrayList<StoryModel>, priv
         fun bind(story: StoryModel, listener: StoryNoSaveListener) {
 
 
-
+            if (story.outlet in ca){
+                Glide.with(this.itemView.context).load(R.drawable.canicon).into(binding.imageView3)
+            }
+            if (story.outlet in eu){
+                Glide.with(this.itemView.context).load(R.drawable.euicon).into(binding.imageView3)
+            }
+            if (story.outlet in uk){
+                Glide.with(this.itemView.context).load(R.drawable.gbicon).into(binding.imageView3)
+            }
+            if (story.outlet in us){
+                Glide.with(this.itemView.context).load(R.drawable.usicon).into(binding.imageView3)
+            }
+            if (story.outlet in ie){
+                Glide.with(this.itemView.context).load(R.drawable.ieicon).into(binding.imageView3)
+            }
             binding.root.setOnClickListener { listener.onStoryClick(story) }
             binding.button3Nosave.setOnClickListener { listener.onShare(story) }
             binding.root.tag = story

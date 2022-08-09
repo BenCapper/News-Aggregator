@@ -302,6 +302,12 @@ class Home : AppCompatActivity() {
         Timber.i("UserId = ${loggedInViewModel.liveFirebaseUser.value!!.uid}")
     }
 
+    fun guaArticles(item: MenuItem) {
+        findNavController(R.id.nav_host_fragment).navigate(R.id.guardFragment)
+        findViewById<DrawerLayout>(R.id.drawer_layout).closeDrawers()
+        Timber.i("UserId = ${loggedInViewModel.liveFirebaseUser.value!!.uid}")
+    }
+
     fun spikeArticles(item: MenuItem) {
         findNavController(R.id.nav_host_fragment).navigate(R.id.spikedFragment)
         findViewById<DrawerLayout>(R.id.drawer_layout).closeDrawers()

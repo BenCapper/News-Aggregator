@@ -8,6 +8,7 @@ python3 cbs.py;
 python3 beast.py
 python3 dailycaller.py;
 python3 euronews.py;
+python3 guardian.py;
 python3 gbnews.py;
 python3 globalnews.py;
 python3 gript.py;

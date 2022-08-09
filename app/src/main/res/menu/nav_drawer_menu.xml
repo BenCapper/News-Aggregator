@@ -105,6 +105,11 @@
                 android:onClick="skyArticles"
                 android:title="@string/sky" />
             <item
+                android:id="@+id/menugua"
+                android:icon="@drawable/gbicon"
+                android:onClick="guaArticles"
+                android:title="@string/gua" />
+            <item
                 android:id="@+id/menueuron"
                 android:icon="@drawable/euicon"
                 android:onClick="euronArticles"
