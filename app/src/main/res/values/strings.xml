@@ -17,6 +17,7 @@
     <string name="account">Account</string>
     <string name="history">History</string>
     <string name="view_history">View History</string>
+    <string name="yest">Check Yesterday</string>
 
     <string name="save_can">Save Cancelled</string>
     <string name="save_art">Confirm Save</string>

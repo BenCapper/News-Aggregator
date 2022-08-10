@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.google.android.gms.ads.*
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -31,6 +32,7 @@ import splitties.alertdialog.appcompat.*
 import splitties.snackbar.snack
 import splitties.views.onClick
 import splitties.views.textColorResource
+import timber.log.Timber
 
 
 class StoryListFragment : Fragment(), StoryListener {
@@ -67,6 +69,7 @@ class StoryListFragment : Fragment(), StoryListener {
         MobileAds.initialize(this.context!!) {}
         val fab = activity?.findViewById<FloatingActionButton>(R.id.fab)
         val bot = activity?.findViewById<BottomNavigationView>(R.id.bottom_nav)
+
         fab?.visibility = View.INVISIBLE
         fragBinding.recyclerView.addOnScrollListener (object : RecyclerView.OnScrollListener(){
             var y = 0
@@ -98,10 +101,21 @@ class StoryListFragment : Fragment(), StoryListener {
                 checkSwipeRefresh()
             }
             hideLoader(loader)
+            if(fragBinding.recyclerView.adapter!!.itemCount == 0){
+                fragBinding.creepy.visibility = View.VISIBLE
+                Glide.with(this).load(R.drawable.bidenfall).into(fragBinding.imageView2)
+                fragBinding.yestbtn.setOnClickListener {
+                    fragBinding.creepy.visibility = View.INVISIBLE
+                    day += 1
+                    storyListViewModel.load(day)
+                }
+            }
         }
         setSwipeRefresh()
         return root
     }
+
+
 
 
     private fun setSwipeRefresh() {
@@ -173,6 +187,7 @@ class StoryListFragment : Fragment(), StoryListener {
         }
         if( item.itemId == R.id.app_bar_r) {
             day += 1
+            fragBinding.creepy.visibility = View.INVISIBLE
             storyListViewModel.load(day)
         }
         if( item.itemId == R.id.app_bar_l) {
