@@ -14,6 +14,7 @@ import android.widget.SearchView
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.google.android.gms.ads.MobileAds
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -95,6 +96,20 @@ class BreitbartFragment : Fragment(), StoryListener {
                 checkSwipeRefresh()
             }
             hideLoader(loader)
+            if(fragBinding.recyclerViewBreit.adapter!!.itemCount == 0){
+                if (day == 0){
+                    fragBinding.headline.text = resources.getText(R.string.fell)
+                    fragBinding.yestbtn.text = resources.getText(R.string.yest)
+                }
+                fragBinding.creepy.visibility = View.VISIBLE
+                Glide.with(this).load(R.drawable.bidenfall).into(fragBinding.imageView2)
+                fragBinding.yestbtn.setOnClickListener {
+                    fragBinding.creepy.visibility = View.INVISIBLE
+                    day += 1
+                    breitbartViewModel.load(day)
+                }
+            }
+
         }
         setSwipeRefresh()
         return root
@@ -103,6 +118,7 @@ class BreitbartFragment : Fragment(), StoryListener {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if( item.itemId == R.id.app_bar_right) {
             day += 1
+            fragBinding.creepy.visibility = View.INVISIBLE
             breitbartViewModel.load(day)
         }
         if( item.itemId == R.id.app_bar_left) {
@@ -110,6 +126,7 @@ class BreitbartFragment : Fragment(), StoryListener {
             if (day <= 0 ){
                 day = 0
             }
+            fragBinding.creepy.visibility = View.INVISIBLE
             breitbartViewModel.load(day)
         }
         return super.onOptionsItemSelected(item)
@@ -151,15 +168,18 @@ class BreitbartFragment : Fragment(), StoryListener {
 
             override fun onQueryTextChange(newText: String?): Boolean {
                 if (newText != null) {
+                    fragBinding.creepy.visibility = View.INVISIBLE
                     breitbartViewModel.search(
                         day,
                         newText
                     )
                 }
                 else{
+                    fragBinding.creepy.visibility = View.INVISIBLE
                     breitbartViewModel.load(day)
                 }
                 if (newText == "") {
+                    fragBinding.creepy.visibility = View.INVISIBLE
                     breitbartViewModel.load(day)
                 }
 
@@ -167,6 +187,7 @@ class BreitbartFragment : Fragment(), StoryListener {
             }
         })
         searchView.setOnCloseListener {
+            fragBinding.creepy.visibility = View.INVISIBLE
             breitbartViewModel.load(day)
             false
         }

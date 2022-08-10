@@ -17,7 +17,10 @@
     <string name="account">Account</string>
     <string name="history">History</string>
     <string name="view_history">View History</string>
-
+    <string name="yest">See Yesterdays News</string>
+    <string name="backone">Back a Day</string>
+    <string name="fell">No Articles to Show</string>
+    <string name="late">No Articles Found Yet Today</string>
     <string name="save_can">Save Cancelled</string>
     <string name="save_art">Confirm Save</string>
     <string name="list_title">360 News</string>

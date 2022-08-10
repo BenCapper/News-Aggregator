@@ -15,6 +15,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.google.android.gms.ads.MobileAds
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -61,7 +62,7 @@ class HistoryListFragment : Fragment(), StoryListener {
         showLoader(loader,"")
         _fragBinding = FragmentHistoryListBinding.inflate(inflater, container, false)
         val root = fragBinding.root
-        activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.history1)
+        activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.history)
         fragBinding.recyclerViewHistory.layoutManager = activity?.let { LinearLayoutManager(it) }
         MobileAds.initialize(this.context!!) {}
         val fab = activity?.findViewById<FloatingActionButton>(R.id.fab)
@@ -96,6 +97,19 @@ class HistoryListFragment : Fragment(), StoryListener {
                 checkSwipeRefresh()
             }
             hideLoader(loader)
+            if(fragBinding.recyclerViewHistory.adapter!!.itemCount == 0){
+                if (day == 0){
+                    fragBinding.headline.text = resources.getText(R.string.fell)
+                    fragBinding.yestbtn.text = resources.getText(R.string.yest)
+                }
+                fragBinding.creepy.visibility = View.VISIBLE
+                Glide.with(this).load(R.drawable.bidenfall).into(fragBinding.imageView2)
+                fragBinding.yestbtn.setOnClickListener {
+                    fragBinding.creepy.visibility = View.INVISIBLE
+                    day += 1
+                    historyListViewModel.load(day)
+                }
+            }
         }
         setSwipeRefresh()
 
@@ -120,6 +134,7 @@ class HistoryListFragment : Fragment(), StoryListener {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if( item.itemId == R.id.app_bar_right) {
             day += 1
+            fragBinding.creepy.visibility = View.INVISIBLE
             historyListViewModel.load(day)
         }
         if( item.itemId == R.id.app_bar_left) {
@@ -127,6 +142,7 @@ class HistoryListFragment : Fragment(), StoryListener {
             if (day <= 0 ){
                 day = 0
             }
+            fragBinding.creepy.visibility = View.INVISIBLE
             historyListViewModel.load(day)
         }
         return super.onOptionsItemSelected(item)
@@ -168,18 +184,26 @@ class HistoryListFragment : Fragment(), StoryListener {
 
             override fun onQueryTextChange(newText: String?): Boolean {
                 if (newText != null) {
+                    fragBinding.creepy.visibility = View.INVISIBLE
                     historyListViewModel.search(
                         day,
                         newText
                     )
                 }
-                else {
+                else{
+                    fragBinding.creepy.visibility = View.INVISIBLE
                     historyListViewModel.load(day)
                 }
+                if (newText == "") {
+                    fragBinding.creepy.visibility = View.INVISIBLE
+                    historyListViewModel.load(day)
+                }
+
                 return true
             }
         })
         searchView.setOnCloseListener {
+            fragBinding.creepy.visibility = View.INVISIBLE
             historyListViewModel.load(day)
             false
         }

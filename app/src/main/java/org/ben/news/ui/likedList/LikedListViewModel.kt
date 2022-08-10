@@ -43,7 +43,7 @@ class LikedListViewModel : ViewModel() {
         val dates: String
         try {
             dates = StoryManager.getDate(day)
-            StoryManager.search(term,dates,liveFirebaseUser.value!!.uid,"likes",likedList)
+            StoryManager.search(dates,term,liveFirebaseUser.value!!.uid,"likes",likedList)
             Timber.i("Search Success")
         }
         catch (e: java.lang.Exception) {

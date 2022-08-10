@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.google.android.gms.ads.*
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -31,6 +32,7 @@ import splitties.alertdialog.appcompat.*
 import splitties.snackbar.snack
 import splitties.views.onClick
 import splitties.views.textColorResource
+import timber.log.Timber
 
 
 class StoryListFragment : Fragment(), StoryListener {
@@ -59,7 +61,7 @@ class StoryListFragment : Fragment(), StoryListener {
     ): View {
         loader = createLoader(requireActivity())
         showLoader(loader,"")
-        activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.logohead)
+        activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.hometit)
         _fragBinding = FragmentStoryListBinding.inflate(inflater, container, false)
         val root = fragBinding.root
         fragBinding.recyclerView.layoutManager = activity?.let { LinearLayoutManager(it) }
@@ -67,6 +69,7 @@ class StoryListFragment : Fragment(), StoryListener {
         MobileAds.initialize(this.context!!) {}
         val fab = activity?.findViewById<FloatingActionButton>(R.id.fab)
         val bot = activity?.findViewById<BottomNavigationView>(R.id.bottom_nav)
+
         fab?.visibility = View.INVISIBLE
         fragBinding.recyclerView.addOnScrollListener (object : RecyclerView.OnScrollListener(){
             var y = 0
@@ -98,10 +101,25 @@ class StoryListFragment : Fragment(), StoryListener {
                 checkSwipeRefresh()
             }
             hideLoader(loader)
+            if(fragBinding.recyclerView.adapter!!.itemCount == 0){
+                if (day == 0){
+                    fragBinding.headline.text = resources.getText(R.string.fell)
+                    fragBinding.yestbtn.text = resources.getText(R.string.yest)
+                }
+                fragBinding.creepy.visibility = View.VISIBLE
+                Glide.with(this).load(R.drawable.bidenfall).into(fragBinding.imageView2)
+                fragBinding.yestbtn.setOnClickListener {
+                    fragBinding.creepy.visibility = View.INVISIBLE
+                    day += 1
+                    storyListViewModel.load(day)
+                }
+            }
         }
         setSwipeRefresh()
         return root
     }
+
+
 
 
     private fun setSwipeRefresh() {
@@ -142,15 +160,19 @@ class StoryListFragment : Fragment(), StoryListener {
 
             override fun onQueryTextChange(newText: String?): Boolean {
                 if (newText != null) {
+                    fragBinding.creepy.visibility = View.INVISIBLE
                     storyListViewModel.search(
                         day,
                         newText
                     )
                 }
+
                 else{
+                    fragBinding.creepy.visibility = View.INVISIBLE
                     storyListViewModel.load(day)
                 }
                 if (newText == "") {
+                    fragBinding.creepy.visibility = View.INVISIBLE
                     storyListViewModel.load(day)
                 }
 
@@ -158,6 +180,7 @@ class StoryListFragment : Fragment(), StoryListener {
             }
         })
         searchView.setOnCloseListener {
+            fragBinding.creepy.visibility = View.INVISIBLE
             storyListViewModel.load(day)
             false
         }
@@ -173,6 +196,7 @@ class StoryListFragment : Fragment(), StoryListener {
         }
         if( item.itemId == R.id.app_bar_r) {
             day += 1
+            fragBinding.creepy.visibility = View.INVISIBLE
             storyListViewModel.load(day)
         }
         if( item.itemId == R.id.app_bar_l) {
@@ -180,6 +204,7 @@ class StoryListFragment : Fragment(), StoryListener {
             if (day <= 0 ){
                 day = 0
             }
+            fragBinding.creepy.visibility = View.INVISIBLE
             storyListViewModel.load(day)
         }
 

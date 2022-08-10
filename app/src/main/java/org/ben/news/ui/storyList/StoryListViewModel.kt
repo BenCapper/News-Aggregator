@@ -47,7 +47,7 @@ class StoryListViewModel : ViewModel() {
     fun search( day: Int, term: String) {
         try {
             val dates = StoryManager.getDate(day)
-            StoryManager.search(dates,term,storyList)
+            StoryManager.search(term,dates,storyList)
             Timber.i("Search Success")
         }
         catch (e: java.lang.Exception) {

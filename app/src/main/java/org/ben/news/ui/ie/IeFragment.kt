@@ -14,6 +14,7 @@ import android.widget.SearchView
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.google.android.gms.ads.MobileAds
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -60,7 +61,7 @@ class IeFragment : Fragment(), StoryListener {
         _fragBinding = FragmentIeBinding.inflate(inflater, container, false)
         val root = fragBinding.root
         fragBinding.recyclerViewIe.layoutManager = activity?.let { LinearLayoutManager(it) }
-        activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.irish)
+        activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.ie)
         MobileAds.initialize(this.context!!) {}
         val fab = activity?.findViewById<FloatingActionButton>(R.id.fab)
         val bot = activity?.findViewById<BottomNavigationView>(R.id.bottom_nav)
@@ -94,6 +95,19 @@ class IeFragment : Fragment(), StoryListener {
                 checkSwipeRefresh()
             }
             hideLoader(loader)
+            if(fragBinding.recyclerViewIe.adapter!!.itemCount == 0){
+                if (day == 0){
+                    fragBinding.headline.text = resources.getText(R.string.fell)
+                    fragBinding.yestbtn.text = resources.getText(R.string.yest)
+                }
+                fragBinding.creepy.visibility = View.VISIBLE
+                Glide.with(this).load(R.drawable.bidenfall).into(fragBinding.imageView2)
+                fragBinding.yestbtn.setOnClickListener {
+                    fragBinding.creepy.visibility = View.INVISIBLE
+                    day += 1
+                    ieViewModel.load(day)
+                }
+            }
         }
         setSwipeRefresh()
         return root
@@ -134,15 +148,18 @@ class IeFragment : Fragment(), StoryListener {
 
             override fun onQueryTextChange(newText: String?): Boolean {
                 if (newText != null) {
+                    fragBinding.creepy.visibility = View.INVISIBLE
                     ieViewModel.search(
                         day,
                         newText
                     )
                 }
                 else{
+                    fragBinding.creepy.visibility = View.INVISIBLE
                     ieViewModel.load(day)
                 }
                 if (newText == "") {
+                    fragBinding.creepy.visibility = View.INVISIBLE
                     ieViewModel.load(day)
                 }
 
@@ -150,6 +167,7 @@ class IeFragment : Fragment(), StoryListener {
             }
         })
         searchView.setOnCloseListener {
+            fragBinding.creepy.visibility = View.INVISIBLE
             ieViewModel.load(day)
             false
         }
@@ -165,6 +183,7 @@ class IeFragment : Fragment(), StoryListener {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if( item.itemId == R.id.app_bar_right) {
             day += 1
+            fragBinding.creepy.visibility = View.INVISIBLE
             ieViewModel.load(day)
         }
         if( item.itemId == R.id.app_bar_left) {
@@ -172,6 +191,7 @@ class IeFragment : Fragment(), StoryListener {
             if (day <= 0 ){
                 day = 0
             }
+            fragBinding.creepy.visibility = View.INVISIBLE
             ieViewModel.load(day)
         }
         return super.onOptionsItemSelected(item)

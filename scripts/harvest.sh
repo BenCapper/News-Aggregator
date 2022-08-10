@@ -3,7 +3,6 @@
 python3 abc.py;
 python3 blaze.py;
 python3 bongino.py;
-python3 breitbart.py;
 python3 cbs.py;
 python3 beast.py
 python3 dailycaller.py;
@@ -24,3 +23,4 @@ python3 timcast.py;
 python3 vox.py;
 python3 yahoo.py;
 python3 zerohedge.py;
+python3 breitbart.py;
