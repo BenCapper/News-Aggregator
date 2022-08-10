@@ -60,7 +60,7 @@ class PoliticoFragment : Fragment(), StoryListener {
         _fragBinding = FragmentPoliticoBinding.inflate(inflater, container, false)
         val root = fragBinding.root
         fragBinding.recyclerViewPol.layoutManager = activity?.let { LinearLayoutManager(it) }
-        activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.politico)
+        activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.pol)
         MobileAds.initialize(this.context!!) {}
         val fab = activity?.findViewById<FloatingActionButton>(R.id.fab)
         val bot = activity?.findViewById<BottomNavigationView>(R.id.bottom_nav)

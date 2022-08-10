@@ -60,7 +60,7 @@ class LikedListFragment : Fragment(), StoryNoSaveListener {
         _fragBinding = FragmentLikedListBinding.inflate(inflater, container, false)
         val root = fragBinding.root
         fragBinding.recyclerViewLiked.layoutManager = activity?.let { LinearLayoutManager(it) }
-        activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.saved2)
+        activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.saved)
         MobileAds.initialize(this.context!!) {}
         val fab = activity?.findViewById<FloatingActionButton>(R.id.fab)
         val bot = activity?.findViewById<BottomNavigationView>(R.id.bottom_nav)

@@ -61,7 +61,7 @@ class HistoryListFragment : Fragment(), StoryListener {
         showLoader(loader,"")
         _fragBinding = FragmentHistoryListBinding.inflate(inflater, container, false)
         val root = fragBinding.root
-        activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.history1)
+        activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.history)
         fragBinding.recyclerViewHistory.layoutManager = activity?.let { LinearLayoutManager(it) }
         MobileAds.initialize(this.context!!) {}
         val fab = activity?.findViewById<FloatingActionButton>(R.id.fab)

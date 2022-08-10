@@ -60,7 +60,7 @@ class IeFragment : Fragment(), StoryListener {
         _fragBinding = FragmentIeBinding.inflate(inflater, container, false)
         val root = fragBinding.root
         fragBinding.recyclerViewIe.layoutManager = activity?.let { LinearLayoutManager(it) }
-        activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.irish)
+        activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.ie)
         MobileAds.initialize(this.context!!) {}
         val fab = activity?.findViewById<FloatingActionButton>(R.id.fab)
         val bot = activity?.findViewById<BottomNavigationView>(R.id.bottom_nav)

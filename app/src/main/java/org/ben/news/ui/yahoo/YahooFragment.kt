@@ -60,7 +60,7 @@ class YahooFragment : Fragment(), StoryListener {
         _fragBinding = FragmentYahooBinding.inflate(inflater, container, false)
         val root = fragBinding.root
         fragBinding.recyclerViewYahoo.layoutManager = activity?.let { LinearLayoutManager(it) }
-        activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.yahoo)
+        activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.yah)
         MobileAds.initialize(this.context!!) {}
         val fab = activity?.findViewById<FloatingActionButton>(R.id.fab)
         val bot = activity?.findViewById<BottomNavigationView>(R.id.bottom_nav)

@@ -62,7 +62,7 @@ class CanFragment : Fragment(), StoryListener {
         _fragBinding = FragmentCanBinding.inflate(inflater, container, false)
         val root = fragBinding.root
         fragBinding.recyclerViewCan.layoutManager = activity?.let { LinearLayoutManager(it) }
-        activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.canadian)
+        activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.ca)
         MobileAds.initialize(this.context!!) {}
         val fab = activity?.findViewById<FloatingActionButton>(R.id.fab)
         val bot = activity?.findViewById<BottomNavigationView>(R.id.bottom_nav)
