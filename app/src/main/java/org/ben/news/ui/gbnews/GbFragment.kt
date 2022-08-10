@@ -98,12 +98,8 @@ class GbFragment : Fragment(), StoryListener {
             hideLoader(loader)
             if(fragBinding.recyclerViewGb.adapter!!.itemCount == 0){
                 if (day == 0){
-                    fragBinding.headline.text = resources.getText(R.string.late)
-                    fragBinding.yestbtn.text = resources.getText(R.string.yest)
-                }
-                else {
                     fragBinding.headline.text = resources.getText(R.string.fell)
-                    fragBinding.yestbtn.text = resources.getText(R.string.backone)
+                    fragBinding.yestbtn.text = resources.getText(R.string.yest)
                 }
                 fragBinding.creepy.visibility = View.VISIBLE
                 Glide.with(this).load(R.drawable.bidenfall).into(fragBinding.imageView2)
@@ -193,6 +189,7 @@ class GbFragment : Fragment(), StoryListener {
             }
         })
         searchView.setOnCloseListener {
+            fragBinding.creepy.visibility = View.INVISIBLE
             gbViewModel.load(day)
             false
         }

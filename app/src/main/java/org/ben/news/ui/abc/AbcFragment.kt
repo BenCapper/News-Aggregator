@@ -101,12 +101,8 @@ class AbcFragment : Fragment(), StoryListener {
             if(fragBinding.recyclerViewAbc.adapter!!.itemCount == 0){
                 fragBinding.creepy.visibility = View.VISIBLE
                 if (day == 0){
-                    fragBinding.headline.text = resources.getText(R.string.late)
-                    fragBinding.yestbtn.text = resources.getText(R.string.yest)
-                }
-                else {
                     fragBinding.headline.text = resources.getText(R.string.fell)
-                    fragBinding.yestbtn.text = resources.getText(R.string.backone)
+                    fragBinding.yestbtn.text = resources.getText(R.string.yest)
                 }
                 Glide.with(this).load(R.drawable.bidenfall).into(fragBinding.imageView2)
                 fragBinding.yestbtn.setOnClickListener {
