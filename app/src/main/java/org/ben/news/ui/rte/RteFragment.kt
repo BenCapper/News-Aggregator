@@ -96,6 +96,14 @@ class RteFragment : Fragment(), StoryListener {
             }
             hideLoader(loader)
             if(fragBinding.recyclerViewRte.adapter!!.itemCount == 0){
+                if (day == 0){
+                    fragBinding.headline.text = resources.getText(R.string.late)
+                    fragBinding.yestbtn.text = resources.getText(R.string.yest)
+                }
+                else {
+                    fragBinding.headline.text = resources.getText(R.string.fell)
+                    fragBinding.yestbtn.text = resources.getText(R.string.backone)
+                }
                 fragBinding.creepy.visibility = View.VISIBLE
                 Glide.with(this).load(R.drawable.bidenfall).into(fragBinding.imageView2)
                 fragBinding.yestbtn.setOnClickListener {
@@ -178,6 +186,7 @@ class RteFragment : Fragment(), StoryListener {
             if (day <= 0 ){
                 day = 0
             }
+            fragBinding.creepy.visibility = View.INVISIBLE
             rteViewModel.load(day)
         }
         return super.onOptionsItemSelected(item)

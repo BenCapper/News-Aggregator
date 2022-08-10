@@ -47,7 +47,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="3dp"
-                android:text="No Articles from Today"
                 android:textColor="@color/black"
                 android:textSize="13sp"
                 android:textStyle="bold"
