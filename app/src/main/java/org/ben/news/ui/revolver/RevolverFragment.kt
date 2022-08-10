@@ -172,15 +172,18 @@ class RevolverFragment : Fragment(), StoryListener {
 
             override fun onQueryTextChange(newText: String?): Boolean {
                 if (newText != null) {
+                    fragBinding.creepy.visibility = View.INVISIBLE
                     revViewModel.search(
                         day,
                         newText
                     )
                 }
                 else{
+                    fragBinding.creepy.visibility = View.INVISIBLE
                     revViewModel.load(day)
                 }
                 if (newText == "") {
+                    fragBinding.creepy.visibility = View.INVISIBLE
                     revViewModel.load(day)
                 }
 
@@ -188,6 +191,7 @@ class RevolverFragment : Fragment(), StoryListener {
             }
         })
         searchView.setOnCloseListener {
+            fragBinding.creepy.visibility = View.INVISIBLE
             revViewModel.load(day)
             false
         }

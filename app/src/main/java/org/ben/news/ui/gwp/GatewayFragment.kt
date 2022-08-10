@@ -150,15 +150,18 @@ class GatewayFragment : Fragment(), StoryListener {
 
             override fun onQueryTextChange(newText: String?): Boolean {
                 if (newText != null) {
+                    fragBinding.creepy.visibility = View.INVISIBLE
                     gateViewModel.search(
                         day,
                         newText
                     )
                 }
                 else{
+                    fragBinding.creepy.visibility = View.INVISIBLE
                     gateViewModel.load(day)
                 }
                 if (newText == "") {
+                    fragBinding.creepy.visibility = View.INVISIBLE
                     gateViewModel.load(day)
                 }
 

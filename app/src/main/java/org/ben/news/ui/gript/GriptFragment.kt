@@ -153,15 +153,18 @@ class GriptFragment : Fragment(), StoryListener {
 
             override fun onQueryTextChange(newText: String?): Boolean {
                 if (newText != null) {
+                    fragBinding.creepy.visibility = View.INVISIBLE
                     griptViewModel.search(
                         day,
                         newText
                     )
                 }
                 else{
+                    fragBinding.creepy.visibility = View.INVISIBLE
                     griptViewModel.load(day)
                 }
                 if (newText == "") {
+                    fragBinding.creepy.visibility = View.INVISIBLE
                     griptViewModel.load(day)
                 }
 
@@ -169,6 +172,7 @@ class GriptFragment : Fragment(), StoryListener {
             }
         })
         searchView.setOnCloseListener {
+            fragBinding.creepy.visibility = View.INVISIBLE
             griptViewModel.load(day)
             false
         }

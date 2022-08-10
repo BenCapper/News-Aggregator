@@ -186,17 +186,23 @@ class LikedListFragment : Fragment(), StoryNoSaveListener {
 
             override fun onQueryTextChange(newText: String?): Boolean {
                 if (newText != null) {
+                    fragBinding.creepy.visibility = View.INVISIBLE
                     likedListViewModel.search(
                         day,
                         newText
                     )
                 }
-                else {
+                else{
+                    fragBinding.creepy.visibility = View.INVISIBLE
                     likedListViewModel.load(day)
                 }
+                if (newText == "") {
+                    fragBinding.creepy.visibility = View.INVISIBLE
+                    likedListViewModel.load(day)
+                }
+
                 return true
             }
-
         })
         searchView.setOnCloseListener {
             likedListViewModel.load(day)

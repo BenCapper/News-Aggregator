@@ -170,15 +170,18 @@ class BeastFragment : Fragment(), StoryListener {
 
             override fun onQueryTextChange(newText: String?): Boolean {
                 if (newText != null) {
+                    fragBinding.creepy.visibility = View.INVISIBLE
                     beastViewModel.search(
                         day,
                         newText
                     )
                 }
                 else{
+                    fragBinding.creepy.visibility = View.INVISIBLE
                     beastViewModel.load(day)
                 }
                 if (newText == "") {
+                    fragBinding.creepy.visibility = View.INVISIBLE
                     beastViewModel.load(day)
                 }
 
@@ -186,6 +189,7 @@ class BeastFragment : Fragment(), StoryListener {
             }
         })
         searchView.setOnCloseListener {
+            fragBinding.creepy.visibility = View.INVISIBLE
             beastViewModel.load(day)
             false
         }

@@ -153,15 +153,18 @@ class RteFragment : Fragment(), StoryListener {
 
             override fun onQueryTextChange(newText: String?): Boolean {
                 if (newText != null) {
+                    fragBinding.creepy.visibility = View.INVISIBLE
                     rteViewModel.search(
                         day,
                         newText
                     )
                 }
                 else{
+                    fragBinding.creepy.visibility = View.INVISIBLE
                     rteViewModel.load(day)
                 }
                 if (newText == "") {
+                    fragBinding.creepy.visibility = View.INVISIBLE
                     rteViewModel.load(day)
                 }
 
@@ -169,6 +172,7 @@ class RteFragment : Fragment(), StoryListener {
             }
         })
         searchView.setOnCloseListener {
+            fragBinding.creepy.visibility = View.INVISIBLE
             rteViewModel.load(day)
             false
         }

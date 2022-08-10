@@ -173,15 +173,18 @@ class SpikedFragment : Fragment(), StoryListener {
 
             override fun onQueryTextChange(newText: String?): Boolean {
                 if (newText != null) {
+                    fragBinding.creepy.visibility = View.INVISIBLE
                     spikeViewModel.search(
                         day,
                         newText
                     )
                 }
                 else{
+                    fragBinding.creepy.visibility = View.INVISIBLE
                     spikeViewModel.load(day)
                 }
                 if (newText == "") {
+                    fragBinding.creepy.visibility = View.INVISIBLE
                     spikeViewModel.load(day)
                 }
 
@@ -189,6 +192,7 @@ class SpikedFragment : Fragment(), StoryListener {
             }
         })
         searchView.setOnCloseListener {
+            fragBinding.creepy.visibility = View.INVISIBLE
             spikeViewModel.load(day)
             false
         }

@@ -43,7 +43,7 @@ class HistoryListViewModel : ViewModel() {
         val dates: String
         try {
             dates = StoryManager.getDate(day)
-            StoryManager.search(term,dates,liveFirebaseUser.value!!.uid,"history",historyList)
+            StoryManager.search(dates,term,liveFirebaseUser.value!!.uid,"history",historyList)
             Timber.i("Search Success")
         }
         catch (e: java.lang.Exception) {

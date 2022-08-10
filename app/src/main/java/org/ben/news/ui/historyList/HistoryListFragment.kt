@@ -188,14 +188,21 @@ class HistoryListFragment : Fragment(), StoryListener {
 
             override fun onQueryTextChange(newText: String?): Boolean {
                 if (newText != null) {
+                    fragBinding.creepy.visibility = View.INVISIBLE
                     historyListViewModel.search(
                         day,
                         newText
                     )
                 }
-                else {
+                else{
+                    fragBinding.creepy.visibility = View.INVISIBLE
                     historyListViewModel.load(day)
                 }
+                if (newText == "") {
+                    fragBinding.creepy.visibility = View.INVISIBLE
+                    historyListViewModel.load(day)
+                }
+
                 return true
             }
         })
