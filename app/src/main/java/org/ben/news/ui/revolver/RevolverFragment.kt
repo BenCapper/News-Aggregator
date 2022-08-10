@@ -103,6 +103,7 @@ class RevolverFragment : Fragment(), StoryListener {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if( item.itemId == R.id.app_bar_right) {
             day += 1
+            fragBinding.creepy.visibility = View.INVISIBLE
             revViewModel.load(day)
         }
         if( item.itemId == R.id.app_bar_left) {
