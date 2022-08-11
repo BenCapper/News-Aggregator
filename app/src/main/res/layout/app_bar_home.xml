@@ -37,6 +37,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
+        android:layout_marginRight="3dp"
         android:layout_marginBottom="50dp"
         android:backgroundTint="#ffffff"
         android:src="@drawable/ic_up"
@@ -44,6 +45,7 @@
         app:fabSize="mini"
         app:maxImageSize="36dp"
         app:rippleColor="@color/orange" />
+
     <com.google.android.material.bottomappbar.BottomAppBar
         android:id="@+id/bottomAppBar"
         android:layout_width="match_parent"
@@ -52,13 +54,10 @@
         app:contentInsetStart="0dp"
 
         app:contentInsetStartWithNavigation="0dp"
-        app:fabCradleMargin="5dp"
-        app:fabCradleRoundedCornerRadius="20dp"
-        app:fabCradleVerticalOffset="10dp"
+        app:layout_behavior="@string/hide_bottom_view_on_scroll_behavior"
         app:paddingBottomSystemWindowInsets="false"
         app:paddingLeftSystemWindowInsets="false"
-        app:paddingRightSystemWindowInsets="false"
-        app:layout_behavior="@string/hide_bottom_view_on_scroll_behavior">
+        app:paddingRightSystemWindowInsets="false">
 
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
@@ -68,10 +67,9 @@
             android:background="#000000"
             android:theme="@style/Theme.News.AppBarOverlay"
             app:itemHorizontalTranslationEnabled="false"
-            app:itemRippleColor="#FFAB00"
+            app:itemRippleColor="@color/orange"
             app:labelVisibilityMode="unlabeled"
             app:menu="@menu/bottom_nav" />
-
 
 
     </com.google.android.material.bottomappbar.BottomAppBar>
