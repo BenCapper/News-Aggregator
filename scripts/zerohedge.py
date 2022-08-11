@@ -5,7 +5,7 @@ import requests
 from firebase_admin import storage
  
 from utils.utilities import (addYearAndFormat, formatDate, imgFolder, imgTitleFormat, initialise,
-                            logFolder, pageSoup, pushToDB, titleFormat, similar)
+                            logFolder, pageSoup, pushToDB, titleFormat, similar,getHour)
  
 ref_list = []
 log_file_path = "/home/bencapper/src/News-Aggregator/scripts/log/zerodone.log"
@@ -34,11 +34,9 @@ initialise(json_path, db_url, bucket)
  
 soup = pageSoup(page_url)
 articles = soup.find_all("div","Article_nonStickyContainer__XQgbr")
-order = 0
+order = getHour()
 for article in articles:
     try:
-        if order == 7:
-            order = 0
         a = article.select("a")
         url = str(a).split('href="')[1].split('"')[0]
         url = f"https://{outlet}{url}"
@@ -76,7 +74,6 @@ for article in articles:
             pushToDB(
                 db_path, title, date, img_src, img_title, url, outlet, storage_link, order
             )
-            order = order + 1
             open_temp.write(str(title) + "\n")
             print("Zerohedge Article Added to DB")
         else:

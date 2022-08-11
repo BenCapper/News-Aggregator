@@ -4,7 +4,7 @@ import requests
 from bs4 import BeautifulSoup
 from firebase_admin import storage
 from utils.utilities import (formatDate, imgFolder, imgTitleFormat, initialise,
-                           logFolder, pageSoup, pushToDB, titleFormat, similar)
+                           logFolder, pageSoup, pushToDB, titleFormat, similar,getHour)
 
 
 ref_list = []
@@ -33,11 +33,9 @@ imgFolder(img_path)
 initialise(json_path, db_url, bucket)
 soup = pageSoup(page_url)
 articles = soup.find_all("div", "m-object__body")[22:-34]
-order = 0
+order = getHour()
 for article in articles:
   try:
-      if order == 7:
-        order = 0
       h = article.select('h3')
       href = str(h).split('href="')[1].split('" ')[0]
       link = f"{prefix}{href}"
@@ -81,7 +79,6 @@ for article in articles:
                      storage_link,
                      order
                    )
-              order = order + 1
               open_temp.write(str(title) + "\n")
               print("Euronews Article Added to DB - (No Image)")
           else:
@@ -115,7 +112,6 @@ for article in articles:
                       storage_link,
                       order
                   )
-                  order = order + 1
                   open_temp.write(str(title) + "\n")
                   print("Euronews Article Added to DB")
           else:

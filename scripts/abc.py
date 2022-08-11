@@ -6,7 +6,7 @@ from bs4 import BeautifulSoup
 from firebase_admin import storage
  
 from utils.utilities import (formatDate, imgFolder, imgTitleFormat, initialise,
-                            logFolder, pageSoup, pushToDB, titleFormat, similar)
+                            logFolder, pageSoup, pushToDB, titleFormat, similar,getHour)
  
 ref_list = []
 log_file_path = "/home/bencapper/src/News-Aggregator/scripts/log/abcdone.log"
@@ -35,7 +35,7 @@ initialise(json_path, db_url, bucket)
  
 soup = pageSoup(page_url)
 articles = soup.find_all("section", "ContentRoll__Item")
-order = 0
+order = getHour()
 for article in articles:
    try:
       link = article.select("a")
@@ -43,8 +43,6 @@ for article in articles:
       if "/video/" in link:
          pass
       else:
-         if order == 7:
-            order = 0
          dates = list()
          full_page = requests.get(link).content
          articleSoup = BeautifulSoup(full_page, features="lxml")
@@ -74,6 +72,7 @@ for article in articles:
                similarity = similar(ref,title)
                if similarity > .8:
                   check = True
+                  print('sigh')
                   break
 
             if title not in ref_list and check is False:
@@ -92,7 +91,6 @@ for article in articles:
                 pushToDB(
                     db_path, title, date, img_src, img_title, link, outlet, storage_link, order
                 )
-                order = order + 1
                 open_temp.write(str(title) + "\n")
                 print("ABC Article Added to DB")
             else:
