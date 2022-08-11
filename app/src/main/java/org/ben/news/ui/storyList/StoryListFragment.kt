@@ -19,6 +19,7 @@ import com.google.android.gms.ads.*
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import org.ben.news.R
+import org.ben.news.adapters.EmptyAdapter
 import org.ben.news.adapters.StoryAdapter
 import org.ben.news.adapters.StoryListener
 import org.ben.news.databinding.FragmentStoryListBinding
@@ -103,17 +104,10 @@ class StoryListFragment : Fragment(), StoryListener {
             hideLoader(loader)
             Timber.i("ITEMCUNT = ${fragBinding.recyclerView.adapter!!.itemCount}")
             if(fragBinding.recyclerView.adapter!!.itemCount == 0){
-                if (day == 0){
-                    fragBinding.headline.text = resources.getText(R.string.fell)
-                    fragBinding.yestbtn.text = resources.getText(R.string.yest)
-                }
-                fragBinding.creepy.visibility = View.VISIBLE
-                Glide.with(this).load(R.drawable.bidenfall).into(fragBinding.imageView2)
-                fragBinding.yestbtn.setOnClickListener {
-                    fragBinding.creepy.visibility = View.INVISIBLE
-                    day += 1
-                    storyListViewModel.load(day)
-                }
+                val st = ArrayList<StoryModel>()
+                st.add(StoryModel(title="1"))
+                fragBinding.recyclerView.adapter = EmptyAdapter(st, this)
+                state?.let { fragBinding.recyclerView.layoutManager?.onRestoreInstanceState(it) }
             }
         }
         setSwipeRefresh()
@@ -161,7 +155,6 @@ class StoryListFragment : Fragment(), StoryListener {
 
             override fun onQueryTextChange(newText: String?): Boolean {
                 if (newText != null) {
-                    fragBinding.creepy.visibility = View.INVISIBLE
                     storyListViewModel.search(
                         day,
                         newText
@@ -169,11 +162,9 @@ class StoryListFragment : Fragment(), StoryListener {
                 }
 
                 else{
-                    fragBinding.creepy.visibility = View.INVISIBLE
                     storyListViewModel.load(day)
                 }
                 if (newText == "") {
-                    fragBinding.creepy.visibility = View.INVISIBLE
                     storyListViewModel.load(day)
                 }
 
@@ -181,7 +172,6 @@ class StoryListFragment : Fragment(), StoryListener {
             }
         })
         searchView.setOnCloseListener {
-            fragBinding.creepy.visibility = View.INVISIBLE
             storyListViewModel.load(day)
             false
         }
@@ -197,7 +187,6 @@ class StoryListFragment : Fragment(), StoryListener {
         }
         if( item.itemId == R.id.app_bar_r) {
             day += 1
-            fragBinding.creepy.visibility = View.INVISIBLE
             storyListViewModel.load(day)
         }
         if( item.itemId == R.id.app_bar_l) {
@@ -205,7 +194,6 @@ class StoryListFragment : Fragment(), StoryListener {
             if (day <= 0 ){
                 day = 0
             }
-            fragBinding.creepy.visibility = View.INVISIBLE
             storyListViewModel.load(day)
         }
 
