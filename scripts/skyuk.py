@@ -7,7 +7,7 @@ from bs4 import BeautifulSoup
 from firebase_admin import storage
  
 from utils.utilities import (formatDate, imgFolder, imgTitleFormat, initialise,
-                            logFolder, pageSoup, pushToDB, titleFormat, similar)
+                            logFolder, pageSoup, pushToDB, titleFormat, similar,getHour)
  
 ref_list = []
 token = ""
@@ -39,11 +39,9 @@ initialise(json_path, db_url, bucket)
  
 soup = pageSoup(page_url)
 articles = soup.find_all("h3", "sdc-site-tile__headline")
-order = 0
+order = getHour()
 for article in articles:
     try:
-        if order == 7:
-            order = 0
         href = str(article).split('href="')[1].split('">')[0]
         link = f"{url}{href}"
 
@@ -90,7 +88,6 @@ for article in articles:
                     pushToDB(
                         db_path, title, date, img_src, img_title, link, outlet, storage_link, order
                     )
-                    order = order + 1
                     open_temp.write(str(title) + "\n")
                     print("Sky UK Article Added to DB")
                 else:

@@ -4,7 +4,7 @@ import datetime
 from firebase_admin import storage
  
 from utils.utilities import (imgFolder, initialise,
-                            logFolder, pageSoup, pushToDbNoImg, titleFormat, similar)
+                            logFolder, pageSoup, pushToDbNoImg, titleFormat, similar,getHour)
  
 ref_list = []
 token = ""
@@ -39,7 +39,7 @@ initialise(json_path, db_url, bucket)
 soup = pageSoup(page_url)
 articles = soup.find_all("h2", "title")
  
-order = 0
+order = getHour()
 for article in articles:
     try:
         a = article.select("a")
@@ -81,7 +81,6 @@ for article in articles:
                         storage_link,
                         order
                     )
-                   order = order + 1
                    open_temp.write(str(title) + "\n")
                    print("Revolver Article Added to DB")
                 else:

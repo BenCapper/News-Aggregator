@@ -3,7 +3,7 @@ from uuid import uuid4
 import requests
 from firebase_admin import storage
 from utils.utilities import (formatDate, imgFolder, imgTitleFormat, initialise,
-                          logFolder, pageSoup, pushToDB, titleFormat, similar)
+                          logFolder, pageSoup, pushToDB, titleFormat, similar,getHour)
                           
  
 ref_list = []
@@ -32,11 +32,9 @@ initialise(json_path, db_url, bucket)
  
 soup = pageSoup(page_url)
 articles = soup.find_all("article")[3:]
-order = 0
+order = getHour()
 for article in articles:
    try:
-       if order == 7:
-          order = 0
        link = article.select("a")
        link = str(link).split('href="')[1].split('">')[0]
        title = article.select("h3")
@@ -77,7 +75,6 @@ for article in articles:
            pushToDB(
                db_path, title, date, img_src, img_title, link, outlet, storage_link, order
            )
-           order = order + 1
            open_temp.write(str(title) + "\n")
            print("Daily Beast Article Added to DB")
        else:

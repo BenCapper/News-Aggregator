@@ -116,6 +116,7 @@ object StoryManager : StoryStore {
                             todayList.add(story!!)
                         }
                         todayList = todayList.sortedBy{it.order}.toMutableList()
+                        todayList.reverse()
                         database.child("stories").child(date)
                             .removeEventListener(this)
                         totalList.addAll(todayList)
@@ -204,6 +205,7 @@ object StoryManager : StoryStore {
                             }
                         }
                         todayList = todayList.sortedBy{it.order}.toMutableList()
+                        todayList.reverse()
                         database.child("stories").child(date)
                             .removeEventListener(this)
                         totalList.addAll(todayList)
@@ -235,6 +237,7 @@ object StoryManager : StoryStore {
                             }
                         }
                         todayList = todayList.sortedBy{it.order}.toMutableList()
+                        todayList.reverse()
                         database.child("stories").child(date)
                             .removeEventListener(this)
                         totalList.addAll(todayList)
@@ -264,6 +267,7 @@ object StoryManager : StoryStore {
                             }
                         }
                         todayList = todayList.sortedBy{it.order}.toMutableList()
+                        todayList.reverse()
                         database.child("stories").child(date)
                             .removeEventListener(this)
                         totalList.addAll(todayList)
@@ -294,6 +298,7 @@ object StoryManager : StoryStore {
                             }
                         }
                         todayList = todayList.sortedBy{it.order}.toMutableList()
+                        todayList.reverse()
                         database.child("stories").child(date)
                             .removeEventListener(this)
                         totalList.addAll(todayList)
@@ -324,6 +329,7 @@ object StoryManager : StoryStore {
                             }
                         }
                         todayList = todayList.sortedBy{it.order}.toMutableList()
+                        todayList.reverse()
                         database.child("stories").child(date)
                             .removeEventListener(this)
                         totalList.addAll(todayList)
@@ -355,6 +361,7 @@ object StoryManager : StoryStore {
                             }
                         }
                         todayList = todayList.sortedBy{it.order}.toMutableList()
+                        todayList.reverse()
                         database.child("stories").child(date)
                             .removeEventListener(this)
                         totalList.addAll(todayList)
@@ -385,6 +392,7 @@ object StoryManager : StoryStore {
                             }
                         }
                         todayList = todayList.sortedBy{it.order}.toMutableList()
+                        todayList.reverse()
                         database.child("stories").child("Found on: $date")
                             .removeEventListener(this)
                         totalList.addAll(todayList)
@@ -415,6 +423,7 @@ object StoryManager : StoryStore {
                             }
                         }
                         todayList = todayList.sortedBy{it.order}.toMutableList()
+                        todayList.reverse()
                         database.child("stories").child("Found on: $date")
                             .removeEventListener(this)
                         totalList.addAll(todayList)
@@ -443,6 +452,7 @@ object StoryManager : StoryStore {
                             Timber.i("user-article=$story")
                         }
                         todayList = todayList.sortedBy{it.order}.toMutableList()
+                        todayList.reverse()
                         database.child("user-$path").child(userId)
                             .removeEventListener(this)
                         totalList.addAll(todayList)
@@ -469,6 +479,7 @@ object StoryManager : StoryStore {
                         Timber.i("user-article=$story")
                     }
                     todayList = todayList.sortedBy{it.order}.toMutableList()
+                    todayList.reverse()
                     database.child("user-$path").child(userId).child(date)
                         .removeEventListener(this)
                     totalList.addAll(todayList)
@@ -505,6 +516,7 @@ object StoryManager : StoryStore {
                             }
                         }
                         todayList = todayList.sortedBy{it.order}.toMutableList()
+                        todayList.reverse()
                         database.child("user-$path").child(userId).child(date)
                             .removeEventListener(this)
                         totalList.addAll(todayList)
@@ -535,6 +547,7 @@ object StoryManager : StoryStore {
                             }
                         }
                         todayList = todayList.sortedBy{it.order}.toMutableList()
+                        todayList.reverse()
                         database.child("stories").child(date)
                             .removeEventListener(this)
                         totalList.addAll(todayList)
@@ -565,6 +578,7 @@ object StoryManager : StoryStore {
                             }
                         }
                         todayList = todayList.sortedBy{it.order}.toMutableList()
+                        todayList.reverse()
                         database.child("stories").child(date)
                             .removeEventListener(this)
                         totalList.addAll(todayList)
@@ -600,6 +614,7 @@ object StoryManager : StoryStore {
                             }
                         }
                         todayList = todayList.sortedBy{it.order}.toMutableList()
+                        todayList.reverse()
                         database.child("stories").child(date)
                             .removeEventListener(this)
                         totalList.addAll(todayList)
@@ -635,6 +650,7 @@ object StoryManager : StoryStore {
                             }
                         }
                         todayList = todayList.sortedBy{it.order}.toMutableList()
+                        todayList.reverse()
                         database.child("stories").child(date)
                             .removeEventListener(this)
                         totalList.addAll(todayList)
@@ -665,6 +681,7 @@ object StoryManager : StoryStore {
                             }
                         }
                         todayList = todayList.sortedBy{it.order}.toMutableList()
+                        todayList.reverse()
                         database.child("stories").child("Found on: $date")
                             .removeEventListener(this)
                         totalList.addAll(todayList)
@@ -695,6 +712,7 @@ object StoryManager : StoryStore {
                             }
                         }
                         todayList = todayList.sortedBy{it.order}.toMutableList()
+                        todayList.reverse()
                         database.child("stories").child("Found on: $date")
                             .removeEventListener(this)
                         totalList.addAll(todayList)

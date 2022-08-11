@@ -7,7 +7,7 @@ from bs4 import BeautifulSoup
 from firebase_admin import storage
  
 from utils.utilities import (formatDate, imgFolder, imgTitleFormat, initialise,
-                            logFolder, pageSoup, pushToDB, titleFormat, similar)
+                            logFolder, pageSoup, pushToDB, titleFormat, similar,getHour)
  
 ref_list = []
 token = ""
@@ -39,14 +39,12 @@ initialise(json_path, db_url, bucket)
  
 soup = pageSoup(page_url)
 articles = soup.find_all("div", "article-meta")
-order = 0
+order = getHour()
 for article in articles:
     try:
         empty = False
         url = article.select("a")
         if url != []:
-            if order == 7:
-                order = 0
             url = str(url).split(' href="')[1].split('">')[0]
             url = f"{prefix}{url}"
             full_page = requests.get(url).content
@@ -95,7 +93,6 @@ for article in articles:
                           storage_link,
                           order
                         )
-                       order = order + 1
                        open_temp.write(str(title) + "\n")
                        print("RTE Article Added to DB - (No Image)")
                    else:
@@ -119,7 +116,6 @@ for article in articles:
                             storage_link,
                             order
                         )
-                        order = order + 1
                         open_temp.write(str(title) + "\n")
                         print("RTE Article Added to DB")
                 else:

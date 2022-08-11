@@ -6,7 +6,7 @@ from bs4 import BeautifulSoup
 from firebase_admin import storage
  
 from utils.utilities import (formatDate, imgFolder, imgTitleFormat, initialise,
-                            logFolder, pageSoup, pushToDB, titleFormat, similar)
+                            logFolder, pageSoup, pushToDB, titleFormat, similar,getHour)
  
 ref_list = []
 token = ""
@@ -37,11 +37,9 @@ initialise(json_path, db_url, bucket)
  
 soup = pageSoup(page_url)
 articles = soup.find_all("div", "post-card-inner")
-order = 0
+order = getHour()
 for article in articles:
     try:
-        if order == 7:
-            order = 0
         url = "https://www.ThePostMillennial.com"
         a = article.select("a")
         url = url + str(a).split('href="')[1].split('">')[0]
@@ -89,7 +87,6 @@ for article in articles:
             pushToDB(
                 db_path, title, date, img_src, img_title, url, outlet, storage_link, order
             )
-            order = order + 1
             open_temp.write(str(title) + "\n")
             print("Post Millennial Article Added to DB")
         else:

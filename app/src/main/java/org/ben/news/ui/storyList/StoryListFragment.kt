@@ -101,6 +101,7 @@ class StoryListFragment : Fragment(), StoryListener {
                 checkSwipeRefresh()
             }
             hideLoader(loader)
+            Timber.i("ITEMCUNT = ${fragBinding.recyclerView.adapter!!.itemCount}")
             if(fragBinding.recyclerView.adapter!!.itemCount == 0){
                 if (day == 0){
                     fragBinding.headline.text = resources.getText(R.string.fell)

@@ -32,6 +32,10 @@ def pageSoup(page_url):
 
 def similar(a,b):
     return SequenceMatcher(None, a, b).ratio() 
+
+def getHour():
+    timenow = datetime.now()
+    return timenow.hour
  
 def titleFormat(string):
    string = (
