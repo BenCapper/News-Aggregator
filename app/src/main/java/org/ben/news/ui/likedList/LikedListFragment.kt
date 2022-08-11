@@ -20,7 +20,9 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.storage.FirebaseStorage
 import org.ben.news.R
+import org.ben.news.adapters.EmptyAdapter
 import org.ben.news.adapters.NoSaveAdapter
+import org.ben.news.adapters.StoryListener
 import org.ben.news.adapters.StoryNoSaveListener
 import org.ben.news.databinding.FragmentLikedListBinding
 import org.ben.news.firebase.StoryManager
@@ -33,7 +35,7 @@ import org.ben.news.ui.auth.LoggedInViewModel
 import org.ben.news.ui.storyList.StoryListFragment
 
 
-class LikedListFragment : Fragment(), StoryNoSaveListener {
+class LikedListFragment : Fragment(), StoryNoSaveListener, StoryListener {
 
     companion object {
         fun newInstance() = StoryListFragment()
@@ -96,17 +98,10 @@ class LikedListFragment : Fragment(), StoryNoSaveListener {
             }
             hideLoader(loader)
             if(fragBinding.recyclerViewLiked.adapter!!.itemCount == 0){
-                if (day == 0){
-                    fragBinding.headline.text = resources.getText(R.string.fell)
-                    fragBinding.yestbtn.text = resources.getText(R.string.yest)
-                }
-                fragBinding.creepy.visibility = View.VISIBLE
-                Glide.with(this).load(R.drawable.bidenfall).into(fragBinding.imageView2)
-                fragBinding.yestbtn.setOnClickListener {
-                    fragBinding.creepy.visibility = View.INVISIBLE
-                    day += 1
-                    likedListViewModel.load(day)
-                }
+                val st = ArrayList<StoryModel>()
+                st.add(StoryModel(title="1"))
+                fragBinding.recyclerViewLiked.adapter = EmptyAdapter(st, this)
+                state?.let { fragBinding.recyclerViewLiked.layoutManager?.onRestoreInstanceState(it) }
             }
         }
         setSwipeRefresh()
@@ -133,7 +128,6 @@ class LikedListFragment : Fragment(), StoryNoSaveListener {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if( item.itemId == R.id.app_bar_right) {
             day += 1
-            fragBinding.creepy.visibility = View.INVISIBLE
             likedListViewModel.load(day)
         }
         if( item.itemId == R.id.app_bar_left) {
@@ -141,7 +135,6 @@ class LikedListFragment : Fragment(), StoryNoSaveListener {
             if (day <= 0 ){
                 day = 0
             }
-            fragBinding.creepy.visibility = View.INVISIBLE
             likedListViewModel.load(day)
         }
         return super.onOptionsItemSelected(item)
@@ -182,18 +175,15 @@ class LikedListFragment : Fragment(), StoryNoSaveListener {
 
             override fun onQueryTextChange(newText: String?): Boolean {
                 if (newText != null) {
-                    fragBinding.creepy.visibility = View.INVISIBLE
                     likedListViewModel.search(
                         day,
                         newText
                     )
                 }
                 else{
-                    fragBinding.creepy.visibility = View.INVISIBLE
                     likedListViewModel.load(day)
                 }
                 if (newText == "") {
-                    fragBinding.creepy.visibility = View.INVISIBLE
                     likedListViewModel.load(day)
                 }
 
@@ -201,7 +191,6 @@ class LikedListFragment : Fragment(), StoryNoSaveListener {
             }
         })
         searchView.setOnCloseListener {
-            fragBinding.creepy.visibility = View.INVISIBLE
             likedListViewModel.load(day)
             false
         }
@@ -234,7 +223,10 @@ class LikedListFragment : Fragment(), StoryNoSaveListener {
         state = fragBinding.recyclerViewLiked.layoutManager?.onSaveInstanceState()
         startActivity(intent)
     }
-    
+
+    override fun onLike(story: StoryModel) {
+    }
+
     override fun onShare(story: StoryModel) {
         val sendIntent: Intent = Intent().apply {
             action = Intent.ACTION_SEND

@@ -19,6 +19,7 @@ import com.google.android.gms.ads.MobileAds
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import org.ben.news.R
+import org.ben.news.adapters.EmptyAdapter
 import org.ben.news.adapters.StoryAdapter
 import org.ben.news.adapters.StoryListener
 import org.ben.news.databinding.FragmentYahooBinding
@@ -95,17 +96,10 @@ class YahooFragment : Fragment(), StoryListener {
             }
             hideLoader(loader)
             if(fragBinding.recyclerViewYahoo.adapter!!.itemCount == 0){
-                if (day == 0){
-                    fragBinding.headline.text = resources.getText(R.string.fell)
-                    fragBinding.yestbtn.text = resources.getText(R.string.yest)
-                }
-                fragBinding.creepy.visibility = View.VISIBLE
-                Glide.with(this).load(R.drawable.bidenfall).into(fragBinding.imageView2)
-                fragBinding.yestbtn.setOnClickListener {
-                    fragBinding.creepy.visibility = View.INVISIBLE
-                    day += 1
-                    yahooViewModel.load(day)
-                }
+                val st = ArrayList<StoryModel>()
+                st.add(StoryModel(title="1"))
+                fragBinding.recyclerViewYahoo.adapter = EmptyAdapter(st, this)
+                state?.let { fragBinding.recyclerViewYahoo.layoutManager?.onRestoreInstanceState(it) }
             }
         }
         setSwipeRefresh()
@@ -115,7 +109,6 @@ class YahooFragment : Fragment(), StoryListener {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if( item.itemId == R.id.app_bar_right) {
             day += 1
-            fragBinding.creepy.visibility = View.INVISIBLE
             yahooViewModel.load(day)
         }
         if( item.itemId == R.id.app_bar_left) {
@@ -123,7 +116,6 @@ class YahooFragment : Fragment(), StoryListener {
             if (day <= 0 ){
                 day = 0
             }
-            fragBinding.creepy.visibility = View.INVISIBLE
             yahooViewModel.load(day)
         }
         return super.onOptionsItemSelected(item)
@@ -165,18 +157,15 @@ class YahooFragment : Fragment(), StoryListener {
 
             override fun onQueryTextChange(newText: String?): Boolean {
                 if (newText != null) {
-                    fragBinding.creepy.visibility = View.INVISIBLE
                     yahooViewModel.search(
                         day,
                         newText
                     )
                 }
                 else{
-                    fragBinding.creepy.visibility = View.INVISIBLE
                     yahooViewModel.load(day)
                 }
                 if (newText == "") {
-                    fragBinding.creepy.visibility = View.INVISIBLE
                     yahooViewModel.load(day)
                 }
 
@@ -184,7 +173,6 @@ class YahooFragment : Fragment(), StoryListener {
             }
         })
         searchView.setOnCloseListener {
-            fragBinding.creepy.visibility = View.INVISIBLE
             yahooViewModel.load(day)
             false
         }
