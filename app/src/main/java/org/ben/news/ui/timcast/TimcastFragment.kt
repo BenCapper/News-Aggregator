@@ -33,6 +33,9 @@ import splitties.alertdialog.appcompat.*
 import splitties.snackbar.snack
 import splitties.views.onClick
 import splitties.views.textColorResource
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 class TimcastFragment : Fragment(), StoryListener {
@@ -47,6 +50,9 @@ class TimcastFragment : Fragment(), StoryListener {
     private val timViewModel: TimcastViewModel by activityViewModels()
     var state: Parcelable? = null
     var day = 0
+    val time = Calendar.getInstance().time
+    val formatter = SimpleDateFormat.getTimeInstance()
+    var formatted = formatter.format(time)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,6 +67,11 @@ class TimcastFragment : Fragment(), StoryListener {
         showLoader(loader,"")
         _fragBinding = FragmentTimcastBinding.inflate(inflater, container, false)
         val root = fragBinding.root
+        formatted = formatted.substring(0,2)
+        if (formatted.toInt() < 2){
+            day +=1
+        }
+
         fragBinding.recyclerViewTim.layoutManager = activity?.let { LinearLayoutManager(it) }
         activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.tim)
         MobileAds.initialize(this.context!!) {}
@@ -109,14 +120,14 @@ class TimcastFragment : Fragment(), StoryListener {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if( item.itemId == R.id.app_bar_right) {
-            day += 1
-            timViewModel.load(day)
-        }
-        if( item.itemId == R.id.app_bar_left) {
             day -= 1
             if (day <= 0 ){
                 day = 0
             }
+            timViewModel.load(day)
+        }
+        if( item.itemId == R.id.app_bar_left) {
+            day += 1
             timViewModel.load(day)
         }
         return super.onOptionsItemSelected(item)

@@ -33,6 +33,9 @@ import splitties.alertdialog.appcompat.*
 import splitties.snackbar.snack
 import splitties.views.onClick
 import splitties.views.textColorResource
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 class BlazeFragment : Fragment(), StoryListener {
@@ -47,6 +50,9 @@ class BlazeFragment : Fragment(), StoryListener {
     private val blazeViewModel: BlazeViewModel by activityViewModels()
     var state: Parcelable? = null
     var day = 0
+    val time = Calendar.getInstance().time
+    val formatter = SimpleDateFormat.getTimeInstance()
+    var formatted = formatter.format(time)
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -64,6 +70,11 @@ class BlazeFragment : Fragment(), StoryListener {
         showLoader(loader,"")
         _fragBinding = FragmentBlazeBinding.inflate(inflater, container, false)
         val root = fragBinding.root
+        formatted = formatted.substring(0,2)
+        if (formatted.toInt() < 2){
+            day +=1
+        }
+
         fragBinding.recyclerViewBlaze.layoutManager = activity?.let { LinearLayoutManager(it) }
         activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.blaze)
         MobileAds.initialize(this.context!!) {}
@@ -113,14 +124,14 @@ class BlazeFragment : Fragment(), StoryListener {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if( item.itemId == R.id.app_bar_right) {
-            day += 1
-            blazeViewModel.load(day)
-        }
-        if( item.itemId == R.id.app_bar_left) {
             day -= 1
             if (day <= 0 ){
                 day = 0
             }
+            blazeViewModel.load(day)
+        }
+        if( item.itemId == R.id.app_bar_left) {
+            day += 1
             blazeViewModel.load(day)
         }
         return super.onOptionsItemSelected(item)

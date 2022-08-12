@@ -33,6 +33,9 @@ import org.ben.news.helpers.showLoader
 import org.ben.news.models.StoryModel
 import org.ben.news.ui.auth.LoggedInViewModel
 import org.ben.news.ui.storyList.StoryListFragment
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 class LikedListFragment : Fragment(), StoryNoSaveListener, StoryListener {
@@ -48,6 +51,9 @@ class LikedListFragment : Fragment(), StoryNoSaveListener, StoryListener {
     private var storage = FirebaseStorage.getInstance().reference
     var state: Parcelable? = null
     var day = 0
+    val time = Calendar.getInstance().time
+    val formatter = SimpleDateFormat.getTimeInstance()
+    var formatted = formatter.format(time)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,6 +68,11 @@ class LikedListFragment : Fragment(), StoryNoSaveListener, StoryListener {
         showLoader(loader,"")
         _fragBinding = FragmentLikedListBinding.inflate(inflater, container, false)
         val root = fragBinding.root
+        formatted = formatted.substring(0,2)
+        if (formatted.toInt() < 2){
+            day +=1
+        }
+
         fragBinding.recyclerViewLiked.layoutManager = activity?.let { LinearLayoutManager(it) }
         activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.saved)
         MobileAds.initialize(this.context!!) {}
@@ -127,14 +138,15 @@ class LikedListFragment : Fragment(), StoryNoSaveListener, StoryListener {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if( item.itemId == R.id.app_bar_right) {
-            day += 1
-            likedListViewModel.load(day)
-        }
-        if( item.itemId == R.id.app_bar_left) {
             day -= 1
             if (day <= 0 ){
                 day = 0
             }
+            likedListViewModel.load(day)
+
+        }
+        if( item.itemId == R.id.app_bar_left) {
+            day += 1
             likedListViewModel.load(day)
         }
         return super.onOptionsItemSelected(item)

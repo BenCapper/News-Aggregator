@@ -34,6 +34,9 @@ import splitties.snackbar.snack
 import splitties.views.onClick
 import splitties.views.textColorResource
 import timber.log.Timber
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 class GriptFragment : Fragment(), StoryListener {
@@ -48,6 +51,10 @@ class GriptFragment : Fragment(), StoryListener {
     private val griptViewModel: GriptViewModel by activityViewModels()
     var state: Parcelable? = null
     var day = 0
+    val time = Calendar.getInstance().time
+    val formatter = SimpleDateFormat.getTimeInstance()
+    var formatted = formatter.format(time)
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,12 +69,19 @@ class GriptFragment : Fragment(), StoryListener {
         showLoader(loader,"")
         _fragBinding = FragmentGriptBinding.inflate(inflater, container, false)
         val root = fragBinding.root
+        formatted = formatted.substring(0,2)
+        if (formatted.toInt() < 2){
+            day +=1
+        }
         fragBinding.recyclerViewGript.layoutManager = activity?.let { LinearLayoutManager(it) }
         activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.gript)
         MobileAds.initialize(this.context!!) {}
         val fab = activity?.findViewById<FloatingActionButton>(R.id.fab)
         val bot = activity?.findViewById<BottomNavigationView>(R.id.bottom_nav)
         fab?.visibility = View.INVISIBLE
+
+
+
         fragBinding.recyclerViewGript.addOnScrollListener (object : RecyclerView.OnScrollListener(){
             var y = 0
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
@@ -95,14 +109,16 @@ class GriptFragment : Fragment(), StoryListener {
                 render(story as ArrayList<StoryModel>)
                 checkSwipeRefresh()
             }
+
+
             hideLoader(loader)
-            if(fragBinding.recyclerViewGript.adapter!!.itemCount == 0){
+            if(fragBinding.recyclerViewGript.adapter!!.itemCount == 0 ){
                 val st = ArrayList<StoryModel>()
                 st.add(StoryModel(title="1"))
                 fragBinding.recyclerViewGript.adapter = EmptyAdapter(st, this)
                 state?.let { fragBinding.recyclerViewGript.layoutManager?.onRestoreInstanceState(it) }
+                checkSwipeRefresh()
             }
-
         }
         setSwipeRefresh()
         return root
@@ -168,14 +184,15 @@ class GriptFragment : Fragment(), StoryListener {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if( item.itemId == R.id.app_bar_right) {
-            day += 1
-            griptViewModel.load(day)
-        }
-        if( item.itemId == R.id.app_bar_left) {
             day -= 1
             if (day <= 0 ){
                 day = 0
             }
+            griptViewModel.load(day)
+
+        }
+        if( item.itemId == R.id.app_bar_left) {
+            day += 1
             griptViewModel.load(day)
         }
         return super.onOptionsItemSelected(item)
