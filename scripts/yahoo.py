@@ -7,6 +7,7 @@ from firebase_admin import storage
 from utils.utilities import (formatDate, imgFolder, initialise,
                             logFolder, pageSoup, pushToDB, titleFormat, similar,getHour)
  
+
 ref_list = []
 log_file_path = "/home/bencapper/src/News-Aggregator/scripts/log/yahoodone.log"
 log_folder_path = "/home/bencapper/src/News-Aggregator/scripts/log/"
