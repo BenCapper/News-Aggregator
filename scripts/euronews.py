@@ -64,16 +64,13 @@ for article in articles:
       full_page = requests.get(link).content
       articleSoup = BeautifulSoup(full_page, features="lxml")
 
-      # Gather Title from Article
-      # Format with  a Utils Function
-      # Format Title to get Image Title
+      # Gather Title / Img Title
       title = articleSoup.select("h1")
       title = str(title).split('">')[1].split('</')[0].rstrip().lstrip()
       title = titleFormat(title)
       img_title = imgTitleFormat(title)
 
-      # Gather Date from Article
-      # Format with a Utils Function
+      # Gather / Format Date
       dates = articleSoup.select("time")
       dates = str(dates).split('datetime="')[1].split('">')[0].split('-')
       date = list()
