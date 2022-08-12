@@ -33,6 +33,9 @@ import splitties.alertdialog.appcompat.*
 import splitties.snackbar.snack
 import splitties.views.onClick
 import splitties.views.textColorResource
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 class RevolverFragment : Fragment(), StoryListener {
@@ -47,6 +50,9 @@ class RevolverFragment : Fragment(), StoryListener {
     private val revViewModel: RevolverViewModel by activityViewModels()
     var state: Parcelable? = null
     var day = 0
+    val time = Calendar.getInstance().time
+    val formatter = SimpleDateFormat.getTimeInstance()
+    var formatted = formatter.format(time)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,6 +67,11 @@ class RevolverFragment : Fragment(), StoryListener {
         showLoader(loader,"")
         _fragBinding = FragmentRevolverBinding.inflate(inflater, container, false)
         val root = fragBinding.root
+        formatted = formatted.substring(0,2)
+        if (formatted.toInt() < 2){
+            day +=1
+        }
+
         fragBinding.recyclerViewRev.layoutManager = activity?.let { LinearLayoutManager(it) }
         activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.rev)
 

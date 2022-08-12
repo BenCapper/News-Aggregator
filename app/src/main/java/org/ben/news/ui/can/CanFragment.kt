@@ -33,6 +33,9 @@ import splitties.alertdialog.appcompat.*
 import splitties.snackbar.snack
 import splitties.views.onClick
 import splitties.views.textColorResource
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 class CanFragment : Fragment(), StoryListener {
@@ -47,6 +50,9 @@ class CanFragment : Fragment(), StoryListener {
     private val canViewModel: CanViewModel by activityViewModels()
     var state: Parcelable? = null
     var day = 0
+    val time = Calendar.getInstance().time
+    val formatter = SimpleDateFormat.getTimeInstance()
+    var formatted = formatter.format(time)
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -63,6 +69,11 @@ class CanFragment : Fragment(), StoryListener {
         showLoader(loader,"")
         _fragBinding = FragmentCanBinding.inflate(inflater, container, false)
         val root = fragBinding.root
+        formatted = formatted.substring(0,2)
+        if (formatted.toInt() < 2){
+            day +=1
+        }
+
         fragBinding.recyclerViewCan.layoutManager = activity?.let { LinearLayoutManager(it) }
         activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.ca)
         MobileAds.initialize(this.context!!) {}
