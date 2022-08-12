@@ -109,14 +109,14 @@ class UkFragment : Fragment(), StoryListener {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if( item.itemId == R.id.app_bar_right) {
-            day += 1
-            ukViewModel.load(day)
-        }
-        if( item.itemId == R.id.app_bar_left) {
             day -= 1
             if (day <= 0 ){
                 day = 0
             }
+            ukViewModel.load(day)
+        }
+        if( item.itemId == R.id.app_bar_left) {
+            day += 1
             ukViewModel.load(day)
         }
         return super.onOptionsItemSelected(item)
