@@ -171,8 +171,8 @@ for article in articles:
                   # Get Link to the Stored Image
                   storage_link = f"https://firebasestorage.googleapis.com/v0/b/news-a3e22.appspot.com/o/Euronews%2F{img_title}?alt=media&token={token}"
 
-                # Push the Gathered Data to DB
-                # Using Utils method
+                  # Push the Gathered Data to DB
+                  # Using Utils method
                   pushToDB(
                       db_path,
                       title,
