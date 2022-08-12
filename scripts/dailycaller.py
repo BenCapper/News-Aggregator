@@ -47,7 +47,6 @@ order = getHour()
 soup = pageSoup(page_url)
 articles = soup.find_all("article", "relative")
 
-
 # Cycle through List just Gathered
 # And Save to DB or Pass due to Lack
 # of Information Available
