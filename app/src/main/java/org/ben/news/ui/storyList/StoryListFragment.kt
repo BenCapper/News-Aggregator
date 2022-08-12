@@ -186,14 +186,14 @@ class StoryListFragment : Fragment(), StoryListener {
             state = null
         }
         if( item.itemId == R.id.app_bar_r) {
-            day += 1
-            storyListViewModel.load(day)
-        }
-        if( item.itemId == R.id.app_bar_l) {
             day -= 1
             if (day <= 0 ){
                 day = 0
             }
+            storyListViewModel.load(day)
+        }
+        if( item.itemId == R.id.app_bar_l) {
+            day += 1
             storyListViewModel.load(day)
         }
 
