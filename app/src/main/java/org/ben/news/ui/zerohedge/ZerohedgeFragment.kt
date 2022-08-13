@@ -69,7 +69,7 @@ class ZerohedgeFragment : Fragment(), StoryListener {
         _fragBinding = FragmentZerohedgeBinding.inflate(inflater, container, false)
         val root = fragBinding.root
         formatted = formatted.substring(0,2)
-        if (formatted.toInt() < 2){
+        if (formatted.toInt() < 2 && day == 0){
             day +=1
         }
 
