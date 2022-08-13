@@ -5,13 +5,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseUser
 import org.ben.news.firebase.StoryManager
-import org.ben.news.firebase.StoryManager.getDates
 import org.ben.news.models.StoryModel
 import timber.log.Timber
-import java.text.SimpleDateFormat
-import java.time.LocalDate
-import java.util.*
-import kotlin.collections.ArrayList
 
 
 class BonginoViewModel : ViewModel() {
@@ -40,7 +35,7 @@ class BonginoViewModel : ViewModel() {
         val list: String
         try {
             list = StoryManager.getDate(day)
-            StoryManager.findOutletNoImage(list,outlet,bongList)
+            StoryManager.findByOutlet(list,outlet,bongList)
             Timber.i("Load Success : ${bongList.value}")
         }
         catch (e: Exception) {
@@ -51,7 +46,7 @@ class BonginoViewModel : ViewModel() {
     fun search( day: Int, term: String) {
         try {
             val dates = StoryManager.getDate(day)
-            StoryManager.searchOutletNoImage(dates,term,outlet,bongList)
+            StoryManager.searchByOutlet(dates,term,outlet,bongList)
             Timber.i("Search Success")
         }
         catch (e: java.lang.Exception) {

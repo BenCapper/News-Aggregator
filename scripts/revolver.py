@@ -85,8 +85,7 @@ for article in articles:
                 # Aggregation Site Links to
                 # Many Sites with Diff Layouts
                 date = datetime.datetime.now().strftime("%m-%d-%y")
-                date = f"Found on: {date}"
-
+                
                 # Initialize Storage Variables
                 bucket = storage.bucket()
                 token = ""

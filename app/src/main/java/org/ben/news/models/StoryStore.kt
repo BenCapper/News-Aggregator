@@ -1,7 +1,6 @@
 package org.ben.news.models
 
 import androidx.lifecycle.MutableLiveData
-import com.google.firebase.auth.FirebaseUser
 
 interface StoryStore {
     fun findAll(date: String, storyList: MutableLiveData<List<StoryModel>>)
