@@ -37,6 +37,8 @@ class StoryAdapter constructor(
     private val eu = listOf("www.Euronews.com")
     private val us = listOf("www.TheBlaze.com",
         "www.Timcast.com",
+        "www.Revolver.news",
+        "www.BonginoReport.com",
         "www.Zerohedge.com",
         "www.Breitbart.com",
         "www.Revolver.news",

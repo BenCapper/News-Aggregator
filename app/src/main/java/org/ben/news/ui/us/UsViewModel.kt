@@ -35,6 +35,8 @@ class UsViewModel : ViewModel() {
 
     private val outlets = listOf("www.TheBlaze.com",
         "www.Timcast.com",
+        "www.BonginoReport.com",
+        "www.Revolver.news",
         "www.Zerohedge.com",
         "www.Breitbart.com",
         "www.Revolver.news",
