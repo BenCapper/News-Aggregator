@@ -69,7 +69,7 @@ class EuFragment : Fragment(), StoryListener {
         _fragBinding = FragmentEuBinding.inflate(inflater, container, false)
         val root = fragBinding.root
         formatted = formatted.substring(0,2)
-        if (formatted.toInt() < 2){
+        if (formatted.toInt() < 2 && day == 0){
             day +=1
         }
         fragBinding.recyclerViewEu.layoutManager = activity?.let { LinearLayoutManager(it) }
