@@ -70,7 +70,7 @@ class GriptFragment : Fragment(), StoryListener {
         _fragBinding = FragmentGriptBinding.inflate(inflater, container, false)
         val root = fragBinding.root
         formatted = formatted.substring(0,2)
-        if (formatted.toInt() < 2){
+        if (formatted.toInt() < 2 && day == 0){
             day +=1
         }
         fragBinding.recyclerViewGript.layoutManager = activity?.let { LinearLayoutManager(it) }
