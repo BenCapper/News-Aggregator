@@ -9,9 +9,6 @@ import timber.log.Timber
 import java.time.LocalDate
 import java.util.*
 import kotlin.collections.ArrayList
-import kotlin.random.Random
-import kotlin.random.Random.Default.nextInt
-import kotlin.random.nextInt
 
 
 object StoryManager : StoryStore {
@@ -46,6 +43,7 @@ object StoryManager : StoryStore {
         Timber.i("CHOSEN = $date")
         return date
     }
+
     private fun formatTitle(title: String): String {
         return title.replace("(dot)", ".")
             .replace("(pc)", "%")
@@ -69,34 +67,6 @@ object StoryManager : StoryStore {
             .replace("&amp;", "and")
     }
 
-    override fun findAll(dates: ArrayList<String>, storyList: MutableLiveData<List<StoryModel>>) {
-
-            val totalList = ArrayList<StoryModel>()
-            for (date in dates) {
-                var todayList = mutableListOf<StoryModel>()
-                database.child("stories").child(date)
-                    .addValueEventListener(object : ValueEventListener {
-                        override fun onCancelled(error: DatabaseError) {
-                            Timber.i("Firebase Timcast error : ${error.message}")
-                        }
-
-                        override fun onDataChange(snapshot: DataSnapshot) {
-                            val children = snapshot.children
-                            children.forEach {
-                                val story = it.getValue(StoryModel::class.java)
-                                story?.title = story?.title?.let { it -> formatTitle(it) }.toString()
-                                todayList.add(story!!)
-                            }
-                            todayList = todayList.sortedBy{it.order}.toMutableList()
-                            database.child("stories").child(date)
-                                .removeEventListener(this)
-                            totalList.addAll(todayList)
-                            storyList.value = totalList
-
-                        }
-                    })
-        }
-    }
 
     override fun findAll(date: String, storyList: MutableLiveData<List<StoryModel>>) {
 
@@ -121,38 +91,8 @@ object StoryManager : StoryStore {
                             .removeEventListener(this)
                         totalList.addAll(todayList)
                         storyList.value = totalList
-
                     }
                 })
-    }
-
-    override fun findAllShuffle(dates: ArrayList<String>, storyList: MutableLiveData<List<StoryModel>>) {
-
-        val totalList = ArrayList<StoryModel>()
-        for (date in dates) {
-            var todayList = mutableListOf<StoryModel>()
-            database.child("stories").child(date)
-                .addValueEventListener(object : ValueEventListener {
-                    override fun onCancelled(error: DatabaseError) {
-                        Timber.i("Firebase Timcast error : ${error.message}")
-                    }
-
-                    override fun onDataChange(snapshot: DataSnapshot) {
-                        val children = snapshot.children
-                        children.forEach {
-                            val story = it.getValue(StoryModel::class.java)
-                            story?.title = story?.title?.let { it -> formatTitle(it) }.toString()
-                            todayList.add(story!!)
-                        }
-                        todayList.shuffle()
-                        database.child("stories").child(date)
-                            .removeEventListener(this)
-                        totalList.addAll(todayList)
-                        storyList.value = totalList
-
-                    }
-                })
-        }
     }
 
     override fun findAllShuffle(date: String, storyList: MutableLiveData<List<StoryModel>>) {
@@ -177,42 +117,8 @@ object StoryManager : StoryStore {
                             .removeEventListener(this)
                         totalList.addAll(todayList)
                         storyList.value = totalList
-
                     }
                 })
-    }
-
-    override fun search(term: String, dates: ArrayList<String>, storyList: MutableLiveData<List<StoryModel>>) {
-        val totalList = ArrayList<StoryModel>()
-        for (date in dates) {
-            var todayList = mutableListOf<StoryModel>()
-            database.child("stories").child(date)
-                .addValueEventListener(object : ValueEventListener {
-                    override fun onCancelled(error: DatabaseError) {
-                        Timber.i("Firebase building error : ${error.message}")
-                    }
-
-                    override fun onDataChange(snapshot: DataSnapshot) {
-                        val children = snapshot.children
-                        children.forEach {
-                            if (it.getValue(StoryModel::class.java)?.title!!.contains(term, true) ||
-                                it.getValue(StoryModel::class.java)?.outlet!!.contains(term, true) ||
-                                it.getValue(StoryModel::class.java)?.date!!.contains(term, true)
-                            ) {
-                                val story = it.getValue(StoryModel::class.java)
-                                story?.title = story?.title?.let { it -> formatTitle(it) }.toString()
-                                todayList.add(story!!)
-                            }
-                        }
-                        todayList = todayList.sortedBy{it.order}.toMutableList()
-                        todayList.reverse()
-                        database.child("stories").child(date)
-                            .removeEventListener(this)
-                        totalList.addAll(todayList)
-                        storyList.value = totalList
-                    }
-                })
-        }
     }
 
     override fun search(term: String, date: String, storyList: MutableLiveData<List<StoryModel>>) {
@@ -246,38 +152,6 @@ object StoryManager : StoryStore {
                 })
     }
 
-    override fun findByOutlet(dates: ArrayList<String>, outlet: String, storyList: MutableLiveData<List<StoryModel>>) {
-        val totalList = ArrayList<StoryModel>()
-
-        for (date in dates) {
-            var todayList = mutableListOf<StoryModel>()
-            database.child("stories").child(date)
-                .addValueEventListener(object : ValueEventListener {
-                    override fun onCancelled(error: DatabaseError) {
-                        Timber.i("Firebase error : ${error.message}")
-                    }
-
-                    override fun onDataChange(snapshot: DataSnapshot) {
-                        val children = snapshot.children
-                        children.forEach {
-                            val story = it.getValue(StoryModel::class.java)
-                            if(story?.outlet == outlet) {
-                                story.title = formatTitle(story.title)
-                                todayList.add(story)
-                            }
-                        }
-                        todayList = todayList.sortedBy{it.order}.toMutableList()
-                        todayList.reverse()
-                        database.child("stories").child(date)
-                            .removeEventListener(this)
-                        totalList.addAll(todayList)
-                        storyList.value = totalList
-
-                    }
-                })
-        }
-    }
-
     override fun findByOutlet(date: String, outlet: String, storyList: MutableLiveData<List<StoryModel>>) {
         val totalList = ArrayList<StoryModel>()
 
@@ -306,38 +180,6 @@ object StoryManager : StoryStore {
 
                     }
                 })
-    }
-
-    override fun findByOutlets(dates: ArrayList<String>, outlets: List<String>, storyList: MutableLiveData<List<StoryModel>>) {
-        val totalList = ArrayList<StoryModel>()
-
-        for (date in dates) {
-            var todayList = mutableListOf<StoryModel>()
-            database.child("stories").child(date)
-                .addValueEventListener(object : ValueEventListener {
-                    override fun onCancelled(error: DatabaseError) {
-                        Timber.i("Firebase error : ${error.message}")
-                    }
-
-                    override fun onDataChange(snapshot: DataSnapshot) {
-                        val children = snapshot.children
-                        children.forEach {
-                            val story = it.getValue(StoryModel::class.java)
-                            if(story?.outlet in outlets) {
-                                story?.title = story?.title?.let { it -> formatTitle(it) }.toString()
-                                todayList.add(story!!)
-                            }
-                        }
-                        todayList = todayList.sortedBy{it.order}.toMutableList()
-                        todayList.reverse()
-                        database.child("stories").child(date)
-                            .removeEventListener(this)
-                        totalList.addAll(todayList)
-                        storyList.value = totalList
-
-                    }
-                })
-        }
     }
 
     override fun findByOutlets(date: String, outlets: List<String>, storyList: MutableLiveData<List<StoryModel>>) {
@@ -371,38 +213,6 @@ object StoryManager : StoryStore {
                 })
     }
 
-    override fun findOutletNoImage(dates: ArrayList<String>, outlet: String, storyList: MutableLiveData<List<StoryModel>>) {
-        val totalList = ArrayList<StoryModel>()
-
-        for (date in dates) {
-            var todayList = mutableListOf<StoryModel>()
-            database.child("stories").child("Found on: $date")
-                .addValueEventListener(object : ValueEventListener {
-                    override fun onCancelled(error: DatabaseError) {
-                        Timber.i("Firebase error : ${error.message}")
-                    }
-
-                    override fun onDataChange(snapshot: DataSnapshot) {
-                        val children = snapshot.children
-                        children.forEach {
-                            val story = it.getValue(StoryModel::class.java)
-                            if(story?.outlet == outlet) {
-                                story.title = formatTitle(story.title)
-                                todayList.add(story)
-                            }
-                        }
-                        todayList = todayList.sortedBy{it.order}.toMutableList()
-                        todayList.reverse()
-                        database.child("stories").child("Found on: $date")
-                            .removeEventListener(this)
-                        totalList.addAll(todayList)
-                        storyList.value = totalList
-
-                    }
-                })
-        }
-    }
-
     override fun findOutletNoImage(date: String, outlet: String, storyList: MutableLiveData<List<StoryModel>>) {
         val totalList = ArrayList<StoryModel>()
 
@@ -428,11 +238,9 @@ object StoryManager : StoryStore {
                             .removeEventListener(this)
                         totalList.addAll(todayList)
                         storyList.value = totalList
-
                     }
                 })
     }
-
 
     override fun find(userId: String, path:String, storyList: MutableLiveData<List<StoryModel>>) {
         val totalList = ArrayList<StoryModel>()
@@ -525,38 +333,6 @@ object StoryManager : StoryStore {
                 })
     }
 
-    override fun searchByOutlet(dates: ArrayList<String>, term: String, outlet:String, storyList: MutableLiveData<List<StoryModel>>) {
-
-        val totalList = ArrayList<StoryModel>()
-        for (date in dates) {
-            var todayList = mutableListOf<StoryModel>()
-            database.child("stories").child(date)
-                .addValueEventListener(object : ValueEventListener {
-                    override fun onCancelled(error: DatabaseError) {
-                    }
-
-                    override fun onDataChange(snapshot: DataSnapshot) {
-                        val children = snapshot.children
-                        children.forEach {
-                            if (it.getValue(StoryModel::class.java)?.title!!.contains(term, true) &&
-                                it.getValue(StoryModel::class.java)?.outlet!! == outlet
-                            ) {
-                                val story = it.getValue(StoryModel::class.java)
-                                story?.title = story?.title?.let { it -> formatTitle(it) }.toString()
-                                todayList.add(story!!)
-                            }
-                        }
-                        todayList = todayList.sortedBy{it.order}.toMutableList()
-                        todayList.reverse()
-                        database.child("stories").child(date)
-                            .removeEventListener(this)
-                        totalList.addAll(todayList)
-                        storyList.value = totalList
-                    }
-                })
-        }
-    }
-
     override fun searchByOutlet(date: String, term: String, outlet:String, storyList: MutableLiveData<List<StoryModel>>) {
 
         val totalList = ArrayList<StoryModel>()
@@ -585,43 +361,6 @@ object StoryManager : StoryStore {
                         storyList.value = totalList
                     }
                 })
-    }
-
-    override fun searchByOutlets(dates: ArrayList<String>, term: String, outlets:List<String>, storyList: MutableLiveData<List<StoryModel>>) {
-
-        val totalList = ArrayList<StoryModel>()
-        for (date in dates) {
-            var todayList = mutableListOf<StoryModel>()
-            database.child("stories").child(date)
-                .addValueEventListener(object : ValueEventListener {
-                    override fun onCancelled(error: DatabaseError) {
-                    }
-
-                    override fun onDataChange(snapshot: DataSnapshot) {
-                        val children = snapshot.children
-                        children.forEach {
-                            if (it.getValue(StoryModel::class.java)?.title!!.contains(term, true) &&
-                                it.getValue(StoryModel::class.java)?.outlet!! in outlets ||
-                                it.getValue(StoryModel::class.java)?.outlet!!.contains(term, true) &&
-                                it.getValue(StoryModel::class.java)?.outlet!! in outlets ||
-                                it.getValue(StoryModel::class.java)?.date!!.contains(term, true) &&
-                                it.getValue(StoryModel::class.java)?.outlet!! in outlets
-
-                            ) {
-                                val story = it.getValue(StoryModel::class.java)
-                                story?.title = story?.title?.let { it -> formatTitle(it) }.toString()
-                                todayList.add(story!!)
-                            }
-                        }
-                        todayList = todayList.sortedBy{it.order}.toMutableList()
-                        todayList.reverse()
-                        database.child("stories").child(date)
-                            .removeEventListener(this)
-                        totalList.addAll(todayList)
-                        storyList.value = totalList
-                    }
-                })
-        }
     }
 
     override fun searchByOutlets(date: String, term: String, outlets:List<String>, storyList: MutableLiveData<List<StoryModel>>) {
@@ -657,38 +396,6 @@ object StoryManager : StoryStore {
                         storyList.value = totalList
                     }
                 })
-    }
-
-    override fun searchOutletNoImage(dates: ArrayList<String>, term: String, outlet:String, storyList: MutableLiveData<List<StoryModel>>) {
-
-        val totalList = ArrayList<StoryModel>()
-        for (date in dates) {
-            var todayList = mutableListOf<StoryModel>()
-            database.child("stories").child("Found on: $date")
-                .addValueEventListener(object : ValueEventListener {
-                    override fun onCancelled(error: DatabaseError) {
-                    }
-
-                    override fun onDataChange(snapshot: DataSnapshot) {
-                        val children = snapshot.children
-                        children.forEach {
-                            if (it.getValue(StoryModel::class.java)?.title!!.contains(term, true) &&
-                                it.getValue(StoryModel::class.java)?.outlet!! == outlet
-                            ) {
-                                val story = it.getValue(StoryModel::class.java)
-                                story?.title = story?.title?.let { it -> formatTitle(it) }.toString()
-                                todayList.add(story!!)
-                            }
-                        }
-                        todayList = todayList.sortedBy{it.order}.toMutableList()
-                        todayList.reverse()
-                        database.child("stories").child("Found on: $date")
-                            .removeEventListener(this)
-                        totalList.addAll(todayList)
-                        storyList.value = totalList
-                    }
-                })
-        }
     }
 
     override fun searchOutletNoImage(date: String, term: String, outlet:String, storyList: MutableLiveData<List<StoryModel>>) {
@@ -741,8 +448,6 @@ object StoryManager : StoryStore {
         database.updateChildren(childAdd)
     }
 
-
-
     override fun delete(day:String, userId: String, path: String, title: String) {
 
         val childDelete : MutableMap<String, Any?> = HashMap()
@@ -762,9 +467,6 @@ object StoryManager : StoryStore {
 
         database.updateChildren(childUpdate)
     }
-
-
-
 
     fun updateImageRef(userId: String,imageUri: String) {
 

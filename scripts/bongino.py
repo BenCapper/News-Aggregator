@@ -81,7 +81,6 @@ for article in articles:
       # Gather Date from Article
       # Format with a Utils Function
       date = datetime.datetime.now().strftime("%m-%d-%y")
-      date = f"Found on: {date}" 
 
       # Initialize Storage Variables
       bucket = storage.bucket()

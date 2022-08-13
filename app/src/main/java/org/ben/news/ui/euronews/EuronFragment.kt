@@ -68,7 +68,7 @@ class EuronFragment : Fragment(), StoryListener {
         _fragBinding = FragmentEuronBinding.inflate(inflater, container, false)
         val root = fragBinding.root
         formatted = formatted.substring(0,2)
-        if (formatted.toInt() < 2){
+        if (formatted.toInt() < 2 && day == 0){
             day +=1
         }
 
