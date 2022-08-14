@@ -51,6 +51,7 @@ class StoryListFragment : Fragment(), StoryListener {
     private val storyListViewModel: StoryListViewModel by activityViewModels()
     var state: Parcelable? = null
     var shuffle: Boolean? = null
+    var searching: String? = null
     var day = 0
     val time = Calendar.getInstance().time
     val formatter = SimpleDateFormat.getTimeInstance()
@@ -113,12 +114,29 @@ class StoryListFragment : Fragment(), StoryListener {
                 checkSwipeRefresh()
             }
             hideLoader(loader)
-            if(fragBinding.recyclerView.adapter!!.itemCount == 0){
+            if(fragBinding.recyclerView.adapter!!.itemCount == 0 && searching != null){
                 val st = ArrayList<StoryModel>()
                 st.add(StoryModel(title="1"))
                 fragBinding.recyclerView.adapter = EmptyAdapter(st, this)
                 state?.let { fragBinding.recyclerView.layoutManager?.onRestoreInstanceState(it) }
             }
+            else if(fragBinding.recyclerView.adapter!!.itemCount == 0){
+                fragBinding.creepy.visibility = View.VISIBLE
+            }
+            if (fragBinding.recyclerView.adapter!!.itemCount > 0)
+                fragBinding.creepy.visibility = View.INVISIBLE
+                Glide.with(this).load(R.drawable.bidenlost).into(fragBinding.imageView2)
+                fragBinding.larrow.setOnClickListener {
+                    day += 1
+                    storyListViewModel.load(day)
+                }
+                fragBinding.rarrow.setOnClickListener {
+                    day -= 1
+                    if (day <= 0 ){
+                        day = 0
+                    }
+                    storyListViewModel.load(day)
+                }
         }
         setSwipeRefresh()
         return root
@@ -165,6 +183,7 @@ class StoryListFragment : Fragment(), StoryListener {
 
             override fun onQueryTextChange(newText: String?): Boolean {
                 if (newText != null) {
+                    searching = newText
                     storyListViewModel.search(
                         day,
                         newText
@@ -172,9 +191,11 @@ class StoryListFragment : Fragment(), StoryListener {
                 }
 
                 else{
+                    searching = newText
                     storyListViewModel.load(day)
                 }
                 if (newText == "") {
+                    searching = newText
                     storyListViewModel.load(day)
                 }
 
@@ -182,6 +203,7 @@ class StoryListFragment : Fragment(), StoryListener {
             }
         })
         searchView.setOnCloseListener {
+            searching = null
             storyListViewModel.load(day)
             false
         }
