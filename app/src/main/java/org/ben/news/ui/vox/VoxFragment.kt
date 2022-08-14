@@ -50,6 +50,7 @@ class VoxFragment : Fragment(), StoryListener {
     private val voxViewModel: VoxViewModel by activityViewModels()
     var state: Parcelable? = null
     var day = 0
+    var searching: String? = null
     val time = Calendar.getInstance().time
     val formatter = SimpleDateFormat.getTimeInstance()
     var formatted = formatter.format(time)
@@ -107,12 +108,30 @@ class VoxFragment : Fragment(), StoryListener {
                 checkSwipeRefresh()
             }
             hideLoader(loader)
-            if(fragBinding.recyclerViewVox.adapter!!.itemCount == 0){
+            if(fragBinding.recyclerViewVox.adapter!!.itemCount == 0 && searching != null){
                 val st = ArrayList<StoryModel>()
                 st.add(StoryModel(title="1"))
                 fragBinding.recyclerViewVox.adapter = EmptyAdapter(st, this)
                 state?.let { fragBinding.recyclerViewVox.layoutManager?.onRestoreInstanceState(it) }
             }
+            else if(fragBinding.recyclerViewVox.adapter!!.itemCount == 0){
+                fragBinding.creepy.visibility = View.VISIBLE
+            }
+            if (fragBinding.recyclerViewVox.adapter!!.itemCount > 0)
+                fragBinding.creepy.visibility = View.INVISIBLE
+                Glide.with(this).load(R.drawable.bidenlost).into(fragBinding.imageView2)
+                fragBinding.larrow.setOnClickListener {
+                    day += 1
+                    voxViewModel.load(day)
+                }
+                fragBinding.rarrow.setOnClickListener {
+                    day -= 1
+                    if (day <= 0 ){
+                        day = 0
+                    }
+                    voxViewModel.load(day)
+                }
+
         }
         setSwipeRefresh()
         return root
@@ -169,15 +188,18 @@ class VoxFragment : Fragment(), StoryListener {
 
             override fun onQueryTextChange(newText: String?): Boolean {
                 if (newText != null) {
+                    searching = newText
                     voxViewModel.search(
                         day,
                         newText
                     )
                 }
                 else{
+                    searching = newText
                     voxViewModel.load(day)
                 }
                 if (newText == "") {
+                    searching = newText
                     voxViewModel.load(day)
                 }
 
@@ -185,6 +207,7 @@ class VoxFragment : Fragment(), StoryListener {
             }
         })
         searchView.setOnCloseListener {
+            searching = null
             voxViewModel.load(day)
             false
         }
