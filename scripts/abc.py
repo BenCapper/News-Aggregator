@@ -156,10 +156,7 @@ for article in articles:
                }
                open_json = open(json_dump_path, "r")
                read_json = open_json.read()
-               if read_temp == "":
-                   dumpJson(json_dump_path,data)
-               else:
-                   appendJson(json_dump_path,data)
+               appendJson(json_dump_path,data)
                
                pushToDB(
                    db_path, title, date, img_src, img_title, link, outlet, storage_link, order

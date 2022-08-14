@@ -1,14 +1,8 @@
 import os
 
 import json
-import datetime
-from firebase_admin import storage
-from tomlkit import key
 
 from utils.utilities import jsonFolder, similar, titleDeFormat, initialise, pushDoubleToDB
- 
-from rake_nltk import Rake
-from firebase_admin import db
 
 log_gb = "/home/bencapper/src/News-Aggregator/scripts/log/gbdone.log"
 gb_ref = list()
@@ -32,7 +26,6 @@ json_path = "/home/bencapper/src/News-Aggregator/scripts/news.json"
 jsonFolder(json_folder_path)
 initialise(json_path, db_url, bucket)
 
-key_checker = Rake()
 
 # Read from Existing Log
 if os.path.exists(log_gb):
@@ -79,8 +72,7 @@ for i in gb_words:
          gb_title = gb_sent
          sky_title = j
 
-print(gb_title)
-print(sky_words)
+
 matches = list()
 
 for i in range(len(gb_words)):
@@ -99,48 +91,52 @@ for i in range(len(gb_words)):
 
 print(matches)
 
-titlehead = ""
-for match in matches:
-   titlehead = f"{titlehead} {match}" 
+print(gb_title)
+print(sky_title)
 
-
-
-open_json = open(json_gb_dump_path, "r")
-read_json = json.load(open_json)
-articles = read_json['articles']
-gart = dict()
-sart = dict()
-for article in articles:
-   title = article['title']
-   if title == gb_title:
-      gart = article
-
-open_json = open(json_sky_dump_path, "r")
-read_json = json.load(open_json)
-articles = read_json['articles']
-for article in articles:
-   title = article['title']
-   if title == sky_title:
-      sart = article
-
-print(gart)
-print(sart)
-
-# Need to get matching words as category
-
-pushDoubleToDB(
-   db_path,
-   titlehead,
-   gart['title'],
-   gart['date'],
-   gart['img_name'],
-   gart['link'],
-   gart["outlet"],
-   gart['storage_link'],
-   sart['title'],
-   sart['date'],
-   sart['img_name'],
-   sart['link'],
-   sart["outlet"],
-   sart['storage_link']
-   )
+if gb_title == "" or sky_title == "":
+   pass 
+else:
+   titlehead = ""
+   for match in matches:
+      titlehead = f"{titlehead} {match}" 
+   
+   open_json = open(json_gb_dump_path, "r")
+   read_json = json.load(open_json)
+   articles = read_json['articles']
+   gart = dict()
+   sart = dict()
+   for article in articles:
+      title = article['title']
+      if title == gb_title:
+         gart = article
+   
+   open_json = open(json_sky_dump_path, "r")
+   read_json = json.load(open_json)
+   articles = read_json['articles']
+   for article in articles:
+      title = article['title']
+      if title == sky_title:
+         sart = article
+   
+   print(gart)
+   print(sart)
+   
+   # Need to get matching words as category
+   
+   pushDoubleToDB(
+      db_path,
+      titlehead,
+      gart['title'],
+      gart['date'],
+      gart['img_title'],
+      gart['link'],
+      gart["outlet"],
+      gart['storage_link'],
+      sart['title'],
+      sart['date'],
+      sart['img_title'],
+      sart['link'],
+      sart["outlet"],
+      sart['storage_link']
+      )

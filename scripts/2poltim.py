@@ -94,50 +94,53 @@ for i in range(len(tim_words)):
          matches.append(tim_word)
 
 print(matches)
+print(tim_title)
+print(pol_title)
 
-titlehead = ""
-for match in matches:
-   titlehead = f"{titlehead} {match}" 
+if tim_title == "" or pol_title == "":
+   pass 
+else:
+   titlehead = ""
+   for match in matches:
+      titlehead = f"{titlehead} {match}" 
 
+      open_json = open(json_tim_dump_path, "r")
+      read_json = json.load(open_json)
+      articles = read_json['articles']
+      tart = dict()
+      part = dict()
+      for article in articles:
+         title = article['title']
+         if title == tim_title:
+            tart = article
 
+      open_json = open(json_pol_dump_path, "r")
+      read_json = json.load(open_json)
+      articles = read_json['articles']
+      for article in articles:
+         title = article['title']
+         if title == pol_title:
+            part = article
 
-open_json = open(json_tim_dump_path, "r")
-read_json = json.load(open_json)
-articles = read_json['articles']
-tart = dict()
-part = dict()
-for article in articles:
-   title = article['title']
-   if title == tim_title:
-      tart = article
+      print(tart['date'])
+      print(part['link'])
 
-open_json = open(json_pol_dump_path, "r")
-read_json = json.load(open_json)
-articles = read_json['articles']
-for article in articles:
-   title = article['title']
-   if title == pol_title:
-      part = article
+      # Need to get matching words as category
 
-print(tart)
-print(part)
-
-# Need to get matching words as category
-
-pushDoubleToDB(
-   db_path,
-   titlehead,
-   tart['title'],
-   tart['date'],
-   tart['img_name'],
-   tart['link'],
-   tart["outlet"],
-   tart['storage_link'],
-   part['title'],
-   part['date'],
-   part['img_name'],
-   part['link'],
-   part["outlet"],
-   part['storage_link']
-   )
+      pushDoubleToDB(
+         db_path,
+         titlehead,
+         tart['title'],
+         tart['date'],
+         tart['img_name'],
+         tart['link'],
+         tart["outlet"],
+         tart['storage_link'],
+         part['title'],
+         part['date'],
+         part['img_name'],
+         part['link'],
+         part["outlet"],
+         part['storage_link']
+         )
 
