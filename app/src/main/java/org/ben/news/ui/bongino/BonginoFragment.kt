@@ -50,6 +50,7 @@ class BonginoFragment : Fragment(), StoryListener {
     private val bonginoViewModel: BonginoViewModel by activityViewModels()
     var state: Parcelable? = null
     var day = 0
+    var searching: String? = null
     val time = Calendar.getInstance().time
     val formatter = SimpleDateFormat.getTimeInstance()
     var formatted = formatter.format(time)
@@ -109,12 +110,31 @@ class BonginoFragment : Fragment(), StoryListener {
                 checkSwipeRefresh()
             }
             hideLoader(loader)
-            if(fragBinding.recyclerViewBong.adapter!!.itemCount == 0){
+            if(fragBinding.recyclerViewBong.adapter!!.itemCount == 0 && searching != null){
                 val st = ArrayList<StoryModel>()
                 st.add(StoryModel(title="1"))
                 fragBinding.recyclerViewBong.adapter = EmptyAdapter(st, this)
                 state?.let { fragBinding.recyclerViewBong.layoutManager?.onRestoreInstanceState(it) }
             }
+            else if(fragBinding.recyclerViewBong.adapter!!.itemCount == 0){
+                fragBinding.creepy.visibility = View.VISIBLE
+            }
+            if (fragBinding.recyclerViewBong.adapter!!.itemCount > 0)
+                fragBinding.creepy.visibility = View.INVISIBLE
+                Glide.with(this).load(R.drawable.bidenlost).into(fragBinding.imageView2)
+                val datenow = StoryManager.getDate(day)
+                fragBinding.emptydate.text = datenow
+                fragBinding.larrow.setOnClickListener {
+                    day += 1
+                    bonginoViewModel.load(day)
+                }
+                fragBinding.rarrow.setOnClickListener {
+                    day -= 1
+                    if (day <= 0 ){
+                        day = 0
+                    }
+                    bonginoViewModel.load(day)
+                }
 
         }
         setSwipeRefresh()
@@ -172,15 +192,18 @@ class BonginoFragment : Fragment(), StoryListener {
 
             override fun onQueryTextChange(newText: String?): Boolean {
                 if (newText != null) {
+                    searching = newText
                     bonginoViewModel.search(
                         day,
                         newText
                     )
                 }
                 else{
+                    searching = newText
                     bonginoViewModel.load(day)
                 }
                 if (newText == "") {
+                    searching = newText
                     bonginoViewModel.load(day)
                 }
 
@@ -188,6 +211,7 @@ class BonginoFragment : Fragment(), StoryListener {
             }
         })
         searchView.setOnCloseListener {
+            searching = null
             bonginoViewModel.load(day)
             false
         }

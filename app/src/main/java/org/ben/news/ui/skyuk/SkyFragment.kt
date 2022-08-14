@@ -50,6 +50,7 @@ class SkyFragment : Fragment(), StoryListener {
     private val skyViewModel: SkyViewModel by activityViewModels()
     var state: Parcelable? = null
     var day = 0
+    var searching: String? = null
     val time = Calendar.getInstance().time
     val formatter = SimpleDateFormat.getTimeInstance()
     var formatted = formatter.format(time)
@@ -108,12 +109,31 @@ class SkyFragment : Fragment(), StoryListener {
                 checkSwipeRefresh()
             }
             hideLoader(loader)
-            if(fragBinding.recyclerViewSky.adapter!!.itemCount == 0){
+            if(fragBinding.recyclerViewSky.adapter!!.itemCount == 0 && searching != null){
                 val st = ArrayList<StoryModel>()
                 st.add(StoryModel(title="1"))
                 fragBinding.recyclerViewSky.adapter = EmptyAdapter(st, this)
                 state?.let { fragBinding.recyclerViewSky.layoutManager?.onRestoreInstanceState(it) }
             }
+            else if(fragBinding.recyclerViewSky.adapter!!.itemCount == 0){
+                fragBinding.creepy.visibility = View.VISIBLE
+            }
+            if (fragBinding.recyclerViewSky.adapter!!.itemCount > 0)
+                fragBinding.creepy.visibility = View.INVISIBLE
+                Glide.with(this).load(R.drawable.bidenlost).into(fragBinding.imageView2)
+                val datenow = StoryManager.getDate(day)
+                fragBinding.emptydate.text = datenow
+                fragBinding.larrow.setOnClickListener {
+                    day += 1
+                    skyViewModel.load(day)
+                }
+                fragBinding.rarrow.setOnClickListener {
+                    day -= 1
+                    if (day <= 0 ){
+                        day = 0
+                    }
+                    skyViewModel.load(day)
+                }
 
         }
         setSwipeRefresh()
@@ -171,15 +191,18 @@ class SkyFragment : Fragment(), StoryListener {
 
             override fun onQueryTextChange(newText: String?): Boolean {
                 if (newText != null) {
+                    searching = newText
                     skyViewModel.search(
                         day,
                         newText
                     )
                 }
                 else{
+                    searching = newText
                     skyViewModel.load(day)
                 }
                 if (newText == "") {
+                    searching = newText
                     skyViewModel.load(day)
                 }
 
@@ -187,6 +210,7 @@ class SkyFragment : Fragment(), StoryListener {
             }
         })
         searchView.setOnCloseListener {
+            searching = null
             skyViewModel.load(day)
             false
         }

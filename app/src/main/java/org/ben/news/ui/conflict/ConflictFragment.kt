@@ -14,6 +14,7 @@ import android.widget.SearchView
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.google.android.gms.ads.MobileAds
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -46,6 +47,7 @@ class ConflictFragment : Fragment(), DoubleStoryListener, StoryListener {
     private val conViewModel: ConflictViewModel by activityViewModels()
     var state: Parcelable? = null
     var day = 0
+    var searching: String? = null
     val time = Calendar.getInstance().time
     val formatter = SimpleDateFormat.getTimeInstance()
     var formatted = formatter.format(time)
@@ -103,12 +105,31 @@ class ConflictFragment : Fragment(), DoubleStoryListener, StoryListener {
                 checkSwipeRefresh()
             }
             hideLoader(loader)
-            if(fragBinding.recyclerViewCon.adapter!!.itemCount == 0){
+            if(fragBinding.recyclerViewCon.adapter!!.itemCount == 0 && searching != null){
                 val st = ArrayList<StoryModel>()
                 st.add(StoryModel(title="1"))
                 fragBinding.recyclerViewCon.adapter = EmptyAdapter(st, this)
                 state?.let { fragBinding.recyclerViewCon.layoutManager?.onRestoreInstanceState(it) }
             }
+            else if(fragBinding.recyclerViewCon.adapter!!.itemCount == 0){
+                fragBinding.creepy.visibility = View.VISIBLE
+            }
+            if (fragBinding.recyclerViewCon.adapter!!.itemCount > 0)
+                fragBinding.creepy.visibility = View.INVISIBLE
+                Glide.with(this).load(R.drawable.bidenlost).into(fragBinding.imageView2)
+                val datenow = StoryManager.getDate(day)
+                fragBinding.emptydate.text = datenow
+                fragBinding.larrow.setOnClickListener {
+                    day += 1
+                    conViewModel.load(day)
+                }
+                fragBinding.rarrow.setOnClickListener {
+                    day -= 1
+                    if (day <= 0 ){
+                        day = 0
+                    }
+                    conViewModel.load(day)
+                }
 
         }
         setSwipeRefresh()
@@ -167,15 +188,18 @@ class ConflictFragment : Fragment(), DoubleStoryListener, StoryListener {
 
             override fun onQueryTextChange(newText: String?): Boolean {
                 if (newText != null) {
+                    searching = newText
                     conViewModel.search(
                         day,
                         newText
                     )
                 }
                 else{
+                    searching = newText
                     conViewModel.load(day)
                 }
                 if (newText == "") {
+                    searching = newText
                     conViewModel.load(day)
                 }
 
@@ -183,6 +207,7 @@ class ConflictFragment : Fragment(), DoubleStoryListener, StoryListener {
             }
         })
         searchView.setOnCloseListener {
+            searching = null
             conViewModel.load(day)
             false
         }

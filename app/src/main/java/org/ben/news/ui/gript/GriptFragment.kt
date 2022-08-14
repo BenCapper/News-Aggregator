@@ -51,6 +51,7 @@ class GriptFragment : Fragment(), StoryListener {
     private val griptViewModel: GriptViewModel by activityViewModels()
     var state: Parcelable? = null
     var day = 0
+    var searching: String? = null
     val time = Calendar.getInstance().time
     val formatter = SimpleDateFormat.getTimeInstance()
     var formatted = formatter.format(time)
@@ -109,16 +110,32 @@ class GriptFragment : Fragment(), StoryListener {
                 render(story as ArrayList<StoryModel>)
                 checkSwipeRefresh()
             }
-
-
             hideLoader(loader)
-            if(fragBinding.recyclerViewGript.adapter!!.itemCount == 0 ){
+            if(fragBinding.recyclerViewGript.adapter!!.itemCount == 0 && searching != null){
                 val st = ArrayList<StoryModel>()
                 st.add(StoryModel(title="1"))
                 fragBinding.recyclerViewGript.adapter = EmptyAdapter(st, this)
                 state?.let { fragBinding.recyclerViewGript.layoutManager?.onRestoreInstanceState(it) }
-                checkSwipeRefresh()
             }
+            else if(fragBinding.recyclerViewGript.adapter!!.itemCount == 0){
+                fragBinding.creepy.visibility = View.VISIBLE
+            }
+            if (fragBinding.recyclerViewGript.adapter!!.itemCount > 0)
+                fragBinding.creepy.visibility = View.INVISIBLE
+                Glide.with(this).load(R.drawable.bidenlost).into(fragBinding.imageView2)
+                val datenow = StoryManager.getDate(day)
+                fragBinding.emptydate.text = datenow
+                fragBinding.larrow.setOnClickListener {
+                    day += 1
+                    griptViewModel.load(day)
+                }
+                fragBinding.rarrow.setOnClickListener {
+                    day -= 1
+                    if (day <= 0 ){
+                        day = 0
+                    }
+                    griptViewModel.load(day)
+                }
         }
         setSwipeRefresh()
         return root
@@ -160,15 +177,18 @@ class GriptFragment : Fragment(), StoryListener {
 
             override fun onQueryTextChange(newText: String?): Boolean {
                 if (newText != null) {
+                    searching = newText
                     griptViewModel.search(
                         day,
                         newText
                     )
                 }
                 else{
+                    searching = newText
                     griptViewModel.load(day)
                 }
                 if (newText == "") {
+                    searching = newText
                     griptViewModel.load(day)
                 }
 
@@ -176,6 +196,7 @@ class GriptFragment : Fragment(), StoryListener {
             }
         })
         searchView.setOnCloseListener {
+            searching = null
             griptViewModel.load(day)
             false
         }

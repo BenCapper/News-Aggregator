@@ -50,6 +50,7 @@ class GlobalFragment : Fragment(), StoryListener {
     private val gloViewModel: GlobalViewModel by activityViewModels()
     var state: Parcelable? = null
     var day = 0
+    var searching: String? = null
     val time = Calendar.getInstance().time
     val formatter = SimpleDateFormat.getTimeInstance()
     var formatted = formatter.format(time)
@@ -108,12 +109,31 @@ class GlobalFragment : Fragment(), StoryListener {
                 checkSwipeRefresh()
             }
             hideLoader(loader)
-            if(fragBinding.recyclerViewGlo.adapter!!.itemCount == 0){
+            if(fragBinding.recyclerViewGlo.adapter!!.itemCount == 0 && searching != null){
                 val st = ArrayList<StoryModel>()
                 st.add(StoryModel(title="1"))
                 fragBinding.recyclerViewGlo.adapter = EmptyAdapter(st, this)
                 state?.let { fragBinding.recyclerViewGlo.layoutManager?.onRestoreInstanceState(it) }
             }
+            else if(fragBinding.recyclerViewGlo.adapter!!.itemCount == 0){
+                fragBinding.creepy.visibility = View.VISIBLE
+            }
+            if (fragBinding.recyclerViewGlo.adapter!!.itemCount > 0)
+                fragBinding.creepy.visibility = View.INVISIBLE
+                Glide.with(this).load(R.drawable.bidenlost).into(fragBinding.imageView2)
+                val datenow = StoryManager.getDate(day)
+                fragBinding.emptydate.text = datenow
+                fragBinding.larrow.setOnClickListener {
+                    day += 1
+                    gloViewModel.load(day)
+                }
+                fragBinding.rarrow.setOnClickListener {
+                    day -= 1
+                    if (day <= 0 ){
+                        day = 0
+                    }
+                    gloViewModel.load(day)
+                }
         }
         setSwipeRefresh()
 
@@ -172,15 +192,18 @@ class GlobalFragment : Fragment(), StoryListener {
 
             override fun onQueryTextChange(newText: String?): Boolean {
                 if (newText != null) {
+                    searching = newText
                     gloViewModel.search(
                         day,
                         newText
                     )
                 }
                 else{
+                    searching = newText
                     gloViewModel.load(day)
                 }
                 if (newText == "") {
+                    searching = newText
                     gloViewModel.load(day)
                 }
 
@@ -188,6 +211,7 @@ class GlobalFragment : Fragment(), StoryListener {
             }
         })
         searchView.setOnCloseListener {
+            searching = null
             gloViewModel.load(day)
             false
         }

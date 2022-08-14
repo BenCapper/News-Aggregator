@@ -24,6 +24,10 @@
         <item name="android:backgroundTint">@color/white</item>
     </style>
 
+
+
+
+
     <style name="Theme.News.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
@@ -76,7 +80,6 @@
         <item name="colorControlHighlight">@color/grey_500</item>
         <item name="actionMenuTextColor">@color/black</item>
         <item name="android:editTextColor">@color/black</item>
-        <item name="android:background">@color/white</item>
         <item name="android:itemBackground">@color/white</item>
         <item name="android:colorControlHighlight">@color/orange</item>
         <item name="colorAccent">@color/black</item>
@@ -110,6 +113,9 @@
         <item name="colorAccent">@color/orange</item>
         <item name="android:layout_marginRight">4dp</item>
         <item name="android:layout_marginLeft">4dp</item>
+        <item name="backgroundColor">@color/black</item>
+        <item name="rippleColor">@color/orange</item>
+        <item name="itemRippleColor">@color/orange</item>
         <item name="android:textColor">@android:color/black</item>
         <item name="android:textStyle">bold</item>
     </style>
@@ -134,10 +140,7 @@
     </style>
 
 
-    <style name="Widget.AppCompat.Button.Colored" parent="Theme.News">
-        <item name="android:backgroundTint">@color/grey_700</item>
-        <item name="android:textStyle">bold</item>
-    </style>
+
 
     <style name="ThemeOverlay.MyTitleText" parent="Theme.News">
         <item name="android:gravity">center</item>

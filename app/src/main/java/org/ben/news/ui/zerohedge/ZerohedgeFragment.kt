@@ -50,6 +50,7 @@ class ZerohedgeFragment : Fragment(), StoryListener {
     private val zeroViewModel: ZerohedgeViewModel by activityViewModels()
     var state: Parcelable? = null
     var day = 0
+    var searching: String? = null
     val time = Calendar.getInstance().time
     val formatter = SimpleDateFormat.getTimeInstance()
     var formatted = formatter.format(time)
@@ -108,13 +109,31 @@ class ZerohedgeFragment : Fragment(), StoryListener {
                 checkSwipeRefresh()
             }
             hideLoader(loader)
-            if(fragBinding.recyclerViewZero.adapter!!.itemCount == 0){
+            if(fragBinding.recyclerViewZero.adapter!!.itemCount == 0 && searching != null){
                 val st = ArrayList<StoryModel>()
                 st.add(StoryModel(title="1"))
                 fragBinding.recyclerViewZero.adapter = EmptyAdapter(st, this)
                 state?.let { fragBinding.recyclerViewZero.layoutManager?.onRestoreInstanceState(it) }
             }
-
+            else if(fragBinding.recyclerViewZero.adapter!!.itemCount == 0){
+                fragBinding.creepy.visibility = View.VISIBLE
+            }
+            if (fragBinding.recyclerViewZero.adapter!!.itemCount > 0)
+                fragBinding.creepy.visibility = View.INVISIBLE
+                Glide.with(this).load(R.drawable.bidenlost).into(fragBinding.imageView2)
+                val datenow = StoryManager.getDate(day)
+                fragBinding.emptydate.text = datenow
+                fragBinding.larrow.setOnClickListener {
+                    day += 1
+                    zeroViewModel.load(day)
+                }
+                fragBinding.rarrow.setOnClickListener {
+                    day -= 1
+                    if (day <= 0 ){
+                        day = 0
+                    }
+                    zeroViewModel.load(day)
+                }
         }
         setSwipeRefresh()
         return root
@@ -171,15 +190,18 @@ class ZerohedgeFragment : Fragment(), StoryListener {
 
             override fun onQueryTextChange(newText: String?): Boolean {
                 if (newText != null) {
+                    searching = newText
                     zeroViewModel.search(
                         day,
                         newText
                     )
                 }
                 else{
+                    searching = newText
                     zeroViewModel.load(day)
                 }
                 if (newText == "") {
+                    searching = newText
                     zeroViewModel.load(day)
                 }
 
@@ -187,6 +209,7 @@ class ZerohedgeFragment : Fragment(), StoryListener {
             }
         })
         searchView.setOnCloseListener {
+            searching = null
             zeroViewModel.load(day)
             false
         }
