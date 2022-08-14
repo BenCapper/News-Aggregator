@@ -4,7 +4,8 @@ import requests
 from bs4 import BeautifulSoup
 from firebase_admin import storage
 from utils.utilities import (formatDate, imgFolder, imgTitleFormat, initialise,
-                           logFolder, pageSoup, pushToDB, titleFormat, similar,getHour)
+                           logFolder, pageSoup, pushToDB, titleFormat, similar,getHour,
+                           jsonFolder, dumpJson, appendJson)
 
 
 # Set Global Variables
@@ -12,6 +13,8 @@ ref_list = []
 token = ""
 log_file_path = "/home/bencapper/src/News-Aggregator/scripts/log/politicodone.log"
 log_folder_path = "/home/bencapper/src/News-Aggregator/scripts/log/"
+json_dump_path = "/home/bencapper/src/News-Aggregator/scripts/json/pol.json"
+json_folder_path = "/home/bencapper/src/News-Aggregator/scripts/json/"
 json_path = "/home/bencapper/src/News-Aggregator/scripts/news.json"
 db_url = "https://news-a3e22-default-rtdb.firebaseio.com/"
 bucket = "news-a3e22.appspot.com"
@@ -25,6 +28,7 @@ url = "https://www.politico.com"
 # Set Local Folders
 logFolder(log_folder_path)
 imgFolder(img_path)
+jsonFolder(json_folder_path)
 
 # Read from Existing Log
 if os.path.exists(log_file_path):
@@ -131,6 +135,23 @@ for article in articles:
 
                     # Get Link to the Stored Image
                     storage_link = f"https://firebasestorage.googleapis.com/v0/b/news-a3e22.appspot.com/o/Politico%2F{img_title}?alt=media&token={token}"
+
+                    data = {
+                        "title": title,
+                        "date": date,
+                        "img_src": img_src,
+                        "img_title": img_title,
+                        "link": link,
+                        "outlet": outlet,
+                        "storage_link": storage_link,
+                        "order": order
+                    }
+                    open_json = open(json_dump_path, "r")
+                    read_json = open_json.read()
+                    if read_temp == "":
+                        dumpJson(json_dump_path,data)
+                    else:
+                        appendJson(json_dump_path,data)
 
                     # Push the Gathered Data to DB
                     # Using Utils method

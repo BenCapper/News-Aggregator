@@ -4,13 +4,15 @@ from uuid import uuid4
 import requests
 from firebase_admin import storage
  
-from utils.utilities import (formatDate, imgFolder, imgTitleFormat, initialise,
+from utils.utilities import (formatDate, imgFolder, imgTitleFormat, initialise, jsonFolder, dumpJson, appendJson,
                             logFolder, pageSoup, pushToDB, titleFormat, similar,getHour)
 
 # Set Global Variables
 ref_list = []
 log_file_path = "/home/bencapper/src/News-Aggregator/scripts/log/griptdone.log"
 log_folder_path = "/home/bencapper/src/News-Aggregator/scripts/log/"
+json_dump_path = "/home/bencapper/src/News-Aggregator/scripts/json/gript.json"
+json_folder_path = "/home/bencapper/src/News-Aggregator/scripts/json/"
 json_path = "/home/bencapper/src/News-Aggregator/scripts/news.json"
 db_url = "https://news-a3e22-default-rtdb.firebaseio.com/"
 bucket = "news-a3e22.appspot.com"
@@ -23,6 +25,7 @@ outlet = "www.Gript.ie"
 # Set Local Folders
 logFolder(log_folder_path)
 imgFolder(img_path)
+jsonFolder(json_folder_path)
 
 # Read from Existing Log
 if os.path.exists(log_file_path):
@@ -113,6 +116,23 @@ for article in articles:
            if img_link == "":
                img_title = "gript.jpg"
                storage_link = f"https://firebasestorage.googleapis.com/v0/b/news-a3e22.appspot.com/o/Gript%2Fgript.png?alt=media&token=b3bc4822-64f6-4ade-8910-e8a509ff759b"
+
+               data = {
+                   "title": title,
+                   "date": date,
+                   "img_src": img_link,
+                   "img_title": img_title,
+                   "link": url,
+                   "outlet": outlet,
+                   "storage_link": storage_link,
+                   "order": order
+               }
+               open_json = open(json_dump_path, "r")
+               read_json = open_json.read()
+               if read_temp == "":
+                   dumpJson(json_dump_path,data)
+               else:
+                   appendJson(json_dump_path,data)
                
                # Push the Gathered Data to DB
                # Using Utils method
@@ -137,17 +157,17 @@ for article in articles:
               # Get Image Data using Requests
               # Create the Image Locally
               # Upload image to Storage
-              with open(f"{img_path}/{img_title}", "wb") as img:
+            with open(f"{img_path}/{img_title}", "wb") as img:
                 img.write(requests.get(img_link).content)
                 blob = bucket.blob(f"Gript/{img_title}")
                 token = uuid4()
                 metadata = {"firebaseStorageDownloadTokens": token}
                 blob.upload_from_filename(f"{img_path}/{img_title}")   
-                storage_link = f"https://firebasestorage.googleapis.com/v0/b/news-a3e22.appspot.com/o/Gript%2F{img_title}?alt=media&token={token}"   
+            storage_link = f"https://firebasestorage.googleapis.com/v0/b/news-a3e22.appspot.com/o/Gript%2F{img_title}?alt=media&token={token}"   
                 
                 # Push the Gathered Data to DB
                 # Using Utils method
-                pushToDB(
+            pushToDB(
                     db_path,
                     title,
                     date,
@@ -160,8 +180,8 @@ for article in articles:
                 )
 
                 # Write Title to Local Log File
-                open_temp.write(str(title) + "\n")
-                print("Gript Article Added to DB")
+            open_temp.write(str(title) + "\n")
+            print("Gript Article Added to DB")
         else:
             print("Gript Article Already in DB")
 

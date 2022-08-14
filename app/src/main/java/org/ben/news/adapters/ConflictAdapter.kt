@@ -1,30 +1,31 @@
 package org.ben.news.adapters
 
-
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.google.android.gms.ads.*
-import org.ben.news.R
+import com.google.android.gms.ads.AdLoader
+import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.nativead.NativeAd
+import org.ben.news.R
 import org.ben.news.databinding.CardAdBinding
-import org.ben.news.databinding.CardStoryBinding
+import org.ben.news.databinding.CardConflictBinding
+import org.ben.news.models.DoubleStoryModel
 import org.ben.news.models.StoryModel
 import timber.log.Timber
 import kotlin.math.roundToInt
 
 
-interface StoryListener {
-    fun onStoryClick(story: StoryModel)
-    fun onLike(story: StoryModel)
-    fun onShare(story: StoryModel)
+interface DoubleStoryListener {
+    fun onStoryDoubleClick(story: DoubleStoryModel)
+    fun onLikeDouble(story: DoubleStoryModel)
+    fun onShareDouble(story: DoubleStoryModel)
 }
 
-class StoryAdapter constructor(
-    private var stories: ArrayList<StoryModel>,
-    private val listener: StoryListener
+class ConflictAdapter constructor(
+    private var stories: ArrayList<DoubleStoryModel>,
+    private val listener: DoubleStoryListener
 )
     : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -55,7 +56,7 @@ class StoryAdapter constructor(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return if(viewType == ITEM){
-            val binding = CardStoryBinding
+            val binding = CardConflictBinding
                 .inflate(LayoutInflater.from(parent.context), parent, false)
 
             MainHolder(binding)
@@ -114,33 +115,33 @@ class StoryAdapter constructor(
         return ITEM
     }
     /* This class binds the building information to the recyclerview card */
-    inner class MainHolder(private val binding : CardStoryBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class MainHolder(private val binding : CardConflictBinding) : RecyclerView.ViewHolder(binding.root) {
 
         //val readOnlyRow = readOnly
 
-        fun bind(story: StoryModel, listener : StoryListener) {
+        fun bind(story: DoubleStoryModel, listener : DoubleStoryListener) {
 
-            if (story.outlet in ca){
+            if (story.outlet1 in ca){
                 Glide.with(this.itemView.context).load(R.drawable.canicon).into(binding.imageView3)
             }
-            if (story.outlet in eu){
+            if (story.outlet1 in eu){
                 Glide.with(this.itemView.context).load(R.drawable.euicon).into(binding.imageView3)
             }
-            if (story.outlet in uk){
+            if (story.outlet1 in uk){
                 Glide.with(this.itemView.context).load(R.drawable.gbicon).into(binding.imageView3)
             }
-            if (story.outlet in us){
+            if (story.outlet1 in us){
                 Glide.with(this.itemView.context).load(R.drawable.usicon).into(binding.imageView3)
             }
-            if (story.outlet in ie){
+            if (story.outlet1 in ie){
                 Glide.with(this.itemView.context).load(R.drawable.ieicon).into(binding.imageView3)
             }
-            binding.root.setOnClickListener { listener.onStoryClick(story) }
-            binding.button.setOnClickListener { listener.onLike(story) }
-            binding.button3.setOnClickListener { listener.onShare(story) }
+            binding.root.setOnClickListener { listener.onStoryDoubleClick(story) }
+            binding.button.setOnClickListener { listener.onLikeDouble(story) }
+            binding.button3.setOnClickListener { listener.onShareDouble(story) }
             binding.root.tag = story
             binding.story = story
-            Glide.with(this.itemView.context).load(story.storage_link).into(binding.imageView2)
+            Glide.with(this.itemView.context).load(story.storage_link1).into(binding.imageView2)
             binding.executePendingBindings()
         }
 

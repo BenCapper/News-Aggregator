@@ -6,7 +6,7 @@ import requests
 from bs4 import BeautifulSoup
 from firebase_admin import storage
  
-from utils.utilities import (imgFolder, imgTitleFormat, initialise,
+from utils.utilities import (imgFolder, imgTitleFormat, initialise,jsonFolder, dumpJson, appendJson,
                             logFolder, pageSoup, pushToDB, titleFormat, similar,getHour)
 
 # Set Global Variables
@@ -14,6 +14,8 @@ ref_list = []
 token = ""
 log_file_path = "/home/bencapper/src/News-Aggregator/scripts/log/breitbartdone.log"
 log_folder_path = "/home/bencapper/src/News-Aggregator/scripts/log/"
+json_dump_path = "/home/bencapper/src/News-Aggregator/scripts/json/breit.json"
+json_folder_path = "/home/bencapper/src/News-Aggregator/scripts/json/"
 json_path = "/home/bencapper/src/News-Aggregator/scripts/news.json"
 db_url = "https://news-a3e22-default-rtdb.firebaseio.com/"
 bucket = "news-a3e22.appspot.com"
@@ -28,6 +30,7 @@ img_src = ""
 # Set Local Folders
 logFolder(log_folder_path)
 imgFolder(img_path)
+jsonFolder(json_folder_path)
 
 # Read from Existing Log
 if os.path.exists(log_file_path):
@@ -127,6 +130,22 @@ for article in articles:
                 img_title = "bb.jpg"
                 storage_link = f"https://firebasestorage.googleapis.com/v0/b/news-a3e22.appspot.com/o/Breitbart%2Fbb.jpg?alt=media&token=14e1f346-6cdd-4ded-bbba-4dd6e9a42d1f"
                 
+                data = {
+                   "title": title,
+                   "date": date,
+                   "img_src": img_src,
+                   "img_title": img_title,
+                   "link": url,
+                   "outlet": outlet,
+                   "storage_link": storage_link,
+                   "order": order
+                }
+                open_json = open(json_dump_path, "r")
+                read_json = open_json.read()
+                if read_temp == "":
+                    dumpJson(json_dump_path,data)
+                else:
+                    appendJson(json_dump_path,data)
                 # Push the Gathered Data to DB
                 # Using Utils method
                 pushToDB(
@@ -159,28 +178,42 @@ for article in articles:
                   metadata = {"firebaseStorageDownloadTokens": token}
                   blob.upload_from_filename(f"{img_path}/{img_title}")
                   
-                  # Get Link to the Stored Image
-                  storage_link = f"https://firebasestorage.googleapis.com/v0/b/news-a3e22.appspot.com/o/Breitbart%2F{img_title}?alt=media&token={token}"
+                # Get Link to the Stored Image
+                storage_link = f"https://firebasestorage.googleapis.com/v0/b/news-a3e22.appspot.com/o/Breitbart%2F{img_title}?alt=media&token={token}"
   
+                data = {
+                   "title": title,
+                   "date": date,
+                   "img_src": img_src,
+                   "img_title": img_title,
+                   "link": url,
+                   "outlet": outlet,
+                   "storage_link": storage_link,
+                   "order": order
+                }
+                open_json = open(json_dump_path, "r")
+                read_json = open_json.read()
+                if read_temp == "":
+                    dumpJson(json_dump_path,data)
+                else:
+                    appendJson(json_dump_path,data)
                   # Push the Gathered Data to DB
                   # Using Utils method
-                  pushToDB(
-                      db_path,
-                      title,
-                      date,
-                      img_src,
-                      img_title,
-                      url,
-                      outlet,
-                      storage_link,
-                      order
-                  )
-
-                  # Write Title to Local Log File
-                  open_temp.write(str(title) + "\n")
-
-                  # Return Confirmation of New DB Entry 
-                  print("Breitbart Article Added to DB")
+                pushToDB(
+                    db_path,
+                    title,
+                    date,
+                    img_src,
+                    img_title,
+                    url,
+                    outlet,
+                    storage_link,
+                    order
+                )
+                # Write Title to Local Log File
+                open_temp.write(str(title) + "\n")
+                # Return Confirmation of New DB Entry 
+                print("Breitbart Article Added to DB")
 
         # Title was Already in the Log List
         # or too Similar to another
