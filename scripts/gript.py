@@ -129,10 +129,7 @@ for article in articles:
                }
                open_json = open(json_dump_path, "r")
                read_json = open_json.read()
-               if read_temp == "":
-                   dumpJson(json_dump_path,data)
-               else:
-                   appendJson(json_dump_path,data)
+               appendJson(json_dump_path,data)
                
                # Push the Gathered Data to DB
                # Using Utils method
@@ -165,6 +162,19 @@ for article in articles:
                 blob.upload_from_filename(f"{img_path}/{img_title}")   
             storage_link = f"https://firebasestorage.googleapis.com/v0/b/news-a3e22.appspot.com/o/Gript%2F{img_title}?alt=media&token={token}"   
                 
+            data = {
+                "title": title,
+                "date": date,
+                "img_src": img_link,
+                "img_title": img_title,
+                "link": url,
+                "outlet": outlet,
+                "storage_link": storage_link,
+                "order": order
+            }
+            open_json = open(json_dump_path, "r")
+            read_json = open_json.read()
+            appendJson(json_dump_path,data)
                 # Push the Gathered Data to DB
                 # Using Utils method
             pushToDB(
