@@ -18,6 +18,7 @@
     <string name="history">History</string>
     <string name="view_history">View History</string>
     <string name="fell">No Results</string>
+    <string name="no">No Articles Found</string>
     <string name="save_can">Save Cancelled</string>
     <string name="save_art">Confirm Save</string>
     <string name="list_title">360 News</string>
