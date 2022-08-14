@@ -120,20 +120,20 @@ class ZerohedgeFragment : Fragment(), StoryListener {
             }
             if (fragBinding.recyclerViewZero.adapter!!.itemCount > 0)
                 fragBinding.creepy.visibility = View.INVISIBLE
-            Glide.with(this).load(R.drawable.bidenlost).into(fragBinding.imageView2)
-            fragBinding.larrow.setOnClickListener {
-                day += 1
-                zeroViewModel.load(day)
-            }
-            fragBinding.rarrow.setOnClickListener {
-                day -= 1
-                if (day <= 0 ){
-                    day = 0
+                Glide.with(this).load(R.drawable.bidenlost).into(fragBinding.imageView2)
+                val datenow = StoryManager.getDate(day)
+                fragBinding.emptydate.text = datenow
+                fragBinding.larrow.setOnClickListener {
+                    day += 1
+                    zeroViewModel.load(day)
                 }
-                zeroViewModel.load(day)
-            }
-
-
+                fragBinding.rarrow.setOnClickListener {
+                    day -= 1
+                    if (day <= 0 ){
+                        day = 0
+                    }
+                    zeroViewModel.load(day)
+                }
         }
         setSwipeRefresh()
         return root

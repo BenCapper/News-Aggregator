@@ -119,6 +119,8 @@ class YahooFragment : Fragment(), StoryListener {
             if (fragBinding.recyclerViewYahoo.adapter!!.itemCount > 0)
                 fragBinding.creepy.visibility = View.INVISIBLE
                 Glide.with(this).load(R.drawable.bidenlost).into(fragBinding.imageView2)
+                val datenow = StoryManager.getDate(day)
+                fragBinding.emptydate.text = datenow
                 fragBinding.larrow.setOnClickListener {
                     day += 1
                     yahooViewModel.load(day)
