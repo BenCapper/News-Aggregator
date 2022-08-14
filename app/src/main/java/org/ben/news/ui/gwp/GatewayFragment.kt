@@ -49,6 +49,7 @@ class GatewayFragment : Fragment(), StoryListener {
     private val gateViewModel: GatewayViewModel by activityViewModels()
     var state: Parcelable? = null
     var day = 0
+    var searching: String? = null
     val time = Calendar.getInstance().time
     val formatter = SimpleDateFormat.getTimeInstance()
     var formatted = formatter.format(time)
@@ -87,12 +88,29 @@ class GatewayFragment : Fragment(), StoryListener {
                 checkSwipeRefresh()
             }
             hideLoader(loader)
-            if(fragBinding.recyclerViewGate.adapter!!.itemCount == 0){
+            if(fragBinding.recyclerViewGate.adapter!!.itemCount == 0 && searching != null){
                 val st = ArrayList<StoryModel>()
                 st.add(StoryModel(title="1"))
                 fragBinding.recyclerViewGate.adapter = EmptyAdapter(st, this)
                 state?.let { fragBinding.recyclerViewGate.layoutManager?.onRestoreInstanceState(it) }
             }
+            else if(fragBinding.recyclerViewGate.adapter!!.itemCount == 0){
+                fragBinding.creepy.visibility = View.VISIBLE
+            }
+            if (fragBinding.recyclerViewGate.adapter!!.itemCount > 0)
+                fragBinding.creepy.visibility = View.INVISIBLE
+                Glide.with(this).load(R.drawable.bidenlost).into(fragBinding.imageView2)
+                fragBinding.larrow.setOnClickListener {
+                    day += 1
+                    gateViewModel.load(day)
+                }
+                fragBinding.rarrow.setOnClickListener {
+                    day -= 1
+                    if (day <= 0 ){
+                        day = 0
+                    }
+                    gateViewModel.load(day)
+                }
         }
         setSwipeRefresh()
         return root
@@ -150,15 +168,18 @@ class GatewayFragment : Fragment(), StoryListener {
 
             override fun onQueryTextChange(newText: String?): Boolean {
                 if (newText != null) {
+                    searching = newText
                     gateViewModel.search(
                         day,
                         newText
                     )
                 }
                 else{
+                    searching = newText
                     gateViewModel.load(day)
                 }
                 if (newText == "") {
+                    searching = newText
                     gateViewModel.load(day)
                 }
 
@@ -166,6 +187,7 @@ class GatewayFragment : Fragment(), StoryListener {
             }
         })
         searchView.setOnCloseListener {
+            searching = null
             gateViewModel.load(day)
             false
         }

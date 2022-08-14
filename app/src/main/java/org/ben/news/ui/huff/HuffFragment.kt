@@ -49,6 +49,7 @@ class HuffFragment : Fragment(), StoryListener {
     private val huffViewModel: HuffViewModel by activityViewModels()
     var state: Parcelable? = null
     var day = 0
+    var searching: String? = null
     val time = Calendar.getInstance().time
     val formatter = SimpleDateFormat.getTimeInstance()
     var formatted = formatter.format(time)
@@ -106,12 +107,29 @@ class HuffFragment : Fragment(), StoryListener {
                 checkSwipeRefresh()
             }
             hideLoader(loader)
-            if(fragBinding.recyclerViewHuff.adapter!!.itemCount == 0){
+            if(fragBinding.recyclerViewHuff.adapter!!.itemCount == 0 && searching != null){
                 val st = ArrayList<StoryModel>()
                 st.add(StoryModel(title="1"))
                 fragBinding.recyclerViewHuff.adapter = EmptyAdapter(st, this)
                 state?.let { fragBinding.recyclerViewHuff.layoutManager?.onRestoreInstanceState(it) }
             }
+            else if(fragBinding.recyclerViewHuff.adapter!!.itemCount == 0){
+                fragBinding.creepy.visibility = View.VISIBLE
+            }
+            if (fragBinding.recyclerViewHuff.adapter!!.itemCount > 0)
+                fragBinding.creepy.visibility = View.INVISIBLE
+                Glide.with(this).load(R.drawable.bidenlost).into(fragBinding.imageView2)
+                fragBinding.larrow.setOnClickListener {
+                    day += 1
+                    huffViewModel.load(day)
+                }
+                fragBinding.rarrow.setOnClickListener {
+                    day -= 1
+                    if (day <= 0 ){
+                        day = 0
+                    }
+                    huffViewModel.load(day)
+                }
         }
         setSwipeRefresh()
         return root
@@ -169,15 +187,18 @@ class HuffFragment : Fragment(), StoryListener {
 
             override fun onQueryTextChange(newText: String?): Boolean {
                 if (newText != null) {
+                    searching = newText
                     huffViewModel.search(
                         day,
                         newText
                     )
                 }
                 else{
+                    searching = newText
                     huffViewModel.load(day)
                 }
                 if (newText == "") {
+                    searching = newText
                     huffViewModel.load(day)
                 }
 
@@ -185,6 +206,7 @@ class HuffFragment : Fragment(), StoryListener {
             }
         })
         searchView.setOnCloseListener {
+            searching = null
             huffViewModel.load(day)
             false
         }
