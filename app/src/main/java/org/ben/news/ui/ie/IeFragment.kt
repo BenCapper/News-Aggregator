@@ -50,6 +50,7 @@ class IeFragment : Fragment(), StoryListener {
     private val ieViewModel: IeViewModel by activityViewModels()
     var state: Parcelable? = null
     var day = 0
+    var searching: String? = null
     val time = Calendar.getInstance().time
     val formatter = SimpleDateFormat.getTimeInstance()
     var formatted = formatter.format(time)
@@ -107,12 +108,30 @@ class IeFragment : Fragment(), StoryListener {
                 checkSwipeRefresh()
             }
             hideLoader(loader)
-            if(fragBinding.recyclerViewIe.adapter!!.itemCount == 0){
+            if(fragBinding.recyclerViewIe.adapter!!.itemCount == 0 && searching != null){
                 val st = ArrayList<StoryModel>()
                 st.add(StoryModel(title="1"))
                 fragBinding.recyclerViewIe.adapter = EmptyAdapter(st, this)
                 state?.let { fragBinding.recyclerViewIe.layoutManager?.onRestoreInstanceState(it) }
             }
+            else if(fragBinding.recyclerViewIe.adapter!!.itemCount == 0){
+                fragBinding.creepy.visibility = View.VISIBLE
+            }
+            if (fragBinding.recyclerViewIe.adapter!!.itemCount > 0)
+                fragBinding.creepy.visibility = View.INVISIBLE
+                Glide.with(this).load(R.drawable.bidenlost).into(fragBinding.imageView2)
+                fragBinding.larrow.setOnClickListener {
+                    day += 1
+                    ieViewModel.load(day)
+                }
+                fragBinding.rarrow.setOnClickListener {
+                    day -= 1
+                    if (day <= 0 ){
+                        day = 0
+                    }
+                    ieViewModel.load(day)
+            }
+
         }
         setSwipeRefresh()
         return root
@@ -153,15 +172,18 @@ class IeFragment : Fragment(), StoryListener {
 
             override fun onQueryTextChange(newText: String?): Boolean {
                 if (newText != null) {
+                    searching = newText
                     ieViewModel.search(
                         day,
                         newText
                     )
                 }
                 else{
+                    searching = newText
                     ieViewModel.load(day)
                 }
                 if (newText == "") {
+                    searching = newText
                     ieViewModel.load(day)
                 }
 
@@ -169,6 +191,7 @@ class IeFragment : Fragment(), StoryListener {
             }
         })
         searchView.setOnCloseListener {
+            searching = null
             ieViewModel.load(day)
             false
         }

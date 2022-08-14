@@ -51,6 +51,7 @@ class LikedListFragment : Fragment(), StoryNoSaveListener, StoryListener {
     private var storage = FirebaseStorage.getInstance().reference
     var state: Parcelable? = null
     var day = 0
+    var searching: String? = null
     val time = Calendar.getInstance().time
     val formatter = SimpleDateFormat.getTimeInstance()
     var formatted = formatter.format(time)
@@ -108,12 +109,30 @@ class LikedListFragment : Fragment(), StoryNoSaveListener, StoryListener {
                 checkSwipeRefresh()
             }
             hideLoader(loader)
-            if(fragBinding.recyclerViewLiked.adapter!!.itemCount == 0){
+            if(fragBinding.recyclerViewLiked.adapter!!.itemCount == 0 && searching != null){
                 val st = ArrayList<StoryModel>()
                 st.add(StoryModel(title="1"))
                 fragBinding.recyclerViewLiked.adapter = EmptyAdapter(st, this)
                 state?.let { fragBinding.recyclerViewLiked.layoutManager?.onRestoreInstanceState(it) }
             }
+            else if(fragBinding.recyclerViewLiked.adapter!!.itemCount == 0){
+                fragBinding.creepy.visibility = View.VISIBLE
+            }
+            if (fragBinding.recyclerViewLiked.adapter!!.itemCount > 0)
+                fragBinding.creepy.visibility = View.INVISIBLE
+                Glide.with(this).load(R.drawable.bidenlost).into(fragBinding.imageView2)
+                fragBinding.larrow.setOnClickListener {
+                    day += 1
+                    likedListViewModel.load(day)
+                }
+                fragBinding.rarrow.setOnClickListener {
+                    day -= 1
+                    if (day <= 0 ){
+                        day = 0
+                    }
+                    likedListViewModel.load(day)
+                }
+
         }
         setSwipeRefresh()
 
@@ -187,15 +206,18 @@ class LikedListFragment : Fragment(), StoryNoSaveListener, StoryListener {
 
             override fun onQueryTextChange(newText: String?): Boolean {
                 if (newText != null) {
+                    searching = newText
                     likedListViewModel.search(
                         day,
                         newText
                     )
                 }
                 else{
+                    searching = newText
                     likedListViewModel.load(day)
                 }
                 if (newText == "") {
+                    searching = newText
                     likedListViewModel.load(day)
                 }
 
@@ -203,6 +225,7 @@ class LikedListFragment : Fragment(), StoryNoSaveListener, StoryListener {
             }
         })
         searchView.setOnCloseListener {
+            searching = null
             likedListViewModel.load(day)
             false
         }

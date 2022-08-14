@@ -50,6 +50,7 @@ class RteFragment : Fragment(), StoryListener {
     private val rteViewModel: RteViewModel by activityViewModels()
     var state: Parcelable? = null
     var day = 0
+    var searching: String? = null
     val time = Calendar.getInstance().time
     val formatter = SimpleDateFormat.getTimeInstance()
     var formatted = formatter.format(time)
@@ -107,12 +108,29 @@ class RteFragment : Fragment(), StoryListener {
                 checkSwipeRefresh()
             }
             hideLoader(loader)
-            if(fragBinding.recyclerViewRte.adapter!!.itemCount == 0){
+            if(fragBinding.recyclerViewRte.adapter!!.itemCount == 0 && searching != null){
                 val st = ArrayList<StoryModel>()
                 st.add(StoryModel(title="1"))
                 fragBinding.recyclerViewRte.adapter = EmptyAdapter(st, this)
                 state?.let { fragBinding.recyclerViewRte.layoutManager?.onRestoreInstanceState(it) }
             }
+            else if(fragBinding.recyclerViewRte.adapter!!.itemCount == 0){
+                fragBinding.creepy.visibility = View.VISIBLE
+            }
+            if (fragBinding.recyclerViewRte.adapter!!.itemCount > 0)
+                fragBinding.creepy.visibility = View.INVISIBLE
+                Glide.with(this).load(R.drawable.bidenlost).into(fragBinding.imageView2)
+                fragBinding.larrow.setOnClickListener {
+                    day += 1
+                    rteViewModel.load(day)
+                }
+                fragBinding.rarrow.setOnClickListener {
+                    day -= 1
+                    if (day <= 0 ){
+                        day = 0
+                    }
+                    rteViewModel.load(day)
+                }
         }
         setSwipeRefresh()
 
@@ -154,15 +172,18 @@ class RteFragment : Fragment(), StoryListener {
 
             override fun onQueryTextChange(newText: String?): Boolean {
                 if (newText != null) {
+                    searching = newText
                     rteViewModel.search(
                         day,
                         newText
                     )
                 }
                 else{
+                    searching = newText
                     rteViewModel.load(day)
                 }
                 if (newText == "") {
+                    searching = newText
                     rteViewModel.load(day)
                 }
 
@@ -170,6 +191,7 @@ class RteFragment : Fragment(), StoryListener {
             }
         })
         searchView.setOnCloseListener {
+            searching = null
             rteViewModel.load(day)
             false
         }

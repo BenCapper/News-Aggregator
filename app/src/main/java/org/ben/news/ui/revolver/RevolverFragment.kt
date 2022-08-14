@@ -50,6 +50,7 @@ class RevolverFragment : Fragment(), StoryListener {
     private val revViewModel: RevolverViewModel by activityViewModels()
     var state: Parcelable? = null
     var day = 0
+    var searching: String? = null
     val time = Calendar.getInstance().time
     val formatter = SimpleDateFormat.getTimeInstance()
     var formatted = formatter.format(time)
@@ -108,12 +109,30 @@ class RevolverFragment : Fragment(), StoryListener {
                 checkSwipeRefresh()
             }
             hideLoader(loader)
-            if(fragBinding.recyclerViewRev.adapter!!.itemCount == 0){
+            if(fragBinding.recyclerViewRev.adapter!!.itemCount == 0 && searching != null){
                 val st = ArrayList<StoryModel>()
                 st.add(StoryModel(title="1"))
                 fragBinding.recyclerViewRev.adapter = EmptyAdapter(st, this)
                 state?.let { fragBinding.recyclerViewRev.layoutManager?.onRestoreInstanceState(it) }
             }
+            else if(fragBinding.recyclerViewRev.adapter!!.itemCount == 0){
+                fragBinding.creepy.visibility = View.VISIBLE
+            }
+            if (fragBinding.recyclerViewRev.adapter!!.itemCount > 0)
+                fragBinding.creepy.visibility = View.INVISIBLE
+                Glide.with(this).load(R.drawable.bidenlost).into(fragBinding.imageView2)
+                fragBinding.larrow.setOnClickListener {
+                    day += 1
+                    revViewModel.load(day)
+                }
+                fragBinding.rarrow.setOnClickListener {
+                    day -= 1
+                    if (day <= 0 ){
+                        day = 0
+                    }
+                    revViewModel.load(day)
+                }
+
         }
         setSwipeRefresh()
         return root
@@ -171,15 +190,18 @@ class RevolverFragment : Fragment(), StoryListener {
 
             override fun onQueryTextChange(newText: String?): Boolean {
                 if (newText != null) {
+                    searching = newText
                     revViewModel.search(
                         day,
                         newText
                     )
                 }
                 else{
+                    searching = newText
                     revViewModel.load(day)
                 }
                 if (newText == "") {
+                    searching = newText
                     revViewModel.load(day)
                 }
 
@@ -187,6 +209,7 @@ class RevolverFragment : Fragment(), StoryListener {
             }
         })
         searchView.setOnCloseListener {
+            searching = null
             revViewModel.load(day)
             false
         }
