@@ -3,12 +3,14 @@ from uuid import uuid4
 import requests
 from bs4 import BeautifulSoup
 from firebase_admin import storage
-from utils.utilities import (formatDate, imgFolder, imgTitleFormat, initialise,
+from utils.utilities import (formatDate, imgFolder, imgTitleFormat, initialise, jsonFolder, dumpJson, appendJson,
                           logFolder, pageSoup, pushToDB, titleFormat, similar,getHour)
 # Set Global Variables
 ref_list = []
 log_file_path = "/home/bencapper/src/News-Aggregator/scripts/log/guarddone.log"
 log_folder_path = "/home/bencapper/src/News-Aggregator/scripts/log/"
+json_dump_path = "/home/bencapper/src/News-Aggregator/scripts/json/guard.json"
+json_folder_path = "/home/bencapper/src/News-Aggregator/scripts/json/"
 json_path = "/home/bencapper/src/News-Aggregator/scripts/news.json"
 db_url = "https://news-a3e22-default-rtdb.firebaseio.com/"
 bucket = "news-a3e22.appspot.com"
@@ -21,6 +23,7 @@ outlet = "www.TheGuardian.com"
 # Set Local Folders
 logFolder(log_folder_path)
 imgFolder(img_path)
+jsonFolder(json_folder_path)
 
 # Read from Existing Log
 if os.path.exists(log_file_path):
@@ -96,7 +99,22 @@ for article in articles:
               ref_list.append(title)
               open_temp = open(log_file_path, "a")
               storage_link = f"https://firebasestorage.googleapis.com/v0/b/news-a3e22.appspot.com/o/Guardian%2Fguard.png?alt=media&token=442ad837-685b-4ac5-a089-a14c88c5dddc"
-              
+              data = {
+                   "title": title,
+                   "date": date,
+                   "img_src": img_src,
+                   "img_title": img_title,
+                   "link": link,
+                   "outlet": outlet,
+                   "storage_link": storage_link,
+                   "order": order
+              }
+              open_json = open(json_dump_path, "r")
+              read_json = open_json.read()
+              if read_temp == "":
+                  dumpJson(json_dump_path,data)
+              else:
+                  appendJson(json_dump_path,data)
               # Push the Gathered Data to DB
               # Using Utils method
               pushToDB(

@@ -14,8 +14,24 @@ def logFolder(log_folder_path):
        pass
    else:
        os.mkdir(log_folder_path)
- 
- 
+
+def jsonFolder(log_folder_path):
+   if os.path.exists(log_folder_path):
+       pass
+   else:
+       os.mkdir(log_folder_path)
+
+def dumpJson(json_dump_path, data):
+    with open(json_dump_path, 'w') as f:
+        json.dump(data, f, indent=4)
+
+def appendJson(json_dump_path, data):
+    with open(json_dump_path, 'r+') as file:
+        file_data = json.load(file)
+        file_data['articles'].append(data)
+        file.seek(0)
+        json.dump(file_data, file, indent=4)
+
 def initialise(json_path, db_url, bucket):
    with open(json_path) as file:
        data = json.load(file)
@@ -52,6 +68,19 @@ def titleFormat(string):
        .replace("  ", " ")
    )
    return string
+
+def titleDeFormat(string):
+   string = (
+       string.replace("(dot)", ".")
+       .replace("(pc)", "%")
+       .replace("(plus)", "+")
+       .replace("(colon)", ":")
+       .replace("(hash)", "#")
+       .replace("(quest)", "?")
+       .replace("(comma)", ",")
+       .replace("(USD)", "$")
+   )
+   return string
  
  
 def imgTitleFormat(string):
@@ -75,7 +104,10 @@ def imgTitleFormat(string):
 def imgFolder(img_path):
    if os.path.exists(img_path) == False:
        os.mkdir(img_path)
- 
+
+def dumpFolder(dump_path):
+   if os.path.exists(dump_path) == False:
+       os.mkdir(dump_path)
  
 def pushToDB(
    db_path, title, date, img_src, img_name, link, outlet, storage_link, order
@@ -93,6 +125,31 @@ def pushToDB(
            "order": order
        }
    )
+
+def pushDoubleToDB(
+   db_path, titlehead, title1, date1, img_name1, link1, outlet1, storage_link1,
+    title2, date2, img_name2, link2, outlet2, storage_link2 ,order
+):
+   ref = db.reference(f"{db_path}/{date1}/{titlehead}/{title1}")
+   ref.set(
+       {
+           "titlehead": titlehead,
+           "title1": title1,
+           "date1": date1,
+           "img_name1": img_name1,
+           "link1": link1,
+           "outlet1": outlet1,
+           "storage_link1": storage_link1,
+           "title2": title2,
+           "date2": date2,
+           "img_name2": img_name2,
+           "link2": link2,
+           "outlet2": outlet2,
+           "storage_link2": storage_link2,
+           "order": order
+       }
+   )
+
 
 def pushToDbNoImg(
    db_path, title, date, link, outlet, storage_link, order

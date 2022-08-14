@@ -19,6 +19,7 @@ local.properties
 /scripts/GB
 /scripts/Timcast
 /scripts/log
+/scripts/json
 /scripts/__pycache__
 /scripts/models/__pycache__
 /scripts/utils/__pycache__

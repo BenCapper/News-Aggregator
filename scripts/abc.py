@@ -5,13 +5,15 @@ import requests
 from bs4 import BeautifulSoup
 from firebase_admin import storage
  
-from utils.utilities import (formatDate, imgFolder, imgTitleFormat, initialise,
+from utils.utilities import (formatDate, imgFolder, imgTitleFormat, initialise, jsonFolder, dumpJson, appendJson,
                             logFolder, pageSoup, pushToDB, titleFormat, similar, getHour)
 
 # Set Global Variables
 ref_list = []
 log_file_path = "/home/bencapper/src/News-Aggregator/scripts/log/abcdone.log"
 log_folder_path = "/home/bencapper/src/News-Aggregator/scripts/log/"
+json_dump_path = "/home/bencapper/src/News-Aggregator/scripts/json/abc.json"
+json_folder_path = "/home/bencapper/src/News-Aggregator/scripts/json/"
 json_path = "/home/bencapper/src/News-Aggregator/scripts/news.json"
 db_url = "https://news-a3e22-default-rtdb.firebaseio.com/"
 bucket = "news-a3e22.appspot.com"
@@ -24,6 +26,7 @@ outlet = "AbcNews.go.com"
 # Set Local Folders
 logFolder(log_folder_path)
 imgFolder(img_path)
+jsonFolder(json_folder_path)
 
 # Read from Existing Log
 if os.path.exists(log_file_path):
@@ -129,13 +132,35 @@ for article in articles:
                # Get Image Data using Requests
                # Create the Image Locally
                # Upload image to Storage
-
+               with open(f"{img_path}/{img_title}", "wb") as img:
+                   img.write(requests.get(img_src).content)
+                   blob = bucket.blob(f"Abc/{img_title}")
+                   token = uuid4()
+                   metadata = {"firebaseStorageDownloadTokens": token}
+                   blob.upload_from_filename(f"{img_path}/{img_title}")
                
                # Get Link to the Stored Image
                storage_link = f"https://firebasestorage.googleapis.com/v0/b/news-a3e22.appspot.com/o/Abc%2F{img_title}?alt=media&token={token}"
 
                # Push the Gathered Data to DB
                # Using Utils method
+               data = {
+                   "title": title,
+                   "date": date,
+                   "img_src": img_src,
+                   "img_title": img_title,
+                   "link": link,
+                   "outlet": outlet,
+                   "storage_link": storage_link,
+                   "order": order
+               }
+               open_json = open(json_dump_path, "r")
+               read_json = open_json.read()
+               if read_temp == "":
+                   dumpJson(json_dump_path,data)
+               else:
+                   appendJson(json_dump_path,data)
+               
                pushToDB(
                    db_path, title, date, img_src, img_title, link, outlet, storage_link, order
                )
