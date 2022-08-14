@@ -50,6 +50,7 @@ class BeastFragment : Fragment(), StoryListener {
     private val beastViewModel: BeastViewModel by activityViewModels()
     var state: Parcelable? = null
     var day = 0
+    var searching: String? = null
     val time = Calendar.getInstance().time
     val formatter = SimpleDateFormat.getTimeInstance()
     var formatted = formatter.format(time)
@@ -108,11 +109,28 @@ class BeastFragment : Fragment(), StoryListener {
                 checkSwipeRefresh()
             }
             hideLoader(loader)
-            if(fragBinding.recyclerViewBeast.adapter!!.itemCount == 0){
+            if(fragBinding.recyclerViewBeast.adapter!!.itemCount == 0 && searching != null){
                 val st = ArrayList<StoryModel>()
                 st.add(StoryModel(title="1"))
                 fragBinding.recyclerViewBeast.adapter = EmptyAdapter(st, this)
                 state?.let { fragBinding.recyclerViewBeast.layoutManager?.onRestoreInstanceState(it) }
+            }
+            else if(fragBinding.recyclerViewBeast.adapter!!.itemCount == 0){
+                fragBinding.creepy.visibility = View.VISIBLE
+            }
+            if (fragBinding.recyclerViewBeast.adapter!!.itemCount > 0)
+                fragBinding.creepy.visibility = View.INVISIBLE
+                Glide.with(this).load(R.drawable.bidenlost).into(fragBinding.imageView2)
+                fragBinding.larrow.setOnClickListener {
+                    day += 1
+                    beastViewModel.load(day)
+                }
+                fragBinding.rarrow.setOnClickListener {
+                    day -= 1
+                    if (day <= 0 ){
+                        day = 0
+                    }
+                    beastViewModel.load(day)
             }
         }
         setSwipeRefresh()
@@ -169,15 +187,18 @@ class BeastFragment : Fragment(), StoryListener {
 
             override fun onQueryTextChange(newText: String?): Boolean {
                 if (newText != null) {
+                    searching = newText
                     beastViewModel.search(
                         day,
                         newText
                     )
                 }
                 else{
+                    searching = newText
                     beastViewModel.load(day)
                 }
                 if (newText == "") {
+                    searching = newText
                     beastViewModel.load(day)
                 }
 
@@ -185,6 +206,7 @@ class BeastFragment : Fragment(), StoryListener {
             }
         })
         searchView.setOnCloseListener {
+            searching = null
             beastViewModel.load(day)
             false
         }

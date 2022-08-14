@@ -50,6 +50,7 @@ class CanFragment : Fragment(), StoryListener {
     private val canViewModel: CanViewModel by activityViewModels()
     var state: Parcelable? = null
     var day = 0
+    var searching: String? = null
     val time = Calendar.getInstance().time
     val formatter = SimpleDateFormat.getTimeInstance()
     var formatted = formatter.format(time)
@@ -110,12 +111,29 @@ class CanFragment : Fragment(), StoryListener {
                 checkSwipeRefresh()
             }
             hideLoader(loader)
-            if(fragBinding.recyclerViewCan.adapter!!.itemCount == 0){
+            if(fragBinding.recyclerViewCan.adapter!!.itemCount == 0 && searching != null){
                 val st = ArrayList<StoryModel>()
                 st.add(StoryModel(title="1"))
                 fragBinding.recyclerViewCan.adapter = EmptyAdapter(st, this)
                 state?.let { fragBinding.recyclerViewCan.layoutManager?.onRestoreInstanceState(it) }
             }
+            else if(fragBinding.recyclerViewCan.adapter!!.itemCount == 0){
+                fragBinding.creepy.visibility = View.VISIBLE
+            }
+            if (fragBinding.recyclerViewCan.adapter!!.itemCount > 0)
+                fragBinding.creepy.visibility = View.INVISIBLE
+                Glide.with(this).load(R.drawable.bidenlost).into(fragBinding.imageView2)
+                fragBinding.larrow.setOnClickListener {
+                    day += 1
+                    canViewModel.load(day)
+                }
+                fragBinding.rarrow.setOnClickListener {
+                    day -= 1
+                    if (day <= 0 ){
+                        day = 0
+                    }
+                    canViewModel.load(day)
+                }
         }
         setSwipeRefresh()
         return root
@@ -157,15 +175,18 @@ class CanFragment : Fragment(), StoryListener {
 
             override fun onQueryTextChange(newText: String?): Boolean {
                 if (newText != null) {
+                    searching = newText
                     canViewModel.search(
                         day,
                         newText
                     )
                 }
                 else{
+                    searching = newText
                     canViewModel.load(day)
                 }
                 if (newText == "") {
+                    searching = newText
                     canViewModel.load(day)
                 }
 
@@ -173,6 +194,7 @@ class CanFragment : Fragment(), StoryListener {
             }
         })
         searchView.setOnCloseListener {
+            searching = null
             canViewModel.load(day)
             false
         }

@@ -50,6 +50,7 @@ class AbcFragment : Fragment(), StoryListener {
     private val abcViewModel: AbcViewModel by activityViewModels()
     var state: Parcelable? = null
     var day = 0
+    var searching: String? = null
     val time = Calendar.getInstance().time
     val formatter = SimpleDateFormat.getTimeInstance()
     var formatted = formatter.format(time)
@@ -110,11 +111,28 @@ class AbcFragment : Fragment(), StoryListener {
                 checkSwipeRefresh()
             }
             hideLoader(loader)
-            if(fragBinding.recyclerViewAbc.adapter!!.itemCount == 0){
+            if(fragBinding.recyclerViewAbc.adapter!!.itemCount == 0 && searching != null){
                 val st = ArrayList<StoryModel>()
                 st.add(StoryModel(title="1"))
                 fragBinding.recyclerViewAbc.adapter = EmptyAdapter(st, this)
                 state?.let { fragBinding.recyclerViewAbc.layoutManager?.onRestoreInstanceState(it) }
+            }
+            else if(fragBinding.recyclerViewAbc.adapter!!.itemCount == 0){
+                fragBinding.creepy.visibility = View.VISIBLE
+            }
+            if (fragBinding.recyclerViewAbc.adapter!!.itemCount > 0)
+                fragBinding.creepy.visibility = View.INVISIBLE
+            Glide.with(this).load(R.drawable.bidenlost).into(fragBinding.imageView2)
+            fragBinding.larrow.setOnClickListener {
+                day += 1
+                abcViewModel.load(day)
+            }
+            fragBinding.rarrow.setOnClickListener {
+                day -= 1
+                if (day <= 0 ){
+                    day = 0
+                }
+                abcViewModel.load(day)
             }
         }
         setSwipeRefresh()
@@ -156,15 +174,18 @@ class AbcFragment : Fragment(), StoryListener {
 
             override fun onQueryTextChange(newText: String?): Boolean {
                 if (newText != null) {
+                    searching = newText
                     abcViewModel.search(
                         day,
                         newText
                     )
                 }
                 else{
+                    searching = newText
                     abcViewModel.load(day)
                 }
                 if (newText == "") {
+                    searching = newText
                     abcViewModel.load(day)
                 }
 
@@ -172,6 +193,7 @@ class AbcFragment : Fragment(), StoryListener {
             }
         })
         searchView.setOnCloseListener {
+            searching = null
             abcViewModel.load(day)
             false
         }
