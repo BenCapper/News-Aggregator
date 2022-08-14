@@ -3,6 +3,7 @@ package org.ben.news.firebase
 
 import androidx.lifecycle.MutableLiveData
 import com.google.firebase.database.*
+import org.ben.news.models.DoubleStoryModel
 import org.ben.news.models.StoryModel
 import org.ben.news.models.StoryStore
 import timber.log.Timber
@@ -95,6 +96,33 @@ object StoryManager : StoryStore {
                 })
     }
 
+    override fun findAllDouble(date: String, storyList: MutableLiveData<List<DoubleStoryModel>>) {
+
+        val totalList = ArrayList<DoubleStoryModel>()
+        var todayList = mutableListOf<DoubleStoryModel>()
+        database.child("stories").child(date)
+            .addValueEventListener(object : ValueEventListener {
+                override fun onCancelled(error: DatabaseError) {
+                    Timber.i("Firebase error : ${error.message}")
+                }
+
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val children = snapshot.children
+                    children.forEach {
+                        val story = it.getValue(DoubleStoryModel::class.java)
+                        story?.title1 = story?.title1?.let { it -> formatTitle(it) }.toString()
+                        todayList.add(story!!)
+                    }
+                    todayList = todayList.sortedBy{it.order}.toMutableList()
+                    todayList.reverse()
+                    database.child("stories").child(date)
+                        .removeEventListener(this)
+                    totalList.addAll(todayList)
+                    storyList.value = totalList
+                }
+            })
+    }
+
     override fun findAllShuffle(date: String, storyList: MutableLiveData<List<StoryModel>>) {
 
         val totalList = ArrayList<StoryModel>()
@@ -150,6 +178,37 @@ object StoryManager : StoryStore {
                         storyList.value = totalList
                     }
                 })
+    }
+
+    override fun searchDouble(term: String, date: String, storyList: MutableLiveData<List<DoubleStoryModel>>) {
+        val totalList = ArrayList<DoubleStoryModel>()
+        var todayList = mutableListOf<DoubleStoryModel>()
+        database.child("stories").child(date)
+            .addValueEventListener(object : ValueEventListener {
+                override fun onCancelled(error: DatabaseError) {
+                    Timber.i("Firebase building error : ${error.message}")
+                }
+
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val children = snapshot.children
+                    children.forEach {
+                        if (it.getValue(DoubleStoryModel::class.java)?.title1!!.contains(term, true) ||
+                            it.getValue(DoubleStoryModel::class.java)?.outlet1!!.contains(term, true) ||
+                            it.getValue(DoubleStoryModel::class.java)?.date1!!.contains(term, true)
+                        ) {
+                            val story = it.getValue(DoubleStoryModel::class.java)
+                            story?.title1 = story?.title1?.let { it -> formatTitle(it) }.toString()
+                            todayList.add(story!!)
+                        }
+                    }
+                    todayList = todayList.sortedBy{it.order}.toMutableList()
+                    todayList.reverse()
+                    database.child("stories").child(date)
+                        .removeEventListener(this)
+                    totalList.addAll(todayList)
+                    storyList.value = totalList
+                }
+            })
     }
 
     override fun findByOutlet(date: String, outlet: String, storyList: MutableLiveData<List<StoryModel>>) {

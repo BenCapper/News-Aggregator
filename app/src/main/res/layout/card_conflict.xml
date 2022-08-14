@@ -5,7 +5,7 @@
     <data>
         <variable
             name="story"
-            type="org.ben.news.models.StoryModel" />
+            type="org.ben.news.models.DoubleStoryModel" />
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -15,10 +15,11 @@
             android:id="@+id/conhead"
             android:layout_width="wrap_content"
             android:layout_height="30dp"
+            android:text="@{story.titlehead}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"></TextView>
+            app:layout_constraintTop_toTopOf="parent"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.cardview.widget.CardView
@@ -79,7 +80,7 @@
                 android:layout_marginTop="15dp"
                 android:layout_marginEnd="120dp"
                 android:layout_marginBottom="-10dp"
-                android:text="@{story.outlet}"
+                android:text="@{story.outlet1}"
                 android:textColor="@color/dark"
                 android:textSize="11sp"
                 android:textStyle="italic"
@@ -92,7 +93,7 @@
                 android:id="@+id/date"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@{story.date}"
+                android:text="@{story.date1}"
                 android:textColor="@color/dark"
                 android:textSize="11sp"
                 android:textStyle="bold"
@@ -106,7 +107,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="3dp"
-                android:text="@{story.title}"
+                android:text="@{story.title1}"
                 android:textColor="@color/black"
                 android:textSize="13sp"
                 android:textStyle="bold"
@@ -193,7 +194,7 @@
                 android:layout_marginTop="15dp"
                 android:layout_marginEnd="120dp"
                 android:layout_marginBottom="-10dp"
-                android:text="@{story.outlet}"
+                android:text="@{story.outlet2}"
                 android:textColor="@color/dark"
                 android:textSize="11sp"
                 android:textStyle="italic"
@@ -206,7 +207,7 @@
                 android:id="@+id/date2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@{story.date}"
+                android:text="@{story.date2}"
                 android:textColor="@color/dark"
                 android:textSize="11sp"
                 android:textStyle="bold"
@@ -220,7 +221,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="3dp"
-                android:text="@{story.title}"
+                android:text="@{story.title2}"
                 android:textColor="@color/black"
                 android:textSize="13sp"
                 android:textStyle="bold"

@@ -5,19 +5,20 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseUser
 import org.ben.news.firebase.StoryManager
+import org.ben.news.models.DoubleStoryModel
 import org.ben.news.models.StoryModel
 import timber.log.Timber
 
 class ConflictViewModel : ViewModel() {
     private val conList =
-        MutableLiveData<List<StoryModel>>()
+        MutableLiveData<List<DoubleStoryModel>>()
 
-    val observableConList: LiveData<List<StoryModel>>
+    val observableConList: LiveData<List<DoubleStoryModel>>
         get() = conList
 
-    private val story = MutableLiveData<StoryModel>()
+    private val story = MutableLiveData<DoubleStoryModel>()
 
-    var observableStory: LiveData<StoryModel>
+    var observableStory: LiveData<DoubleStoryModel>
         get() = story
         set(value) {story.value = value.value}
 
@@ -32,7 +33,7 @@ class ConflictViewModel : ViewModel() {
         val list: String
         try {
             list = StoryManager.getDate(day)
-            StoryManager.findByOutlets(list,outlets,conList)
+            StoryManager.findAllDouble(list,conList)
             Timber.i("Load Success : ${conList.value}")
         }
         catch (e: Exception) {
@@ -43,7 +44,7 @@ class ConflictViewModel : ViewModel() {
     fun search( day: Int, term: String) {
         try {
             val dates = StoryManager.getDate(day)
-            StoryManager.searchByOutlets(dates,term,outlets,conList)
+            StoryManager.searchDouble(dates,term,conList)
             Timber.i("Search Success")
         }
         catch (e: java.lang.Exception) {

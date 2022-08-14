@@ -4,7 +4,6 @@ import android.app.AlertDialog
 import android.content.Intent
 import android.content.res.Configuration
 import android.net.Uri
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.*
@@ -19,19 +18,15 @@ import com.google.android.gms.ads.MobileAds
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import org.ben.news.R
-import org.ben.news.adapters.EmptyAdapter
-import org.ben.news.adapters.StoryAdapter
-import org.ben.news.adapters.StoryListener
+import org.ben.news.adapters.*
 import org.ben.news.databinding.FragmentConflictBinding
-import org.ben.news.databinding.FragmentEuBinding
 import org.ben.news.firebase.StoryManager
 import org.ben.news.helpers.createLoader
 import org.ben.news.helpers.hideLoader
 import org.ben.news.helpers.showLoader
+import org.ben.news.models.DoubleStoryModel
 import org.ben.news.models.StoryModel
 import org.ben.news.ui.auth.LoggedInViewModel
-import org.ben.news.ui.eu.EuFragment
-import org.ben.news.ui.eu.EuViewModel
 import splitties.alertdialog.appcompat.*
 import splitties.snackbar.snack
 import splitties.views.textColorResource
@@ -39,7 +34,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
-class ConflictFragment : Fragment(), StoryListener {
+class ConflictFragment : Fragment(), DoubleStoryListener, StoryListener {
 
     companion object {
         fun newInstance() = ConflictFragment()
@@ -104,7 +99,7 @@ class ConflictFragment : Fragment(), StoryListener {
 
         conViewModel.observableConList.observe(viewLifecycleOwner) { story ->
             story?.let {
-                render(story as ArrayList<StoryModel>)
+                render(story as ArrayList<DoubleStoryModel>)
                 checkSwipeRefresh()
             }
             hideLoader(loader)
@@ -195,8 +190,8 @@ class ConflictFragment : Fragment(), StoryListener {
     }
 
 
-    private fun render(storyList: ArrayList<StoryModel>) {
-        fragBinding.recyclerViewCon.adapter = StoryAdapter(storyList, this)
+    private fun render(storyList: ArrayList<DoubleStoryModel>) {
+        fragBinding.recyclerViewCon.adapter = ConflictAdapter(storyList, this)
         state?.let { fragBinding.recyclerViewCon.layoutManager?.onRestoreInstanceState(it) }
     }
 
@@ -249,4 +244,15 @@ class ConflictFragment : Fragment(), StoryListener {
         super.onDestroyView()
         _fragBinding = null
     }
+
+    override fun onStoryDoubleClick(story: DoubleStoryModel) {
+
+    }
+
+    override fun onLikeDouble(story: DoubleStoryModel) {
+    }
+
+    override fun onShareDouble(story: DoubleStoryModel) {
+    }
+
 }
