@@ -100,7 +100,7 @@ object StoryManager : StoryStore {
 
         val totalList = ArrayList<DoubleStoryModel>()
         var todayList = mutableListOf<DoubleStoryModel>()
-        database.child("stories").child(date)
+        database.child("doubles").child(date)
             .addValueEventListener(object : ValueEventListener {
                 override fun onCancelled(error: DatabaseError) {
                     Timber.i("Firebase error : ${error.message}")
@@ -110,12 +110,11 @@ object StoryManager : StoryStore {
                     val children = snapshot.children
                     children.forEach {
                         val story = it.getValue(DoubleStoryModel::class.java)
-                        story?.title1 = story?.title1?.let { it -> formatTitle(it) }.toString()
                         todayList.add(story!!)
                     }
                     todayList = todayList.sortedBy{it.order}.toMutableList()
                     todayList.reverse()
-                    database.child("stories").child(date)
+                    database.child("doubles").child(date)
                         .removeEventListener(this)
                     totalList.addAll(todayList)
                     storyList.value = totalList
@@ -183,7 +182,7 @@ object StoryManager : StoryStore {
     override fun searchDouble(term: String, date: String, storyList: MutableLiveData<List<DoubleStoryModel>>) {
         val totalList = ArrayList<DoubleStoryModel>()
         var todayList = mutableListOf<DoubleStoryModel>()
-        database.child("stories").child(date)
+        database.child("doubles").child(date)
             .addValueEventListener(object : ValueEventListener {
                 override fun onCancelled(error: DatabaseError) {
                     Timber.i("Firebase building error : ${error.message}")
@@ -193,17 +192,18 @@ object StoryManager : StoryStore {
                     val children = snapshot.children
                     children.forEach {
                         if (it.getValue(DoubleStoryModel::class.java)?.title1!!.contains(term, true) ||
+                            it.getValue(DoubleStoryModel::class.java)?.title2!!.contains(term, true) ||
                             it.getValue(DoubleStoryModel::class.java)?.outlet1!!.contains(term, true) ||
-                            it.getValue(DoubleStoryModel::class.java)?.date1!!.contains(term, true)
+                            it.getValue(DoubleStoryModel::class.java)?.outlet2!!.contains(term, true) ||
+                            it.getValue(DoubleStoryModel::class.java)?.titlehead!!.contains(term, true)
                         ) {
                             val story = it.getValue(DoubleStoryModel::class.java)
-                            story?.title1 = story?.title1?.let { it -> formatTitle(it) }.toString()
                             todayList.add(story!!)
                         }
                     }
                     todayList = todayList.sortedBy{it.order}.toMutableList()
                     todayList.reverse()
-                    database.child("stories").child(date)
+                    database.child("doubles").child(date)
                         .removeEventListener(this)
                     totalList.addAll(todayList)
                     storyList.value = totalList

@@ -121,6 +121,9 @@ class ConflictAdapter constructor(
 
         fun bind(story: DoubleStoryModel, listener : DoubleStoryListener) {
 
+            binding.root.tag = story
+            binding.story = story
+
             if (story.outlet1 in ca){
                 Glide.with(this.itemView.context).load(R.drawable.canicon).into(binding.imageView3)
             }
@@ -136,12 +139,38 @@ class ConflictAdapter constructor(
             if (story.outlet1 in ie){
                 Glide.with(this.itemView.context).load(R.drawable.ieicon).into(binding.imageView3)
             }
+
+            if (story.outlet2 in ca){
+                Glide.with(this.itemView.context).load(R.drawable.canicon).into(binding.imageView33)
+            }
+            if (story.outlet2 in eu){
+                Glide.with(this.itemView.context).load(R.drawable.euicon).into(binding.imageView33)
+            }
+            if (story.outlet2 in uk){
+                Glide.with(this.itemView.context).load(R.drawable.gbicon).into(binding.imageView33)
+            }
+            if (story.outlet2 in us){
+                Glide.with(this.itemView.context).load(R.drawable.usicon).into(binding.imageView33)
+            }
+            if (story.outlet2 in ie){
+                Glide.with(this.itemView.context).load(R.drawable.ieicon).into(binding.imageView33)
+            }
+
+            Glide.with(this.itemView.context).load(story.storage_link1).into(binding.imageView2)
+            Glide.with(this.itemView.context).load(story.storage_link2).into(binding.imageView22)
+
+            binding.date.text = story.date1
+            binding.headline.text = story.title1
+            binding.link.text = story.outlet1
+
+            binding.date2.text = story.date2
+            binding.headline2.text = story.title2
+            binding.link2.text = story.outlet2
+
             binding.root.setOnClickListener { listener.onStoryDoubleClick(story) }
             binding.button.setOnClickListener { listener.onLikeDouble(story) }
             binding.button3.setOnClickListener { listener.onShareDouble(story) }
-            binding.root.tag = story
-            binding.story = story
-            Glide.with(this.itemView.context).load(story.storage_link1).into(binding.imageView2)
+
             binding.executePendingBindings()
         }
 

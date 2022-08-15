@@ -11,6 +11,11 @@
                 android:icon="@drawable/ic_home"
                 android:onClick="homeArticles"
                 android:title="@string/home" />
+            <item
+                android:id="@+id/nav_con"
+                android:icon="@drawable/ic_home"
+                android:onClick="conflictArticles"
+                android:title="@string/both" />
         </menu>
     </item>
     <item android:title="@string/your">

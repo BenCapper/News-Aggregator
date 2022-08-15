@@ -411,6 +411,12 @@ class Home : AppCompatActivity() {
         Timber.i("UserId = ${loggedInViewModel.liveFirebaseUser.value!!.uid}")
     }
 
+    fun conflictArticles(item: MenuItem) {
+        findNavController(R.id.nav_host_fragment).navigate(R.id.conflictFragment)
+        findViewById<DrawerLayout>(R.id.drawer_layout).closeDrawers()
+        Timber.i("UserId = ${loggedInViewModel.liveFirebaseUser.value!!.uid}")
+    }
+
     fun theme(item: MenuItem) {
         val currentNightMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)

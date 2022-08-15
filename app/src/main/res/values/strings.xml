@@ -16,6 +16,7 @@
     <string name="login_fail">Authentication Failed</string>
     <string name="account">Account</string>
     <string name="history">History</string>
+    <string name="both">See Both Sides</string>
     <string name="view_history">View History</string>
     <string name="fell">No Results</string>
     <string name="no">No Articles Found</string>
