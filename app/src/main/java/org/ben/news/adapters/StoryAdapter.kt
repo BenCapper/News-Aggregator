@@ -1,9 +1,13 @@
 package org.ben.news.adapters
 
 
+import android.content.res.ColorStateList
+import android.graphics.drawable.ColorDrawable
+import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.graphics.drawable.DrawableCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.google.android.gms.ads.*
@@ -12,6 +16,7 @@ import com.google.android.gms.ads.nativead.NativeAd
 import org.ben.news.databinding.CardAdBinding
 import org.ben.news.databinding.CardStoryBinding
 import org.ben.news.models.StoryModel
+import splitties.resources.color
 import timber.log.Timber
 import kotlin.math.roundToInt
 
@@ -31,13 +36,17 @@ class StoryAdapter constructor(
     private var ITEM = 0
     private var AD = 1
     private var FEED = 5
+    private val right = listOf("www.Gript.ie","www.GBNews.uk","www.Spiked-Online.com","www.ThePostMillennial.com","www.TheBlaze.com",
+        "www.Timcast.com","www.Revolver.news","www.BonginoReport.com","www.Zerohedge.com","www.Breitbart.com",
+        "www.DailyCaller.com", "www.TheGatewayPundit.com",)
+    private val left = listOf("www.RTE.ie","news.Sky.com","www.TheGuardian.com", "www.GlobalNews.ca","www.Euronews.com","www.TheDailyBeast.com",
+        "www.Politico.com", "www.CbsNews.com",  "AbcNews.go.com", "news.Yahoo.com", "www.Vox.com","www.HuffPost.com")
     private val ie = listOf("www.RTE.ie", "www.Gript.ie")
     private val uk = listOf("www.GBNews.uk", "news.Sky.com", "www.Spiked-Online.com", "www.TheGuardian.com")
     private val ca = listOf("www.ThePostMillennial.com", "www.GlobalNews.ca")
     private val eu = listOf("www.Euronews.com")
     private val us = listOf("www.TheBlaze.com",
         "www.Timcast.com",
-        "www.Revolver.news",
         "www.BonginoReport.com",
         "www.Zerohedge.com",
         "www.Breitbart.com",

@@ -165,6 +165,9 @@
             app:destination="@id/guardFragment"
             app:enterAnim="@anim/nav_default_enter_anim"
             app:exitAnim="@anim/nav_default_exit_anim" />
+        <action
+            android:id="@+id/action_storyListFragment_to_conflictFragment"
+            app:destination="@id/conflictFragment" />
     </fragment>
     <fragment
         android:id="@+id/likedListFragment"
@@ -321,4 +324,9 @@
         android:name="org.ben.news.ui.guardian.GuardFragment"
         android:label="fragment_guard"
         tools:layout="@layout/fragment_guard" />
+    <fragment
+        android:id="@+id/conflictFragment"
+        android:name="org.ben.news.ui.conflict.ConflictFragment"
+        android:label="fragment_conflict"
+        tools:layout="@layout/fragment_conflict" />
 </navigation>
