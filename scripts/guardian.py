@@ -98,7 +98,7 @@ for article in articles:
               # of Titles Already in the Log
               ref_list.append(title)
               open_temp = open(log_file_path, "a")
-              storage_link = f"https://firebasestorage.googleapis.com/v0/b/news-a3e22.appspot.com/o/Guardian%2Fguard.png?alt=media&token=442ad837-685b-4ac5-a089-a14c88c5dddc"
+              storage_link = f"https://firebasestorage.googleapis.com/v0/b/news-a3e22.appspot.com/o/Guardian%2Fbestguar.jpg?alt=media&token=117ec4ab-845a-46f7-aa91-ee7bedd086c0"
               data = {
                    "title": title,
                    "date": date,

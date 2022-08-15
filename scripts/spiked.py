@@ -127,7 +127,7 @@ for article in articles:
                 storage_link = f"https://firebasestorage.googleapis.com/v0/b/news-a3e22.appspot.com/o/Spiked%2F{img_title}?alt=media&token={token}"
                 data = {
                    "title": title,
-                   "date": date,
+                   "date": dates,
                    "img_src": img_src,
                    "img_title": img_title,
                    "link": link,
