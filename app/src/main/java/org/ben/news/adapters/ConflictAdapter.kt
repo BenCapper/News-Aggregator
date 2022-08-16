@@ -159,13 +159,7 @@ class ConflictAdapter constructor(
             Glide.with(this.itemView.context).load(story.storage_link1).into(binding.imageView2)
             Glide.with(this.itemView.context).load(story.storage_link2).into(binding.imageView22)
 
-            binding.date.text = story.date1
-            binding.headline.text = story.title1
-            binding.link.text = story.outlet1
 
-            binding.date2.text = story.date2
-            binding.headline2.text = story.title2
-            binding.link2.text = story.outlet2
 
             binding.root.setOnClickListener { listener.onStoryDoubleClick(story) }
             binding.button.setOnClickListener { listener.onLikeDouble(story) }

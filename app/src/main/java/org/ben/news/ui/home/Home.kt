@@ -85,6 +85,7 @@ class Home : AppCompatActivity() {
             R.id.breitbartFragment,
             R.id.cbsFragment,
             R.id.callerFragment,
+            R.id.conflictFragment,
             R.id.euronFragment,
             R.id.gbFragment,
             R.id.globalFragment,
