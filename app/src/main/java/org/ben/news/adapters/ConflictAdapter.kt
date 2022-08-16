@@ -34,7 +34,7 @@ class ConflictAdapter constructor(
 
     private var ITEM = 0
     private var AD = 1
-    private var FEED = 3
+    private var FEED = 5
     private val ie = listOf("www.RTE.ie", "www.Gript.ie")
     private val uk = listOf("www.GBNews.uk", "news.Sky.com", "www.Spiked-Online.com", "www.TheGuardian.com")
     private val ca = listOf("www.ThePostMillennial.com", "www.GlobalNews.ca")
