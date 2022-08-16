@@ -18,9 +18,12 @@ import kotlin.math.roundToInt
 
 
 interface DoubleStoryListener {
-    fun onStoryDoubleClick(story: DoubleStoryModel)
-    fun onLikeDouble(story: DoubleStoryModel)
-    fun onShareDouble(story: DoubleStoryModel)
+    fun onRightClick(story: DoubleStoryModel)
+    fun onLeftClick(story: DoubleStoryModel)
+    fun onLikeRight(story: DoubleStoryModel)
+    fun onLikeLeft(story: DoubleStoryModel)
+    fun onShareRight(story: DoubleStoryModel)
+    fun onShareLeft(story: DoubleStoryModel)
 }
 
 class ConflictAdapter constructor(
@@ -31,7 +34,7 @@ class ConflictAdapter constructor(
 
     private var ITEM = 0
     private var AD = 1
-    private var FEED = 3
+    private var FEED = 5
     private val ie = listOf("www.RTE.ie", "www.Gript.ie")
     private val uk = listOf("www.GBNews.uk", "news.Sky.com", "www.Spiked-Online.com", "www.TheGuardian.com")
     private val ca = listOf("www.ThePostMillennial.com", "www.GlobalNews.ca")
@@ -159,11 +162,18 @@ class ConflictAdapter constructor(
             Glide.with(this.itemView.context).load(story.storage_link1).into(binding.imageView2)
             Glide.with(this.itemView.context).load(story.storage_link2).into(binding.imageView22)
 
+            binding.relativeLayout.setOnClickListener { listener.onRightClick(story) }
+            binding.relativeLayout2.setOnClickListener { listener.onLeftClick(story) }
+
+            binding.imagetoplayout.setOnClickListener { listener.onRightClick(story) }
+            binding.imgblayout.setOnClickListener { listener.onLeftClick(story) }
 
 
-            binding.root.setOnClickListener { listener.onStoryDoubleClick(story) }
-            binding.button.setOnClickListener { listener.onLikeDouble(story) }
-            binding.button3.setOnClickListener { listener.onShareDouble(story) }
+            binding.button3.setOnClickListener{ listener.onShareRight(story)}
+            binding.button.setOnClickListener{ listener.onLikeRight(story)}
+
+            binding.button32.setOnClickListener { listener.onShareLeft(story) }
+            binding.button2.setOnClickListener { listener.onLikeLeft(story) }
 
             binding.executePendingBindings()
         }

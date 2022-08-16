@@ -231,16 +231,44 @@ class ConflictFragment : Fragment(), DoubleStoryListener, StoryListener {
     }
 
     override fun onStoryClick(story: StoryModel) {
-        StoryManager.create(loggedInViewModel.liveFirebaseUser.value!!.uid,"history", story)
-        val intent = Intent(Intent.ACTION_VIEW).setData(Uri.parse(story.link))
-        state = fragBinding.recyclerViewCon.layoutManager?.onSaveInstanceState()
-        startActivity(intent)
     }
 
     override fun onLike(story: StoryModel) {
+    }
+
+    override fun onShare(story: StoryModel) {
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _fragBinding = null
+    }
+
+    override fun onRightClick(story: DoubleStoryModel) {
+        val article = StoryModel(story.title1,"","","","",story.date1,story.outlet1,story.storage_link1,story.order,story.link1)
+        StoryManager.create(loggedInViewModel.liveFirebaseUser.value!!.uid,"history", article)
+        val intent = Intent(Intent.ACTION_VIEW).setData(Uri.parse(story.link1))
+
+        state = fragBinding.recyclerViewCon.layoutManager?.onSaveInstanceState()
+
+        startActivity(intent)
+    }
+
+    override fun onLeftClick(story: DoubleStoryModel) {
+        val article = StoryModel(story.title1,"","","","",story.date1,story.outlet1,story.storage_link1,story.order,story.link1)
+        StoryManager.create(loggedInViewModel.liveFirebaseUser.value!!.uid,"history", article)
+        val intent = Intent(Intent.ACTION_VIEW).setData(Uri.parse(story.link2))
+
+        state = fragBinding.recyclerViewCon.layoutManager?.onSaveInstanceState()
+
+        startActivity(intent)
+    }
+
+    override fun onLikeRight(story: DoubleStoryModel) {
+        val article = StoryModel(story.title1,"","","","",story.date1,story.outlet1,story.storage_link1,story.order,story.link1)
         activity?.alertDialog {
             messageResource = R.string.save_art
-            okButton { StoryManager.create(loggedInViewModel.liveFirebaseUser.value!!.uid,"likes", story)
+            okButton { StoryManager.create(loggedInViewModel.liveFirebaseUser.value!!.uid,"likes", article)
                 val params = fragBinding.root.layoutParams as FrameLayout.LayoutParams
                 params.gravity = Gravity.CENTER_HORIZONTAL
                 view?.snack(R.string.saved_article)}
@@ -253,11 +281,28 @@ class ConflictFragment : Fragment(), DoubleStoryListener, StoryListener {
         }?.show()
     }
 
-    override fun onShare(story: StoryModel) {
+    override fun onLikeLeft(story: DoubleStoryModel) {
+        val article = StoryModel(story.title1,"","","","",story.date1,story.outlet1,story.storage_link1,story.order,story.link1)
+        activity?.alertDialog {
+            messageResource = R.string.save_art
+            okButton { StoryManager.create(loggedInViewModel.liveFirebaseUser.value!!.uid,"likes", article)
+                val params = fragBinding.root.layoutParams as FrameLayout.LayoutParams
+                params.gravity = Gravity.CENTER_HORIZONTAL
+                view?.snack(R.string.saved_article)}
+            cancelButton{ view?.snack(R.string.save_can)}
+        }?.onShow {
+            positiveButton.textColorResource = R.color.black
+            negativeButton.textColorResource = splitties.material.colors.R.color.grey_500
+            positiveButton.text = "Confirm"
+            negativeButton.text = "Cancel"
+        }?.show()
+    }
+
+    override fun onShareRight(story: DoubleStoryModel) {
         val sendIntent: Intent = Intent().apply {
             action = Intent.ACTION_SEND
-            putExtra(Intent.EXTRA_TEXT, story.link)
-            putExtra(Intent.EXTRA_TITLE, story.title)
+            putExtra(Intent.EXTRA_TEXT, story.link1)
+            putExtra(Intent.EXTRA_TITLE, story.title1)
             type = "text/html"
         }
 
@@ -265,19 +310,18 @@ class ConflictFragment : Fragment(), DoubleStoryListener, StoryListener {
         state = fragBinding.recyclerViewCon.layoutManager?.onSaveInstanceState()
         startActivity(shareIntent)
     }
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _fragBinding = null
-    }
 
-    override fun onStoryDoubleClick(story: DoubleStoryModel) {
+    override fun onShareLeft(story: DoubleStoryModel) {
+        val sendIntent: Intent = Intent().apply {
+            action = Intent.ACTION_SEND
+            putExtra(Intent.EXTRA_TEXT, story.link2)
+            putExtra(Intent.EXTRA_TITLE, story.title2)
+            type = "text/html"
+        }
 
-    }
-
-    override fun onLikeDouble(story: DoubleStoryModel) {
-    }
-
-    override fun onShareDouble(story: DoubleStoryModel) {
+        val shareIntent = Intent.createChooser(sendIntent, null)
+        state = fragBinding.recyclerViewCon.layoutManager?.onSaveInstanceState()
+        startActivity(shareIntent)
     }
 
 }

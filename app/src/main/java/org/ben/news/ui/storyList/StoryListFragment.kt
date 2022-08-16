@@ -281,7 +281,6 @@ class StoryListFragment : Fragment(), StoryListener {
             positiveButton.text = "Confirm"
             negativeButton.text = "Cancel"
         }?.show()
-
     }
 
     override fun onShare(story: StoryModel) {

@@ -107,7 +107,7 @@ for i in left_titles:
             sim = True
             break
          
-      if similar(rformat, lformat) > .59 and sim is False and similar(rformat, lformat) < .97: 
+      if similar(rformat, lformat) > .59 and sim is False and similar(rformat, lformat) < .97 and rformat not in match_ref and lformat not in match_ref: 
          matches.append(f"{routlet} // {loutlet}")
          open_temp = open(match_log, "a")
          open_temp.write(f"{rformat}" + "\n")
