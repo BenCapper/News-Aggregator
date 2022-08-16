@@ -85,7 +85,7 @@ for article in articles:
          check = False
          for ref in ref_list:
             similarity = similar(ref,title)
-            if similarity > .8:
+            if similarity > .8 or "<span" in title:
               check = True
               break
 

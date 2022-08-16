@@ -130,7 +130,8 @@ def pushDoubleToDB(
    db_path, titlehead, title1, date1, img_name1, link1, outlet1, storage_link1,
     title2, date2, img_name2, link2, outlet2, storage_link2 ,order
 ):
-   ref = db.reference(f"{db_path}/{date1}/{titlehead}/{title1}")
+   d = datetime.today().strftime('%m-%d-%y')
+   ref = db.reference(f"{db_path}/{d}/{titlehead}")
    ref.set(
        {
            "titlehead": titlehead,

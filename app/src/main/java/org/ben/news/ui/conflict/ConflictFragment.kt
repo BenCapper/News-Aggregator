@@ -71,7 +71,7 @@ class ConflictFragment : Fragment(), DoubleStoryListener, StoryListener {
             day +=1
         }
         fragBinding.recyclerViewCon.layoutManager = activity?.let { LinearLayoutManager(it) }
-        activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.eu)
+        activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.both)
         MobileAds.initialize(this.context!!) {}
         val fab = activity?.findViewById<FloatingActionButton>(R.id.fab)
         val bot = activity?.findViewById<BottomNavigationView>(R.id.bottom_nav)
