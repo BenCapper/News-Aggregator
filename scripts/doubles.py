@@ -1,9 +1,13 @@
 import os
 import json
-from utils.utilities import jsonFolder, similar, titleDeFormat, initialise, pushDoubleToDB, logFolder
+from utils.utilities import jsonFolder, similar, titleDeFormat, initialise, pushDoubleToDB, logFolder, titleFormat
 
 double_log_gb = "/home/bencapper/src/News-Aggregator/scripts/doublelog/double.log"
 double_gb_ref = list()
+
+match_log = "/home/bencapper/src/News-Aggregator/scripts/doublelog/matches.log"
+match_ref = list()
+
 json_path = "/home/bencapper/src/News-Aggregator/scripts/news.json"
 
 db_url = "https://news-a3e22-default-rtdb.firebaseio.com/"
@@ -28,6 +32,7 @@ left_log = ["abcdone.log", "beastdone.log", "cbsdone.log", "euronewsdone.log",
 left_json = ["abc.json","beast.json","cbs.json","euron.json","global.json","guard.json",
             "huff.json","pol.json","rte.json","sky.json","vox.json","yah.json"]
 
+# Open Right Log and add outlet to title
 right_ref = list()
 for i in right_log:
     path = f"/home/bencapper/src/News-Aggregator/scripts/log/{i}"
@@ -38,7 +43,7 @@ for i in right_log:
         j = f"{j}--{i}"
         right_ref.append(j)
 
-    
+# Open Left Log and add outlet to title
 left_ref = list()
 for i in left_log:
     path = f"/home/bencapper/src/News-Aggregator/scripts/log/{i}"
@@ -49,7 +54,8 @@ for i in left_log:
         j = f"{j}--{i}"
         left_ref.append(j)
 
-
+# Create Double Log file if doesnt exist
+# Split into lines
 if os.path.exists(double_log_gb):
    open_temp = open(double_log_gb, "r")
    read_temp = open_temp.read()
@@ -57,17 +63,32 @@ if os.path.exists(double_log_gb):
 else:
    os.mknod(double_log_gb)
 
+if os.path.exists(match_log):
+   open_temp = open(match_log, "r")
+   read_temp = open_temp.read()
+   double_gb_ref = read_temp.splitlines()
+else:
+   os.mknod(match_log)
+
 
 right_titles = list()
 left_titles = list()
 
+# Copy Right Ref List into another var
 for line in right_ref:
     right_titles.append(line)
 
+# Copy Left Ref List into another var
 for line in left_ref:
     left_titles.append(line)
 
 matches = list()
+# Nested loop to match titles
+# Remove the outlet name
+# Connect titles, readd outlets
+# Add titles that match to matches list
+left_matches = list()
+right_matches = list()
 for i in left_titles:
    loutlet = titleDeFormat(i).split('.log')[0]
    lnoout = i.split('--')[0]
@@ -76,15 +97,35 @@ for i in left_titles:
       routlet = titleDeFormat(j).split('.log')[0]
       rnoout = j.split('--')[0]
       rformat = titleDeFormat(rnoout)
-      if similar(rformat, lformat) > .58:
+      sim = False
+      for m in matches:
+         if similar(m, f"{routlet} // {loutlet}") > .7:
+            sim = True
+            break
+      for line in match_ref:
+         if rformat in line or lformat in line:
+            sim = True
+            break
+         
+      if similar(rformat, lformat) > .63 and sim is False and similar(rformat, lformat) < .97: 
          matches.append(f"{routlet} // {loutlet}")
+         open_temp = open(match_log, "a")
+         open_temp.write(f"{rformat}" + "\n")
+         open_temp.write(f"{lformat}" + "\n")
+         print(f"{routlet} // {loutlet}")
 
 
+
+
+# For each title match
 for match in matches:
-
+      # Outlet name - No Title
       right_outlet = match.split('//')[0].split('--')[1].lstrip().rstrip()
+      # Article Title - No Outlet
       right_title = match.split('//')[0].split('--')[0].lstrip().rstrip()
+      # Outlet name - No Title
       left_outlet = match.split('//')[1].split('--')[1].lstrip().rstrip()
+      # Article Title - No Outlet
       left_title = match.split('//')[1].lstrip().rstrip().split('--')[0].lstrip().rstrip()
 
 
@@ -154,6 +195,9 @@ for match in matches:
                   l_art = article
 
          if r_art and l_art:
+            open_dlog = open(double_log_gb, "r")
+            read_dlog = open_dlog.read()
+            double_gb_ref = read_dlog.splitlines()
 
             pushDoubleToDB(
                db_path,
@@ -176,6 +220,3 @@ for match in matches:
             open_temp = open(double_log_gb, "a")
             open_temp.write(str(titlehead) + "\n")
             print("Double Article Added to DB")
-
-
-
