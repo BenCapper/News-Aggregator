@@ -44,7 +44,7 @@ class ConflictViewModel : ViewModel() {
     fun search( day: Int, term: String) {
         try {
             val dates = StoryManager.getDate(day)
-            StoryManager.searchDouble(dates,term,conList)
+            StoryManager.searchDouble(term,dates,conList)
             Timber.i("Search Success")
         }
         catch (e: java.lang.Exception) {
