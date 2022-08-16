@@ -8,7 +8,7 @@ json_path = "/home/bencapper/src/News-Aggregator/scripts/news.json"
 
 db_url = "https://news-a3e22-default-rtdb.firebaseio.com/"
 bucket = "news-a3e22.appspot.com"
-db_path = "stories"
+db_path = "doubles"
 
 json_folder_path = "/home/bencapper/src/News-Aggregator/scripts/json/"
 json_path = "/home/bencapper/src/News-Aggregator/scripts/news.json"
