@@ -19,6 +19,10 @@
         app:cardElevation="3dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/imagetoplayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -69,7 +73,7 @@
                 android:text="@{story.outlet1}"
                 android:textColor="@color/dark"
                 android:textSize="11sp"
-                android:textStyle="italic"
+                android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -132,11 +136,11 @@
         <View
             android:id="@+id/divider"
             android:layout_width="match_parent"
-            android:layout_marginLeft="30dp"
-            android:layout_marginRight="30dp"
             android:layout_height="2dp"
+            android:layout_marginLeft="30dp"
             android:layout_marginTop="120dp"
-            android:background="@color/red" />
+            android:layout_marginRight="30dp"
+            android:background="#FF0000" />
 
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -170,8 +174,6 @@
                 android:id="@+id/button32"
                 android:layout_width="0dp"
                 android:layout_height="47dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="-10dp"
                 android:background="@android:color/transparent"
                 android:textSize="10sp"
                 app:icon="@drawable/ic_share"
@@ -191,7 +193,7 @@
                 android:text="@{story.outlet2}"
                 android:textColor="@color/dark"
                 android:textSize="11sp"
-                android:textStyle="italic"
+                android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -227,8 +229,7 @@
                 android:id="@+id/button2"
                 android:layout_width="53dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="-10dp"
+                android:layout_marginBottom="-2dp"
                 android:background="@android:color/transparent"
                 android:textSize="10sp"
                 app:icon="@drawable/ic_download"
@@ -256,8 +257,8 @@
             android:layout_width="match_parent"
             android:layout_height="2dp"
             android:layout_marginLeft="30dp"
-            android:layout_marginRight="30dp"
             android:layout_marginTop="380dp"
-            android:background="@color/light_blue_300" />
+            android:layout_marginRight="30dp"
+            android:background="#2FB4FF" />
     </androidx.cardview.widget.CardView>
 </layout>
