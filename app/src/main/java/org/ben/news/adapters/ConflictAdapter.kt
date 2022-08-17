@@ -1,5 +1,6 @@
 package org.ben.news.adapters
 
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -167,7 +168,12 @@ class ConflictAdapter constructor(
 
             binding.imagetoplayout.setOnClickListener { listener.onRightClick(story) }
             binding.imgblayout.setOnClickListener { listener.onLeftClick(story) }
-
+            var keys = story.titlehead.split('-')[0]
+            keys = if (keys.length > 45){
+                "Keywords:  ${keys.substring(0,45)}..."
+            } else {
+                "Keywords:  $keys"
+            }
 
             binding.button3.setOnClickListener{ listener.onShareRight(story)}
             binding.button.setOnClickListener{ listener.onLikeRight(story)}

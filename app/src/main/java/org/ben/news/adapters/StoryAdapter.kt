@@ -2,6 +2,7 @@ package org.ben.news.adapters
 
 
 import android.content.res.ColorStateList
+import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
@@ -144,6 +145,13 @@ class StoryAdapter constructor(
             if (story.outlet in ie){
                 Glide.with(this.itemView.context).load(R.drawable.ieicon).into(binding.imageView3)
             }
+            if (story.outlet in left){
+                binding.divider5.setBackgroundColor(Color.parseColor("#2FB4FF"))
+            }
+            if (story.outlet in right){
+                binding.divider5.setBackgroundColor(Color.parseColor("#FF0000"))
+            }
+
             binding.root.setOnClickListener { listener.onStoryClick(story) }
             binding.button.setOnClickListener { listener.onLike(story) }
             binding.button3.setOnClickListener { listener.onShare(story) }
