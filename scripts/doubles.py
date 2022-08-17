@@ -104,7 +104,7 @@ for title in right_not_in_ref:
         ltitle_no_log = titleDeFormat(ltitle).split('.log')[0]
         ltitle_no_outlet = ltitle.split('--')[0]
         ltitle_formatted = titleDeFormat(ltitle_no_outlet)
-        if similar(title_formatted,ltitle_formatted) > .7 and ltitle_formatted not in ltits and ltitle_formatted not in match_ref and title_formatted not in match_ref:
+        if similar(title_formatted,ltitle_formatted) > .7 and similar(title_formatted,ltitle_formatted) < .97 and ltitle_formatted not in ltits and ltitle_formatted not in match_ref and title_formatted not in match_ref:
            matches.append(f"{title_no_log} // {ltitle_no_log}")
            rtits.append(title_formatted)
            ltits.append(ltitle_formatted)
