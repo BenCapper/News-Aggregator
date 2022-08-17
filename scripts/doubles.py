@@ -21,19 +21,22 @@ logFolder(double_log_gb)
 jsonFolder(json_folder_path)
 initialise(json_path, db_url, bucket)
 
-right_log = ["blazedone.log","bonginodone.log","breitbartdone.log", "dailycallerdone.log",
+right_log = ["timdone.log", "zerodone.log","blazedone.log", "dailycallerdone.log",
             "gbdone.log", "griptdone.log", "GWPdone.log", "pmill.log",
-            "rev.log", "spikedone.log", "timdone.log", "zerodone.log"]
-right_json = ["blaze.json","bong.json","breit.json","caller.json","gb.json",
-            "gript.json","gwp.json","rev.json","spiked.json","tim.json","zero.json"]
-left_log = ["abcdone.log", "beastdone.log", "cbsdone.log", "euronewsdone.log",
-            "globaldone.log", "guarddone.log", "huffdone.log", "politicodone.log",
-            "rtedone.log", "skyukdone.log", "voxdone.log", "yahoodone.log"]
-left_json = ["abc.json","beast.json","cbs.json","euron.json","global.json","guard.json",
-            "huff.json","pol.json","rte.json","sky.json","vox.json","yah.json"]
+            "spikedone.log", "rev.log", "breitbartdone.log","bonginodone.log"]
+right_json = ["tim.json","caller.json","gb.json","spiked.json","zero.json",
+            "gript.json","gwp.json","rev.json","blaze.json","bong.json","breit.json"]
+left_log = ["politicodone.log","abcdone.log", "beastdone.log", "euronewsdone.log",
+            "globaldone.log", "guarddone.log", "huffdone.log","rtedone.log","cbsdone.log",
+            "skyukdone.log", "voxdone.log", "yahoodone.log"]
+left_json = ["euron.json","global.json","guard.json","vox.json",
+            "huff.json","pol.json","rte.json","yah.json",
+            "abc.json","beast.json","cbs.json","sky.json"]
 
-# Open Right Log and add outlet to title
-right_ref = list()
+
+fullref_with_outlets = list()
+right_titles = list()
+left_titles = list()
 for i in right_log:
     path = f"/home/bencapper/src/News-Aggregator/scripts/log/{i}"
     open_temp = open(path, "r")
@@ -41,10 +44,10 @@ for i in right_log:
     split = read_temp.splitlines()
     for j in split:
         j = f"{j}--{i}"
-        right_ref.append(j)
+        fullref_with_outlets.append(j)
+        right_titles.append(j)
 
 # Open Left Log and add outlet to title
-left_ref = list()
 for i in left_log:
     path = f"/home/bencapper/src/News-Aggregator/scripts/log/{i}"
     open_temp = open(path, "r")
@@ -52,10 +55,10 @@ for i in left_log:
     split = read_temp.splitlines()
     for j in split:
         j = f"{j}--{i}"
-        left_ref.append(j)
+        fullref_with_outlets.append(j)
+        left_titles.append(j)
 
-# Create Double Log file if doesnt exist
-# Split into lines
+
 if os.path.exists(double_log_gb):
    open_temp = open(double_log_gb, "r")
    read_temp = open_temp.read()
@@ -66,56 +69,50 @@ else:
 if os.path.exists(match_log):
    open_temp = open(match_log, "r")
    read_temp = open_temp.read()
-   double_gb_ref = read_temp.splitlines()
+   match_ref = read_temp.splitlines()
 else:
    os.mknod(match_log)
 
-
-right_titles = list()
-left_titles = list()
-
-# Copy Right Ref List into another var
-for line in right_ref:
-    right_titles.append(line)
-
-# Copy Left Ref List into another var
-for line in left_ref:
-    left_titles.append(line)
-
 matches = list()
-# Nested loop to match titles
-# Remove the outlet name
-# Connect titles, readd outlets
-# Add titles that match to matches list
-left_matches = list()
-right_matches = list()
-for i in left_titles:
-   loutlet = titleDeFormat(i).split('.log')[0]
-   lnoout = i.split('--')[0]
-   lformat = titleDeFormat(lnoout)
-   for j in right_titles:
-      routlet = titleDeFormat(j).split('.log')[0]
-      rnoout = j.split('--')[0]
-      rformat = titleDeFormat(rnoout)
-      sim = False
-      for m in matches:
-         if similar(m, f"{routlet} // {loutlet}") > .7:
-            sim = True
-            break
-      for line in match_ref:
-         if rformat in line or lformat in line:
-            sim = True
-            break
-         
-      if similar(rformat, lformat) > .7 and sim is False and similar(rformat, lformat) < .97 and rformat not in match_ref and lformat not in match_ref: 
-         matches.append(f"{routlet} // {loutlet}")
-         open_temp = open(match_log, "a")
-         open_temp.write(f"{rformat}" + "\n")
-         open_temp.write(f"{lformat}" + "\n")
-         print(f"{routlet} // {loutlet}")
+right_not_in_ref = list()
+left_not_in_ref = list()
+for title in right_titles:
+    if title.split('--')[0] in match_ref:
+        pass
+    else:
+        right_not_in_ref.append(title) 
 
+for title in left_titles:
+    if title.split('--')[0] in match_ref:
+        pass
+    else:
+        left_not_in_ref.append(title)
 
+rtits = list()
+ltits = list()
 
+for title in right_not_in_ref:
+    title_no_log = titleDeFormat(title).split('.log')[0]
+    title_no_outlet = title.split('--')[0]
+    title_formatted = titleDeFormat(title_no_outlet)
+    if title_formatted in rtits:
+       print(f"RIGHT TITLE = ${title_formatted}")
+       print(f"RTITS = ${rtits}")
+       break
+    else:
+       for ltitle in left_not_in_ref:
+        ltitle_no_log = titleDeFormat(ltitle).split('.log')[0]
+        ltitle_no_outlet = ltitle.split('--')[0]
+        ltitle_formatted = titleDeFormat(ltitle_no_outlet)
+        if similar(title_formatted,ltitle_formatted) > .7 and ltitle_formatted not in ltits and ltitle_formatted not in match_ref and title_formatted not in match_ref:
+           matches.append(f"{title_no_log} // {ltitle_no_log}")
+           rtits.append(title_formatted)
+           ltits.append(ltitle_formatted)
+           open_temp = open(match_log, "a")
+           open_temp.write(f"{title_formatted}" + "\n")
+           open_temp.write(f"{ltitle_formatted}" + "\n")
+           print(f"{title_formatted} // {ltitle_formatted}")
+           break
 
 # For each title match
 for match in matches:
