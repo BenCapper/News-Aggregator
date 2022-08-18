@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseUser
 import org.ben.news.firebase.StoryManager
 import org.ben.news.models.DoubleStoryModel
-import org.ben.news.models.StoryModel
 import timber.log.Timber
 
 class ConflictViewModel : ViewModel() {
@@ -25,8 +24,6 @@ class ConflictViewModel : ViewModel() {
     var liveFirebaseUser = MutableLiveData<FirebaseUser>()
 
     init { load(0) }
-
-    private val outlets = listOf("www.Euronews.com")
 
 
     fun load(day: Int) {

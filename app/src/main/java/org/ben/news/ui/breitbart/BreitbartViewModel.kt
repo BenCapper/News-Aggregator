@@ -25,7 +25,6 @@ class BreitbartViewModel : ViewModel() {
 
     var liveFirebaseUser = MutableLiveData<FirebaseUser>()
 
-    //var readOnly = MutableLiveData(false)
 
     init { load(0) }
 
