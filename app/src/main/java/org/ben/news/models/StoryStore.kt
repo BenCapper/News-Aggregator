@@ -14,7 +14,6 @@ interface StoryStore {
     fun findById(userId:String, storyId: String, story: MutableLiveData<StoryModel>)
     fun create(userId: String, path:String, story: StoryModel)
     fun delete(day:String, userId: String, path: String, title: String)
-    fun update(userId:String, storyId: String, story: StoryModel)
     fun search(term: String, date: String, storyList: MutableLiveData<List<StoryModel>>)
     fun search(date: String,term: String, userId: String, path:String,  storyList: MutableLiveData<List<StoryModel>>)
     fun searchDouble(term: String, date: String, storyList: MutableLiveData<List<DoubleStoryModel>>)
