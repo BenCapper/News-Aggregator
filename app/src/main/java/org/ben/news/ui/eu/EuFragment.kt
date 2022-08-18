@@ -31,7 +31,6 @@ import org.ben.news.models.StoryModel
 import org.ben.news.ui.auth.LoggedInViewModel
 import splitties.alertdialog.appcompat.*
 import splitties.snackbar.snack
-import splitties.views.onClick
 import splitties.views.textColorResource
 import java.text.SimpleDateFormat
 import java.util.*

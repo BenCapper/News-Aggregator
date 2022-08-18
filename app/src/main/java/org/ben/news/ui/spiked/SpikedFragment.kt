@@ -22,7 +22,6 @@ import org.ben.news.R
 import org.ben.news.adapters.EmptyAdapter
 import org.ben.news.adapters.StoryAdapter
 import org.ben.news.adapters.StoryListener
-import org.ben.news.databinding.FragmentSkyBinding
 import org.ben.news.databinding.FragmentSpikedBinding
 import org.ben.news.firebase.StoryManager
 import org.ben.news.helpers.createLoader
@@ -30,11 +29,8 @@ import org.ben.news.helpers.hideLoader
 import org.ben.news.helpers.showLoader
 import org.ben.news.models.StoryModel
 import org.ben.news.ui.auth.LoggedInViewModel
-import org.ben.news.ui.skyuk.SkyFragment
-import org.ben.news.ui.skyuk.SkyViewModel
 import splitties.alertdialog.appcompat.*
 import splitties.snackbar.snack
-import splitties.views.onClick
 import splitties.views.textColorResource
 import java.text.SimpleDateFormat
 import java.util.*
