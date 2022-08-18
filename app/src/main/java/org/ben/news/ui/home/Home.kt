@@ -6,11 +6,8 @@ import android.content.SharedPreferences
 import android.content.res.Configuration
 import android.net.Uri
 import android.os.Bundle
-import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.Switch
-import androidx.activity.addCallback
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -18,17 +15,12 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO
 import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES
 import androidx.appcompat.widget.Toolbar
-import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
-import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.*
 import androidx.preference.PreferenceManager
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.android.material.internal.NavigationMenuItemView
 import com.google.firebase.auth.FirebaseUser
 import org.ben.news.R
 import org.ben.news.databinding.HomeBinding
@@ -38,7 +30,6 @@ import org.ben.news.helpers.readImageUri
 import org.ben.news.helpers.showImagePicker
 import org.ben.news.ui.auth.LoggedInViewModel
 import org.ben.news.ui.auth.Login
-import org.ben.news.ui.storyList.StoryListViewModel
 import timber.log.Timber
 
 
