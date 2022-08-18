@@ -1,14 +1,10 @@
 package org.ben.news.adapters
 
 
-import android.content.res.ColorStateList
 import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
-import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.graphics.drawable.DrawableCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.google.android.gms.ads.*
@@ -17,7 +13,6 @@ import com.google.android.gms.ads.nativead.NativeAd
 import org.ben.news.databinding.CardAdBinding
 import org.ben.news.databinding.CardStoryBinding
 import org.ben.news.models.StoryModel
-import splitties.resources.color
 import timber.log.Timber
 import kotlin.math.roundToInt
 
