@@ -16,26 +16,7 @@ object StoryManager : StoryStore {
 
     var database: DatabaseReference = FirebaseDatabase.getInstance().reference
 
-    fun getDates(n:Int): ArrayList<String> {
-        val now = LocalDate.now()
-        val dates = ArrayList<String>()
-        for (i in 0..n) {
-            val yesterday = now.minusDays(i.toLong())
-            val year = yesterday.year.toString().substring(2)
-            var month = yesterday.month.value.toString()
-            if (month.length == 1) {
-                month = "0$month"
-            }
-            var day = yesterday.dayOfMonth.toString()
-            if (day.length == 1) {
-                day = "0$day"
-            }
-            val date = "$month-$day-$year"
-            dates.add(date)
-        }
 
-        return dates
-    }
 
     fun getDate(n:Int): String{
         val now = LocalDate.now()
@@ -516,16 +497,6 @@ object StoryManager : StoryStore {
         database.updateChildren(childDelete)
     }
 
-    override fun update(userId: String, storyId: String, story: StoryModel) {
-
-        val storyValues = story.toMap()
-
-        val childUpdate : MutableMap<String, Any?> = HashMap()
-        childUpdate["stories/$storyId"] = storyValues
-        childUpdate["user-stories/$userId/$storyId"] = storyValues
-
-        database.updateChildren(childUpdate)
-    }
 
     fun updateImageRef(userId: String,imageUri: String) {
 

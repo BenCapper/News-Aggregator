@@ -245,7 +245,7 @@ class ConflictFragment : Fragment(), DoubleStoryListener, StoryListener {
     }
 
     override fun onRightClick(story: DoubleStoryModel) {
-        val article = StoryModel(story.title1,"","","","",story.date1,story.outlet1,story.storage_link1,story.order,story.link1)
+        val article = StoryModel(story.title1,"","",story.date1,story.outlet1,story.storage_link1,story.order,story.link1)
         StoryManager.create(loggedInViewModel.liveFirebaseUser.value!!.uid,"history", article)
         val intent = Intent(Intent.ACTION_VIEW).setData(Uri.parse(story.link1))
 
@@ -255,7 +255,7 @@ class ConflictFragment : Fragment(), DoubleStoryListener, StoryListener {
     }
 
     override fun onLeftClick(story: DoubleStoryModel) {
-        val article = StoryModel(story.title1,"","","","",story.date1,story.outlet1,story.storage_link1,story.order,story.link1)
+        val article = StoryModel(story.title2,"","",story.date2,story.outlet2,story.storage_link2,story.order,story.link2)
         StoryManager.create(loggedInViewModel.liveFirebaseUser.value!!.uid,"history", article)
         val intent = Intent(Intent.ACTION_VIEW).setData(Uri.parse(story.link2))
 
@@ -265,7 +265,7 @@ class ConflictFragment : Fragment(), DoubleStoryListener, StoryListener {
     }
 
     override fun onLikeRight(story: DoubleStoryModel) {
-        val article = StoryModel(story.title1,"","","","",story.date1,story.outlet1,story.storage_link1,story.order,story.link1)
+        val article = StoryModel(story.title1,"","",story.date1,story.outlet1,story.storage_link1,story.order,story.link1)
         activity?.alertDialog {
             messageResource = R.string.save_art
             okButton { StoryManager.create(loggedInViewModel.liveFirebaseUser.value!!.uid,"likes", article)
@@ -282,7 +282,7 @@ class ConflictFragment : Fragment(), DoubleStoryListener, StoryListener {
     }
 
     override fun onLikeLeft(story: DoubleStoryModel) {
-        val article = StoryModel(story.title1,"","","","",story.date1,story.outlet1,story.storage_link1,story.order,story.link1)
+        val article = StoryModel(story.title2,"","",story.date2,story.outlet2,story.storage_link2,story.order,story.link2)
         activity?.alertDialog {
             messageResource = R.string.save_art
             okButton { StoryManager.create(loggedInViewModel.liveFirebaseUser.value!!.uid,"likes", article)

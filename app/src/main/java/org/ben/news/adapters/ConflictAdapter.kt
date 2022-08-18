@@ -1,6 +1,5 @@
 package org.ben.news.adapters
 
-import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,7 +12,6 @@ import org.ben.news.R
 import org.ben.news.databinding.CardAdBinding
 import org.ben.news.databinding.CardConflictBinding
 import org.ben.news.models.DoubleStoryModel
-import org.ben.news.models.StoryModel
 import timber.log.Timber
 import kotlin.math.roundToInt
 
