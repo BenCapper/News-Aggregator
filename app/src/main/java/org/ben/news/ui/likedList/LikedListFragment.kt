@@ -169,6 +169,7 @@ class LikedListFragment : Fragment(), StoryNoSaveListener, StoryListener {
 
         }
         if( item.itemId == R.id.app_bar_left) {
+            showLoader(loader,"")
             day += 1
             likedListViewModel.load(day)
         }

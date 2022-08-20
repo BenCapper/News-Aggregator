@@ -146,7 +146,6 @@ class BlazeFragment : Fragment(), StoryListener {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if( item.itemId == R.id.app_bar_right) {
-            showLoader(loader,"")
             day -= 1
             if (day <= 0 ){
                 day = 0

@@ -225,6 +225,7 @@ class UsFragment : Fragment(), StoryListener {
             usViewModel.load(day)
         }
         if( item.itemId == R.id.app_bar_left) {
+            showLoader(loader,"")
             day += 1
             usViewModel.load(day)
         }

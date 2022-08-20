@@ -222,7 +222,6 @@ class StoryListFragment : Fragment(), StoryListener {
             state = null
         }
         if( item.itemId == R.id.app_bar_r) {
-            showLoader(loader,"")
             day -= 1
             if (day <= 0 ){
                 day = 0

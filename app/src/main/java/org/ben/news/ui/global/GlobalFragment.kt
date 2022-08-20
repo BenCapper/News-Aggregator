@@ -151,6 +151,7 @@ class GlobalFragment : Fragment(), StoryListener {
 
         }
         if( item.itemId == R.id.app_bar_left) {
+            showLoader(loader,"")
             day += 1
             gloViewModel.load(day)
         }
