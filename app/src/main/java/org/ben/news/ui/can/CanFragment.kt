@@ -125,10 +125,12 @@ class CanFragment : Fragment(), StoryListener {
                 val datenow = StoryManager.getDate(day)
                 fragBinding.emptydate.text = datenow
                 fragBinding.larrow.setOnClickListener {
+                    showLoader(loader,"")
                     day += 1
                     canViewModel.load(day)
                 }
                 fragBinding.rarrow.setOnClickListener {
+                    showLoader(loader,"")
                     day -= 1
                     if (day <= 0 ){
                         day = 0
@@ -204,6 +206,7 @@ class CanFragment : Fragment(), StoryListener {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if( item.itemId == R.id.app_bar_right) {
+            showLoader(loader,"")
             day -= 1
             if (day <= 0 ){
                 day = 0
@@ -211,6 +214,7 @@ class CanFragment : Fragment(), StoryListener {
             canViewModel.load(day)
         }
         if( item.itemId == R.id.app_bar_left) {
+            showLoader(loader,"")
             day += 1
             canViewModel.load(day)
         }
