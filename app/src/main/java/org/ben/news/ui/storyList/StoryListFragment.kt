@@ -128,10 +128,12 @@ class StoryListFragment : Fragment(), StoryListener {
                 val datenow = StoryManager.getDate(day)
                 fragBinding.emptydate.text = datenow
                 fragBinding.larrow.setOnClickListener {
+                    showLoader(loader,"")
                     day += 1
                     storyListViewModel.load(day)
                 }
                 fragBinding.rarrow.setOnClickListener {
+                    showLoader(loader,"")
                     day -= 1
                     if (day <= 0 ){
                         day = 0
@@ -214,11 +216,13 @@ class StoryListFragment : Fragment(), StoryListener {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
         if (id == R.id.app_bar_shuffle) {
+            showLoader(loader,"")
             storyListViewModel.loadShuffle(day)
             shuffle = true
             state = null
         }
         if( item.itemId == R.id.app_bar_r) {
+            showLoader(loader,"")
             day -= 1
             if (day <= 0 ){
                 day = 0
@@ -226,6 +230,7 @@ class StoryListFragment : Fragment(), StoryListener {
             storyListViewModel.load(day)
         }
         if( item.itemId == R.id.app_bar_l) {
+            showLoader(loader,"")
             day += 1
             storyListViewModel.load(day)
         }
