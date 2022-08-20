@@ -122,10 +122,12 @@ class CallerFragment : Fragment(), StoryListener {
                 val datenow = StoryManager.getDate(day)
                 fragBinding.emptydate.text = datenow
                 fragBinding.larrow.setOnClickListener {
+                    showLoader(loader,"")
                     day += 1
                     callerViewModel.load(day)
                 }
                 fragBinding.rarrow.setOnClickListener {
+                    showLoader(loader,"")
                     day -= 1
                     if (day <= 0 ){
                         day = 0
@@ -147,6 +149,7 @@ class CallerFragment : Fragment(), StoryListener {
             callerViewModel.load(day)
         }
         if( item.itemId == R.id.app_bar_left) {
+            showLoader(loader,"")
             day += 1
             callerViewModel.load(day)
         }

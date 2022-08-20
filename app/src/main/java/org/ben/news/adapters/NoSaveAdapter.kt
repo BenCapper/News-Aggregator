@@ -143,7 +143,7 @@ class NoSaveAdapter constructor(private var stories: ArrayList<StoryModel>, priv
 
         fun bind() {
 
-            val adLoader = AdLoader.Builder(this.itemView.context, "ca-app-pub-7534564032628512/6984101088")
+            val adLoader = AdLoader.Builder(this.itemView.context, "") //ca-app-pub-7534564032628512/6984101088
                 .forNativeAd { ad : NativeAd ->
                     populateNativeAdView(ad,binding)
 

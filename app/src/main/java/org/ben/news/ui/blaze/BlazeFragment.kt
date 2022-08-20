@@ -125,10 +125,12 @@ class BlazeFragment : Fragment(), StoryListener {
                 val datenow = StoryManager.getDate(day)
                 fragBinding.emptydate.text = datenow
                 fragBinding.larrow.setOnClickListener {
+                    showLoader(loader,"")
                     day += 1
                     blazeViewModel.load(day)
                 }
                 fragBinding.rarrow.setOnClickListener {
+                    showLoader(loader,"")
                     day -= 1
                     if (day <= 0 ){
                         day = 0
@@ -151,6 +153,7 @@ class BlazeFragment : Fragment(), StoryListener {
             blazeViewModel.load(day)
         }
         if( item.itemId == R.id.app_bar_left) {
+            showLoader(loader,"")
             day += 1
             blazeViewModel.load(day)
         }

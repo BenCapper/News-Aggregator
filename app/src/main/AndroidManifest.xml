@@ -24,6 +24,7 @@
 
         <activity
             android:name=".ui.splash.Splash"
+            android:screenOrientation="fullSensor"
             android:exported="true"
             android:theme="@style/Theme.News" >
             <intent-filter>
@@ -34,11 +35,13 @@
         </activity>
         <activity
             android:name=".ui.auth.Login"
+            android:screenOrientation="fullSensor"
             android:exported="true"
             android:windowSoftInputMode="adjustPan" >
         </activity>
         <activity
             android:name=".ui.home.Home"
+            android:screenOrientation="fullSensor"
             android:exported="true"
             android:windowSoftInputMode="adjustPan" >
         </activity>

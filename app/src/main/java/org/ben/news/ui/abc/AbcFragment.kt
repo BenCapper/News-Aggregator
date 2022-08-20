@@ -125,10 +125,12 @@ class AbcFragment : Fragment(), StoryListener {
                 val datenow = StoryManager.getDate(day)
                 fragBinding.emptydate.text = datenow
                 fragBinding.larrow.setOnClickListener {
+                    showLoader(loader,"")
                     day += 1
                     abcViewModel.load(day)
                 }
                 fragBinding.rarrow.setOnClickListener {
+                    showLoader(loader,"")
                     day -= 1
                     if (day <= 0 ){
                         day = 0
@@ -194,6 +196,7 @@ class AbcFragment : Fragment(), StoryListener {
             }
         })
         searchView.setOnCloseListener {
+            showLoader(loader,"")
             searching = null
             abcViewModel.load(day)
             false
@@ -210,6 +213,7 @@ class AbcFragment : Fragment(), StoryListener {
             abcViewModel.load(day)
         }
         if( item.itemId == R.id.app_bar_left) {
+            showLoader(loader,"")
             day += 1
             abcViewModel.load(day)
         }
