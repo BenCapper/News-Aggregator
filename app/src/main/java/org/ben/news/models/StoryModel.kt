@@ -7,8 +7,6 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class StoryModel(var title: String = "",
-                      var img_name: String = "",
-                      var img_src: String = "",
                       var date: String = "",
                       var outlet: String = "",
                       var storage_link: String = "",
@@ -19,8 +17,6 @@ data class StoryModel(var title: String = "",
                         fun toMap(): Map<String, Any?> {
                             return mapOf(
                                 "title" to title,
-                                "img_name" to img_name,
-                                "img_src" to img_src,
                                 "date" to date,
                                 "outlet" to outlet,
                                 "storage_link" to storage_link,
