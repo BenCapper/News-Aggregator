@@ -60,21 +60,29 @@
         app:boxBackgroundMode="outline"
         app:boxStrokeColor="@color/orange"
         app:boxStrokeWidth="3dp"
-        app:hintTextAppearance="@style/TextAppearance.AppCompat.Medium"
-        app:hintTextColor="@color/orange"
         app:endIconDrawable="@drawable/ic_baseline_close_24"
         app:endIconMode="clear_text"
         app:endIconTint="@color/orange"
+        app:hintTextAppearance="@style/TextAppearance.AppCompat.Medium"
+        app:hintTextColor="@color/orange"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView3"
-        app:layout_constraintVertical_bias="0.050000012">
+        app:layout_constraintVertical_bias="0.050000012"
+        app:suffixTextColor="@null">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/fieldEmail"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:allowUndo="false"
+            android:autoText="false"
+            android:cursorVisible="true"
+            android:textColorHighlight="@color/orange"
+            android:textColorHint="@color/orange"
+            android:textCursorDrawable="@null"
+            app:textInputLayoutFocusedRectEnabled="false" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
