@@ -79,6 +79,7 @@
             android:allowUndo="false"
             android:autoText="false"
             android:cursorVisible="true"
+            android:inputType="textEmailAddress"
             android:textColorHighlight="@color/orange"
             android:textColorHint="@color/orange"
             android:textCursorDrawable="@null"
@@ -109,7 +110,8 @@
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/fieldPassword"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:inputType="textPassword" />
     </com.google.android.material.textfield.TextInputLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
