@@ -51,10 +51,6 @@ class StoryListFragment : Fragment(), StoryListener {
     var shuffle: Boolean? = null
     var searching: String? = null
     var day = 0
-    val time = Calendar.getInstance().time
-    val formatter = SimpleDateFormat.getTimeInstance()
-    var formatted = formatter.format(time)
-
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -71,10 +67,6 @@ class StoryListFragment : Fragment(), StoryListener {
         activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.hometit)
         _fragBinding = FragmentStoryListBinding.inflate(inflater, container, false)
         val root = fragBinding.root
-        formatted = formatted.substring(0,2)
-        if (formatted.toInt() < 2 && day == 0){
-            day +=1
-        }
 
         fragBinding.recyclerView.layoutManager = activity?.let { LinearLayoutManager(it) }
         activity?.findViewById<BottomNavigationView>(R.id.bottom_nav)?.itemIconTintList = null
