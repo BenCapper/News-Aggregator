@@ -77,7 +77,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:allowUndo="false"
-            android:autoText="false"
             android:cursorVisible="true"
             android:inputType="textEmailAddress"
             android:textColorHighlight="@color/orange"
@@ -111,7 +110,8 @@
             android:id="@+id/fieldPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textPassword" />
+            android:inputType="textPassword"
+            android:textCursorDrawable="@null" />
     </com.google.android.material.textfield.TextInputLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -52,9 +52,6 @@ class LikedListFragment : Fragment(), StoryNoSaveListener, StoryListener {
     var state: Parcelable? = null
     var day = 0
     var searching: String? = null
-    val time = Calendar.getInstance().time
-    val formatter = SimpleDateFormat.getTimeInstance()
-    var formatted = formatter.format(time)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,10 +66,6 @@ class LikedListFragment : Fragment(), StoryNoSaveListener, StoryListener {
         showLoader(loader,"")
         _fragBinding = FragmentLikedListBinding.inflate(inflater, container, false)
         val root = fragBinding.root
-        formatted = formatted.substring(0,2)
-        if (formatted.toInt() < 2 && day == 0){
-            day +=1
-        }
 
         fragBinding.recyclerViewLiked.layoutManager = activity?.let { LinearLayoutManager(it) }
         activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.saved)
