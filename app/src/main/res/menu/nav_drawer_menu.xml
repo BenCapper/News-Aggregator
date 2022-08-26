@@ -13,7 +13,7 @@
                 android:title="@string/home" />
             <item
                 android:id="@+id/nav_con"
-                android:icon="@drawable/ic_home"
+                android:icon="@drawable/ic_sides"
                 android:onClick="conflictArticles"
                 android:title="@string/both" />
         </menu>
