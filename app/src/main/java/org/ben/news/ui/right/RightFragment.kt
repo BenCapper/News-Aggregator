@@ -64,7 +64,7 @@ class RightFragment : Fragment(), StoryListener {
         val root = fragBinding.root
 
         fragBinding.recyclerViewRight.layoutManager = activity?.let { LinearLayoutManager(it) }
-        activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.bong)
+        activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.right)
         MobileAds.initialize(this.context!!) {}
         val fab = activity?.findViewById<FloatingActionButton>(R.id.fab)
         val bot = activity?.findViewById<BottomNavigationView>(R.id.bottom_nav)
