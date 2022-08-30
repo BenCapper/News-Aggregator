@@ -12,6 +12,16 @@
                 android:onClick="homeArticles"
                 android:title="@string/home" />
             <item
+                android:id="@+id/nav_right"
+                android:icon="@drawable/ic_dr"
+                android:onClick="rightArticles"
+                android:title="@string/right" />
+            <item
+                android:id="@+id/nav_left"
+                android:icon="@drawable/ic_dl"
+                android:onClick="leftArticles"
+                android:title="@string/left" />
+            <item
                 android:id="@+id/nav_con"
                 android:icon="@drawable/ic_sides"
                 android:onClick="conflictArticles"

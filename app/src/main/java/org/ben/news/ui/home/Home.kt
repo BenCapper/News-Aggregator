@@ -84,10 +84,12 @@ class Home : AppCompatActivity() {
             R.id.griptFragment,
             R.id.gatewayFragment,
             R.id.huffFragment,
+            R.id.leftFragment,
             R.id.pmillFragment,
             R.id.politicoFragment,
             R.id.revolverFragment,
             R.id.rteFragment,
+            R.id.rightFragment,
             R.id.skyFragment,
             R.id.spikedFragment,
             R.id.timcastFragment,
@@ -399,6 +401,18 @@ class Home : AppCompatActivity() {
 
     fun zeroArticles(item: MenuItem) {
         findNavController(R.id.nav_host_fragment).navigate(R.id.zerohedgeFragment)
+        findViewById<DrawerLayout>(R.id.drawer_layout).closeDrawers()
+        Timber.i("UserId = ${loggedInViewModel.liveFirebaseUser.value!!.uid}")
+    }
+
+    fun rightArticles(item: MenuItem) {
+        findNavController(R.id.nav_host_fragment).navigate(R.id.rightFragment)
+        findViewById<DrawerLayout>(R.id.drawer_layout).closeDrawers()
+        Timber.i("UserId = ${loggedInViewModel.liveFirebaseUser.value!!.uid}")
+    }
+
+    fun leftArticles(item: MenuItem) {
+        findNavController(R.id.nav_host_fragment).navigate(R.id.leftFragment)
         findViewById<DrawerLayout>(R.id.drawer_layout).closeDrawers()
         Timber.i("UserId = ${loggedInViewModel.liveFirebaseUser.value!!.uid}")
     }

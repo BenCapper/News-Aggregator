@@ -78,6 +78,7 @@ dependencies {
     implementation 'androidx.preference:preference:1.2.0'
     implementation 'com.github.bumptech.glide:glide:4.13.2'
     implementation 'com.google.android.gms:play-services-ads:21.1.0'
+    implementation 'com.google.ads.mediation:inmobi:10.0.7.0'
     kapt 'com.github.bumptech.glide:compiler:4.13.2'
 
     testImplementation 'junit:junit:4.13.2'

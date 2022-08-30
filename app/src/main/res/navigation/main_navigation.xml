@@ -168,6 +168,12 @@
         <action
             android:id="@+id/action_storyListFragment_to_conflictFragment"
             app:destination="@id/conflictFragment" />
+        <action
+            android:id="@+id/action_storyListFragment_to_rightFragment"
+            app:destination="@id/rightFragment" />
+        <action
+            android:id="@+id/action_storyListFragment_to_leftFragment"
+            app:destination="@id/leftFragment" />
     </fragment>
     <fragment
         android:id="@+id/likedListFragment"
@@ -329,4 +335,14 @@
         android:name="org.ben.news.ui.conflict.ConflictFragment"
         android:label="fragment_conflict"
         tools:layout="@layout/fragment_conflict" />
+    <fragment
+        android:id="@+id/rightFragment"
+        android:name="org.ben.news.ui.right.RightFragment"
+        android:label="fragment_right"
+        tools:layout="@layout/fragment_right" />
+    <fragment
+        android:id="@+id/leftFragment"
+        android:name="org.ben.news.ui.left.LeftFragment"
+        android:label="fragment_left"
+        tools:layout="@layout/fragment_left" />
 </navigation>
