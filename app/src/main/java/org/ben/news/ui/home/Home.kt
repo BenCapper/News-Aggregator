@@ -84,6 +84,7 @@ class Home : AppCompatActivity() {
             R.id.griptFragment,
             R.id.gatewayFragment,
             R.id.huffFragment,
+            R.id.leftFragment,
             R.id.pmillFragment,
             R.id.politicoFragment,
             R.id.revolverFragment,
@@ -406,6 +407,12 @@ class Home : AppCompatActivity() {
 
     fun rightArticles(item: MenuItem) {
         findNavController(R.id.nav_host_fragment).navigate(R.id.rightFragment)
+        findViewById<DrawerLayout>(R.id.drawer_layout).closeDrawers()
+        Timber.i("UserId = ${loggedInViewModel.liveFirebaseUser.value!!.uid}")
+    }
+
+    fun leftArticles(item: MenuItem) {
+        findNavController(R.id.nav_host_fragment).navigate(R.id.leftFragment)
         findViewById<DrawerLayout>(R.id.drawer_layout).closeDrawers()
         Timber.i("UserId = ${loggedInViewModel.liveFirebaseUser.value!!.uid}")
     }

@@ -1,4 +1,4 @@
-package org.ben.news.ui.right
+package org.ben.news.ui.left
 
 import android.app.AlertDialog
 import android.content.Intent
@@ -22,7 +22,7 @@ import org.ben.news.R
 import org.ben.news.adapters.EmptyAdapter
 import org.ben.news.adapters.StoryAdapter
 import org.ben.news.adapters.StoryListener
-import org.ben.news.databinding.FragmentRightBinding
+import org.ben.news.databinding.FragmentLeftBinding
 import org.ben.news.firebase.StoryManager
 import org.ben.news.helpers.createLoader
 import org.ben.news.helpers.hideLoader
@@ -33,16 +33,16 @@ import splitties.alertdialog.appcompat.*
 import splitties.snackbar.snack
 import splitties.views.textColorResource
 
-class RightFragment : Fragment(), StoryListener {
+class LeftFragment : Fragment(), StoryListener {
 
     companion object {
-        fun newInstance() = RightFragment()
+        fun newInstance() = LeftFragment()
     }
-    private var _fragBinding: FragmentRightBinding? = null
+    private var _fragBinding: FragmentLeftBinding? = null
     private val fragBinding get() = _fragBinding!!
     lateinit var loader : AlertDialog
     private val loggedInViewModel : LoggedInViewModel by activityViewModels()
-    private val rightViewModel: RightViewModel by activityViewModels()
+    private val leftViewModel: LeftViewModel by activityViewModels()
     var state: Parcelable? = null
     var day = 0
     var searching: String? = null
@@ -60,16 +60,16 @@ class RightFragment : Fragment(), StoryListener {
     ): View {
         loader = createLoader(requireActivity())
         showLoader(loader,"")
-        _fragBinding = FragmentRightBinding.inflate(inflater, container, false)
+        _fragBinding = FragmentLeftBinding.inflate(inflater, container, false)
         val root = fragBinding.root
 
-        fragBinding.recyclerViewRight.layoutManager = activity?.let { LinearLayoutManager(it) }
+        fragBinding.recyclerViewLeft.layoutManager = activity?.let { LinearLayoutManager(it) }
         activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.bong)
         MobileAds.initialize(this.context!!) {}
         val fab = activity?.findViewById<FloatingActionButton>(R.id.fab)
         val bot = activity?.findViewById<BottomNavigationView>(R.id.bottom_nav)
         fab?.visibility = View.INVISIBLE
-        fragBinding.recyclerViewRight.addOnScrollListener (object : RecyclerView.OnScrollListener(){
+        fragBinding.recyclerViewLeft.addOnScrollListener (object : RecyclerView.OnScrollListener(){
             var y = 0
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 y = dy
@@ -88,26 +88,26 @@ class RightFragment : Fragment(), StoryListener {
             }
         })
         fab!!.setOnClickListener {
-            fragBinding.recyclerViewRight.smoothScrollToPosition(0)
+            fragBinding.recyclerViewLeft.smoothScrollToPosition(0)
             bot!!.visibility = View.VISIBLE
         }
 
-        rightViewModel.observableRightList.observe(viewLifecycleOwner) { story ->
+        leftViewModel.observableLeftList.observe(viewLifecycleOwner) { story ->
             story?.let {
                 render(story as ArrayList<StoryModel>)
                 checkSwipeRefresh()
             }
             hideLoader(loader)
-            if(fragBinding.recyclerViewRight.adapter!!.itemCount == 0 && searching != null){
+            if(fragBinding.recyclerViewLeft.adapter!!.itemCount == 0 && searching != null){
                 val st = ArrayList<StoryModel>()
                 st.add(StoryModel(title="1"))
-                fragBinding.recyclerViewRight.adapter = EmptyAdapter(st, this)
-                state?.let { fragBinding.recyclerViewRight.layoutManager?.onRestoreInstanceState(it) }
+                fragBinding.recyclerViewLeft.adapter = EmptyAdapter(st, this)
+                state?.let { fragBinding.recyclerViewLeft.layoutManager?.onRestoreInstanceState(it) }
             }
-            else if(fragBinding.recyclerViewRight.adapter!!.itemCount == 0){
+            else if(fragBinding.recyclerViewLeft.adapter!!.itemCount == 0){
                 fragBinding.creepy.visibility = View.VISIBLE
             }
-            if (fragBinding.recyclerViewRight.adapter!!.itemCount > 0)
+            if (fragBinding.recyclerViewLeft.adapter!!.itemCount > 0)
                 fragBinding.creepy.visibility = View.INVISIBLE
             Glide.with(this).load(R.drawable.bidenlost).into(fragBinding.imageView2)
             val datenow = StoryManager.getDate(day)
@@ -115,7 +115,7 @@ class RightFragment : Fragment(), StoryListener {
             fragBinding.larrow.setOnClickListener {
                 showLoader(loader,"")
                 day += 1
-                rightViewModel.load(day)
+                leftViewModel.load(day)
             }
             fragBinding.rarrow.setOnClickListener {
                 showLoader(loader,"")
@@ -123,7 +123,7 @@ class RightFragment : Fragment(), StoryListener {
                 if (day <= 0 ){
                     day = 0
                 }
-                rightViewModel.load(day)
+                leftViewModel.load(day)
             }
 
         }
@@ -138,12 +138,12 @@ class RightFragment : Fragment(), StoryListener {
             if (day <= 0 ){
                 day = 0
             }
-            rightViewModel.load(day)
+            leftViewModel.load(day)
         }
         if( item.itemId == R.id.app_bar_left) {
             showLoader(loader,"")
             day += 1
-            rightViewModel.load(day)
+            leftViewModel.load(day)
         }
         return super.onOptionsItemSelected(item)
     }
@@ -152,8 +152,8 @@ class RightFragment : Fragment(), StoryListener {
     private fun setSwipeRefresh() {
         fragBinding.swipe.setOnRefreshListener {
             fragBinding.swipe.isRefreshing = true
-            state = fragBinding.recyclerViewRight.layoutManager?.onSaveInstanceState()
-            rightViewModel.load(day)
+            state = fragBinding.recyclerViewLeft.layoutManager?.onSaveInstanceState()
+            leftViewModel.load(day)
         }
     }
 
@@ -185,18 +185,18 @@ class RightFragment : Fragment(), StoryListener {
             override fun onQueryTextChange(newText: String?): Boolean {
                 if (newText != null) {
                     searching = newText
-                    rightViewModel.search(
+                    leftViewModel.search(
                         day,
                         newText
                     )
                 }
                 else{
                     searching = newText
-                    rightViewModel.load(day)
+                    leftViewModel.load(day)
                 }
                 if (newText == "") {
                     searching = newText
-                    rightViewModel.load(day)
+                    leftViewModel.load(day)
                 }
 
                 return true
@@ -204,7 +204,7 @@ class RightFragment : Fragment(), StoryListener {
         })
         searchView.setOnCloseListener {
             searching = null
-            rightViewModel.load(day)
+            leftViewModel.load(day)
             false
         }
         super.onCreateOptionsMenu(menu, inflater)
@@ -212,25 +212,25 @@ class RightFragment : Fragment(), StoryListener {
 
 
     private fun render(storyList: ArrayList<StoryModel>) {
-        fragBinding.recyclerViewRight.adapter = StoryAdapter(storyList, this)
-        state?.let { fragBinding.recyclerViewRight.layoutManager?.onRestoreInstanceState(it) }
+        fragBinding.recyclerViewLeft.adapter = StoryAdapter(storyList, this)
+        state?.let { fragBinding.recyclerViewLeft.layoutManager?.onRestoreInstanceState(it) }
     }
 
 
     override fun onResume() {
-        rightViewModel.load(day)
+        leftViewModel.load(day)
         super.onResume()
     }
 
     override fun onPause() {
-        state = fragBinding.recyclerViewRight.layoutManager?.onSaveInstanceState()
+        state = fragBinding.recyclerViewLeft.layoutManager?.onSaveInstanceState()
         super.onPause()
     }
 
     override fun onStoryClick(story: StoryModel) {
         StoryManager.create(loggedInViewModel.liveFirebaseUser.value!!.uid,"history", story)
         val intent = Intent(Intent.ACTION_VIEW).setData(Uri.parse(story.link))
-        state = fragBinding.recyclerViewRight.layoutManager?.onSaveInstanceState()
+        state = fragBinding.recyclerViewLeft.layoutManager?.onSaveInstanceState()
         startActivity(intent)
     }
 
@@ -259,7 +259,7 @@ class RightFragment : Fragment(), StoryListener {
         }
 
         val shareIntent = Intent.createChooser(sendIntent, null)
-        state = fragBinding.recyclerViewRight.layoutManager?.onSaveInstanceState()
+        state = fragBinding.recyclerViewLeft.layoutManager?.onSaveInstanceState()
         startActivity(shareIntent)
     }
     override fun onDestroyView() {
