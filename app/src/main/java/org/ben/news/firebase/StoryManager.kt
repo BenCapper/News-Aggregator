@@ -77,6 +77,7 @@ object StoryManager : StoryStore {
                 })
     }
 
+
     override fun findAllDouble(date: String, storyList: MutableLiveData<List<DoubleStoryModel>>) {
 
         val totalList = ArrayList<DoubleStoryModel>()
