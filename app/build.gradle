@@ -19,8 +19,8 @@ android {
         applicationId "org.ben.news"
         minSdk 30
         targetSdk 32
-        versionCode 5
-        versionName '5'
+        versionCode 6
+        versionName '6'
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -51,6 +51,8 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.5.0'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.0'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
+    implementation 'com.flurry.android:analytics:13.3.0@aar'
+    implementation 'com.my.target:mytarget-sdk:5.15.0'
 
     implementation 'androidx.recyclerview:recyclerview:1.2.1'
     implementation "androidx.recyclerview:recyclerview:1.3.0-beta01"
