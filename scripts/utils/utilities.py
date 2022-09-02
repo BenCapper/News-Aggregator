@@ -7,7 +7,7 @@ from bs4 import BeautifulSoup
 from difflib import SequenceMatcher
 from firebase_admin import credentials, db
 from datetime import datetime
- 
+from datetime import date
  
 def logFolder(log_folder_path):
    if os.path.exists(log_folder_path):
@@ -209,3 +209,7 @@ def formatDate(date):
        day = f"0{day}"
    year = date[2][2:]
    return f"{month}-{day}-{year}"
+
+def todayDate():
+    today = date.today()
+    return today.strftime("%m-%d-%y")
