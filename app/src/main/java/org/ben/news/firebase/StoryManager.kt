@@ -65,7 +65,7 @@ object StoryManager : StoryStore {
                         children.forEach {
                             val story = it.getValue(StoryModel::class.java)
                             if (story?.outlet !in dont_show) {
-                                    story?.title?.let { it -> formatTitle(it) }.toString()
+                                story?.title = story?.title?.let { it -> formatTitle(it) }.toString()
                                 todayList.add(story!!)
                             }
                         }
@@ -150,7 +150,7 @@ object StoryManager : StoryStore {
                             ) {
                                 val story = it.getValue(StoryModel::class.java)
                                 if (story?.outlet !in dont_show) {
-                                        story?.title?.let { it -> formatTitle(it) }.toString()
+                                    story?.title = story?.title?.let { it -> formatTitle(it) }.toString()
                                     todayList.add(story!!)
                                 }
                             }
