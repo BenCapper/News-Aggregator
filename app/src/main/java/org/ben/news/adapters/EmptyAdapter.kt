@@ -1,19 +1,13 @@
 package org.ben.news.adapters
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.google.android.gms.ads.AdLoader
-import com.google.android.gms.ads.AdRequest
-import com.google.android.gms.ads.nativead.NativeAd
 import org.ben.news.R
-import org.ben.news.databinding.CardAdBinding
 import org.ben.news.databinding.CardEmptyBinding
 import org.ben.news.models.StoryModel
-import timber.log.Timber
-import kotlin.math.roundToInt
+
 
 class EmptyAdapter constructor(
     private var stories: ArrayList<StoryModel>,

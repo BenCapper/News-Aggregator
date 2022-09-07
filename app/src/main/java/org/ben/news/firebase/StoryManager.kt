@@ -15,7 +15,7 @@ import kotlin.collections.ArrayList
 object StoryManager : StoryStore {
 
     var database: DatabaseReference = FirebaseDatabase.getInstance().reference
-    val dont_show = listOf("www.OANN.com", "www.BoundingIntoComics.com", "www.AmericanThinker.com")
+    val dont_show = listOf("www.OANN.com", "BoundingIntoComics.com","www.BoundingIntoComics.com", "www.AmericanThinker.com")
 
 
     fun getDate(n:Int): String{
