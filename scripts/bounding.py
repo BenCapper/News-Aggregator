@@ -18,7 +18,7 @@ page_url = "https://www.boundingintocomics.com"
 img_path = "/home/bencapper/src/News/Bounding"
 storage_path = "https://firebasestorage.googleapis.com/v0/b/news-a3e22.appspot.com/o"
 db_path = "stories"
-outlet = "www.BoundingIntoComics.com"
+outlet = "BoundingIntoComics.com"
 
 # Set Local Folders
 logFolder(log_folder_path)

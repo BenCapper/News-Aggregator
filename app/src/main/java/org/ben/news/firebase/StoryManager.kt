@@ -15,7 +15,7 @@ import kotlin.collections.ArrayList
 object StoryManager : StoryStore {
 
     var database: DatabaseReference = FirebaseDatabase.getInstance().reference
-    val dont_show = listOf("www.OANN.com", "www.BoundingIntoComics.com", "www.AmericanThinker.com")
+    val dont_show = listOf("www.OANN.com", "BoundingIntoComics.com","www.BoundingIntoComics.com", "www.AmericanThinker.com")
 
 
     fun getDate(n:Int): String{
@@ -65,7 +65,7 @@ object StoryManager : StoryStore {
                         children.forEach {
                             val story = it.getValue(StoryModel::class.java)
                             if (story?.outlet !in dont_show) {
-                                    story?.title?.let { it -> formatTitle(it) }.toString()
+                                story?.title = story?.title?.let { it -> formatTitle(it) }.toString()
                                 todayList.add(story!!)
                             }
                         }
@@ -150,7 +150,7 @@ object StoryManager : StoryStore {
                             ) {
                                 val story = it.getValue(StoryModel::class.java)
                                 if (story?.outlet !in dont_show) {
-                                        story?.title?.let { it -> formatTitle(it) }.toString()
+                                    story?.title = story?.title?.let { it -> formatTitle(it) }.toString()
                                     todayList.add(story!!)
                                 }
                             }
