@@ -43,6 +43,7 @@ class LeftFragment : Fragment(), StoryListener {
     lateinit var loader : AlertDialog
     private val loggedInViewModel : LoggedInViewModel by activityViewModels()
     private val leftViewModel: LeftViewModel by activityViewModels()
+    var shuffle: Boolean? = null
     var state: Parcelable? = null
     var day = 0
     var searching: String? = null
@@ -64,7 +65,7 @@ class LeftFragment : Fragment(), StoryListener {
         val root = fragBinding.root
 
         fragBinding.recyclerViewLeft.layoutManager = activity?.let { LinearLayoutManager(it) }
-        activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.left)
+        activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.left11)
         MobileAds.initialize(this.requireContext()) {}
         val fab = activity?.findViewById<FloatingActionButton>(R.id.fab)
         val bot = activity?.findViewById<BottomNavigationView>(R.id.bottom_nav)
@@ -132,6 +133,12 @@ class LeftFragment : Fragment(), StoryListener {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.app_bar_shuffle) {
+            showLoader(loader,"")
+            leftViewModel.loadShuffle(day)
+            shuffle = true
+            state = null
+        }
         if( item.itemId == R.id.app_bar_right) {
             if(day != 0) {
                 showLoader(loader, "")
@@ -167,7 +174,7 @@ class LeftFragment : Fragment(), StoryListener {
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.menu_all, menu)
+        inflater.inflate(R.menu.menu_home, menu)
         when (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) {
             Configuration.UI_MODE_NIGHT_YES -> {
                 menu.findItem(R.id.app_bar_right).iconTintList = null

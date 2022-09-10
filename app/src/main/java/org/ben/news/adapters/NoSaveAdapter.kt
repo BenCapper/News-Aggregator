@@ -132,6 +132,7 @@ class NoSaveAdapter constructor(private var stories: ArrayList<StoryModel>, priv
             binding.button3Nosave.setOnClickListener { listener.onShare(story) }
             binding.root.tag = story
             binding.story = story
+            Glide.with(this.itemView.context).load(story.storage_link).into(binding.imageViewNosave)
             binding.executePendingBindings()
         }
 

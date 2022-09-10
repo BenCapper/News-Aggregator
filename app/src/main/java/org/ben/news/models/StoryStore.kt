@@ -6,6 +6,7 @@ interface StoryStore {
     fun findAll(date: String, storyList: MutableLiveData<List<StoryModel>>)
     fun findAllDouble(date: String, storyList: MutableLiveData<List<DoubleStoryModel>>)
     fun findAllShuffle(date: String, storyList: MutableLiveData<List<StoryModel>>)
+    fun findRightShuffle(outlets: List<String>, date: String, storyList: MutableLiveData<List<StoryModel>>)
     fun find(userId: String, path:String, storyList: MutableLiveData<List<StoryModel>>)
     fun find(date: String, userId: String, path:String, storyList: MutableLiveData<List<StoryModel>>)
     fun findByOutlet(date: String, outlet: String, storyList: MutableLiveData<List<StoryModel>>)
