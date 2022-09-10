@@ -134,18 +134,21 @@ class ConflictFragment : Fragment(), DoubleStoryListener, StoryListener {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if( item.itemId == R.id.app_bar_right) {
-            showLoader(loader,"")
-            day -= 1
-            if (day <= 0 ){
-                day = 0
+            if(day != 0) {
+                showLoader(loader, "")
+                day -= 1
+                if (day <= 0) {
+                    day = 0
+                }
+                conViewModel.load(day)
             }
-            conViewModel.load(day)
-
         }
         if( item.itemId == R.id.app_bar_left) {
-            showLoader(loader,"")
-            day += 1
-            conViewModel.load(day)
+            if (day < 30) {
+                showLoader(loader, "")
+                day += 1
+                conViewModel.load(day)
+            }
         }
         return super.onOptionsItemSelected(item)
     }

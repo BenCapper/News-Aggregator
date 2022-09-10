@@ -137,17 +137,21 @@ class BreitbartFragment : Fragment(), StoryListener {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if( item.itemId == R.id.app_bar_right) {
-            showLoader(loader,"")
-            day -= 1
-            if (day <= 0 ){
-                day = 0
+            if(day != 0) {
+                showLoader(loader, "")
+                day -= 1
+                if (day <= 0) {
+                    day = 0
+                }
+                breitbartViewModel.load(day)
             }
-            breitbartViewModel.load(day)
         }
         if( item.itemId == R.id.app_bar_left) {
-            showLoader(loader,"")
-            day += 1
-            breitbartViewModel.load(day)
+            if (day < 30) {
+                showLoader(loader, "")
+                day += 1
+                breitbartViewModel.load(day)
+            }
         }
         return super.onOptionsItemSelected(item)
     }
