@@ -1,5 +1,6 @@
 package org.ben.news.ui.storyList
 
+import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Intent
 import android.content.res.Configuration
@@ -58,6 +59,7 @@ class StoryListFragment : Fragment(), StoryListener {
         setHasOptionsMenu(true)
     }
 
+    @SuppressLint("CutPasteId")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -70,7 +72,7 @@ class StoryListFragment : Fragment(), StoryListener {
 
         fragBinding.recyclerView.layoutManager = activity?.let { LinearLayoutManager(it) }
         activity?.findViewById<BottomNavigationView>(R.id.bottom_nav)?.itemIconTintList = null
-        MobileAds.initialize(this.context!!) {}
+        MobileAds.initialize(this.requireContext()) {}
         val fab = activity?.findViewById<FloatingActionButton>(R.id.fab)
         val bot = activity?.findViewById<BottomNavigationView>(R.id.bottom_nav)
 
