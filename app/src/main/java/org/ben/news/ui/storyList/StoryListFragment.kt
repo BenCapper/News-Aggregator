@@ -216,17 +216,21 @@ class StoryListFragment : Fragment(), StoryListener {
             state = null
         }
         if( item.itemId == R.id.app_bar_r) {
-            showLoader(loader,"")
-            day -= 1
-            if (day <= 0 ){
-                day = 0
+            if(day != 0) {
+                showLoader(loader, "")
+                day -= 1
+                if (day <= 0) {
+                    day = 0
+                }
+                storyListViewModel.load(day)
             }
-            storyListViewModel.load(day)
         }
         if( item.itemId == R.id.app_bar_l) {
-            showLoader(loader,"")
-            day += 1
-            storyListViewModel.load(day)
+            if (day < 30) {
+                showLoader(loader, "")
+                day += 1
+                storyListViewModel.load(day)
+            }
         }
 
         return super.onOptionsItemSelected(item)
