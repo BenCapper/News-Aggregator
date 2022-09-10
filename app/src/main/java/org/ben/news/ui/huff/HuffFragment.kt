@@ -67,7 +67,7 @@ class HuffFragment : Fragment(), StoryListener {
 
         fragBinding.recyclerViewHuff.layoutManager = activity?.let { LinearLayoutManager(it) }
         activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.huff)
-        MobileAds.initialize(this.context!!) {}
+        MobileAds.initialize(this.requireContext()) {}
         val fab = activity?.findViewById<FloatingActionButton>(R.id.fab)
         val bot = activity?.findViewById<BottomNavigationView>(R.id.bottom_nav)
         fab?.visibility = View.INVISIBLE
