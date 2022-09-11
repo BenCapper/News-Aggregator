@@ -19,8 +19,8 @@ android {
         applicationId "org.ben.news"
         minSdk 30
         targetSdk 32
-        versionCode 9
-        versionName '9'
+        versionCode 10
+        versionName '10'
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -65,7 +65,6 @@ dependencies {
     implementation 'com.jakewharton.timber:timber:5.0.1'
     implementation 'com.squareup.picasso:picasso:2.71828'
     implementation 'com.makeramen:roundedimageview:2.3.0'
-    implementation 'org.jsoup:jsoup:1.15.2'
     implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.24'
 
     implementation 'com.google.android.material:material:1.6.1'

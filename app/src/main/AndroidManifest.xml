@@ -42,7 +42,6 @@
             android:exported="true"
             android:windowSoftInputMode="adjustPan" >
         </activity>
-        <activity android:name="com.my.target.common.MyTargetActivity" android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"/>
     </application>
 
 </manifest>
