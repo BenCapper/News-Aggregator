@@ -122,17 +122,21 @@ class StoryListFragment : Fragment(), StoryListener {
                 val datenow = StoryManager.getDate(day)
                 fragBinding.emptydate.text = datenow
                 fragBinding.larrow.setOnClickListener {
-                    showLoader(loader,"")
-                    day += 1
-                    storyListViewModel.load(day)
+                    if (day < 30) {
+                        showLoader(loader, "")
+                        day += 1
+                        storyListViewModel.load(day)
+                    }
                 }
                 fragBinding.rarrow.setOnClickListener {
-                    showLoader(loader,"")
-                    day -= 1
-                    if (day <= 0 ){
-                        day = 0
+                    if (day != 0) {
+                        showLoader(loader, "")
+                        day -= 1
+                        if (day <= 0) {
+                            day = 0
+                        }
+                        storyListViewModel.load(day)
                     }
-                    storyListViewModel.load(day)
                 }
         }
         setSwipeRefresh()

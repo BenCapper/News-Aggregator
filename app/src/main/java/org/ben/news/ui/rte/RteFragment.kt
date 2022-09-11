@@ -115,9 +115,11 @@ class RteFragment : Fragment(), StoryListener {
                 val datenow = StoryManager.getDate(day)
                 fragBinding.emptydate.text = datenow
                 fragBinding.larrow.setOnClickListener {
-                    showLoader(loader,"")
-                    day += 1
-                    rteViewModel.load(day)
+                    if (day < 30) {
+                        showLoader(loader, "")
+                        day += 1
+                        rteViewModel.load(day)
+                    }
                 }
                 fragBinding.rarrow.setOnClickListener {
                     showLoader(loader,"")

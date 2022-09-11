@@ -117,9 +117,11 @@ class LikedListFragment : Fragment(), StoryNoSaveListener, StoryListener {
                 val datenow = StoryManager.getDate(day)
                 fragBinding.emptydate.text = datenow
                 fragBinding.larrow.setOnClickListener {
-                    showLoader(loader,"")
-                    day += 1
-                    likedListViewModel.load(day)
+                    if (day < 30) {
+                        showLoader(loader, "")
+                        day += 1
+                        likedListViewModel.load(day)
+                    }
                 }
                 fragBinding.rarrow.setOnClickListener {
                     showLoader(loader,"")
