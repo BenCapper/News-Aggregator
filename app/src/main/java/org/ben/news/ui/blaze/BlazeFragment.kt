@@ -69,7 +69,7 @@ class BlazeFragment : Fragment(), StoryListener {
 
         fragBinding.recyclerViewBlaze.layoutManager = activity?.let { LinearLayoutManager(it) }
         activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.blaze)
-        MobileAds.initialize(this.context!!) {}
+        MobileAds.initialize(this.requireContext()) {}
         val fab = activity?.findViewById<FloatingActionButton>(R.id.fab)
         val bot = activity?.findViewById<BottomNavigationView>(R.id.bottom_nav)
         fab?.visibility = View.INVISIBLE
@@ -117,9 +117,11 @@ class BlazeFragment : Fragment(), StoryListener {
                 val datenow = StoryManager.getDate(day)
                 fragBinding.emptydate.text = datenow
                 fragBinding.larrow.setOnClickListener {
-                    showLoader(loader,"")
-                    day += 1
-                    blazeViewModel.load(day)
+                    if (day < 30) {
+                        showLoader(loader, "")
+                        day += 1
+                        blazeViewModel.load(day)
+                    }
                 }
                 fragBinding.rarrow.setOnClickListener {
                     showLoader(loader,"")
@@ -138,17 +140,21 @@ class BlazeFragment : Fragment(), StoryListener {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if( item.itemId == R.id.app_bar_right) {
-            showLoader(loader,"")
-            day -= 1
-            if (day <= 0 ){
-                day = 0
+            if(day != 0) {
+                showLoader(loader, "")
+                day -= 1
+                if (day <= 0) {
+                    day = 0
+                }
+                blazeViewModel.load(day)
             }
-            blazeViewModel.load(day)
         }
         if( item.itemId == R.id.app_bar_left) {
-            showLoader(loader,"")
-            day += 1
-            blazeViewModel.load(day)
+            if (day < 30) {
+                showLoader(loader, "")
+                day += 1
+                blazeViewModel.load(day)
+            }
         }
         return super.onOptionsItemSelected(item)
     }

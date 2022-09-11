@@ -43,6 +43,7 @@ class RightFragment : Fragment(), StoryListener {
     lateinit var loader : AlertDialog
     private val loggedInViewModel : LoggedInViewModel by activityViewModels()
     private val rightViewModel: RightViewModel by activityViewModels()
+    var shuffle: Boolean? = null
     var state: Parcelable? = null
     var day = 0
     var searching: String? = null
@@ -64,8 +65,8 @@ class RightFragment : Fragment(), StoryListener {
         val root = fragBinding.root
 
         fragBinding.recyclerViewRight.layoutManager = activity?.let { LinearLayoutManager(it) }
-        activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.right)
-        MobileAds.initialize(this.context!!) {}
+        activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.right11)
+        MobileAds.initialize(this.requireContext()) {}
         val fab = activity?.findViewById<FloatingActionButton>(R.id.fab)
         val bot = activity?.findViewById<BottomNavigationView>(R.id.bottom_nav)
         fab?.visibility = View.INVISIBLE
@@ -113,9 +114,11 @@ class RightFragment : Fragment(), StoryListener {
             val datenow = StoryManager.getDate(day)
             fragBinding.emptydate.text = datenow
             fragBinding.larrow.setOnClickListener {
-                showLoader(loader,"")
-                day += 1
-                rightViewModel.load(day)
+                if (day < 30) {
+                    showLoader(loader, "")
+                    day += 1
+                    rightViewModel.load(day)
+                }
             }
             fragBinding.rarrow.setOnClickListener {
                 showLoader(loader,"")
@@ -132,18 +135,28 @@ class RightFragment : Fragment(), StoryListener {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if( item.itemId == R.id.app_bar_right) {
+        if (item.itemId == R.id.app_bar_shuffle) {
             showLoader(loader,"")
-            day -= 1
-            if (day <= 0 ){
-                day = 0
+            rightViewModel.loadShuffle(day)
+            shuffle = true
+            state = null
+        }
+        if( item.itemId == R.id.app_bar_right) {
+            if(day != 0) {
+                showLoader(loader, "")
+                day -= 1
+                if (day <= 0) {
+                    day = 0
+                }
+                rightViewModel.load(day)
             }
-            rightViewModel.load(day)
         }
         if( item.itemId == R.id.app_bar_left) {
-            showLoader(loader,"")
-            day += 1
-            rightViewModel.load(day)
+            if (day < 30) {
+                showLoader(loader, "")
+                day += 1
+                rightViewModel.load(day)
+            }
         }
         return super.onOptionsItemSelected(item)
     }
@@ -163,7 +176,7 @@ class RightFragment : Fragment(), StoryListener {
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.menu_all, menu)
+        inflater.inflate(R.menu.menu_home, menu)
         when (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) {
             Configuration.UI_MODE_NIGHT_YES -> {
                 menu.findItem(R.id.app_bar_right).iconTintList = null

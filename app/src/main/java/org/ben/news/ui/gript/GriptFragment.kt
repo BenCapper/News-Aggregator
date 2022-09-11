@@ -68,7 +68,7 @@ class GriptFragment : Fragment(), StoryListener {
 
         fragBinding.recyclerViewGript.layoutManager = activity?.let { LinearLayoutManager(it) }
         activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.gript)
-        MobileAds.initialize(this.context!!) {}
+        MobileAds.initialize(this.requireContext()) {}
         val fab = activity?.findViewById<FloatingActionButton>(R.id.fab)
         val bot = activity?.findViewById<BottomNavigationView>(R.id.bottom_nav)
         fab?.visibility = View.INVISIBLE
@@ -118,9 +118,11 @@ class GriptFragment : Fragment(), StoryListener {
                 val datenow = StoryManager.getDate(day)
                 fragBinding.emptydate.text = datenow
                 fragBinding.larrow.setOnClickListener {
-                    showLoader(loader,"")
-                    day += 1
-                    griptViewModel.load(day)
+                    if (day < 30) {
+                        showLoader(loader, "")
+                        day += 1
+                        griptViewModel.load(day)
+                    }
                 }
                 fragBinding.rarrow.setOnClickListener {
                     showLoader(loader,"")
@@ -199,18 +201,21 @@ class GriptFragment : Fragment(), StoryListener {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if( item.itemId == R.id.app_bar_right) {
-            showLoader(loader,"")
-            day -= 1
-            if (day <= 0 ){
-                day = 0
+            if(day != 0) {
+                showLoader(loader, "")
+                day -= 1
+                if (day <= 0) {
+                    day = 0
+                }
+                griptViewModel.load(day)
             }
-            griptViewModel.load(day)
-
         }
         if( item.itemId == R.id.app_bar_left) {
-            showLoader(loader,"")
-            day += 1
-            griptViewModel.load(day)
+            if (day < 30) {
+                showLoader(loader, "")
+                day += 1
+                griptViewModel.load(day)
+            }
         }
         return super.onOptionsItemSelected(item)
 

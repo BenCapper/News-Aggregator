@@ -69,7 +69,7 @@ class CanFragment : Fragment(), StoryListener {
 
         fragBinding.recyclerViewCan.layoutManager = activity?.let { LinearLayoutManager(it) }
         activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.ca)
-        MobileAds.initialize(this.context!!) {}
+        MobileAds.initialize(this.requireContext()) {}
         val fab = activity?.findViewById<FloatingActionButton>(R.id.fab)
         val bot = activity?.findViewById<BottomNavigationView>(R.id.bottom_nav)
         fab?.visibility = View.INVISIBLE
@@ -118,9 +118,11 @@ class CanFragment : Fragment(), StoryListener {
                 val datenow = StoryManager.getDate(day)
                 fragBinding.emptydate.text = datenow
                 fragBinding.larrow.setOnClickListener {
-                    showLoader(loader,"")
-                    day += 1
-                    canViewModel.load(day)
+                    if (day < 30) {
+                        showLoader(loader, "")
+                        day += 1
+                        canViewModel.load(day)
+                    }
                 }
                 fragBinding.rarrow.setOnClickListener {
                     showLoader(loader,"")
@@ -199,17 +201,21 @@ class CanFragment : Fragment(), StoryListener {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if( item.itemId == R.id.app_bar_right) {
-            showLoader(loader,"")
-            day -= 1
-            if (day <= 0 ){
-                day = 0
+            if(day != 0) {
+                showLoader(loader, "")
+                day -= 1
+                if (day <= 0) {
+                    day = 0
+                }
+                canViewModel.load(day)
             }
-            canViewModel.load(day)
         }
         if( item.itemId == R.id.app_bar_left) {
-            showLoader(loader,"")
-            day += 1
-            canViewModel.load(day)
+            if (day < 30) {
+                showLoader(loader, "")
+                day += 1
+                canViewModel.load(day)
+            }
         }
         return super.onOptionsItemSelected(item)
 

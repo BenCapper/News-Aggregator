@@ -1,5 +1,6 @@
 package org.ben.news.ui.storyList
 
+import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Intent
 import android.content.res.Configuration
@@ -58,6 +59,7 @@ class StoryListFragment : Fragment(), StoryListener {
         setHasOptionsMenu(true)
     }
 
+    @SuppressLint("CutPasteId")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -70,7 +72,7 @@ class StoryListFragment : Fragment(), StoryListener {
 
         fragBinding.recyclerView.layoutManager = activity?.let { LinearLayoutManager(it) }
         activity?.findViewById<BottomNavigationView>(R.id.bottom_nav)?.itemIconTintList = null
-        MobileAds.initialize(this.context!!) {}
+        MobileAds.initialize(this.requireContext()) {}
         val fab = activity?.findViewById<FloatingActionButton>(R.id.fab)
         val bot = activity?.findViewById<BottomNavigationView>(R.id.bottom_nav)
 
@@ -120,17 +122,21 @@ class StoryListFragment : Fragment(), StoryListener {
                 val datenow = StoryManager.getDate(day)
                 fragBinding.emptydate.text = datenow
                 fragBinding.larrow.setOnClickListener {
-                    showLoader(loader,"")
-                    day += 1
-                    storyListViewModel.load(day)
+                    if (day < 30) {
+                        showLoader(loader, "")
+                        day += 1
+                        storyListViewModel.load(day)
+                    }
                 }
                 fragBinding.rarrow.setOnClickListener {
-                    showLoader(loader,"")
-                    day -= 1
-                    if (day <= 0 ){
-                        day = 0
+                    if (day != 0) {
+                        showLoader(loader, "")
+                        day -= 1
+                        if (day <= 0) {
+                            day = 0
+                        }
+                        storyListViewModel.load(day)
                     }
-                    storyListViewModel.load(day)
                 }
         }
         setSwipeRefresh()
@@ -214,17 +220,21 @@ class StoryListFragment : Fragment(), StoryListener {
             state = null
         }
         if( item.itemId == R.id.app_bar_r) {
-            showLoader(loader,"")
-            day -= 1
-            if (day <= 0 ){
-                day = 0
+            if(day != 0) {
+                showLoader(loader, "")
+                day -= 1
+                if (day <= 0) {
+                    day = 0
+                }
+                storyListViewModel.load(day)
             }
-            storyListViewModel.load(day)
         }
         if( item.itemId == R.id.app_bar_l) {
-            showLoader(loader,"")
-            day += 1
-            storyListViewModel.load(day)
+            if (day < 30) {
+                showLoader(loader, "")
+                day += 1
+                storyListViewModel.load(day)
+            }
         }
 
         return super.onOptionsItemSelected(item)

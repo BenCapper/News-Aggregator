@@ -132,6 +132,34 @@ object StoryManager : StoryStore {
                 })
     }
 
+    override fun findRightShuffle(outlets: List<String>, date: String, storyList: MutableLiveData<List<StoryModel>>) {
+
+        val totalList = ArrayList<StoryModel>()
+        val todayList = mutableListOf<StoryModel>()
+        database.child("stories").child(date)
+            .addValueEventListener(object : ValueEventListener {
+                override fun onCancelled(error: DatabaseError) {
+                    Timber.i("Firebase error : ${error.message}")
+                }
+
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val children = snapshot.children
+                    children.forEach {
+                        val story = it.getValue(StoryModel::class.java)
+                        if(story?.outlet in outlets) {
+                            story?.title = story?.title?.let { it -> formatTitle(it) }.toString()
+                            todayList.add(story!!)
+                        }
+                    }
+                    todayList.shuffle()
+                    database.child("stories").child(date)
+                        .removeEventListener(this)
+                    totalList.addAll(todayList)
+                    storyList.value = totalList
+                }
+            })
+    }
+
     override fun search(term: String, date: String, storyList: MutableLiveData<List<StoryModel>>) {
         val totalList = ArrayList<StoryModel>()
             var todayList = mutableListOf<StoryModel>()

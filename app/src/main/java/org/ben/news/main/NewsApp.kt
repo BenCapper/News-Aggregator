@@ -6,8 +6,6 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO
 import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES
 import androidx.preference.PreferenceManager
-import com.flurry.android.FlurryAgent
-import com.flurry.android.FlurryPerformance
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.ktx.Firebase
@@ -24,11 +22,6 @@ class NewsApp : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        FlurryAgent.Builder()
-            .withLogEnabled(true)
-            .withIncludeBackgroundSessionsInMetrics(true)
-            .withPerformanceMetrics(FlurryPerformance.ALL)
-            .build(this, "G8H5V4RMMBP9NMG6YXB9")
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
         val night = sharedPreferences.contains("night_mode")
         if (night){

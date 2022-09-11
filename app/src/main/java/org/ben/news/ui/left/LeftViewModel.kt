@@ -54,4 +54,15 @@ class LeftViewModel : ViewModel() {
         }
     }
 
+    fun loadShuffle(day:Int) {
+        try {
+            val dates = StoryManager.getDate(day)
+            StoryManager.findRightShuffle(outlet,dates,leftList)
+            Timber.i("Load Success : ${leftList.value}")
+        }
+        catch (e: Exception) {
+            Timber.i("Load Error : $e.message")
+        }
+    }
+
 }
