@@ -4,8 +4,8 @@ import requests
 from bs4 import BeautifulSoup
 from firebase_admin import storage
 from utils.utilities import (formatDate, imgFolder, imgTitleFormat, initialise, jsonFolder, dumpJson, appendJson,
-                           logFolder, pageSoup, pushToDB, titleFormat, similar,getHour)
-
+                           todayDate,logFolder, pageSoup, pushToDB, titleFormat, similar,getHour)
+td = todayDate()
 # Set Global Variables
 ref_list = []
 log_file_path = "/home/bencapper/src/News-Aggregator/scripts/log/euronewsdone.log"
@@ -16,7 +16,7 @@ json_path = "/home/bencapper/src/News-Aggregator/scripts/news.json"
 db_url = "https://news-a3e22-default-rtdb.firebaseio.com/"
 bucket = "news-a3e22.appspot.com"
 page_url = "https://www.euronews.com/news/international"
-img_path = "/home/bencapper/src/News/Euronews"
+img_path = f"/home/bencapper/src/News/Euronews/{td}"
 storage_path = "https://firebasestorage.googleapis.com/v0/b/news-a3e22.appspot.com/o"
 db_path = "stories"
 outlet = "www.Euronews.com"
@@ -94,7 +94,7 @@ for article in articles:
       if img is None:
           img_title = "eu.png"
           img_src = ""
-          storage_link = f"https://firebasestorage.googleapis.com/v0/b/news-a3e22.appspot.com/o/Euronews%2Feun.jpg?alt=media&token=1fc82731-59b7-41cb-b1e5-07f936a0322f"
+          storage_link = f"https://firebasestorage.googleapis.com/v0/b/news-a3e22.appspot.com/o/Euronews%2Feuronews.jpg?alt=media&token=a1edaad7-50f2-400f-bbbf-e89d56b7c9ee"
           
           # Check if an Article which is 80%+
           # Similar to any Other in the Log
@@ -176,13 +176,13 @@ for article in articles:
               # Upload image to Storage
               with open(f"{img_path}/{img_title}", "wb") as img:
                   img.write(requests.get(img_src).content)
-                  blob = bucket.blob(f"Euronews/{img_title}")
+                  blob = bucket.blob(f"Euronews/{td}/{img_title}")
                   token = uuid4()
                   metadata = {"firebaseStorageDownloadTokens": token}
                   blob.upload_from_filename(f"{img_path}/{img_title}")
 
                   # Get Link to the Stored Image
-                  storage_link = f"https://firebasestorage.googleapis.com/v0/b/news-a3e22.appspot.com/o/Euronews%2F{img_title}?alt=media&token={token}"
+                  storage_link = f"https://firebasestorage.googleapis.com/v0/b/news-a3e22.appspot.com/o/Euronews%2F{td}%2F{img_title}?alt=media&token={token}"
 
                   data = {
                    "title": title,

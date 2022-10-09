@@ -5,6 +5,7 @@ from bs4 import BeautifulSoup
 from firebase_admin import storage
 from utils.utilities import (formatDate, imgFolder, imgTitleFormat, initialise, jsonFolder, dumpJson, appendJson, pushToDbNoImg,
                           todayDate,logFolder, pageSoup, pushToDB, titleFormat, similar,getHour)
+td = todayDate()
 # Set Global Variables
 ref_list = []
 log_file_path = "/home/bencapper/src/News-Aggregator/scripts/log/boundingdone.log"
@@ -15,10 +16,10 @@ json_path = "/home/bencapper/src/News-Aggregator/scripts/news.json"
 db_url = "https://news-a3e22-default-rtdb.firebaseio.com/"
 bucket = "news-a3e22.appspot.com"
 page_url = "https://www.boundingintocomics.com"
-img_path = "/home/bencapper/src/News/Bounding"
+img_path = f"/home/bencapper/src/News/Bounding/{td}"
 storage_path = "https://firebasestorage.googleapis.com/v0/b/news-a3e22.appspot.com/o"
 db_path = "stories"
-outlet = "BoundingIntoComics.com"
+outlet = "www.BoundingIntoComics.com"
 
 # Set Local Folders
 logFolder(log_folder_path)
@@ -97,13 +98,13 @@ for article in articles:
             # Upload image to Storage
             with open(f"{img_path}/{img_title}", "wb") as img:
                 img.write(requests.get(img_src).content)
-                blob = bucket.blob(f"Bounding/{img_title}")
+                blob = bucket.blob(f"Bounding/{td}/{img_title}")
                 token = uuid4()
                 metadata = {"firebaseStorageDownloadTokens": token}
                 blob.upload_from_filename(f"{img_path}/{img_title}")
 
             # Get Link to the Stored Image
-            storage_link = f"https://firebasestorage.googleapis.com/v0/b/news-a3e22.appspot.com/o/Bounding%2F{img_title}?alt=media&token={token}"
+            storage_link = f"https://firebasestorage.googleapis.com/v0/b/news-a3e22.appspot.com/o/Bounding%2F{td}%2F{img_title}?alt=media&token={token}"
             data = {
                    "title": title,
                    "date": date,

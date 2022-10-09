@@ -23,5 +23,5 @@ python3 ~/src/News-Aggregator/scripts/timcast.py;
 python3 ~/src/News-Aggregator/scripts/vox.py;
 python3 ~/src/News-Aggregator/scripts/yahoo.py;
 python3 ~/src/News-Aggregator/scripts/zerohedge.py;
-python3 ~/src/News-Aggregator/scripts/breitbart.py;
+python3 ~/src/News-Aggregator/scripts/breit.py;
 python3 ~/src/News-Aggregator/scripts/doubles.py;

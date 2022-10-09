@@ -5,8 +5,8 @@ import requests
 from firebase_admin import storage
  
 from utils.utilities import (formatDate, imgFolder, imgTitleFormat, initialise, jsonFolder, dumpJson, appendJson,
-                            logFolder, pageSoup, pushToDB, titleFormat, similar,getHour)
-
+                            todayDate,logFolder, pageSoup, pushToDB, titleFormat, similar,getHour)
+td = todayDate()
 # Set Global Variables
 ref_list = []
 log_file_path = "/home/bencapper/src/News-Aggregator/scripts/log/griptdone.log"
@@ -17,7 +17,7 @@ json_path = "/home/bencapper/src/News-Aggregator/scripts/news.json"
 db_url = "https://news-a3e22-default-rtdb.firebaseio.com/"
 bucket = "news-a3e22.appspot.com"
 page_url = "https://gript.ie/news/"
-img_path = "/home/bencapper/src/News/Gript"
+img_path = f"/home/bencapper/src/News/Gript/{td}"
 storage_path = "https://firebasestorage.googleapis.com/v0/b/news-a3e22.appspot.com/o"
 db_path = "stories"
 outlet = "www.Gript.ie"
@@ -115,7 +115,7 @@ for article in articles:
            # Use Default   
            if img_link == "":
                img_title = "gript.jpg"
-               storage_link = f"https://firebasestorage.googleapis.com/v0/b/news-a3e22.appspot.com/o/Gript%2Fgript.png?alt=media&token=b3bc4822-64f6-4ade-8910-e8a509ff759b"
+               storage_link = f"https://firebasestorage.googleapis.com/v0/b/news-a3e22.appspot.com/o/Gript%2Fgript.png?alt=media&token=bfd4ac07-e089-4007-a3db-1bff3a932093"
 
                data = {
                    "title": title,
@@ -156,11 +156,11 @@ for article in articles:
               # Upload image to Storage
             with open(f"{img_path}/{img_title}", "wb") as img:
                 img.write(requests.get(img_link).content)
-                blob = bucket.blob(f"Gript/{img_title}")
+                blob = bucket.blob(f"Gript/{td}/{img_title}")
                 token = uuid4()
                 metadata = {"firebaseStorageDownloadTokens": token}
                 blob.upload_from_filename(f"{img_path}/{img_title}")   
-            storage_link = f"https://firebasestorage.googleapis.com/v0/b/news-a3e22.appspot.com/o/Gript%2F{img_title}?alt=media&token={token}"   
+            storage_link = f"https://firebasestorage.googleapis.com/v0/b/news-a3e22.appspot.com/o/Gript%2F{td}%2F{img_title}?alt=media&token={token}"   
                 
             data = {
                 "title": title,

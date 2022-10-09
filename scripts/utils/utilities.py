@@ -7,7 +7,7 @@ from bs4 import BeautifulSoup
 from difflib import SequenceMatcher
 from firebase_admin import credentials, db
 from datetime import datetime
-from datetime import date
+from datetime import date 
  
 def logFolder(log_folder_path):
    if os.path.exists(log_folder_path):

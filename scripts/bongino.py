@@ -55,8 +55,7 @@ articles = articles[:-8]
 cap_1 = articles[:8]
 cult_2 = articles[8:16]
 eco_3 = articles[16:24]
-swamp_4 = articles[24:31]
-glob_5 = articles[31:38]
+swamp_4 = articles[24:38]
 opin_6 = articles[38:45]
 ent_7 = articles[45:51]
 sport_8 = articles[51:57]
@@ -65,7 +64,7 @@ health_9 = articles[57:63]
 # Cycle through List just Gathered
 # And Save to DB or Pass due to Lack
 # of Information Available
-for article in articles:
+for article in swamp_4:
 
    # Catch all for a Litany of Possible Errors
    try:
@@ -112,7 +111,7 @@ for article in articles:
          # Site Links to Many News Sites
          # Can't Reliably Isolate Image Tag
          # Use Pre-Stored Default Image Instead
-         storage_link = f"https://firebasestorage.googleapis.com/v0/b/news-a3e22.appspot.com/o/Bongino%2Fbongino.jpg?alt=media&token=c347bc71-7d59-45bf-b1eb-a1f98ab0965f"
+         storage_link = f"https://firebasestorage.googleapis.com/v0/b/news-a3e22.appspot.com/o/Bongino%2Fbong.jpg?alt=media&token=a8f80ae8-5675-47d5-96f5-10b6a6dbdeeb"
 
          data = {
              "title": title,
