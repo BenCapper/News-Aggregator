@@ -67,7 +67,7 @@ for article in articles:
         dates.append(date[0])
         dates.append(date[2])
         date = formatDate(dates)
-        storage_link = "https://firebasestorage.googleapis.com/v0/b/news-a3e22.appspot.com/o/AmThinker%2Famthink.jpg?alt=media&token=bcb3f4db-4354-4f80-b5fb-e785b9aaa853"
+        storage_link = "https://firebasestorage.googleapis.com/v0/b/news-a3e22.appspot.com/o/AmThink%2Famthink.png?alt=media&token=49067977-74ea-4d50-8c70-cb99885ec0af"
 
         check = False
         for ref in ref_list:

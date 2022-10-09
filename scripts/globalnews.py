@@ -6,8 +6,8 @@ from bs4 import BeautifulSoup
 from firebase_admin import storage
  
 from utils.utilities import (formatDate, imgFolder, imgTitleFormat, initialise, jsonFolder, dumpJson, appendJson,
-                            logFolder, pageSoup, pushToDB, titleFormat, similar,getHour)
-
+                            todayDate,logFolder, pageSoup, pushToDB, titleFormat, similar,getHour)
+td = todayDate()
 # Set Global Variables
 ref_list = []
 log_file_path = "/home/bencapper/src/News-Aggregator/scripts/log/globaldone.log"
@@ -18,7 +18,7 @@ json_path = "/home/bencapper/src/News-Aggregator/scripts/news.json"
 db_url = "https://news-a3e22-default-rtdb.firebaseio.com/"
 bucket = "news-a3e22.appspot.com"
 page_url = "https://globalnews.ca/canada"
-img_path = "/home/bencapper/src/News/Global"
+img_path = f"/home/bencapper/src/News/Global/{td}"
 storage_path = "https://firebasestorage.googleapis.com/v0/b/news-a3e22.appspot.com/o"
 db_path = "stories"
 outlet = "www.GlobalNews.ca"
@@ -115,13 +115,13 @@ for article in articles:
             # Upload image to Storage
             with open(f"{img_path}/{img_title}", "wb") as img:
                 img.write(requests.get(img_src).content)
-                blob = bucket.blob(f"Global/{img_title}")
+                blob = bucket.blob(f"Global/{td}/{img_title}")
                 token = uuid4()
                 metadata = {"firebaseStorageDownloadTokens": token}
                 blob.upload_from_filename(f"{img_path}/{img_title}")
 
             # Get Link to the Stored Image
-            storage_link = f"https://firebasestorage.googleapis.com/v0/b/news-a3e22.appspot.com/o/Global%2F{img_title}?alt=media&token={token}"
+            storage_link = f"https://firebasestorage.googleapis.com/v0/b/news-a3e22.appspot.com/o/Global%2F{td}%2F{img_title}?alt=media&token={token}"
             data = {
                    "title": title,
                    "date": date,

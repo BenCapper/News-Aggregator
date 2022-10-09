@@ -7,8 +7,8 @@ from bs4 import BeautifulSoup
 from firebase_admin import storage
  
 from utils.utilities import (imgFolder, imgTitleFormat, initialise,jsonFolder, dumpJson, appendJson,
-                            logFolder, pageSoup, pushToDB, titleFormat, similar,getHour)
-
+                            todayDate,logFolder, pageSoup, pushToDB, titleFormat, similar,getHour)
+td = todayDate()
 # Set Global Variables
 ref_list = []
 token = ""
@@ -20,7 +20,7 @@ json_path = "/home/bencapper/src/News-Aggregator/scripts/news.json"
 db_url = "https://news-a3e22-default-rtdb.firebaseio.com/"
 bucket = "news-a3e22.appspot.com"
 page_url = "https://www.breitbart.com"
-img_path = "/home/bencapper/src/News/Breitbart"
+img_path = f"/home/bencapper/src/News/Breitbart/{td}"
 storage_path = "https://firebasestorage.googleapis.com/v0/b/news-a3e22.appspot.com/o"
 db_path = "stories"
 outlet = "www.Breitbart.com"
@@ -128,7 +128,7 @@ for article in articles:
             # Using Default Image
             if empty is True:
                 img_title = "bb.jpg"
-                storage_link = f"https://firebasestorage.googleapis.com/v0/b/news-a3e22.appspot.com/o/Breitbart%2Fbb.jpg?alt=media&token=14e1f346-6cdd-4ded-bbba-4dd6e9a42d1f"
+                storage_link = f"https://firebasestorage.googleapis.com/v0/b/news-a3e22.appspot.com/o/Breitbart%2Fbreit.png?alt=media&token=902e2373-245a-4e4b-8ce7-2814fd01cc36"
                 
                 data = {
                    "title": title,
@@ -170,13 +170,13 @@ for article in articles:
                 # Upload image to Storage
                 with open(f"{img_path}/{img_title}", "wb") as img:
                   img.write(requests.get(img_src).content)
-                  blob = bucket.blob(f"Breitbart/{img_title}")
+                  blob = bucket.blob(f"Breitbart/{td}/{img_title}")
                   token = uuid4()
                   metadata = {"firebaseStorageDownloadTokens": token}
                   blob.upload_from_filename(f"{img_path}/{img_title}")
                   
                 # Get Link to the Stored Image
-                storage_link = f"https://firebasestorage.googleapis.com/v0/b/news-a3e22.appspot.com/o/Breitbart%2F{img_title}?alt=media&token={token}"
+                storage_link = f"https://firebasestorage.googleapis.com/v0/b/news-a3e22.appspot.com/o/Breitbart%2F{td}%2F{img_title}?alt=media&token={token}"
   
                 data = {
                    "title": title,

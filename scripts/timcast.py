@@ -7,8 +7,8 @@ from firebase_admin import storage
  
 from utils.utilities import (imgFolder, imgTitleFormat, initialise, logFolder,
                             pageSoup, pushToDB, titleFormat, similar,getHour,
-                            jsonFolder, dumpJson, appendJson,)
-
+                            todayDate,jsonFolder, dumpJson, appendJson,)
+td = todayDate()
 # Set Global Variables
 ref_list = []
 log_folder_path = "/home/bencapper/src/News-Aggregator/scripts/log/"
@@ -19,7 +19,7 @@ json_path = "/home/bencapper/src/News/news.json"
 db_url = "https://news-a3e22-default-rtdb.firebaseio.com/"
 bucket = "news-a3e22.appspot.com"
 page_url = "https://timcast.com/news/"
-img_path = "/home/bencapper/src/News/Timcast"
+img_path = f"/home/bencapper/src/News/Timcast/{td}"
 storage_path = "https://firebasestorage.googleapis.com/v0/b/news-a3e22.appspot.com/o"
 db_path = "stories"
 outlet = "www.Timcast.com"
@@ -122,11 +122,11 @@ for article in articles:
             # Upload image to Storage
             with open(f"{img_path}/{img_title}", "wb") as img:
                 img.write(requests.get(img_link).content)
-                blob = bucket.blob(f"Timcast/{img_title}")
+                blob = bucket.blob(f"Timcast/{td}/{img_title}")
                 token = uuid4()
                 metadata = {"firebaseStorageDownloadTokens": token}
                 blob.upload_from_filename(f"{img_path}/{img_title}")
-            storage_link = f"{storage_path}/Timcast%2F{img_title}?alt=media&token={token}"
+            storage_link = f"{storage_path}/Timcast%2F{td}%2F{img_title}?alt=media&token={token}"
     
 
             data = {

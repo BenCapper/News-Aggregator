@@ -107,7 +107,7 @@ for article in articles:
          open_temp = open(log_file_path, "a")
 
          # Get Link to the Stored Image
-         storage_link = f"https://firebasestorage.googleapis.com/v0/b/news-a3e22.appspot.com/o/Yahoo%2Fyahoo-news.png?alt=media&token=6ea70d79-fbaf-442d-b952-babb2fb3f6d7"
+         storage_link = f"https://firebasestorage.googleapis.com/v0/b/news-a3e22.appspot.com/o/Yahoo%2Fyah.png?alt=media&token=bb4eabf2-5056-445c-982a-f88a06e951dd"
 
          data = {
              "title": title,
