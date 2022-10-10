@@ -132,8 +132,6 @@ for article in articles:
             data = {
                    "title": title,
                    "date": found_date,
-                   "img_src": img_link,
-                   "img_title": img_title,
                    "link": link,
                    "outlet": outlet,
                    "storage_link": storage_link,
@@ -148,8 +146,6 @@ for article in articles:
                 db_path,
                 title,
                 found_date,
-                img_link,
-                img_title,
                 link,
                 outlet,
                 storage_link,

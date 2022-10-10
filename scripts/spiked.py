@@ -128,8 +128,6 @@ for article in articles:
                 data = {
                    "title": title,
                    "date": dates,
-                   "img_src": img_src,
-                   "img_title": img_title,
                    "link": link,
                    "outlet": outlet,
                    "storage_link": storage_link,
@@ -141,7 +139,7 @@ for article in articles:
                 # Push the Gathered Data to DB
                 # Using Utils method
                 pushToDB(
-                    db_path, title, dates, img_src, img_title, link, outlet, storage_link, order
+                    db_path, title, dates, link, outlet, storage_link, order
                 )
 
                 # Write Title to Local Log File

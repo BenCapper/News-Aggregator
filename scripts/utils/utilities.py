@@ -109,22 +109,22 @@ def dumpFolder(dump_path):
    if os.path.exists(dump_path) == False:
        os.mkdir(dump_path)
  
-def pushToDB(
-   db_path, title, date, img_src, img_name, link, outlet, storage_link, order
-):
-   ref = db.reference(f"{db_path}/{date}/{title}")
-   ref.set(
-       {
-           "title": title,
-           "date": date,
-           "img_src": img_src,
-           "img_name": img_name,
-           "link": link,
-           "outlet": outlet,
-           "storage_link": storage_link,
-           "order": order
-       }
-   )
+# def pushToDB(
+#    db_path, title, date, img_src, img_name, link, outlet, storage_link, order
+# ):
+#    ref = db.reference(f"{db_path}/{date}/{title}")
+#    ref.set(
+#        {
+#            "title": title,
+#            "date": date,
+#            "img_src": img_src,
+#            "img_name": img_name,
+#            "link": link,
+#            "outlet": outlet,
+#            "storage_link": storage_link,
+#            "order": order
+#        }
+#    )
 
 def pushDoubleToDB(
    db_path, titlehead, title1, date1, img_name1, link1, outlet1, storage_link1,
@@ -152,7 +152,7 @@ def pushDoubleToDB(
    )
 
 
-def pushToDbNoImg(
+def pushToDB(
    db_path, title, date, link, outlet, storage_link, order
 ):
    ref = db.reference(f"{db_path}/{date}/{title}")
