@@ -6,7 +6,7 @@ import requests
 from bs4 import BeautifulSoup
 from difflib import SequenceMatcher
 from firebase_admin import credentials, db
-from datetime import datetime
+from datetime import datetime, timedelta
 from datetime import date 
  
 def logFolder(log_folder_path):
@@ -212,4 +212,8 @@ def formatDate(date):
 
 def todayDate():
     today = date.today()
+    return today.strftime("%m-%d-%y")
+
+def cutOffDate():
+    today = datetime.now() - timedelta(days=14)
     return today.strftime("%m-%d-%y")
