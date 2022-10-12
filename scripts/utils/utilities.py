@@ -215,5 +215,5 @@ def todayDate():
     return today.strftime("%m-%d-%y")
 
 def cutOffDate():
-    today = datetime.now() - timedelta(days=14)
+    today = datetime.now() - timedelta(days=15)
     return today.strftime("%m-%d-%y")
