@@ -4,7 +4,7 @@ import datetime
 from firebase_admin import storage
  
 from utils.utilities import (imgFolder, imgTitleFormat, initialise, jsonFolder, dumpJson, appendJson,
-                            logFolder, pageSoup, pushToDbNoImg, titleFormat, similar,getHour)
+                            logFolder, pageSoup, pushToDB, titleFormat, similar,getHour)
 
 # Set Global Variables
 ref_list = []
@@ -37,11 +37,7 @@ else:
 # Initialize Firebase
 initialise(json_path, db_url, bucket)
 
-# Order Based on Current Hour
-# Reversed in Android Studio
-# to Make Sure The Most Recent
-# Articles are Shown First
-order = getHour()
+
 
 # Gather News Page HTML
 # Find the List of Articles
@@ -68,7 +64,11 @@ for article in swamp_4:
 
    # Catch all for a Litany of Possible Errors
    try:
-
+      # Order Based on Current Hour
+      # Reversed in Android Studio
+      # to Make Sure The Most Recent
+      # Articles are Shown First
+      order = getHour()
       # Get Link to the article
       a = article.select("a")
       url = str(a).split(' href="')[1].split('" target')[0]
@@ -128,7 +128,7 @@ for article in swamp_4:
          appendJson(json_dump_path,data)
          # Push the Gathered Data to DB
          # Using Utils method
-         pushToDbNoImg(
+         pushToDB(
               db_path,
               title,
               date,

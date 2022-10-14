@@ -4,7 +4,7 @@ import datetime
 from firebase_admin import storage
  
 from utils.utilities import (imgFolder, initialise, jsonFolder, dumpJson, appendJson,
-                            logFolder, pageSoup, pushToDbNoImg, titleFormat, similar,getHour)
+                            logFolder, pageSoup, pushToDB, titleFormat, similar,getHour)
 
 # Set Global Variables
 ref_list = []
@@ -41,26 +41,27 @@ else:
 # Initialize Firebase
 initialise(json_path, db_url, bucket)
 
-# Order Based on Current Hour
-# Reversed in Android Studio
-# to Make Sure The Most Recent
-# Articles are Shown First
-order = getHour()
+
  
 # Gather News Page HTML
 # Find the Div Containing
 # Targeted Article Links
 soup = pageSoup(page_url)
-articles = soup.find_all("h2", "title")
+articles = soup.find_all("article")
  
 # Cycle through List just Gathered
 # And Save to DB or Pass due to Lack
 # of Information Available
-for article in articles:
+for article in articles[:10]:
 
     # Catch all for a Litany of Possible Errors
     try:
-
+        # Order Based on Current Hour
+        # Reversed in Android Studio
+        # to Make Sure The Most Recent
+        # Articles are Shown First
+        order = getHour()
+        
         # Get Article Link
         a = article.select("a")
         url = str(a).split(' href="')[1].split('" ')[0].split('">')[0]
@@ -130,7 +131,7 @@ for article in articles:
 
                     # Push the Gathered Data to DB
                     # Using Utils method
-                    pushToDbNoImg(
+                    pushToDB(
                          db_path,
                          title,
                          date,
