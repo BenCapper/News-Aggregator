@@ -1,13 +1,14 @@
 import os
 import json
-from utils.utilities import jsonFolder, similar, titleDeFormat, initialise, pushDoubleToDB, logFolder, titleFormat
+from uuid import uuid4
+from utils.utilities import jsonFolder, similar, titleDeFormat, initialise, pushDoubleToDB, logFolder, titleFormat, todayDate
  
 double_log_gb = "/home/bencapper/src/News-Aggregator/scripts/doublelog/double.log"
 double_gb_ref = list()
  
 match_log = "/home/bencapper/src/News-Aggregator/scripts/doublelog/matches.log"
 match_ref = list()
- 
+json_log_path = "/home/bencapper/src/News-Aggregator/scripts/json"
 json_path = "/home/bencapper/src/News-Aggregator/scripts/news.json"
  
 db_url = "https://news-a3e22-default-rtdb.firebaseio.com/"
@@ -20,52 +21,7 @@ json_path = "/home/bencapper/src/News-Aggregator/scripts/news.json"
 logFolder(double_log_gb)
 jsonFolder(json_folder_path)
 initialise(json_path, db_url, bucket)
- 
-right_log = [ "bonginodone.log","rev.log", "timdone.log", "zerodone.log","blazedone.log", "dailycallerdone.log",
-            "gbdone.log", "griptdone.log", "GWPdone.log", "pmill.log",
-            "spikedone.log","breitbartdone.log"]
-right_json = ["tim.json","caller.json","gb.json","spiked.json","zero.json",
-            "gript.json","gwp.json","rev.json","blaze.json","bong.json","breit.json"]
-left_log = ["politicodone.log","abcdone.log", "beastdone.log", "euronewsdone.log",
-            "globaldone.log", "guarddone.log", "huffdone.log","rtedone.log","cbsdone.log",
-            "skyukdone.log", "voxdone.log", "yahoodone.log"]
-left_json = ["euron.json","global.json","guard.json","vox.json",
-            "huff.json","pol.json","rte.json","yah.json",
-            "abc.json","beast.json","cbs.json","sky.json"]
- 
- 
-fullref_with_outlets = list()
-right_titles = list()
-left_titles = list()
-for i in right_log:
-    path = f"/home/bencapper/src/News-Aggregator/scripts/log/{i}"
-    open_temp = open(path, "r")
-    read_temp = open_temp.read()
-    split = read_temp.splitlines()
-    for j in split:
-        j = f"{j}--{i}"
-        fullref_with_outlets.append(j)
-        right_titles.append(j)
- 
-# Open Left Log and add outlet to title
-for i in left_log:
-    path = f"/home/bencapper/src/News-Aggregator/scripts/log/{i}"
-    open_temp = open(path, "r")
-    read_temp = open_temp.read()
-    split = read_temp.splitlines()
-    for j in split:
-        j = f"{j}--{i}"
-        fullref_with_outlets.append(j)
-        left_titles.append(j)
- 
- 
-if os.path.exists(double_log_gb):
-   open_temp = open(double_log_gb, "r")
-   read_temp = open_temp.read()
-   double_gb_ref = read_temp.splitlines()
-else:
-   os.mknod(double_log_gb)
- 
+
 if os.path.exists(match_log):
    open_temp = open(match_log, "r")
    read_temp = open_temp.read()
@@ -73,166 +29,84 @@ if os.path.exists(match_log):
 else:
    os.mknod(match_log)
  
+left_json = ["euron.json","global.json","guard.json","vox.json",
+            "huff.json","pol.json","rte.json","yah.json",
+            "abc.json","beast.json","cbs.json","sky.json"]
+right_json = ["tim.json","caller.json","gb.json","spiked.json","zero.json",
+            "gript.json","gwp.json","rev.json","blaze.json","bong.json","breit.json"]
+
+td = todayDate()
+outlet_logs = os.listdir(json_log_path)
+right_log = list()
+left_log = list()
 matches = list()
-right_not_in_ref = list()
-left_not_in_ref = list()
-for title in right_titles:
-    if title.split('--')[0] in match_ref:
-        pass
-    else:
-        right_not_in_ref.append(title)
- 
-for title in left_titles:
-    if title.split('--')[0] in match_ref:
-        pass
-    else:
-        left_not_in_ref.append(title)
- 
-rtits = list()
-ltits = list()
-for title in right_not_in_ref:
-    title_no_log = titleDeFormat(title).split('.log')[0]
-    title_no_outlet = title.split('--')[0]
-    title_formatted = titleDeFormat(title_no_outlet)
-    if title_formatted in rtits:
-       print(f"RIGHT TITLE = ${title_formatted}")
-       print(f"RTITS = ${rtits}")
-       break
-    else:
-       for ltitle in left_not_in_ref:
-        ltitle_no_log = titleDeFormat(ltitle).split('.log')[0]
-        ltitle_no_outlet = ltitle.split('--')[0]
-        ltitle_formatted = titleDeFormat(ltitle_no_outlet)
-        if similar(title_formatted,ltitle_formatted) > .7 and ltitle_formatted not in ltits and ltitle_formatted not in match_ref and title_formatted not in match_ref:
-           matches.append(f"{title_no_log} // {ltitle_no_log}")
-           rtits.append(title_formatted)
-           ltits.append(ltitle_formatted)
-           open_temp = open(match_log, "a")
-           open_temp.write(f"{title_formatted}" + "\n")
-           open_temp.write(f"{ltitle_formatted}" + "\n")
-           print(f"{title_formatted} // {ltitle_formatted}")
-           break
 
-print(matches)
-# For each title match
+for outlet in outlet_logs:
+    try:
+        outlet_log = open(f"{json_log_path}/{outlet}")
+        outlet_data = json.load(outlet_log)
+        if outlet in left_json:
+            for data in outlet_data['articles'][2:]:
+                left_log.append(data)
+        else:
+            for data in outlet_data['articles'][2:]:
+                right_log.append(data)
+        outlet_log.close()
+    except:
+        print("None")
+
+
+for article in right_log:
+
+    date1 = article['date']
+    title1 = titleDeFormat(article['title'])
+    outlet1 = article['outlet'].split('.')[1].split('.')[0]
+    for article2 in left_log:
+        date2 = article2['date']
+        title2 = titleDeFormat(article2['title'])
+        outlet2 = article2['outlet'].split('.')[1].split('.')[0]
+        if similar(title1,title2) > .7 and article['title'] not in match_ref and article2['title'] not in match_ref:
+            if date1 == td or date2 == td:
+                t1 = article['title']
+                t2 = article2['title']
+                match_ref.append(t1)
+                match_ref.append(t2)
+                open_temp = open(match_log, "a")
+                open_temp.write(f"{t1}" + "\n")
+                open_temp.write(f"{t2}" + "\n")
+                open_temp.close()
+                matches.append(f"{t1} // {t2}")
+                break
+
 for match in matches:
-   # Outlet name - No Title
-   right_outlet = match.split('//')[0].split('--')[1].lstrip().rstrip()
-   # Article Title - No Outlet
-   right_title = match.split('//')[0].split('--')[0].lstrip().rstrip()
+    right_article = dict()
+    left_article = dict()
+    title1 = match.split(" // ")[0]
+    title2 = match.split(" // ")[1]
+    for article in right_log:
+        if title1 == article['title']:
+            right_article = article
+    for article in left_log:
+        if title2 == article['title']:
+            left_article = article
 
-   # Outlet name - No Title
-   left_outlet = match.split('//')[1].split('--')[1].lstrip().rstrip()
-   # Article Title - No Outlet
-   left_title = match.split('//')[1].lstrip().rstrip().split('--')[0].lstrip().rstrip()
-
-
-   title_words = list()
-
-   for word in right_title.split(' '):
-      rightword = word
-      for word2 in left_title.split(' '):
-         if rightword.lower() == word2.lower():
-            title_words.append(rightword)
-   
-   stoplist = ["a","an","and","are","as","at",
-         "be", "by", "for", "from", "has", "in", "it",
-         "of", "on", "that", "the","to","was", "were",
-         "will", "with", "should", "but", "could", "did", "is"]
-
-   for word in title_words:
-      if word in stoplist:
-         while word in title_words:
-            title_words.remove(word)
-   count = 0
-   for word in title_words:
-      if word[0].islower():
-         title_words[count] = word.capitalize()
-      count += 1
-   titlehead = ""
-   for word in title_words:
-      titlehead = f"{titlehead} {word}"
-   titlehead = f"{titlehead} - {right_outlet} - {left_outlet}"
-   titlehead = titlehead.lstrip().rstrip()
-   if titlehead in double_gb_ref:
-      print("Double Article Already in DB")
-      pass
-   else:
-      right_articles = list()
-      for i in right_json:
-         articles = list()
-         path = f"/home/bencapper/src/News-Aggregator/scripts/json/{i}"
-         open_json = open(path, "r")
-         read_json = json.load(open_json)
-         articles = read_json['articles']
-         for article in articles:
-             right_articles.append(article)
-
-      r_art = dict()
-      for article in right_articles:
-         if article:
-            title = titleDeFormat(article['title'])
-            if title == right_title and title != "" and title != " ":
-               r_art = article
-
-      left_articles = list()
-      for i in left_json:
-         articles = list()
-         path = f"/home/bencapper/src/News-Aggregator/scripts/json/{i}"
-         open_json = open(path, "r")
-         read_json = json.load(open_json)
-         articles = read_json['articles']
-         for article in articles:
-             left_articles.append(article)
-
-      l_art = dict()
-      for article in left_articles:
-         if article:
-            title = titleDeFormat(article['title'])
-            if title == left_title and title != "" and title != " ":
-               l_art = article
-
-      if r_art and l_art:
-         if r_art['link'] == l_art['link']:
-            open_mlog = open(match_log,"r+")
-            read_mlog = open_mlog.read()
-            mlog = read_mlog.splitlines()
-            print("SAME LINKS")
-            if titleDeFormat(r_art['title']) in mlog or titleDeFormat(l_art['title']) in mlog:
-               mlog.remove(r_art['title'])
-               mlog.remove(l_art['title'])
-               with open(match_log,"r+") as f:
-                  f.truncate
-                  for line in mlog:
-                     f.write(line)
-                     open_temp.write(str(line) + "\n")
-
-         else:
-            open_dlog = open(double_log_gb, "r")
-            read_dlog = open_dlog.read()
-            double_gb_ref = read_dlog.splitlines()
-
-            pushDoubleToDB(
-               db_path,
-               titlehead,
-               titleDeFormat(r_art['title']),
-               r_art['date'],
-               r_art['img_title'],
-               r_art['link'],
-               r_art["outlet"],
-               r_art['storage_link'],
-               titleDeFormat(l_art['title']),
-               l_art['date'],
-               l_art['img_title'],
-               l_art['link'],
-               l_art["outlet"],
-               l_art['storage_link'],
-               l_art['order']
-            )
-            double_gb_ref.append(titlehead)
-            open_temp = open(double_log_gb, "a")
-            open_temp.write(str(titlehead) + "\n")
-            print("Double Article Added to DB")
-      else:
-         print("fuck")
-
+    if right_article['link'] == left_article['link']:
+        pass
+    else:
+        key = uuid4()
+        pushDoubleToDB(
+            db_path,
+            str(key),
+            right_article['title'],
+            right_article['date'],
+            right_article['link'],
+            right_article['outlet'],
+            right_article['storage_link'],
+            left_article['title'],
+            left_article['date'],
+            left_article['link'],
+            left_article['outlet'],
+            left_article['storage_link'],
+            right_article['order']
+        )
+        print(f"Double Article Added to DB {match}")

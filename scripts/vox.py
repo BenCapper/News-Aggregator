@@ -5,7 +5,7 @@ import requests
 from bs4 import BeautifulSoup
 from firebase_admin import storage
  
-from utils.utilities import (formatDate, imgFolder, imgTitleFormat, initialise, jsonFolder, dumpJson, appendJson,
+from utils.utilities import (decodeTitle, formatDate, imgFolder, imgTitleFormat, initialise, jsonFolder, dumpJson, appendJson,
                             todayDate,logFolder, pageSoup, pushToDB, titleFormat, similar,getHour)
 td = todayDate()
 # Set Global Variables
@@ -73,7 +73,7 @@ for article in articles:
             pass
         else:
             title = str(title).split('">')[1].split('</')[0]
-            title = titleFormat(title)
+            title = decodeTitle(title)
             img_title = imgTitleFormat(title)
             img = article.select("img")
             if len(img) > 1:

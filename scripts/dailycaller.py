@@ -4,7 +4,7 @@ from uuid import uuid4
 import requests
 from firebase_admin import storage
  
-from utils.utilities import (imgFolder, imgTitleFormat, initialise, jsonFolder, dumpJson, appendJson,
+from utils.utilities import (decodeTitle, imgFolder, imgTitleFormat, initialise, jsonFolder, dumpJson, appendJson,
                             todayDate,logFolder, pageSoup, pushToDB, titleFormat, similar,getHour)
 td = todayDate()
 
@@ -78,7 +78,7 @@ for article in articles:
         # Format with  a Utils Function
         # Format Title to get Image Title
         title = str(a).split('title="')[1].split('">')[0].split('Link to ')[1]
-        title = titleFormat(title)
+        title = decodeTitle(title)
         img_title = imgTitleFormat(title)
 
         # Get Image Link

@@ -1,10 +1,11 @@
 import os
+from unicodedata import decimal
 from uuid import uuid4
  
 import requests
 from firebase_admin import storage
  
-from utils.utilities import (addYearAndFormat, formatDate, imgFolder, imgTitleFormat, initialise,jsonFolder, dumpJson, appendJson,
+from utils.utilities import (addYearAndFormat, decodeTitle, formatDate, imgFolder, imgTitleFormat, initialise,jsonFolder, dumpJson, appendJson,
                             todayDate,logFolder, pageSoup, pushToDB, titleFormat, similar,getHour)
 td = todayDate()
 # Set Global Variables
@@ -67,7 +68,7 @@ for article in articles:
         # Format with  a Utils Function
         # Format Title to get Image Title
         title = str(a).split('">')[1].split('</a>')[0]
-        title = titleFormat(title)
+        title = decodeTitle(title)
         img_title = imgTitleFormat(title)
         
         # Get Image Link

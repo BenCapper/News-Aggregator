@@ -2,7 +2,7 @@ import os
 from uuid import uuid4
 import requests
 from firebase_admin import storage
-from utils.utilities import (formatDate, imgFolder, imgTitleFormat, initialise, jsonFolder, dumpJson, appendJson,
+from utils.utilities import (decodeTitle, formatDate, imgFolder, imgTitleFormat, initialise, jsonFolder, dumpJson, appendJson,
                           todayDate,logFolder, pageSoup, pushToDB, titleFormat, similar,getHour)
 
 
@@ -67,7 +67,8 @@ for article in articles:
         # Format Title to get Image Title
         title = article.select("h3")
         title = str(title).split('">')[1].split('</h')[0]
-        title = titleFormat(title)
+        title = decodeTitle(title)
+
         img_title = imgTitleFormat(title)
 
         # Gather Date from Article

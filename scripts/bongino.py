@@ -3,7 +3,7 @@ import os
 import datetime
 from firebase_admin import storage
  
-from utils.utilities import (imgFolder, imgTitleFormat, initialise, jsonFolder, dumpJson, appendJson,
+from utils.utilities import (decodeTitle, imgFolder, imgTitleFormat, initialise, jsonFolder, dumpJson, appendJson,
                             logFolder, pageSoup, pushToDB, titleFormat, similar,getHour)
 
 # Set Global Variables
@@ -77,7 +77,7 @@ for article in swamp_4:
       # Format with  a Utils Function
       # Format Title to get Image Title
       title = str(a).split('">')[1].split('</a')[0]
-      title = titleFormat(title)
+      title = decodeTitle(title)
       img_title = imgTitleFormat(title)
 
       # Gather Date from Article

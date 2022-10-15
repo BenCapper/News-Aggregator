@@ -1,3 +1,4 @@
+from encodings import utf_8
 import json
 import os
  
@@ -22,8 +23,8 @@ def jsonFolder(log_folder_path):
        os.mkdir(log_folder_path)
 
 def dumpJson(json_dump_path, data):
-    with open(json_dump_path, 'w') as f:
-        json.dump(data, f, indent=4)
+    with open(json_dump_path, 'w', encoding='utf8') as f:
+        json.dump(data, f, indent=4, ensure_ascii=False)
 
 def appendJson(json_dump_path, data):
     with open(json_dump_path, 'r+') as file:
@@ -127,23 +128,20 @@ def dumpFolder(dump_path):
 #    )
 
 def pushDoubleToDB(
-   db_path, titlehead, title1, date1, img_name1, link1, outlet1, storage_link1,
-    title2, date2, img_name2, link2, outlet2, storage_link2 ,order
+   db_path, titlehead, title1, date1, link1, outlet1, storage_link1,
+    title2, date2, link2, outlet2, storage_link2 ,order
 ):
    d = datetime.today().strftime('%m-%d-%y')
    ref = db.reference(f"{db_path}/{d}/{titlehead}")
    ref.set(
        {
-           "titlehead": titlehead,
            "title1": title1,
            "date1": date1,
-           "img_name1": img_name1,
            "link1": link1,
            "outlet1": outlet1,
            "storage_link1": storage_link1,
            "title2": title2,
            "date2": date2,
-           "img_name2": img_name2,
            "link2": link2,
            "outlet2": outlet2,
            "storage_link2": storage_link2,
@@ -217,3 +215,8 @@ def todayDate():
 def cutOffDate():
     today = datetime.now() - timedelta(days=15)
     return today.strftime("%m-%d-%y")
+
+def decodeTitle(title):
+    titleencode = title.encode("ascii", "ignore")
+    titledecode = titleencode.decode()
+    return titleFormat(titledecode)

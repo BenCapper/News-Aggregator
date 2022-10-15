@@ -4,7 +4,7 @@ from uuid import uuid4
 import requests
 from firebase_admin import storage
  
-from utils.utilities import (formatDate, imgFolder, imgTitleFormat, initialise, jsonFolder, dumpJson, appendJson,
+from utils.utilities import (decodeTitle, formatDate, imgFolder, imgTitleFormat, initialise, jsonFolder, dumpJson, appendJson,
                             todayDate,logFolder, pageSoup, pushToDB, titleFormat, similar,getHour)
 td = todayDate()
 # Set Global Variables
@@ -84,7 +84,7 @@ for article in articles:
         # Format with  a Utils Function
         # Format Title to get Image Title
         title = article.split('" post-title="')[1].split('" post')[0]
-        title = titleFormat(title)
+        title = decodeTitle(title)
         img_title = imgTitleFormat(title)
     
         # Initialize Storage Variables

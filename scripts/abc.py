@@ -5,7 +5,7 @@ import requests
 from bs4 import BeautifulSoup
 from firebase_admin import storage
  
-from utils.utilities import (formatDate, imgFolder, imgTitleFormat, initialise, jsonFolder, dumpJson, appendJson,
+from utils.utilities import (decodeTitle, formatDate, imgFolder, imgTitleFormat, initialise, jsonFolder, dumpJson, appendJson,
                             logFolder, pageSoup, pushToDB, titleFormat, similar, getHour, todayDate)
 
 td = todayDate()
@@ -104,7 +104,7 @@ for article in articles:
             # Format Title to get Image Title
             title = articleSoup.select('h1')
             title = str(title).split('">')[1].split('</h')[0]
-            title = titleFormat(title)
+            title = decodeTitle(title)
             img_title = imgTitleFormat(title)
 
             # Initialize Storage Variables

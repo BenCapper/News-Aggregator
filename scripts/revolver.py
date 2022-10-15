@@ -3,7 +3,7 @@ import os
 import datetime
 from firebase_admin import storage
  
-from utils.utilities import (imgFolder, initialise, jsonFolder, dumpJson, appendJson,
+from utils.utilities import (decodeTitle, imgFolder, initialise, jsonFolder, dumpJson, appendJson,
                             logFolder, pageSoup, pushToDB, titleFormat, similar,getHour)
 
 # Set Global Variables
@@ -55,13 +55,13 @@ articles = soup.find_all("article")
 for article in articles[:10]:
 
     # Catch all for a Litany of Possible Errors
-    try:
+
         # Order Based on Current Hour
         # Reversed in Android Studio
         # to Make Sure The Most Recent
         # Articles are Shown First
         order = getHour()
-        
+
         # Get Article Link
         a = article.select("a")
         url = str(a).split(' href="')[1].split('" ')[0].split('">')[0]
@@ -83,72 +83,70 @@ for article in articles[:10]:
 
                 # Gather Title / No Images
                 title = str(a).split('">')[1].split('</a')[0]
-                title = titleFormat(title)
-
-                # Found On Date
-                # Aggregation Site Links to
-                # Many Sites with Diff Layouts
-                date = datetime.datetime.now().strftime("%m-%d-%y")
-                
-                # Initialize Storage Variables
-                bucket = storage.bucket()
-                token = ""
-
-                # Check if an Article which is 80%+
-                # Similar to any Other in the Log
-                # Similar function in Utils
-                check = False
-                for ref in ref_list:
-                   similarity = similar(ref,title)
-                   if similarity > .8:
-                      check = True
-                      break
-
-                # Only Continue if the Title is not
-                # Already in the Log and is not too
-                # Similar to Another
-                if title not in ref_list and check is False:
-
-                    # Add the Title to the List
-                    # of Titles Already in the Log
-                    ref_list.append(title)
-                    open_temp = open(log_file_path, "a")
-                    storage_link = f"https://firebasestorage.googleapis.com/v0/b/news-a3e22.appspot.com/o/Revolver%2Frev.png?alt=media&token=bbb47374-c02d-41b5-859f-593fc90c5ea0"
-
-                    data = {
-                        "title": title,
-                        "date": date,
-                        "img_src": "",
-                        "img_title": "",
-                        "link": url,
-                        "outlet": outlet,
-                        "storage_link": storage_link,
-                        "order": order
-                    }
-                    open_json = open(json_dump_path, "r")
-                    read_json = open_json.read()
-                    appendJson(json_dump_path,data)
-
-                    # Push the Gathered Data to DB
-                    # Using Utils method
-                    pushToDB(
-                         db_path,
-                         title,
-                         date,
-                         url,
-                         outlet,
-                         storage_link,
-                         order
-                     )
-
-                    # Write Title to Local Log File
-                    open_temp.write(str(title) + "\n")
-                    print("Revolver Article Added to DB")
+                title = decodeTitle(title)
+                if "<span" in title:
+                    pass
                 else:
-                    print("Revolver Article Already in DB")
+                    # Found On Date
+                    # Aggregation Site Links to
+                    # Many Sites with Diff Layouts
+                    date = datetime.datetime.now().strftime("%m-%d-%y")
+                    
+                    # Initialize Storage Variables
+                    bucket = storage.bucket()
+                    token = ""
+    
+                    # Check if an Article which is 80%+
+                    # Similar to any Other in the Log
+                    # Similar function in Utils
+                    check = False
+                    for ref in ref_list:
+                       similarity = similar(ref,title)
+                       if similarity > .8:
+                          check = True
+                          break
+                      
+                    # Only Continue if the Title is not
+                    # Already in the Log and is not too
+                    # Similar to Another
+                    if title not in ref_list and check is False:
+                    
+                        # Add the Title to the List
+                        # of Titles Already in the Log
+                        ref_list.append(title)
+                        open_temp = open(log_file_path, "a")
+                        storage_link = f"https://firebasestorage.googleapis.com/v0/b/news-a3e22.appspot.com/o/Revolver%2Frev.png?alt=media&token=bbb47374-c02d-41b5-859f-593fc90c5ea0"
+    
+                        data = {
+                            "title": title,
+                            "date": date,
+                            "link": url,
+                            "outlet": outlet,
+                            "storage_link": storage_link,
+                            "order": order
+                        }
+                        open_json = open(json_dump_path, "r")
+                        read_json = open_json.read()
+                        appendJson(json_dump_path,data)
+    
+                        # Push the Gathered Data to DB
+                        # Using Utils method
+                        pushToDB(
+                             db_path,
+                             title,
+                             date,
+                             url,
+                             outlet,
+                             storage_link,
+                             order
+                         )
+    
+                        # Write Title to Local Log File
+                        open_temp.write(str(title) + "\n")
+                        print("Revolver Article Added to DB")
+                    else:
+                        print("Revolver Article Already in DB")
     
     # One of Many Possible Things
     # Went Wrong - 
     # Too Much of This is an Issue
-    except:
-        print("Revolver Article Error")

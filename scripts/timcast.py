@@ -5,7 +5,7 @@ from uuid import uuid4
 import requests
 from firebase_admin import storage
  
-from utils.utilities import (imgFolder, imgTitleFormat, initialise, logFolder,
+from utils.utilities import (decodeTitle, imgFolder, imgTitleFormat, initialise, logFolder,
                             pageSoup, pushToDB, titleFormat, similar,getHour,
                             todayDate,jsonFolder, dumpJson, appendJson,)
 td = todayDate()
@@ -90,8 +90,8 @@ for article in articles:
         img_list = image.split(" src=")
         title = img_list[0][10:-1]
         img_link = img_list[1][1:-3]
+        title = decodeTitle(title)
         img_title = imgTitleFormat(title)
-        title = titleFormat(title)
 
         # Initialize Storage Variables
         bucket = storage.bucket()

@@ -3,7 +3,7 @@ from uuid import uuid4
 import requests
 from bs4 import BeautifulSoup
 from firebase_admin import storage
-from utils.utilities import (formatDate, imgFolder, imgTitleFormat, initialise, jsonFolder, dumpJson, appendJson,
+from utils.utilities import (decodeTitle, formatDate, imgFolder, imgTitleFormat, initialise, jsonFolder, dumpJson, appendJson,
                            todayDate,logFolder, pageSoup, pushToDB, titleFormat, similar,getHour)
 td = todayDate()
 
@@ -109,7 +109,7 @@ for article in articles:
                 # Format Title to get Image Title
                 img_src = articleSoup.find("div", "widget__image crop-16x9")
                 title = str(img_src).split('label="')[1].split('" class')[0]
-                title = titleFormat(title)
+                title = decodeTitle(title)
                 img_title = imgTitleFormat(title)
 
                 # Finalize Image Link

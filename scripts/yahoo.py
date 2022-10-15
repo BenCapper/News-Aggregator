@@ -4,7 +4,7 @@ import requests
 from bs4 import BeautifulSoup
 from firebase_admin import storage
  
-from utils.utilities import (formatDate, imgFolder, initialise, jsonFolder, dumpJson, appendJson,
+from utils.utilities import (decodeTitle, formatDate, imgFolder, initialise, jsonFolder, dumpJson, appendJson,
                             logFolder, pageSoup, pushToDB, titleFormat, similar,getHour)
  
 # Set Global Variables
@@ -70,8 +70,7 @@ for article in articles:
       # Gather Title
       title = articleSoup.select("h1")
       title = str(title).split('">')[1].split('</')[0]
-      title = titleFormat(title)
-
+      title = decodeTitle(title)
       # Gather / Format Date
       date = list()
       dates = articleSoup.select("time")

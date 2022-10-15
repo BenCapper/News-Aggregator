@@ -4,7 +4,7 @@ json_path = "/home/bencapper/src/News-Aggregator/scripts/json"
 default = """{
     "articles": [
         {},
-        {},
+        {}
     ]
 }"""
 
