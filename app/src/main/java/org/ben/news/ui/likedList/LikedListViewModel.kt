@@ -24,13 +24,12 @@ class LikedListViewModel : ViewModel() {
 
     var liveFirebaseUser = MutableLiveData<FirebaseUser>()
 
-    init { load(0) }
+    init { load() }
 
-    fun load(day:Int,) {
+    fun load() {
         val dates: String
         try {
-            dates = StoryManager.getDate(day)
-            StoryManager.find(dates,liveFirebaseUser.value!!.uid,"likes",likedList)
+            StoryManager.findLiked(liveFirebaseUser.value!!.uid,"likes",likedList)
             Timber.i("Load Success : ${likedList.value}")
         }
         catch (e: Exception) {
@@ -39,11 +38,10 @@ class LikedListViewModel : ViewModel() {
 
     }
 
-    fun search(day:Int, term: String) {
+    fun search(term: String) {
         val dates: String
         try {
-            dates = StoryManager.getDate(day)
-            StoryManager.search(dates,term,liveFirebaseUser.value!!.uid,"likes",likedList)
+            StoryManager.searchLiked(term,liveFirebaseUser.value!!.uid,"likes",likedList)
             Timber.i("Search Success")
         }
         catch (e: java.lang.Exception) {
@@ -51,11 +49,9 @@ class LikedListViewModel : ViewModel() {
         }
     }
 
-    fun delete(day:Int, userid: String, id: String) {
-        val dates: String
+    fun delete(userid: String, id: String) {
         try {
-            dates = StoryManager.getDate(day)
-            StoryManager.delete(dates,userid,"likes", id)
+            StoryManager.deleteLiked(userid,"likes", id)
             Timber.i("Delete Success")
         }
         catch (e: java.lang.Exception) {
