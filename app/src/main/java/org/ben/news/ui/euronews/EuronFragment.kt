@@ -244,7 +244,7 @@ class EuronFragment : Fragment(), StoryListener {
     override fun onLike(story: StoryModel) {
         activity?.alertDialog {
             messageResource = R.string.save_art
-            okButton { StoryManager.create(loggedInViewModel.liveFirebaseUser.value!!.uid,"likes", story)
+            okButton { StoryManager.createLiked(loggedInViewModel.liveFirebaseUser.value!!.uid,"likes", story)
                 val params = fragBinding.root.layoutParams as FrameLayout.LayoutParams
                 params.gravity = Gravity.CENTER_HORIZONTAL
                 view?.snack(R.string.saved_article)}
