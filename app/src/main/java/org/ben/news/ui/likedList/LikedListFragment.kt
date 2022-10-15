@@ -20,16 +20,10 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.storage.FirebaseStorage
 import org.ben.news.R
-import org.ben.news.adapters.EmptyAdapter
-import org.ben.news.adapters.NoSaveAdapter
-import org.ben.news.adapters.StoryListener
-import org.ben.news.adapters.StoryNoSaveListener
+import org.ben.news.adapters.*
 import org.ben.news.databinding.FragmentLikedListBinding
 import org.ben.news.firebase.StoryManager
-import org.ben.news.helpers.SwipeToDeleteCallback
-import org.ben.news.helpers.createLoader
-import org.ben.news.helpers.hideLoader
-import org.ben.news.helpers.showLoader
+import org.ben.news.helpers.*
 import org.ben.news.models.StoryModel
 import org.ben.news.ui.auth.LoggedInViewModel
 import org.ben.news.ui.storyList.StoryListFragment
@@ -38,7 +32,7 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 
-class LikedListFragment : Fragment(), StoryNoSaveListener, StoryListener {
+class LikedListFragment : Fragment(), StorySaveListener, StoryListener {
 
     companion object {
         fun newInstance() = StoryListFragment()
@@ -69,7 +63,7 @@ class LikedListFragment : Fragment(), StoryNoSaveListener, StoryListener {
 
         fragBinding.recyclerViewLiked.layoutManager = activity?.let { LinearLayoutManager(it) }
         activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.saved)
-        MobileAds.initialize(this.context!!) {}
+        MobileAds.initialize(this.requireContext()) {}
         val fab = activity?.findViewById<FloatingActionButton>(R.id.fab)
         val bot = activity?.findViewById<BottomNavigationView>(R.id.bottom_nav)
         fab?.visibility = View.INVISIBLE
@@ -115,33 +109,19 @@ class LikedListFragment : Fragment(), StoryNoSaveListener, StoryListener {
                 fragBinding.creepy.visibility = View.INVISIBLE
                 Glide.with(this).load(R.drawable.bidenlost).into(fragBinding.imageView2)
                 val datenow = StoryManager.getDate(day)
-                fragBinding.emptydate.text = datenow
-                fragBinding.larrow.setOnClickListener {
-                    if (day < 14) {
-                        showLoader(loader, "")
-                        day += 1
-                        likedListViewModel.load(day)
-                    }
-                }
-                fragBinding.rarrow.setOnClickListener {
-                    showLoader(loader,"")
-                    day -= 1
-                    if (day <= 0 ){
-                        day = 0
-                    }
-                    likedListViewModel.load(day)
-                }
+                fragBinding.emptydate.visibility = View.INVISIBLE
+                fragBinding.larrow.visibility = View.INVISIBLE
+                fragBinding.rarrow.visibility = View.INVISIBLE
 
         }
         setSwipeRefresh()
 
-        val swipeDeleteHandler = object : SwipeToDeleteCallback(requireContext()) {
+        val swipeDeleteHandler = object : SwipeToDeleteLikedCallback(requireContext()) {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 if (viewHolder.itemViewType != 1) {
                     val adapter = fragBinding.recyclerViewLiked.adapter as NoSaveAdapter
                     adapter.removeAt(viewHolder.absoluteAdapterPosition)
                     likedListViewModel.delete(
-                        day,
                         likedListViewModel.liveFirebaseUser.value?.uid!!,
                         (viewHolder.itemView.tag as StoryModel).title
                     )
@@ -156,21 +136,10 @@ class LikedListFragment : Fragment(), StoryNoSaveListener, StoryListener {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if( item.itemId == R.id.app_bar_right) {
-            if(day != 0) {
-                showLoader(loader, "")
-                day -= 1
-                if (day <= 0) {
-                    day = 0
-                }
-                likedListViewModel.load(day)
-            }
+
         }
         if( item.itemId == R.id.app_bar_left) {
-            if (day < 14) {
-                showLoader(loader, "")
-                day += 1
-                likedListViewModel.load(day)
-            }
+
         }
         return super.onOptionsItemSelected(item)
     }
@@ -180,7 +149,7 @@ class LikedListFragment : Fragment(), StoryNoSaveListener, StoryListener {
         fragBinding.swipe.setOnRefreshListener {
             fragBinding.swipe.isRefreshing = true
             state = fragBinding.recyclerViewLiked.layoutManager?.onSaveInstanceState()
-            likedListViewModel.load(day)
+            likedListViewModel.load()
         }
     }
 
@@ -190,7 +159,7 @@ class LikedListFragment : Fragment(), StoryNoSaveListener, StoryListener {
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.menu_all, menu)
+        inflater.inflate(R.menu.menu_liked, menu)
         when (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) {
             Configuration.UI_MODE_NIGHT_YES -> {
                 menu.findItem(R.id.app_bar_right).iconTintList = null
@@ -212,17 +181,16 @@ class LikedListFragment : Fragment(), StoryNoSaveListener, StoryListener {
                 if (newText != null) {
                     searching = newText
                     likedListViewModel.search(
-                        day,
                         newText
                     )
                 }
                 else{
                     searching = newText
-                    likedListViewModel.load(day)
+                    likedListViewModel.load()
                 }
                 if (newText == "") {
                     searching = newText
-                    likedListViewModel.load(day)
+                    likedListViewModel.load()
                 }
 
                 return true
@@ -230,7 +198,7 @@ class LikedListFragment : Fragment(), StoryNoSaveListener, StoryListener {
         })
         searchView.setOnCloseListener {
             searching = null
-            likedListViewModel.load(day)
+            likedListViewModel.load()
             false
         }
         super.onCreateOptionsMenu(menu, inflater)
@@ -246,7 +214,7 @@ class LikedListFragment : Fragment(), StoryNoSaveListener, StoryListener {
         loggedInViewModel.liveFirebaseUser.observe(viewLifecycleOwner) { firebaseUser ->
             if (firebaseUser != null) {
                 likedListViewModel.liveFirebaseUser.value = firebaseUser
-                likedListViewModel.load(day)
+                likedListViewModel.load()
             }
         }
     }

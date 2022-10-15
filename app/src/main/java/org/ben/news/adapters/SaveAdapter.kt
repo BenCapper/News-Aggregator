@@ -10,18 +10,18 @@ import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.nativead.NativeAd
 import org.ben.news.R
 import org.ben.news.databinding.CardAdBinding
-import org.ben.news.databinding.CardStoryNosaveBinding
+import org.ben.news.databinding.CardStorySaveBinding
 import org.ben.news.models.StoryModel
 import timber.log.Timber
 import kotlin.math.roundToInt
 
 
-interface StoryNoSaveListener {
+interface StorySaveListener {
     fun onStoryClick(story: StoryModel)
     fun onShare(story: StoryModel)
 }
 
-class NoSaveAdapter constructor(private var stories: ArrayList<StoryModel>, private val listener: StoryNoSaveListener, )
+class NoSaveAdapter constructor(private var stories: ArrayList<StoryModel>, private val listener: StorySaveListener, )
     : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var ITEM = 0
@@ -48,7 +48,7 @@ class NoSaveAdapter constructor(private var stories: ArrayList<StoryModel>, priv
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return if(viewType == ITEM){
-            val binding = CardStoryNosaveBinding
+            val binding = CardStorySaveBinding
                 .inflate(LayoutInflater.from(parent.context), parent, false)
 
             MainHolder(binding)
@@ -106,11 +106,11 @@ class NoSaveAdapter constructor(private var stories: ArrayList<StoryModel>, priv
     }
 
     /* This class binds the building information to the recyclerview card */
-    inner class MainHolder(private val binding : CardStoryNosaveBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class MainHolder(private val binding : CardStorySaveBinding) : RecyclerView.ViewHolder(binding.root) {
 
         //val readOnlyRow = readOnly
 
-        fun bind(story: StoryModel, listener: StoryNoSaveListener) {
+        fun bind(story: StoryModel, listener: StorySaveListener) {
 
 
             if (story.outlet in ca){
@@ -132,7 +132,6 @@ class NoSaveAdapter constructor(private var stories: ArrayList<StoryModel>, priv
             binding.button3Nosave.setOnClickListener { listener.onShare(story) }
             binding.root.tag = story
             binding.story = story
-            Glide.with(this.itemView.context).load(story.storage_link).into(binding.imageViewNosave)
             binding.executePendingBindings()
         }
 

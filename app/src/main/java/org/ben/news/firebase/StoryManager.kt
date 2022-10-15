@@ -369,6 +369,33 @@ object StoryManager : StoryStore {
             })
     }
 
+    override fun findLiked( userId: String, path:String, storyList: MutableLiveData<List<StoryModel>>) {
+        val totalList = ArrayList<StoryModel>()
+        var todayList = mutableListOf<StoryModel>()
+        database.child("user-$path").child(userId)
+            .addValueEventListener(object : ValueEventListener {
+                override fun onCancelled(error: DatabaseError) {
+                    Timber.i("Firebase error : ${error.message}")
+                }
+
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val children = snapshot.children
+                    children.forEach {
+                        val story = it.getValue(StoryModel::class.java)
+                        story?.title = story?.title?.let { it -> formatTitle(it) }.toString()
+                        todayList.add(story!!)
+                        Timber.i("user-article=$story")
+                    }
+                    todayList = todayList.sortedBy{it.order}.toMutableList()
+                    todayList.reverse()
+                    database.child("user-$path").child(userId)
+                        .removeEventListener(this)
+                    totalList.addAll(todayList)
+                    storyList.value = totalList
+                }
+            })
+    }
+
     override fun search(date: String,term: String, userId: String, path:String,  storyList: MutableLiveData<List<StoryModel>>) {
 
         val totalList = ArrayList<StoryModel>()
@@ -404,6 +431,43 @@ object StoryManager : StoryStore {
                         storyList.value = totalList
                     }
                 })
+    }
+
+    override fun searchLiked(term: String, userId: String, path:String,  storyList: MutableLiveData<List<StoryModel>>) {
+
+        val totalList = ArrayList<StoryModel>()
+        var todayList = mutableListOf<StoryModel>()
+        database.child("user-$path").child(userId)
+            .addValueEventListener(object : ValueEventListener {
+                override fun onCancelled(error: DatabaseError) {
+                    Timber.i("Firebase error : ${error.message}")
+                }
+
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val children = snapshot.children
+                    children.forEach {
+                        if (it.getValue(StoryModel::class.java)?.title!!.contains(term, true) ||
+                            it.getValue(StoryModel::class.java)?.outlet!!.contains(
+                                term,
+                                true
+                            ) ||
+                            it.getValue(StoryModel::class.java)?.date!!.contains(term, true)
+                        ) {
+                            val story = it.getValue(StoryModel::class.java)
+                            story?.title =
+                                story?.title?.let { it -> formatTitle(it) }.toString()
+                            todayList.add(story!!)
+
+                        }
+                    }
+                    todayList = todayList.sortedBy{it.order}.toMutableList()
+                    todayList.reverse()
+                    database.child("user-$path").child(userId)
+                        .removeEventListener(this)
+                    totalList.addAll(todayList)
+                    storyList.value = totalList
+                }
+            })
     }
 
     override fun searchByOutlet(date: String, term: String, outlet:String, storyList: MutableLiveData<List<StoryModel>>) {
@@ -521,11 +585,28 @@ object StoryManager : StoryStore {
         database.updateChildren(childAdd)
     }
 
+    override fun createLiked(userId: String, path:String, story: StoryModel) {
+        val storyValues = story.toMap()
+        val childAdd = HashMap<String, Any>()
+        val title = formatTitleIllegal(story.title)
+        childAdd["/user-$path/$userId/$title"] = storyValues
+        database.updateChildren(childAdd)
+    }
+
     override fun delete(day:String, userId: String, path: String, title: String) {
 
         val childDelete : MutableMap<String, Any?> = HashMap()
         val new = formatTitleIllegal(title)
         childDelete["/user-$path/$userId/$day/$new"] = null
+
+        database.updateChildren(childDelete)
+    }
+
+    override fun deleteLiked(userId: String, path: String, title: String) {
+
+        val childDelete : MutableMap<String, Any?> = HashMap()
+        val new = formatTitleIllegal(title)
+        childDelete["/user-$path/$userId/$new"] = null
 
         database.updateChildren(childDelete)
     }
