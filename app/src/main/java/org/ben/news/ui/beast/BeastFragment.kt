@@ -233,7 +233,7 @@ class BeastFragment : Fragment(), StoryListener {
     }
 
     override fun onStoryClick(story: StoryModel) {
-        StoryManager.create(loggedInViewModel.liveFirebaseUser.value!!.uid,"history", story)
+        StoryManager.createLiked(loggedInViewModel.liveFirebaseUser.value!!.uid,"history", story)
         val intent = Intent(Intent.ACTION_VIEW).setData(Uri.parse(story.link))
         state = fragBinding.recyclerViewBeast.layoutManager?.onSaveInstanceState()
         startActivity(intent)

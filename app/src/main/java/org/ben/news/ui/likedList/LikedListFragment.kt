@@ -108,7 +108,6 @@ class LikedListFragment : Fragment(), StorySaveListener, StoryListener {
             if (fragBinding.recyclerViewLiked.adapter!!.itemCount > 0)
                 fragBinding.creepy.visibility = View.INVISIBLE
                 Glide.with(this).load(R.drawable.bidenlost).into(fragBinding.imageView2)
-                val datenow = StoryManager.getDate(day)
                 fragBinding.emptydate.visibility = View.INVISIBLE
                 fragBinding.larrow.visibility = View.INVISIBLE
                 fragBinding.rarrow.visibility = View.INVISIBLE
@@ -225,7 +224,7 @@ class LikedListFragment : Fragment(), StorySaveListener, StoryListener {
     }
 
     override fun onStoryClick(story: StoryModel) {
-        StoryManager.create(loggedInViewModel.liveFirebaseUser.value!!.uid, "history",story)
+        StoryManager.createLiked(loggedInViewModel.liveFirebaseUser.value!!.uid, "history",story)
         val intent = Intent(Intent.ACTION_VIEW).setData(Uri.parse(story.link))
         state = fragBinding.recyclerViewLiked.layoutManager?.onSaveInstanceState()
         startActivity(intent)

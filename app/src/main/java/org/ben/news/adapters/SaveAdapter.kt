@@ -38,6 +38,7 @@ class NoSaveAdapter constructor(private var stories: ArrayList<StoryModel>, priv
         "www.Revolver.news",
         "www.DailyCaller.com",
         "www.TheDailyBeast.com",
+        "www.BonginoReport.com",
         "www.TheGatewayPundit.com",
         "www.Politico.com",
         "www.CbsNews.com",
@@ -142,7 +143,7 @@ class NoSaveAdapter constructor(private var stories: ArrayList<StoryModel>, priv
 
         fun bind() {
 
-            val adLoader = AdLoader.Builder(this.itemView.context, "ca-app-pub-3940256099942544/2247696110") //ca-app-pub-7534564032628512/6984101088
+            val adLoader = AdLoader.Builder(this.itemView.context, "ca-app-pub-7534564032628512/6984101088") //ca-app-pub-3940256099942544/2247696110
                 .forNativeAd { ad : NativeAd ->
                     populateNativeAdView(ad,binding)
 
