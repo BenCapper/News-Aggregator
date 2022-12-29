@@ -121,15 +121,15 @@ for article in articles:
 
                         # Add the Title to the List
                         # of Titles Already in the Log
-                        with open(f"{img_path}/{img_title}", "wb") as img:
-                            img.write(requests.get(img_src).content)
-                            blob = bucket.blob(f"Vox/{td}/{img_title}")
-                            token = uuid4()
-                            metadata = {"firebaseStorageDownloadTokens": token}
-                            blob.upload_from_filename(f"{img_path}/{img_title}")
+                        #with open(f"{img_path}/{img_title}", "wb") as img:
+                        #    img.write(requests.get(img_src).content)
+                        #    blob = bucket.blob(f"Vox/{td}/{img_title}")
+                        #    token = uuid4()
+                        #    metadata = {"firebaseStorageDownloadTokens": token}
+                        #    blob.upload_from_filename(f"{img_path}/{img_title}")
 
                         # Get Link to the Stored Image
-                        storage_link = f"https://firebasestorage.googleapis.com/v0/b/news-a3e22.appspot.com/o/Vox%2F{td}%2F{img_title}?alt=media&token={token}"
+                        storage_link = f"https://firebasestorage.googleapis.com/v0/b/news-a3e22.appspot.com/o/Vox%2Fvox.png?alt=media&token=db1c46f1-1155-44fa-b0aa-61d0b992da21"
 
                         data = {
                             "title": title,

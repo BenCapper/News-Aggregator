@@ -61,15 +61,13 @@ for article in articles:
       # Get Article Link
       a = article.select("a")
       link = str(a).split('href="')[1].split('">')[0]
-      link = f"{page_url}/{link}"
-
+      link = f"{page_url}{link}"
       # Get Full Article Page
       full_page = requests.get(link).content
       articleSoup = BeautifulSoup(full_page, features="lxml")
-
       # Gather Title
       title = articleSoup.select("h1")
-      title = str(title).split('">')[1].split('</')[0]
+      title = str(title).split('headline">')[1].split('</')[0]
       title = decodeTitle(title)
       # Gather / Format Date
       date = list()
@@ -80,11 +78,9 @@ for article in articles:
       date.append(monthDay[0])
       date.append(year)
       date = formatDate(date)
-
       # No Images
       img_title = ""
       img_src = ""
-
       # Check if an Article which is 80%+
       # Similar to any Other in the Log
       # Similar function in Utils
@@ -94,20 +90,16 @@ for article in articles:
          if similarity > .8:
             check = True
             break
-
       # Only Continue if the Title is not
       # Already in the Log and is not too
       # Similar to Another   
       if title not in ref_list and check is False:
-
          # Add the Title to the List
          # of Titles Already in the Log
          ref_list.append(title)
          open_temp = open(log_file_path, "a")
-
          # Get Link to the Stored Image
          storage_link = f"https://firebasestorage.googleapis.com/v0/b/news-a3e22.appspot.com/o/Yahoo%2Fyah.png?alt=media&token=bb4eabf2-5056-445c-982a-f88a06e951dd"
-
          data = {
              "title": title,
              "date": date,
@@ -119,18 +111,17 @@ for article in articles:
          open_json = open(json_dump_path, "r")
          read_json = open_json.read()
          appendJson(json_dump_path,data)
-             
+
          # Push the Gathered Data to DB
          # Using Utils method
          pushToDB(
               db_path, title, date, link, outlet, storage_link, order
           )
-
           # Write Title to Local Log File
          open_temp.write(str(title) + "\n")
          print("Yahoo Article Added to the database")
       else:
-         print("Yahoo Article Already in the database")
+         print("Yahoo Article Already in the database" + title)
 
    # One of Many Possible Things
    # Went Wrong - 
