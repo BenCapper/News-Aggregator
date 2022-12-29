@@ -386,7 +386,7 @@ object StoryManager : StoryStore {
                         todayList.add(story!!)
                         Timber.i("user-article=$story")
                     }
-                    todayList = todayList.sortedBy{it.order}.toMutableList()
+                    todayList = todayList.sortedBy{it.date}.toMutableList()
                     todayList.reverse()
                     database.child("user-$path").child(userId)
                         .removeEventListener(this)
@@ -395,6 +395,8 @@ object StoryManager : StoryStore {
                 }
             })
     }
+
+
 
     override fun search(date: String,term: String, userId: String, path:String,  storyList: MutableLiveData<List<StoryModel>>) {
 

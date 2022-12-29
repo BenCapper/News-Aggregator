@@ -24,5 +24,4 @@ data class StoryModel(var title: String = "",
                                 "link" to link
                             )
                         }
-
     }

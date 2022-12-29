@@ -27,7 +27,6 @@ class LikedListViewModel : ViewModel() {
     init { load() }
 
     fun load() {
-        val dates: String
         try {
             StoryManager.findLiked(liveFirebaseUser.value!!.uid,"likes",likedList)
             Timber.i("Load Success : ${likedList.value}")
@@ -39,7 +38,6 @@ class LikedListViewModel : ViewModel() {
     }
 
     fun search(term: String) {
-        val dates: String
         try {
             StoryManager.searchLiked(term,liveFirebaseUser.value!!.uid,"likes",likedList)
             Timber.i("Search Success")

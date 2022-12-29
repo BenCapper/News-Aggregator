@@ -19,8 +19,8 @@ android {
         applicationId "org.ben.news"
         minSdk 30
         targetSdk 32
-        versionCode 10
-        versionName '10'
+        versionCode 12
+        versionName '12'
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }

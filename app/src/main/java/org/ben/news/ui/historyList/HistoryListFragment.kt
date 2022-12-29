@@ -21,7 +21,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import org.ben.news.R
 import org.ben.news.adapters.EmptyAdapter
-import org.ben.news.adapters.StoryAdapter
+import org.ben.news.adapters.HistoryAdapter
 import org.ben.news.adapters.StoryListener
 import org.ben.news.databinding.FragmentHistoryListBinding
 import org.ben.news.firebase.StoryManager
@@ -35,8 +35,6 @@ import org.ben.news.ui.storyList.StoryListFragment
 import splitties.alertdialog.appcompat.*
 import splitties.snackbar.snack
 import splitties.views.textColorResource
-import java.text.SimpleDateFormat
-import java.util.*
 import kotlin.collections.ArrayList
 
 
@@ -114,34 +112,20 @@ class HistoryListFragment : Fragment(), StoryListener {
             }
             if (fragBinding.recyclerViewHistory.adapter!!.itemCount > 0)
                 fragBinding.creepy.visibility = View.INVISIBLE
-                Glide.with(this).load(R.drawable.bidenlost).into(fragBinding.imageView2)
-                val datenow = StoryManager.getDate(day)
-                fragBinding.emptydate.text = datenow
-                fragBinding.larrow.setOnClickListener {
-                    if (day < 14) {
-                        showLoader(loader, "")
-                        day += 1
-                        historyListViewModel.load(day)
-                    }
-                }
-                fragBinding.rarrow.setOnClickListener {
-                    showLoader(loader,"")
-                    day -= 1
-                    if (day <= 0 ){
-                        day = 0
-                    }
-                    historyListViewModel.load(day)
-                }
+            Glide.with(this).load(R.drawable.bidenlost).into(fragBinding.imageView2)
+            fragBinding.emptydate.visibility = View.INVISIBLE
+            fragBinding.larrow.visibility = View.INVISIBLE
+            fragBinding.rarrow.visibility = View.INVISIBLE
+
         }
         setSwipeRefresh()
 
         val swipeDeleteHandler = object : SwipeToDeleteCallback(requireContext()) {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 if (viewHolder.itemViewType != 1) {
-                    val adapter = fragBinding.recyclerViewHistory.adapter as StoryAdapter
+                    val adapter = fragBinding.recyclerViewHistory.adapter as HistoryAdapter
                     adapter.removeAt(viewHolder.absoluteAdapterPosition)
                     historyListViewModel.delete(
-                        day,
                         historyListViewModel.liveFirebaseUser.value?.uid!!,
                         (viewHolder.itemView.tag as StoryModel).title
                     )
@@ -155,21 +139,10 @@ class HistoryListFragment : Fragment(), StoryListener {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if( item.itemId == R.id.app_bar_right) {
-            if(day != 0) {
-                showLoader(loader, "")
-                day -= 1
-                if (day <= 0) {
-                    day = 0
-                }
-                historyListViewModel.load(day)
-            }
+
         }
         if( item.itemId == R.id.app_bar_left) {
-            if (day < 14) {
-                showLoader(loader, "")
-                day += 1
-                historyListViewModel.load(day)
-            }
+
         }
         return super.onOptionsItemSelected(item)
     }
@@ -179,7 +152,7 @@ class HistoryListFragment : Fragment(), StoryListener {
         fragBinding.swipe.setOnRefreshListener {
             fragBinding.swipe.isRefreshing = true
             state = fragBinding.recyclerViewHistory.layoutManager?.onSaveInstanceState()
-            historyListViewModel.load(day)
+            historyListViewModel.load()
         }
     }
 
@@ -190,7 +163,7 @@ class HistoryListFragment : Fragment(), StoryListener {
 
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.menu_all, menu)
+        inflater.inflate(R.menu.menu_liked, menu)
         when (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) {
             Configuration.UI_MODE_NIGHT_YES -> {
                 menu.findItem(R.id.app_bar_right).iconTintList = null
@@ -212,17 +185,16 @@ class HistoryListFragment : Fragment(), StoryListener {
                 if (newText != null) {
                     searching = newText
                     historyListViewModel.search(
-                        day,
                         newText
                     )
                 }
                 else{
                     searching = newText
-                    historyListViewModel.load(day)
+                    historyListViewModel.load()
                 }
                 if (newText == "") {
                     searching = newText
-                    historyListViewModel.load(day)
+                    historyListViewModel.load()
                 }
 
                 return true
@@ -230,7 +202,7 @@ class HistoryListFragment : Fragment(), StoryListener {
         })
         searchView.setOnCloseListener {
             searching = null
-            historyListViewModel.load(day)
+            historyListViewModel.load()
             false
         }
         super.onCreateOptionsMenu(menu, inflater)
@@ -238,7 +210,7 @@ class HistoryListFragment : Fragment(), StoryListener {
 
 
     private fun render(storyList: ArrayList<StoryModel>) {
-        fragBinding.recyclerViewHistory.adapter = StoryAdapter(storyList, this)
+        fragBinding.recyclerViewHistory.adapter = HistoryAdapter(storyList, this)
         state?.let { fragBinding.recyclerViewHistory.layoutManager?.onRestoreInstanceState(it) }
     }
 
@@ -247,7 +219,7 @@ class HistoryListFragment : Fragment(), StoryListener {
         loggedInViewModel.liveFirebaseUser.observe(viewLifecycleOwner) { firebaseUser ->
             if (firebaseUser != null) {
                 historyListViewModel.liveFirebaseUser.value = firebaseUser
-                historyListViewModel.load(day)
+                historyListViewModel.load()
             }
         }
     }
@@ -258,7 +230,7 @@ class HistoryListFragment : Fragment(), StoryListener {
     }
 
     override fun onStoryClick(story: StoryModel) {
-        StoryManager.create(loggedInViewModel.liveFirebaseUser.value!!.uid, "history",story)
+        StoryManager.createLiked(loggedInViewModel.liveFirebaseUser.value!!.uid, "history",story)
         val intent = Intent(Intent.ACTION_VIEW).setData(Uri.parse(story.link))
         state = fragBinding.recyclerViewHistory.layoutManager?.onSaveInstanceState()
         startActivity(intent)

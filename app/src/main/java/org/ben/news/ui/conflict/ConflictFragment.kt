@@ -248,7 +248,7 @@ class ConflictFragment : Fragment(), DoubleStoryListener, StoryListener {
 
     override fun onRightClick(story: DoubleStoryModel) {
         val article = StoryModel(story.title1,story.date1,story.outlet1,story.storage_link1,story.order,story.link1)
-        StoryManager.create(loggedInViewModel.liveFirebaseUser.value!!.uid,"history", article)
+        StoryManager.createLiked(loggedInViewModel.liveFirebaseUser.value!!.uid,"history", article)
         val intent = Intent(Intent.ACTION_VIEW).setData(Uri.parse(story.link1))
 
         state = fragBinding.recyclerViewCon.layoutManager?.onSaveInstanceState()
@@ -258,7 +258,7 @@ class ConflictFragment : Fragment(), DoubleStoryListener, StoryListener {
 
     override fun onLeftClick(story: DoubleStoryModel) {
         val article = StoryModel(story.title2,story.date2,story.outlet2,story.storage_link2,story.order,story.link2)
-        StoryManager.create(loggedInViewModel.liveFirebaseUser.value!!.uid,"history", article)
+        StoryManager.createLiked(loggedInViewModel.liveFirebaseUser.value!!.uid,"history", article)
         val intent = Intent(Intent.ACTION_VIEW).setData(Uri.parse(story.link2))
 
         state = fragBinding.recyclerViewCon.layoutManager?.onSaveInstanceState()

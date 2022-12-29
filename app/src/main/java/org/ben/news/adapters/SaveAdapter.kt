@@ -38,6 +38,7 @@ class NoSaveAdapter constructor(private var stories: ArrayList<StoryModel>, priv
         "www.Revolver.news",
         "www.DailyCaller.com",
         "www.TheDailyBeast.com",
+        "www.BonginoReport.com",
         "www.TheGatewayPundit.com",
         "www.Politico.com",
         "www.CbsNews.com",
