@@ -25,10 +25,7 @@ import org.ben.news.adapters.HistoryAdapter
 import org.ben.news.adapters.StoryListener
 import org.ben.news.databinding.FragmentHistoryListBinding
 import org.ben.news.firebase.StoryManager
-import org.ben.news.helpers.SwipeToDeleteCallback
-import org.ben.news.helpers.createLoader
-import org.ben.news.helpers.hideLoader
-import org.ben.news.helpers.showLoader
+import org.ben.news.helpers.*
 import org.ben.news.models.StoryModel
 import org.ben.news.ui.auth.LoggedInViewModel
 import org.ben.news.ui.storyList.StoryListFragment
@@ -120,7 +117,7 @@ class HistoryListFragment : Fragment(), StoryListener {
         }
         setSwipeRefresh()
 
-        val swipeDeleteHandler = object : SwipeToDeleteCallback(requireContext()) {
+        val swipeDeleteHandler = object : SwipeToDeleteLikedCallback(requireContext()) {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 if (viewHolder.itemViewType != 1) {
                     val adapter = fragBinding.recyclerViewHistory.adapter as HistoryAdapter
