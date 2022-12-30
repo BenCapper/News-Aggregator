@@ -7,10 +7,10 @@ python3 ~/src/News-Aggregator/scripts/cbs.py;
 python3 ~/src/News-Aggregator/scripts/beast.py
 python3 ~/src/News-Aggregator/scripts/dailycaller.py;
 python3 ~/src/News-Aggregator/scripts/euronews.py;
-python3 ~/src/News-Aggregator/scripts/guardian.py;
 python3 ~/src/News-Aggregator/scripts/gbnews.py;
 python3 ~/src/News-Aggregator/scripts/globalnews.py;
 python3 ~/src/News-Aggregator/scripts/gript.py;
+python3 ~/src/News-Aggregator/scripts/guardian.py;
 python3 ~/src/News-Aggregator/scripts/gwp.py;
 python3 ~/src/News-Aggregator/scripts/huff.py;
 python3 ~/src/News-Aggregator/scripts/pmillen.py;

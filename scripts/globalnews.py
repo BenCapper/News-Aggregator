@@ -113,15 +113,15 @@ for article in articles:
             # Get Image Data using Requests
             # Create the Image Locally
             # Upload image to Storage
-            with open(f"{img_path}/{img_title}", "wb") as img:
-                img.write(requests.get(img_src).content)
-                blob = bucket.blob(f"Global/{td}/{img_title}")
-                token = uuid4()
-                metadata = {"firebaseStorageDownloadTokens": token}
-                blob.upload_from_filename(f"{img_path}/{img_title}")
+            #with open(f"{img_path}/{img_title}", "wb") as img:
+            #    img.write(requests.get(img_src).content)
+            #    blob = bucket.blob(f"Global/{td}/{img_title}")
+            #    token = uuid4()
+            #    metadata = {"firebaseStorageDownloadTokens": token}
+            #    blob.upload_from_filename(f"{img_path}/{img_title}")
 
             # Get Link to the Stored Image
-            storage_link = f"https://firebasestorage.googleapis.com/v0/b/news-a3e22.appspot.com/o/Global%2F{td}%2F{img_title}?alt=media&token={token}"
+            storage_link = f"https://firebasestorage.googleapis.com/v0/b/news-a3e22.appspot.com/o/Global%2Fglo.png?alt=media&token=2560dcd6-6f15-4da1-85ff-53de78333456"
             data = {
                    "title": title,
                    "date": date,

@@ -1,6 +1,7 @@
 import os
 from uuid import uuid4
 import requests
+import datetime
 from bs4 import BeautifulSoup
 from firebase_admin import storage
 from utils.utilities import (decodeTitle, formatDate, imgFolder, imgTitleFormat, initialise, jsonFolder, dumpJson, appendJson,
@@ -55,72 +56,61 @@ for article in articles:
 
      # Catch all for a Litany of Possible Errors
      try:
-         # Get Article Link
-         link = str(article).split('href="')[1].split('">')[0]
-
-         # Get Full Article Page
-         full_page = requests.get(link).content
-         articleSoup = BeautifulSoup(full_page, features="lxml")
-
-         # Gather Title / Img Title
-         title = articleSoup.select('h1')
-         title = str(title).split('">')[1].split('</')[0]
-         title = decodeTitle(title)
-         img_title = imgTitleFormat(title)
-
-         # Gather / Format Date
-         date = articleSoup.find('span', 'dcr-10i63lj')
-         date = str(date).split('">')[1].split('</')[0].split(' ')[1:-2]
-         date = formatDate(date)
-
-         # Images Protected - Use Default
-         img_src = "guard.png"
-
-         # Initialize Storage Variables
-         bucket = storage.bucket()
-         token = ""
-
-         # Check if an Article which is 80%+
-         # Similar to any Other in the Log
-         check = False
-         for ref in ref_list:
-            similarity = similar(ref,title)
-            if similarity > .8 or "<span" in title:
-              check = True
-              break
-
-         # Only Continue if the Title is not
-         # Already in the Log and is not too
-         # Similar to Another
-         if title not in ref_list and check is False:
-
-              # Add the Title to the List
-              # of Titles Already in the Log
-              ref_list.append(title)
-              open_temp = open(log_file_path, "a")
-              storage_link = f"https://firebasestorage.googleapis.com/v0/b/news-a3e22.appspot.com/o/Guardian%2Fguard.png?alt=media&token=5193672c-3e9a-44db-8512-632f0a4fb0c5"
-              data = {
-                   "title": title,
-                   "date": date,
-                   "link": link,
-                   "outlet": outlet,
-                   "storage_link": storage_link,
-                   "order": order
-              }
-              open_json = open(json_dump_path, "r")
-              read_json = open_json.read()
-              appendJson(json_dump_path,data)
-              # Push the Gathered Data to DB
-              # Using Utils method
-              pushToDB(
-                 db_path, title, date, link, outlet, storage_link, order
-              )
-
-              # Write Title to Local Log File
-              open_temp.write(str(title) + "\n")
-              print("Guardian Article Added to DB")
-         else:
-              print("Guardian Article Already in DB")
+          # Get Article Link
+          link = str(article).split('href="')[1].split('">')[0]
+          # Get Full Article Page
+          full_page = requests.get(link).content
+          articleSoup = BeautifulSoup(full_page, features="lxml")
+          # Gather Title / Img Title
+          title = articleSoup.select('h1')
+          title = str(title).split('">')[1].split('</')[0]
+          title = decodeTitle(title)
+          img_title = imgTitleFormat(title)
+          # Gather / Format Date
+          date = datetime.datetime.now().strftime("%m-%d-%y")
+          # Images Protected - Use Default
+          img_src = "guard.png"
+          # Initialize Storage Variables
+          bucket = storage.bucket()
+          token = ""
+          # Check if an Article which is 80%+
+          # Similar to any Other in the Log
+          check = False
+          for ref in ref_list:
+             similarity = similar(ref,title)
+             if similarity > .8 or "<span" in title:
+               check = True
+               break
+          # Only Continue if the Title is not
+          # Already in the Log and is not too
+          # Similar to Another
+          if title not in ref_list and check is False:
+               # Add the Title to the List
+               # of Titles Already in the Log
+               ref_list.append(title)
+               open_temp = open(log_file_path, "a")
+               storage_link = f"https://firebasestorage.googleapis.com/v0/b/news-a3e22.appspot.com/o/Guardian%2Fguard.png?alt=media&token=5193672c-3e9a-44db-8512-632f0a4fb0c5"
+               data = {
+                    "title": title,
+                    "date": date,
+                    "link": link,
+                    "outlet": outlet,
+                    "storage_link": storage_link,
+                    "order": order
+               }
+               open_json = open(json_dump_path, "r")
+               read_json = open_json.read()
+               appendJson(json_dump_path,data)
+               # Push the Gathered Data to DB
+               # Using Utils method
+               pushToDB(
+                  db_path, title, date, link, outlet, storage_link, order
+               )
+               # Write Title to Local Log File
+               open_temp.write(str(title) + "\n")
+               print("Guardian Article Added to DB")
+          else:
+               print("Guardian Article Already in DB")
               
      # One of Many Possible Things
      # Went Wrong - 
