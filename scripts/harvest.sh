@@ -25,3 +25,10 @@ python3 ~/src/News-Aggregator/scripts/yahoo.py;
 python3 ~/src/News-Aggregator/scripts/zerohedge.py;
 python3 ~/src/News-Aggregator/scripts/breit.py;
 python3 ~/src/News-Aggregator/scripts/doubles.py;
+
+#python3 ~/src/News-Aggregator/scripts/infowars.py;
+#python3 ~/src/News-Aggregator/scripts/oan.py;
+#python3 ~/src/News-Aggregator/scripts/amthinker.py;
+#python3 ~/src/News-Aggregator/scripts/hill.py;
+#python3 ~/src/News-Aggregator/scripts/npr.py;
+#python3 ~/src/News-Aggregator/scripts/dailymail.py;

@@ -43,7 +43,8 @@ def initialise(json_path, db_url, bucket):
  
  
 def pageSoup(page_url):
-   page = requests.get(page_url).content
+   headers = {"User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.96 Safari/537.36"} 
+   page = requests.get(page_url, headers=headers).content
    soup = BeautifulSoup(page, features="lxml")
    return soup
 
