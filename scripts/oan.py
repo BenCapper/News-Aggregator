@@ -3,7 +3,7 @@ from uuid import uuid4
 import requests
 from bs4 import BeautifulSoup
 from firebase_admin import storage
-from utils.utilities import (formatDate, imgFolder, imgTitleFormat, initialise, jsonFolder, dumpJson, appendJson, pushToDbNoImg,
+from utils.utilities import (formatDate, imgFolder, imgTitleFormat, initialise, jsonFolder, appendJson,
                           todayDate,logFolder, pageSoup, pushToDB, titleFormat, similar,getHour)
 td = todayDate()
 # Set Global Variables
@@ -18,7 +18,7 @@ bucket = "news-a3e22.appspot.com"
 page_url = "https://www.oann.com/category/newsroom/"
 img_path = f"/home/bencapper/src/News/OAN/{td}"
 storage_path = "https://firebasestorage.googleapis.com/v0/b/news-a3e22.appspot.com/o"
-db_path = "stories"
+db_path = "tests"
 outlet = "www.OANN.com"
 
 # Set Local Folders
@@ -52,7 +52,7 @@ articles = soup.find_all("article")
 # Cycle through List just Gathered
 # And Save to DB or Pass due to Lack
 # of Information Available
-for article in articles:
+for article in articles[:6]:
     try:
         link = str(article).split('href="')[1].split('" ')[0]
         title = str(article).split('href="')[1].split('" ')[1].split('title="')[1].split('">')[0]
@@ -61,8 +61,9 @@ for article in articles:
         img_src = str(article).split('src="')[1].split('" ')[0]
         full_page = requests.get(link).content
         articleSoup = BeautifulSoup(full_page, features="lxml")
-        date = articleSoup.select('h5')
-        date = str(date).split('day, ')[1].split('</h')[0].replace(',',' ').replace('  ', ' ').split(' ')
+        date = articleSoup.find('div', 'entry-content')
+        date = date.find('p')
+        date = str(date).split('day, ')[1].split('</p')[0].replace(',',' ').replace('  ', ' ').split(' ')
         dates = list()
         day = date[1]
         if len(day) < 2:
