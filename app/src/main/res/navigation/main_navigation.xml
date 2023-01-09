@@ -183,6 +183,9 @@
         <action
             android:id="@+id/action_storyListFragment_to_dmailFragment"
             app:destination="@id/dmailFragment" />
+        <action
+            android:id="@+id/action_storyListFragment_to_nprFragment"
+            app:destination="@id/nprFragment" />
     </fragment>
     <fragment
         android:id="@+id/likedListFragment"
@@ -368,4 +371,9 @@
         android:name="org.ben.news.ui.dmail.DmailFragment"
         android:label="fragment_dmail"
         tools:layout="@layout/fragment_dmail" />
+    <fragment
+        android:id="@+id/nprFragment"
+        android:name="org.ben.news.ui.npr.NprFragment"
+        android:label="fragment_npr"
+        tools:layout="@layout/fragment_npr" />
 </navigation>

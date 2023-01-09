@@ -72,6 +72,7 @@ class Home : AppCompatActivity() {
             R.id.callerFragment,
             R.id.conflictFragment,
             R.id.dmailFragment,
+            R.id.nprFragment,
             R.id.euronFragment,
             R.id.gbFragment,
             R.id.globalFragment,
@@ -345,6 +346,12 @@ class Home : AppCompatActivity() {
 
     fun dmailArticles(item: MenuItem) {
         findNavController(R.id.nav_host_fragment).navigate(R.id.dmailFragment)
+        findViewById<DrawerLayout>(R.id.drawer_layout).closeDrawers()
+        Timber.i("UserId = ${loggedInViewModel.liveFirebaseUser.value!!.uid}")
+    }
+
+    fun nprArticles(item: MenuItem) {
+        findNavController(R.id.nav_host_fragment).navigate(R.id.nprFragment)
         findViewById<DrawerLayout>(R.id.drawer_layout).closeDrawers()
         Timber.i("UserId = ${loggedInViewModel.liveFirebaseUser.value!!.uid}")
     }

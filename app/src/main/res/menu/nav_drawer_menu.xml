@@ -155,6 +155,11 @@
                 android:onClick="cbsArticles"
                 android:title="@string/cbs" />
             <item
+                android:id="@+id/menunpr"
+                android:icon="@drawable/usicon"
+                android:onClick="nprArticles"
+                android:title="@string/npr" />
+            <item
                 android:id="@+id/menuvox"
                 android:icon="@drawable/usicon"
                 android:onClick="voxArticles"
