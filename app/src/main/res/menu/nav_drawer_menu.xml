@@ -91,6 +91,11 @@
                 android:onClick="bongArticles"
                 android:title="@string/bongino" />
             <item
+                android:id="@+id/menuinfo"
+                android:icon="@drawable/usicon"
+                android:onClick="infoArticles"
+                android:title="@string/infow" />
+            <item
                 android:id="@+id/menucaller"
                 android:icon="@drawable/usicon"
                 android:onClick="callerArticles"

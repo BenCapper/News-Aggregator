@@ -85,6 +85,7 @@ class Home : AppCompatActivity() {
             R.id.rteFragment,
             R.id.rightFragment,
             R.id.skyFragment,
+            R.id.infoFragment,
             R.id.spikedFragment,
             R.id.timcastFragment,
             R.id.voxFragment,
@@ -228,6 +229,12 @@ class Home : AppCompatActivity() {
     }
 
     fun amThinkArticles(item: MenuItem) {
+        findNavController(R.id.nav_host_fragment).navigate(R.id.infoFragment)
+        findViewById<DrawerLayout>(R.id.drawer_layout).closeDrawers()
+        Timber.i("UserId = ${loggedInViewModel.liveFirebaseUser.value!!.uid}")
+    }
+
+    fun infoArticles(item: MenuItem) {
         findNavController(R.id.nav_host_fragment).navigate(R.id.amThinkFragment)
         findViewById<DrawerLayout>(R.id.drawer_layout).closeDrawers()
         Timber.i("UserId = ${loggedInViewModel.liveFirebaseUser.value!!.uid}")
@@ -370,13 +377,13 @@ class Home : AppCompatActivity() {
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
         when (currentNightMode) {
             Configuration.UI_MODE_NIGHT_NO -> {
-                sharedPreferences.edit().clear().commit()
-                sharedPreferences.edit().putString("night_mode", "night_mode").commit()
+                sharedPreferences.edit().clear().apply()
+                sharedPreferences.edit().putString("night_mode", "night_mode").apply()
                 AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_YES)
             }
             Configuration.UI_MODE_NIGHT_YES -> {
-                sharedPreferences.edit().clear().commit()
-                sharedPreferences.edit().putString("light_mode", "light_mode").commit()
+                sharedPreferences.edit().clear().apply()
+                sharedPreferences.edit().putString("light_mode", "light_mode").apply()
                 AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_NO)
 
             }
