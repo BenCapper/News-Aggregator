@@ -67,7 +67,7 @@ class DmailFragment : Fragment(), StoryListener, MenuProvider {
         val root = fragBinding.root
 
         fragBinding.recyclerViewDmail.layoutManager = activity?.let { LinearLayoutManager(it) }
-        activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.call)
+        activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.dmail)
         MobileAds.initialize(this.requireContext()) {}
         val fab = activity?.findViewById<FloatingActionButton>(R.id.fab)
         val bot = activity?.findViewById<BottomNavigationView>(R.id.bottom_nav)

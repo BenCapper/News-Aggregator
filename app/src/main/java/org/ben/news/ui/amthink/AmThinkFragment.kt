@@ -67,7 +67,7 @@ class AmThinkFragment : Fragment(), StoryListener, MenuProvider {
         val root = fragBinding.root
 
         fragBinding.recyclerViewAm.layoutManager = activity?.let { LinearLayoutManager(it) }
-        activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.beast)
+        activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.amthink)
         MobileAds.initialize(this.requireContext()) {}
         val fab = activity?.findViewById<FloatingActionButton>(R.id.fab)
         val bot = activity?.findViewById<BottomNavigationView>(R.id.bottom_nav)

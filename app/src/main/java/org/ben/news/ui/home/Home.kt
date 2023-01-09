@@ -79,6 +79,7 @@ class Home : AppCompatActivity() {
             R.id.guardFragment,
             R.id.griptFragment,
             R.id.gatewayFragment,
+            R.id.hillFragment,
             R.id.huffFragment,
             R.id.leftFragment,
             R.id.pmillFragment,
@@ -231,13 +232,13 @@ class Home : AppCompatActivity() {
     }
 
     fun amThinkArticles(item: MenuItem) {
-        findNavController(R.id.nav_host_fragment).navigate(R.id.infoFragment)
+        findNavController(R.id.nav_host_fragment).navigate(R.id.amThinkFragment)
         findViewById<DrawerLayout>(R.id.drawer_layout).closeDrawers()
         Timber.i("UserId = ${loggedInViewModel.liveFirebaseUser.value!!.uid}")
     }
 
     fun infoArticles(item: MenuItem) {
-        findNavController(R.id.nav_host_fragment).navigate(R.id.amThinkFragment)
+        findNavController(R.id.nav_host_fragment).navigate(R.id.infoFragment)
         findViewById<DrawerLayout>(R.id.drawer_layout).closeDrawers()
         Timber.i("UserId = ${loggedInViewModel.liveFirebaseUser.value!!.uid}")
     }

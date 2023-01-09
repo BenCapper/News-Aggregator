@@ -70,7 +70,7 @@ class InfoFragment : Fragment(), StoryListener, MenuProvider {
         val root = fragBinding.root
 
         fragBinding.recyclerViewInfo.layoutManager = activity?.let { LinearLayoutManager(it) }
-        activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.beast)
+        activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.info)
         MobileAds.initialize(this.requireContext()) {}
         val fab = activity?.findViewById<FloatingActionButton>(R.id.fab)
         val bot = activity?.findViewById<BottomNavigationView>(R.id.bottom_nav)
@@ -140,9 +140,9 @@ class InfoFragment : Fragment(), StoryListener, MenuProvider {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
         val menuHost: MenuHost = requireActivity()
         menuHost.addMenuProvider(this, viewLifecycleOwner, Lifecycle.State.RESUMED)
+        super.onViewCreated(view, savedInstanceState)
     }
 
     private fun setSwipeRefresh() {
