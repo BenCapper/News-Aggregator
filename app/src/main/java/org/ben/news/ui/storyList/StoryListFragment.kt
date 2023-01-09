@@ -11,8 +11,11 @@ import android.view.*
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.SearchView
+import androidx.core.view.MenuHost
+import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Lifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -38,15 +41,16 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 
-class StoryListFragment : Fragment(), StoryListener {
+class StoryListFragment : Fragment(), StoryListener, MenuProvider {
 
     companion object {
         fun newInstance() = StoryListFragment()
     }
+
     private var _fragBinding: FragmentStoryListBinding? = null
     private val fragBinding get() = _fragBinding!!
-    lateinit var loader : AlertDialog
-    private val loggedInViewModel : LoggedInViewModel by activityViewModels()
+    lateinit var loader: AlertDialog
+    private val loggedInViewModel: LoggedInViewModel by activityViewModels()
     private val storyListViewModel: StoryListViewModel by activityViewModels()
     var state: Parcelable? = null
     var shuffle: Boolean? = null
@@ -65,7 +69,7 @@ class StoryListFragment : Fragment(), StoryListener {
         savedInstanceState: Bundle?
     ): View {
         loader = createLoader(requireActivity())
-        showLoader(loader,"")
+        showLoader(loader, "")
         activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.hometit)
         _fragBinding = FragmentStoryListBinding.inflate(inflater, container, false)
         val root = fragBinding.root
@@ -77,7 +81,7 @@ class StoryListFragment : Fragment(), StoryListener {
         val bot = activity?.findViewById<BottomNavigationView>(R.id.bottom_nav)
 
         fab?.visibility = View.INVISIBLE
-        fragBinding.recyclerView.addOnScrollListener (object : RecyclerView.OnScrollListener(){
+        fragBinding.recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             var y = 0
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 y = dy
@@ -87,10 +91,9 @@ class StoryListFragment : Fragment(), StoryListener {
 
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
-                if (y > 0){
+                if (y > 0) {
                     fab!!.visibility = View.VISIBLE
-                }
-                else {
+                } else {
                     fab!!.visibility = View.INVISIBLE
                 }
             }
@@ -107,43 +110,47 @@ class StoryListFragment : Fragment(), StoryListener {
                 checkSwipeRefresh()
             }
             hideLoader(loader)
-            if(fragBinding.recyclerView.adapter!!.itemCount == 0 && searching != null){
+            if (fragBinding.recyclerView.adapter!!.itemCount == 0 && searching != null) {
                 val st = ArrayList<StoryModel>()
-                st.add(StoryModel(title="1"))
+                st.add(StoryModel(title = "1"))
                 fragBinding.recyclerView.adapter = EmptyAdapter(st, this)
                 state?.let { fragBinding.recyclerView.layoutManager?.onRestoreInstanceState(it) }
-            }
-            else if(fragBinding.recyclerView.adapter!!.itemCount == 0){
+            } else if (fragBinding.recyclerView.adapter!!.itemCount == 0) {
                 fragBinding.creepy.visibility = View.VISIBLE
             }
-            if (fragBinding.recyclerView.adapter!!.itemCount > 0)
+            if (fragBinding.recyclerView.adapter!!.itemCount > 0) {
                 fragBinding.creepy.visibility = View.INVISIBLE
-                Glide.with(this).load(R.drawable.bidenlost).into(fragBinding.imageView2)
-                val datenow = StoryManager.getDate(day)
-                fragBinding.emptydate.text = datenow
-                fragBinding.larrow.setOnClickListener {
-                    if (day < 14) {
-                        showLoader(loader, "")
-                        day += 1
-                        storyListViewModel.load(day)
-                    }
+            }
+            Glide.with(this).load(R.drawable.bidenlost).into(fragBinding.imageView2)
+            val datenow = StoryManager.getDate(day)
+            fragBinding.emptydate.text = datenow
+            fragBinding.larrow.setOnClickListener {
+                if (day < 14) {
+                    showLoader(loader, "")
+                    day += 1
+                    storyListViewModel.load(day)
                 }
-                fragBinding.rarrow.setOnClickListener {
-                    if (day != 0) {
-                        showLoader(loader, "")
-                        day -= 1
-                        if (day <= 0) {
-                            day = 0
-                        }
-                        storyListViewModel.load(day)
+            }
+            fragBinding.rarrow.setOnClickListener {
+                if (day != 0) {
+                    showLoader(loader, "")
+                    day -= 1
+                    if (day <= 0) {
+                        day = 0
                     }
+                    storyListViewModel.load(day)
                 }
+            }
         }
         setSwipeRefresh()
         return root
     }
 
-
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        val menuHost: MenuHost = requireActivity()
+        menuHost.addMenuProvider(this, viewLifecycleOwner, Lifecycle.State.RESUMED)
+    }
 
 
     private fun setSwipeRefresh() {
@@ -160,85 +167,6 @@ class StoryListFragment : Fragment(), StoryListener {
             fragBinding.swipe.isRefreshing = false
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.menu_home, menu)
-        when (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) {
-            Configuration.UI_MODE_NIGHT_YES -> {
-                menu.findItem(R.id.app_bar_shuffle).iconTintList = null
-                menu.findItem(R.id.app_bar_r).iconTintList = null
-                menu.findItem(R.id.app_bar_l).iconTintList = null
-            }
-        }
-
-
-        /* Finding the search bar in the menu and setting it to the search view. */
-        val item = menu.findItem(R.id.app_bar_search)
-        val searchView = item.actionView as SearchView
-
-        /* This is the code that is executed when the search bar is used. It searches the database for
-        the building that the user is searching for. */
-        searchView.setOnQueryTextListener(object :  SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                return false
-            }
-
-            override fun onQueryTextChange(newText: String?): Boolean {
-                if (newText != null) {
-                    searching = newText
-                    storyListViewModel.search(
-                        day,
-                        newText
-                    )
-                }
-
-                else{
-                    searching = newText
-                    storyListViewModel.load(day)
-                }
-                if (newText == "") {
-                    searching = newText
-                    storyListViewModel.load(day)
-                }
-
-                return true
-            }
-        })
-        searchView.setOnCloseListener {
-            searching = null
-            storyListViewModel.load(day)
-            false
-        }
-        super.onCreateOptionsMenu(menu, inflater)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        val id = item.itemId
-        if (id == R.id.app_bar_shuffle) {
-            showLoader(loader,"")
-            storyListViewModel.loadShuffle(day)
-            shuffle = true
-            state = null
-        }
-        if( item.itemId == R.id.app_bar_r) {
-            if(day != 0) {
-                showLoader(loader, "")
-                day -= 1
-                if (day <= 0) {
-                    day = 0
-                }
-                storyListViewModel.load(day)
-            }
-        }
-        if( item.itemId == R.id.app_bar_l) {
-            if (day < 14) {
-                showLoader(loader, "")
-                day += 1
-                storyListViewModel.load(day)
-            }
-        }
-
-        return super.onOptionsItemSelected(item)
-    }
 
     private fun render(storyList: ArrayList<StoryModel>) {
         fragBinding.recyclerView.adapter = StoryAdapter(storyList, this)
@@ -253,19 +181,19 @@ class StoryListFragment : Fragment(), StoryListener {
     override fun onPause() {
         state = if (shuffle == true) {
             null
-        } else{
+        } else {
             fragBinding.recyclerView.layoutManager?.onSaveInstanceState()
         }
         super.onPause()
     }
 
     override fun onStoryClick(story: StoryModel) {
-        StoryManager.createLiked(loggedInViewModel.liveFirebaseUser.value!!.uid,"history", story)
+        StoryManager.createLiked(loggedInViewModel.liveFirebaseUser.value!!.uid, "history", story)
         val intent = Intent(Intent.ACTION_VIEW).setData(Uri.parse(story.link))
 
         state = if (shuffle == true) {
             null
-        } else{
+        } else {
             fragBinding.recyclerView.layoutManager?.onSaveInstanceState()
         }
 
@@ -275,11 +203,17 @@ class StoryListFragment : Fragment(), StoryListener {
     override fun onLike(story: StoryModel) {
         activity?.alertDialog {
             messageResource = R.string.save_art
-            okButton { StoryManager.createLiked(loggedInViewModel.liveFirebaseUser.value!!.uid,"likes", story)
+            okButton {
+                StoryManager.createLiked(
+                    loggedInViewModel.liveFirebaseUser.value!!.uid,
+                    "likes",
+                    story
+                )
                 val params = fragBinding.root.layoutParams as FrameLayout.LayoutParams
                 params.gravity = Gravity.CENTER_HORIZONTAL
-                view?.snack(R.string.saved_article)}
-            cancelButton{ view?.snack(R.string.save_can)}
+                view?.snack(R.string.saved_article)
+            }
+            cancelButton { view?.snack(R.string.save_can) }
         }?.onShow {
             positiveButton.textColorResource = R.color.black
             negativeButton.textColorResource = splitties.material.colors.R.color.grey_500
@@ -300,8 +234,85 @@ class StoryListFragment : Fragment(), StoryListener {
         state = fragBinding.recyclerView.layoutManager?.onSaveInstanceState()
         startActivity(shareIntent)
     }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _fragBinding = null
+    }
+
+    override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+        menuInflater.inflate(R.menu.menu_home, menu)
+        when (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) {
+            Configuration.UI_MODE_NIGHT_YES -> {
+                menu.findItem(R.id.app_bar_shuffle).iconTintList = null
+                menu.findItem(R.id.app_bar_r).iconTintList = null
+                menu.findItem(R.id.app_bar_l).iconTintList = null
+            }
+        }
+
+
+        /* Finding the search bar in the menu and setting it to the search view. */
+        val item = menu.findItem(R.id.app_bar_search)
+        val searchView = item.actionView as SearchView
+
+        /* This is the code that is executed when the search bar is used. It searches the database for
+        the building that the user is searching for. */
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                if (newText != null) {
+                    searching = newText
+                    storyListViewModel.search(
+                        day,
+                        newText
+                    )
+                } else {
+                    searching = newText
+                    storyListViewModel.load(day)
+                }
+                if (newText == "") {
+                    searching = newText
+                    storyListViewModel.load(day)
+                }
+
+                return true
+            }
+        })
+        searchView.setOnCloseListener {
+            searching = null
+            storyListViewModel.load(day)
+            false
+        }
+    }
+
+    override fun onMenuItemSelected(item: MenuItem): Boolean {
+        val id = item.itemId
+        if (id == R.id.app_bar_shuffle) {
+            showLoader(loader, "")
+            storyListViewModel.loadShuffle(day)
+            shuffle = true
+            state = null
+        }
+        if (item.itemId == R.id.app_bar_r) {
+            if (day != 0) {
+                showLoader(loader, "")
+                day -= 1
+                if (day <= 0) {
+                    day = 0
+                }
+                storyListViewModel.load(day)
+            }
+        }
+        if (item.itemId == R.id.app_bar_l) {
+            if (day < 14) {
+                showLoader(loader, "")
+                day += 1
+                storyListViewModel.load(day)
+            }
+        }
+        return false
     }
 }

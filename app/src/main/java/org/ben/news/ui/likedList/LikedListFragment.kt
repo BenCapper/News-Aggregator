@@ -9,8 +9,11 @@ import android.os.Parcelable
 import android.view.*
 import android.widget.ImageView
 import android.widget.SearchView
+import androidx.core.view.MenuHost
+import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Lifecycle
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -32,15 +35,16 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 
-class LikedListFragment : Fragment(), StorySaveListener, StoryListener {
+class LikedListFragment : Fragment(), StorySaveListener, StoryListener, MenuProvider {
 
     companion object {
         fun newInstance() = StoryListFragment()
     }
+
     private var _fragBinding: FragmentLikedListBinding? = null
     private val fragBinding get() = _fragBinding!!
-    lateinit var loader : AlertDialog
-    private val loggedInViewModel : LoggedInViewModel by activityViewModels()
+    lateinit var loader: AlertDialog
+    private val loggedInViewModel: LoggedInViewModel by activityViewModels()
     private val likedListViewModel: LikedListViewModel by activityViewModels()
     private var storage = FirebaseStorage.getInstance().reference
     var state: Parcelable? = null
@@ -57,7 +61,7 @@ class LikedListFragment : Fragment(), StorySaveListener, StoryListener {
         savedInstanceState: Bundle?
     ): View {
         loader = createLoader(requireActivity())
-        showLoader(loader,"")
+        showLoader(loader, "")
         _fragBinding = FragmentLikedListBinding.inflate(inflater, container, false)
         val root = fragBinding.root
 
@@ -67,7 +71,7 @@ class LikedListFragment : Fragment(), StorySaveListener, StoryListener {
         val fab = activity?.findViewById<FloatingActionButton>(R.id.fab)
         val bot = activity?.findViewById<BottomNavigationView>(R.id.bottom_nav)
         fab?.visibility = View.INVISIBLE
-        fragBinding.recyclerViewLiked.addOnScrollListener (object : RecyclerView.OnScrollListener(){
+        fragBinding.recyclerViewLiked.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             var y = 0
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 y = dy
@@ -77,10 +81,9 @@ class LikedListFragment : Fragment(), StorySaveListener, StoryListener {
 
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
-                if (y > 0){
+                if (y > 0) {
                     fab!!.visibility = View.VISIBLE
-                }
-                else {
+                } else {
                     fab!!.visibility = View.INVISIBLE
                 }
             }
@@ -96,21 +99,21 @@ class LikedListFragment : Fragment(), StorySaveListener, StoryListener {
                 checkSwipeRefresh()
             }
             hideLoader(loader)
-            if(fragBinding.recyclerViewLiked.adapter!!.itemCount == 0 && searching != null){
+            if (fragBinding.recyclerViewLiked.adapter!!.itemCount == 0 && searching != null) {
                 val st = ArrayList<StoryModel>()
-                st.add(StoryModel(title="1"))
+                st.add(StoryModel(title = "1"))
                 fragBinding.recyclerViewLiked.adapter = EmptyAdapter(st, this)
                 state?.let { fragBinding.recyclerViewLiked.layoutManager?.onRestoreInstanceState(it) }
-            }
-            else if(fragBinding.recyclerViewLiked.adapter!!.itemCount == 0){
+            } else if (fragBinding.recyclerViewLiked.adapter!!.itemCount == 0) {
                 fragBinding.creepy.visibility = View.VISIBLE
             }
-            if (fragBinding.recyclerViewLiked.adapter!!.itemCount > 0)
+            if (fragBinding.recyclerViewLiked.adapter!!.itemCount > 0) {
                 fragBinding.creepy.visibility = View.INVISIBLE
-                Glide.with(this).load(R.drawable.bidenlost).into(fragBinding.imageView2)
-                fragBinding.emptydate.visibility = View.INVISIBLE
-                fragBinding.larrow.visibility = View.INVISIBLE
-                fragBinding.rarrow.visibility = View.INVISIBLE
+            }
+            Glide.with(this).load(R.drawable.bidenlost).into(fragBinding.imageView2)
+            fragBinding.emptydate.visibility = View.INVISIBLE
+            fragBinding.larrow.visibility = View.INVISIBLE
+            fragBinding.rarrow.visibility = View.INVISIBLE
 
         }
         setSwipeRefresh()
@@ -129,20 +132,14 @@ class LikedListFragment : Fragment(), StorySaveListener, StoryListener {
         }
         val itemTouchDeleteHelper = ItemTouchHelper(swipeDeleteHandler)
         itemTouchDeleteHelper.attachToRecyclerView(fragBinding.recyclerViewLiked)
-
         return root
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if( item.itemId == R.id.app_bar_right) {
-
-        }
-        if( item.itemId == R.id.app_bar_left) {
-
-        }
-        return super.onOptionsItemSelected(item)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        val menuHost: MenuHost = requireActivity()
+        menuHost.addMenuProvider(this, viewLifecycleOwner, Lifecycle.State.RESUMED)
     }
-
 
     private fun setSwipeRefresh() {
         fragBinding.swipe.setOnRefreshListener {
@@ -155,52 +152,6 @@ class LikedListFragment : Fragment(), StorySaveListener, StoryListener {
     private fun checkSwipeRefresh() {
         if (fragBinding.swipe.isRefreshing)
             fragBinding.swipe.isRefreshing = false
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.menu_liked, menu)
-        when (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) {
-            Configuration.UI_MODE_NIGHT_YES -> {
-                menu.findItem(R.id.app_bar_right).iconTintList = null
-                menu.findItem(R.id.app_bar_left).iconTintList = null
-            }
-        }
-        /* Finding the search bar in the menu and setting it to the search view. */
-        val item = menu.findItem(R.id.app_bar_search)
-        val searchView = item.actionView as SearchView
-
-        /* This is the code that is executed when the search bar is used. It searches the database for
-        the building that the user is searching for. */
-        searchView.setOnQueryTextListener(object :  SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                return false
-            }
-
-            override fun onQueryTextChange(newText: String?): Boolean {
-                if (newText != null) {
-                    searching = newText
-                    likedListViewModel.search(
-                        newText
-                    )
-                }
-                else{
-                    searching = newText
-                    likedListViewModel.load()
-                }
-                if (newText == "") {
-                    searching = newText
-                    likedListViewModel.load()
-                }
-
-                return true
-            }
-        })
-        searchView.setOnCloseListener {
-            searching = null
-            likedListViewModel.load()
-            false
-        }
-        super.onCreateOptionsMenu(menu, inflater)
     }
 
     private fun render(storyList: ArrayList<StoryModel>) {
@@ -224,7 +175,7 @@ class LikedListFragment : Fragment(), StorySaveListener, StoryListener {
     }
 
     override fun onStoryClick(story: StoryModel) {
-        StoryManager.createLiked(loggedInViewModel.liveFirebaseUser.value!!.uid, "history",story)
+        StoryManager.createLiked(loggedInViewModel.liveFirebaseUser.value!!.uid, "history", story)
         val intent = Intent(Intent.ACTION_VIEW).setData(Uri.parse(story.link))
         state = fragBinding.recyclerViewLiked.layoutManager?.onSaveInstanceState()
         startActivity(intent)
@@ -248,5 +199,59 @@ class LikedListFragment : Fragment(), StorySaveListener, StoryListener {
     override fun onDestroyView() {
         super.onDestroyView()
         _fragBinding = null
+    }
+
+    override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+        menuInflater.inflate(R.menu.menu_liked, menu)
+        when (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) {
+            Configuration.UI_MODE_NIGHT_YES -> {
+                menu.findItem(R.id.app_bar_right).iconTintList = null
+                menu.findItem(R.id.app_bar_left).iconTintList = null
+            }
+        }
+        /* Finding the search bar in the menu and setting it to the search view. */
+        val item = menu.findItem(R.id.app_bar_search)
+        val searchView = item.actionView as SearchView
+
+        /* This is the code that is executed when the search bar is used. It searches the database for
+        the building that the user is searching for. */
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                if (newText != null) {
+                    searching = newText
+                    likedListViewModel.search(
+                        newText
+                    )
+                } else {
+                    searching = newText
+                    likedListViewModel.load()
+                }
+                if (newText == "") {
+                    searching = newText
+                    likedListViewModel.load()
+                }
+
+                return true
+            }
+        })
+        searchView.setOnCloseListener {
+            searching = null
+            likedListViewModel.load()
+            false
+        }
+    }
+
+    override fun onMenuItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.app_bar_right) {
+
+        }
+        if (item.itemId == R.id.app_bar_left) {
+
+        }
+        return false
     }
 }
