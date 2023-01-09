@@ -45,10 +45,11 @@ class BonginoFragment : Fragment(), StoryListener, MenuProvider {
     companion object {
         fun newInstance() = BonginoFragment()
     }
+
     private var _fragBinding: FragmentBonginoBinding? = null
     private val fragBinding get() = _fragBinding!!
-    lateinit var loader : AlertDialog
-    private val loggedInViewModel : LoggedInViewModel by activityViewModels()
+    lateinit var loader: AlertDialog
+    private val loggedInViewModel: LoggedInViewModel by activityViewModels()
     private val bonginoViewModel: BonginoViewModel by activityViewModels()
     var state: Parcelable? = null
     var day = 0
@@ -66,7 +67,7 @@ class BonginoFragment : Fragment(), StoryListener, MenuProvider {
         savedInstanceState: Bundle?
     ): View {
         loader = createLoader(requireActivity())
-        showLoader(loader,"")
+        showLoader(loader, "")
         _fragBinding = FragmentBonginoBinding.inflate(inflater, container, false)
         val root = fragBinding.root
 
@@ -76,7 +77,7 @@ class BonginoFragment : Fragment(), StoryListener, MenuProvider {
         val fab = activity?.findViewById<FloatingActionButton>(R.id.fab)
         val bot = activity?.findViewById<BottomNavigationView>(R.id.bottom_nav)
         fab?.visibility = View.INVISIBLE
-        fragBinding.recyclerViewBong.addOnScrollListener (object : RecyclerView.OnScrollListener(){
+        fragBinding.recyclerViewBong.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             var y = 0
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 y = dy
@@ -86,10 +87,9 @@ class BonginoFragment : Fragment(), StoryListener, MenuProvider {
 
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
-                if (y > 0){
+                if (y > 0) {
                     fab!!.visibility = View.VISIBLE
-                }
-                else {
+                } else {
                     fab!!.visibility = View.INVISIBLE
                 }
             }
@@ -105,35 +105,37 @@ class BonginoFragment : Fragment(), StoryListener, MenuProvider {
                 checkSwipeRefresh()
             }
             hideLoader(loader)
-            if(fragBinding.recyclerViewBong.adapter!!.itemCount == 0 && searching != null){
+            if (fragBinding.recyclerViewBong.adapter!!.itemCount == 0 && searching != null) {
                 val st = ArrayList<StoryModel>()
-                st.add(StoryModel(title="1"))
+                st.add(StoryModel(title = "1"))
                 fragBinding.recyclerViewBong.adapter = EmptyAdapter(st, this)
                 state?.let { fragBinding.recyclerViewBong.layoutManager?.onRestoreInstanceState(it) }
-            }
-            else if(fragBinding.recyclerViewBong.adapter!!.itemCount == 0){
+            } else if (fragBinding.recyclerViewBong.adapter!!.itemCount == 0) {
                 fragBinding.creepy.visibility = View.VISIBLE
             }
-            if (fragBinding.recyclerViewBong.adapter!!.itemCount > 0)
+            if (fragBinding.recyclerViewBong.adapter!!.itemCount > 0) {
                 fragBinding.creepy.visibility = View.INVISIBLE
-                Glide.with(this).load(R.drawable.bidenlost).into(fragBinding.imageView2)
-                val datenow = StoryManager.getDate(day)
-                fragBinding.emptydate.text = datenow
-                fragBinding.larrow.setOnClickListener {
-                    if (day < 14) {
-                        showLoader(loader, "")
-                        day += 1
-                        bonginoViewModel.load(day)
-                    }
+            }
+            Glide.with(this).load(R.drawable.bidenlost).into(fragBinding.imageView2)
+            val datenow = StoryManager.getDate(day)
+            fragBinding.emptydate.text = datenow
+            fragBinding.larrow.setOnClickListener {
+                if (day < 14) {
+                    showLoader(loader, "")
+                    day += 1
+                    bonginoViewModel.load(day)
                 }
-                fragBinding.rarrow.setOnClickListener {
-                    showLoader(loader,"")
+            }
+            fragBinding.rarrow.setOnClickListener {
+                if (day != 0) {
+                    showLoader(loader, "")
                     day -= 1
-                    if (day <= 0 ){
+                    if (day <= 0) {
                         day = 0
                     }
                     bonginoViewModel.load(day)
                 }
+            }
 
         }
         setSwipeRefresh()
@@ -177,7 +179,7 @@ class BonginoFragment : Fragment(), StoryListener, MenuProvider {
     }
 
     override fun onStoryClick(story: StoryModel) {
-        StoryManager.createLiked(loggedInViewModel.liveFirebaseUser.value!!.uid,"history", story)
+        StoryManager.createLiked(loggedInViewModel.liveFirebaseUser.value!!.uid, "history", story)
         val intent = Intent(Intent.ACTION_VIEW).setData(Uri.parse(story.link))
         state = fragBinding.recyclerViewBong.layoutManager?.onSaveInstanceState()
         startActivity(intent)
@@ -186,11 +188,17 @@ class BonginoFragment : Fragment(), StoryListener, MenuProvider {
     override fun onLike(story: StoryModel) {
         activity?.alertDialog {
             messageResource = R.string.save_art
-            okButton { StoryManager.createLiked(loggedInViewModel.liveFirebaseUser.value!!.uid,"likes", story)
+            okButton {
+                StoryManager.createLiked(
+                    loggedInViewModel.liveFirebaseUser.value!!.uid,
+                    "likes",
+                    story
+                )
                 val params = fragBinding.root.layoutParams as FrameLayout.LayoutParams
                 params.gravity = Gravity.CENTER_HORIZONTAL
-                view?.snack(R.string.saved_article)}
-            cancelButton{ view?.snack(R.string.save_can)}
+                view?.snack(R.string.saved_article)
+            }
+            cancelButton { view?.snack(R.string.save_can) }
         }?.onShow {
             positiveButton.textColorResource = R.color.black
             negativeButton.textColorResource = splitties.material.colors.R.color.grey_500
@@ -211,6 +219,7 @@ class BonginoFragment : Fragment(), StoryListener, MenuProvider {
         state = fragBinding.recyclerViewBong.layoutManager?.onSaveInstanceState()
         startActivity(shareIntent)
     }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _fragBinding = null
@@ -231,7 +240,7 @@ class BonginoFragment : Fragment(), StoryListener, MenuProvider {
 
         /* This is the code that is executed when the search bar is used. It searches the database for
         the building that the user is searching for. */
-        searchView.setOnQueryTextListener(object :  SearchView.OnQueryTextListener {
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 return false
             }
@@ -243,8 +252,7 @@ class BonginoFragment : Fragment(), StoryListener, MenuProvider {
                         day,
                         newText
                     )
-                }
-                else{
+                } else {
                     searching = newText
                     bonginoViewModel.load(day)
                 }
@@ -264,8 +272,8 @@ class BonginoFragment : Fragment(), StoryListener, MenuProvider {
     }
 
     override fun onMenuItemSelected(item: MenuItem): Boolean {
-        if( item.itemId == R.id.app_bar_right) {
-            if(day != 0) {
+        if (item.itemId == R.id.app_bar_right) {
+            if (day != 0) {
                 showLoader(loader, "")
                 day -= 1
                 if (day <= 0) {
@@ -274,7 +282,7 @@ class BonginoFragment : Fragment(), StoryListener, MenuProvider {
                 bonginoViewModel.load(day)
             }
         }
-        if( item.itemId == R.id.app_bar_left) {
+        if (item.itemId == R.id.app_bar_left) {
             if (day < 14) {
                 showLoader(loader, "")
                 day += 1

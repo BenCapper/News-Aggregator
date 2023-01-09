@@ -45,10 +45,11 @@ class AbcFragment : Fragment(), StoryListener, MenuProvider {
     companion object {
         fun newInstance() = AbcFragment()
     }
+
     private var _fragBinding: FragmentAbcBinding? = null
     private val fragBinding get() = _fragBinding!!
-    lateinit var loader : AlertDialog
-    private val loggedInViewModel : LoggedInViewModel by activityViewModels()
+    lateinit var loader: AlertDialog
+    private val loggedInViewModel: LoggedInViewModel by activityViewModels()
     private val abcViewModel: AbcViewModel by activityViewModels()
     var state: Parcelable? = null
     var day = 0
@@ -67,7 +68,7 @@ class AbcFragment : Fragment(), StoryListener, MenuProvider {
         savedInstanceState: Bundle?
     ): View {
         loader = createLoader(requireActivity())
-        showLoader(loader,"")
+        showLoader(loader, "")
         _fragBinding = FragmentAbcBinding.inflate(inflater, container, false)
         val root = fragBinding.root
 
@@ -77,7 +78,7 @@ class AbcFragment : Fragment(), StoryListener, MenuProvider {
         val fab = activity?.findViewById<FloatingActionButton>(R.id.fab)
         val bot = activity?.findViewById<BottomNavigationView>(R.id.bottom_nav)
         fab?.visibility = View.INVISIBLE
-        fragBinding.recyclerViewAbc.addOnScrollListener (object : RecyclerView.OnScrollListener(){
+        fragBinding.recyclerViewAbc.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             var y = 0
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 y = dy
@@ -87,10 +88,9 @@ class AbcFragment : Fragment(), StoryListener, MenuProvider {
 
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
-                if (y > 0){
+                if (y > 0) {
                     fab!!.visibility = View.VISIBLE
-                }
-                else {
+                } else {
                     fab!!.visibility = View.INVISIBLE
                 }
             }
@@ -106,36 +106,37 @@ class AbcFragment : Fragment(), StoryListener, MenuProvider {
                 checkSwipeRefresh()
             }
             hideLoader(loader)
-            if(fragBinding.recyclerViewAbc.adapter!!.itemCount == 0 && searching != null){
+            if (fragBinding.recyclerViewAbc.adapter!!.itemCount == 0 && searching != null) {
                 val st = ArrayList<StoryModel>()
-                st.add(StoryModel(title="1"))
+                st.add(StoryModel(title = "1"))
                 fragBinding.recyclerViewAbc.adapter = EmptyAdapter(st, this)
                 state?.let { fragBinding.recyclerViewAbc.layoutManager?.onRestoreInstanceState(it) }
-            }
-            else if(fragBinding.recyclerViewAbc.adapter!!.itemCount == 0){
+            } else if (fragBinding.recyclerViewAbc.adapter!!.itemCount == 0) {
                 fragBinding.creepy.visibility = View.VISIBLE
             }
-            if (fragBinding.recyclerViewAbc.adapter!!.itemCount > 0)
+            if (fragBinding.recyclerViewAbc.adapter!!.itemCount > 0) {
                 fragBinding.creepy.visibility = View.INVISIBLE
-                Glide.with(this).load(R.drawable.bidenlost).into(fragBinding.imageView2)
-                val datenow = StoryManager.getDate(day)
-                fragBinding.emptydate.text = datenow
-                fragBinding.larrow.setOnClickListener {
-                    if (day < 14) {
-                        showLoader(loader, "")
-                        day += 1
-                        abcViewModel.load(day)
-                    }
+            }
+            Glide.with(this).load(R.drawable.bidenlost).into(fragBinding.imageView2)
+            val datenow = StoryManager.getDate(day)
+            fragBinding.emptydate.text = datenow
+            fragBinding.larrow.setOnClickListener {
+                if (day < 14) {
+                    showLoader(loader, "")
+                    day += 1
+                    abcViewModel.load(day)
                 }
-                fragBinding.rarrow.setOnClickListener {
-                    showLoader(loader,"")
+            }
+            fragBinding.rarrow.setOnClickListener {
+                if (day != 0) {
+                    showLoader(loader, "")
                     day -= 1
-                    if (day <= 0 ){
+                    if (day <= 0) {
                         day = 0
                     }
                     abcViewModel.load(day)
                 }
-
+            }
         }
         setSwipeRefresh()
         return root
@@ -161,7 +162,6 @@ class AbcFragment : Fragment(), StoryListener, MenuProvider {
     }
 
 
-
     private fun render(storyList: ArrayList<StoryModel>) {
         fragBinding.recyclerViewAbc.adapter = StoryAdapter(storyList, this)
         state?.let { fragBinding.recyclerViewAbc.layoutManager?.onRestoreInstanceState(it) }
@@ -179,7 +179,7 @@ class AbcFragment : Fragment(), StoryListener, MenuProvider {
     }
 
     override fun onStoryClick(story: StoryModel) {
-        StoryManager.createLiked(loggedInViewModel.liveFirebaseUser.value!!.uid,"history", story)
+        StoryManager.createLiked(loggedInViewModel.liveFirebaseUser.value!!.uid, "history", story)
         val intent = Intent(Intent.ACTION_VIEW).setData(Uri.parse(story.link))
         state = fragBinding.recyclerViewAbc.layoutManager?.onSaveInstanceState()
         startActivity(intent)
@@ -188,11 +188,17 @@ class AbcFragment : Fragment(), StoryListener, MenuProvider {
     override fun onLike(story: StoryModel) {
         activity?.alertDialog {
             messageResource = R.string.save_art
-            okButton { StoryManager.createLiked(loggedInViewModel.liveFirebaseUser.value!!.uid,"likes", story)
+            okButton {
+                StoryManager.createLiked(
+                    loggedInViewModel.liveFirebaseUser.value!!.uid,
+                    "likes",
+                    story
+                )
                 val params = fragBinding.root.layoutParams as FrameLayout.LayoutParams
                 params.gravity = Gravity.CENTER_HORIZONTAL
-                view?.snack(R.string.saved_article)}
-            cancelButton{ view?.snack(R.string.save_can)}
+                view?.snack(R.string.saved_article)
+            }
+            cancelButton { view?.snack(R.string.save_can) }
         }?.onShow {
             positiveButton.textColorResource = R.color.black
             negativeButton.textColorResource = splitties.material.colors.R.color.grey_500
@@ -213,6 +219,7 @@ class AbcFragment : Fragment(), StoryListener, MenuProvider {
         state = fragBinding.recyclerViewAbc.layoutManager?.onSaveInstanceState()
         startActivity(shareIntent)
     }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _fragBinding = null
@@ -233,7 +240,7 @@ class AbcFragment : Fragment(), StoryListener, MenuProvider {
 
         /* This is the code that is executed when the search bar is used. It searches the database for
         the building that the user is searching for. */
-        searchView.setOnQueryTextListener(object :  SearchView.OnQueryTextListener {
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 return false
             }
@@ -245,8 +252,7 @@ class AbcFragment : Fragment(), StoryListener, MenuProvider {
                         day,
                         newText
                     )
-                }
-                else{
+                } else {
                     searching = newText
                     abcViewModel.load(day)
                 }
@@ -259,7 +265,7 @@ class AbcFragment : Fragment(), StoryListener, MenuProvider {
             }
         })
         searchView.setOnCloseListener {
-            showLoader(loader,"")
+            showLoader(loader, "")
             searching = null
             abcViewModel.load(day)
             false
@@ -267,8 +273,8 @@ class AbcFragment : Fragment(), StoryListener, MenuProvider {
     }
 
     override fun onMenuItemSelected(item: MenuItem): Boolean {
-        if( item.itemId == R.id.app_bar_right) {
-            if(day != 0) {
+        if (item.itemId == R.id.app_bar_right) {
+            if (day != 0) {
                 showLoader(loader, "")
                 day -= 1
                 if (day <= 0) {
@@ -277,7 +283,7 @@ class AbcFragment : Fragment(), StoryListener, MenuProvider {
                 abcViewModel.load(day)
             }
         }
-        if( item.itemId == R.id.app_bar_left) {
+        if (item.itemId == R.id.app_bar_left) {
             if (day < 14) {
                 showLoader(loader, "")
                 day += 1
