@@ -11,7 +11,10 @@ import android.widget.FrameLayout
 import androidx.fragment.app.Fragment
 import android.widget.ImageView
 import android.widget.SearchView
+import androidx.core.view.MenuHost
+import androidx.core.view.MenuProvider
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Lifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -35,15 +38,16 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
-class ConflictFragment : Fragment(), DoubleStoryListener, StoryListener {
+class ConflictFragment : Fragment(), DoubleStoryListener, StoryListener, MenuProvider {
 
     companion object {
         fun newInstance() = ConflictFragment()
     }
+
     private var _fragBinding: FragmentConflictBinding? = null
     private val fragBinding get() = _fragBinding!!
-    lateinit var loader : AlertDialog
-    private val loggedInViewModel : LoggedInViewModel by activityViewModels()
+    lateinit var loader: AlertDialog
+    private val loggedInViewModel: LoggedInViewModel by activityViewModels()
     private val conViewModel: ConflictViewModel by activityViewModels()
     var state: Parcelable? = null
     var day = 0
@@ -60,7 +64,7 @@ class ConflictFragment : Fragment(), DoubleStoryListener, StoryListener {
         savedInstanceState: Bundle?
     ): View {
         loader = createLoader(requireActivity())
-        showLoader(loader,"")
+        showLoader(loader, "")
         _fragBinding = FragmentConflictBinding.inflate(inflater, container, false)
         val root = fragBinding.root
         fragBinding.recyclerViewCon.layoutManager = activity?.let { LinearLayoutManager(it) }
@@ -69,7 +73,7 @@ class ConflictFragment : Fragment(), DoubleStoryListener, StoryListener {
         val fab = activity?.findViewById<FloatingActionButton>(R.id.fab)
         val bot = activity?.findViewById<BottomNavigationView>(R.id.bottom_nav)
         fab?.visibility = View.INVISIBLE
-        fragBinding.recyclerViewCon.addOnScrollListener (object : RecyclerView.OnScrollListener(){
+        fragBinding.recyclerViewCon.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             var y = 0
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 y = dy
@@ -79,10 +83,9 @@ class ConflictFragment : Fragment(), DoubleStoryListener, StoryListener {
 
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
-                if (y > 0){
+                if (y > 0) {
                     fab!!.visibility = View.VISIBLE
-                }
-                else {
+                } else {
                     fab!!.visibility = View.INVISIBLE
                 }
             }
@@ -98,61 +101,46 @@ class ConflictFragment : Fragment(), DoubleStoryListener, StoryListener {
                 checkSwipeRefresh()
             }
             hideLoader(loader)
-            if(fragBinding.recyclerViewCon.adapter!!.itemCount == 0 && searching != null){
+            if (fragBinding.recyclerViewCon.adapter!!.itemCount == 0 && searching != null) {
                 val st = ArrayList<StoryModel>()
-                st.add(StoryModel(title="1"))
+                st.add(StoryModel(title = "1"))
                 fragBinding.recyclerViewCon.adapter = EmptyAdapter(st, this)
                 state?.let { fragBinding.recyclerViewCon.layoutManager?.onRestoreInstanceState(it) }
-            }
-            else if(fragBinding.recyclerViewCon.adapter!!.itemCount == 0){
+            } else if (fragBinding.recyclerViewCon.adapter!!.itemCount == 0) {
                 fragBinding.creepy.visibility = View.VISIBLE
             }
-            if (fragBinding.recyclerViewCon.adapter!!.itemCount > 0)
+            if (fragBinding.recyclerViewCon.adapter!!.itemCount > 0) {
                 fragBinding.creepy.visibility = View.INVISIBLE
-                Glide.with(this).load(R.drawable.bidenlost).into(fragBinding.imageView2)
-                val datenow = StoryManager.getDate(day)
-                fragBinding.emptydate.text = datenow
-                fragBinding.larrow.setOnClickListener {
-                    if (day < 14) {
-                        showLoader(loader, "")
-                        day += 1
-                        conViewModel.load(day)
-                    }
+            }
+            Glide.with(this).load(R.drawable.bidenlost).into(fragBinding.imageView2)
+            val datenow = StoryManager.getDate(day)
+            fragBinding.emptydate.text = datenow
+            fragBinding.larrow.setOnClickListener {
+                if (day < 14) {
+                    showLoader(loader, "")
+                    day += 1
+                    conViewModel.load(day)
                 }
-                fragBinding.rarrow.setOnClickListener {
-                    showLoader(loader,"")
+            }
+            fragBinding.rarrow.setOnClickListener {
+                if (day != 0) {
+                    showLoader(loader, "")
                     day -= 1
-                    if (day <= 0 ){
+                    if (day <= 0) {
                         day = 0
                     }
                     conViewModel.load(day)
                 }
-
+            }
         }
         setSwipeRefresh()
-
         return root
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if( item.itemId == R.id.app_bar_right) {
-            if(day != 0) {
-                showLoader(loader, "")
-                day -= 1
-                if (day <= 0) {
-                    day = 0
-                }
-                conViewModel.load(day)
-            }
-        }
-        if( item.itemId == R.id.app_bar_left) {
-            if (day < 14) {
-                showLoader(loader, "")
-                day += 1
-                conViewModel.load(day)
-            }
-        }
-        return super.onOptionsItemSelected(item)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        val menuHost: MenuHost = requireActivity()
+        menuHost.addMenuProvider(this, viewLifecycleOwner, Lifecycle.State.RESUMED)
     }
 
     private fun setSwipeRefresh() {
@@ -167,55 +155,6 @@ class ConflictFragment : Fragment(), DoubleStoryListener, StoryListener {
         if (fragBinding.swipe.isRefreshing)
             fragBinding.swipe.isRefreshing = false
     }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.menu_all, menu)
-        when (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) {
-            Configuration.UI_MODE_NIGHT_YES -> {
-                menu.findItem(R.id.app_bar_right).iconTintList = null
-                menu.findItem(R.id.app_bar_left).iconTintList = null
-            }
-        }
-        /* Finding the search bar in the menu and setting it to the search view. */
-        val item = menu.findItem(R.id.app_bar_search)
-        val searchView = item.actionView as SearchView
-
-
-        /* This is the code that is executed when the search bar is used. It searches the database for
-        the building that the user is searching for. */
-        searchView.setOnQueryTextListener(object :  SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                return false
-            }
-
-            override fun onQueryTextChange(newText: String?): Boolean {
-                if (newText != null) {
-                    searching = newText
-                    conViewModel.search(
-                        day,
-                        newText
-                    )
-                }
-                else{
-                    searching = newText
-                    conViewModel.load(day)
-                }
-                if (newText == "") {
-                    searching = newText
-                    conViewModel.load(day)
-                }
-
-                return true
-            }
-        })
-        searchView.setOnCloseListener {
-            searching = null
-            conViewModel.load(day)
-            false
-        }
-        super.onCreateOptionsMenu(menu, inflater)
-    }
-
 
     private fun render(storyList: ArrayList<DoubleStoryModel>) {
         fragBinding.recyclerViewCon.adapter = ConflictAdapter(storyList, this)
@@ -247,8 +186,15 @@ class ConflictFragment : Fragment(), DoubleStoryListener, StoryListener {
     }
 
     override fun onRightClick(story: DoubleStoryModel) {
-        val article = StoryModel(story.title1,story.date1,story.outlet1,story.storage_link1,story.order,story.link1)
-        StoryManager.createLiked(loggedInViewModel.liveFirebaseUser.value!!.uid,"history", article)
+        val article = StoryModel(
+            story.title1,
+            story.date1,
+            story.outlet1,
+            story.storage_link1,
+            story.order,
+            story.link1
+        )
+        StoryManager.createLiked(loggedInViewModel.liveFirebaseUser.value!!.uid, "history", article)
         val intent = Intent(Intent.ACTION_VIEW).setData(Uri.parse(story.link1))
 
         state = fragBinding.recyclerViewCon.layoutManager?.onSaveInstanceState()
@@ -257,8 +203,15 @@ class ConflictFragment : Fragment(), DoubleStoryListener, StoryListener {
     }
 
     override fun onLeftClick(story: DoubleStoryModel) {
-        val article = StoryModel(story.title2,story.date2,story.outlet2,story.storage_link2,story.order,story.link2)
-        StoryManager.createLiked(loggedInViewModel.liveFirebaseUser.value!!.uid,"history", article)
+        val article = StoryModel(
+            story.title2,
+            story.date2,
+            story.outlet2,
+            story.storage_link2,
+            story.order,
+            story.link2
+        )
+        StoryManager.createLiked(loggedInViewModel.liveFirebaseUser.value!!.uid, "history", article)
         val intent = Intent(Intent.ACTION_VIEW).setData(Uri.parse(story.link2))
 
         state = fragBinding.recyclerViewCon.layoutManager?.onSaveInstanceState()
@@ -267,14 +220,27 @@ class ConflictFragment : Fragment(), DoubleStoryListener, StoryListener {
     }
 
     override fun onLikeRight(story: DoubleStoryModel) {
-        val article = StoryModel(story.title1,story.date1,story.outlet1,story.storage_link1,story.order,story.link1)
+        val article = StoryModel(
+            story.title1,
+            story.date1,
+            story.outlet1,
+            story.storage_link1,
+            story.order,
+            story.link1
+        )
         activity?.alertDialog {
             messageResource = R.string.save_art
-            okButton { StoryManager.createLiked(loggedInViewModel.liveFirebaseUser.value!!.uid,"likes", article)
+            okButton {
+                StoryManager.createLiked(
+                    loggedInViewModel.liveFirebaseUser.value!!.uid,
+                    "likes",
+                    article
+                )
                 val params = fragBinding.root.layoutParams as FrameLayout.LayoutParams
                 params.gravity = Gravity.CENTER_HORIZONTAL
-                view?.snack(R.string.saved_article)}
-            cancelButton{ view?.snack(R.string.save_can)}
+                view?.snack(R.string.saved_article)
+            }
+            cancelButton { view?.snack(R.string.save_can) }
         }?.onShow {
             positiveButton.textColorResource = R.color.black
             negativeButton.textColorResource = splitties.material.colors.R.color.grey_500
@@ -284,14 +250,27 @@ class ConflictFragment : Fragment(), DoubleStoryListener, StoryListener {
     }
 
     override fun onLikeLeft(story: DoubleStoryModel) {
-        val article = StoryModel(story.title2,story.date2,story.outlet2,story.storage_link2,story.order,story.link2)
+        val article = StoryModel(
+            story.title2,
+            story.date2,
+            story.outlet2,
+            story.storage_link2,
+            story.order,
+            story.link2
+        )
         activity?.alertDialog {
             messageResource = R.string.save_art
-            okButton { StoryManager.createLiked(loggedInViewModel.liveFirebaseUser.value!!.uid,"likes", article)
+            okButton {
+                StoryManager.createLiked(
+                    loggedInViewModel.liveFirebaseUser.value!!.uid,
+                    "likes",
+                    article
+                )
                 val params = fragBinding.root.layoutParams as FrameLayout.LayoutParams
                 params.gravity = Gravity.CENTER_HORIZONTAL
-                view?.snack(R.string.saved_article)}
-            cancelButton{ view?.snack(R.string.save_can)}
+                view?.snack(R.string.saved_article)
+            }
+            cancelButton { view?.snack(R.string.save_can) }
         }?.onShow {
             positiveButton.textColorResource = R.color.black
             negativeButton.textColorResource = splitties.material.colors.R.color.grey_500
@@ -324,6 +303,73 @@ class ConflictFragment : Fragment(), DoubleStoryListener, StoryListener {
         val shareIntent = Intent.createChooser(sendIntent, null)
         state = fragBinding.recyclerViewCon.layoutManager?.onSaveInstanceState()
         startActivity(shareIntent)
+    }
+
+    override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+        menuInflater.inflate(R.menu.menu_all, menu)
+        when (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) {
+            Configuration.UI_MODE_NIGHT_YES -> {
+                menu.findItem(R.id.app_bar_right).iconTintList = null
+                menu.findItem(R.id.app_bar_left).iconTintList = null
+            }
+        }
+        /* Finding the search bar in the menu and setting it to the search view. */
+        val item = menu.findItem(R.id.app_bar_search)
+        val searchView = item.actionView as SearchView
+
+
+        /* This is the code that is executed when the search bar is used. It searches the database for
+        the building that the user is searching for. */
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                if (newText != null) {
+                    searching = newText
+                    conViewModel.search(
+                        day,
+                        newText
+                    )
+                } else {
+                    searching = newText
+                    conViewModel.load(day)
+                }
+                if (newText == "") {
+                    searching = newText
+                    conViewModel.load(day)
+                }
+
+                return true
+            }
+        })
+        searchView.setOnCloseListener {
+            searching = null
+            conViewModel.load(day)
+            false
+        }
+    }
+
+    override fun onMenuItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.app_bar_right) {
+            if (day != 0) {
+                showLoader(loader, "")
+                day -= 1
+                if (day <= 0) {
+                    day = 0
+                }
+                conViewModel.load(day)
+            }
+        }
+        if (item.itemId == R.id.app_bar_left) {
+            if (day < 14) {
+                showLoader(loader, "")
+                day += 1
+                conViewModel.load(day)
+            }
+        }
+        return false
     }
 
 }
