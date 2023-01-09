@@ -53,7 +53,7 @@ object StoryManager : StoryStore {
 
         val totalList = ArrayList<StoryModel>()
             var todayList = mutableListOf<StoryModel>()
-            database.child("tests").child(date)
+            database.child("stories").child(date)
                 .addValueEventListener(object : ValueEventListener {
                     override fun onCancelled(error: DatabaseError) {
                         Timber.i("Firebase error : ${error.message}")

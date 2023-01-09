@@ -63,6 +63,7 @@ class Home : AppCompatActivity() {
             R.id.usFragment,
             R.id.euFragment,
             R.id.abcFragment,
+            R.id.amThinkFragment,
             R.id.beastFragment,
             R.id.blazeFragment,
             R.id.bonginoFragment,
@@ -222,6 +223,12 @@ class Home : AppCompatActivity() {
 
     fun breitbartArticles(item: MenuItem) {
         findNavController(R.id.nav_host_fragment).navigate(R.id.breitbartFragment)
+        findViewById<DrawerLayout>(R.id.drawer_layout).closeDrawers()
+        Timber.i("UserId = ${loggedInViewModel.liveFirebaseUser.value!!.uid}")
+    }
+
+    fun amThinkArticles(item: MenuItem) {
+        findNavController(R.id.nav_host_fragment).navigate(R.id.amThinkFragment)
         findViewById<DrawerLayout>(R.id.drawer_layout).closeDrawers()
         Timber.i("UserId = ${loggedInViewModel.liveFirebaseUser.value!!.uid}")
     }

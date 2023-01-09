@@ -101,6 +101,11 @@
                 android:onClick="gatewayArticles"
                 android:title="@string/gateway" />
             <item
+                android:id="@+id/menuamThink"
+                android:icon="@drawable/usicon"
+                android:onClick="amThinkArticles"
+                android:title="@string/amthink" />
+            <item
                 android:id="@+id/menumill"
                 android:icon="@drawable/canicon"
                 android:onClick="pMillArticles"
