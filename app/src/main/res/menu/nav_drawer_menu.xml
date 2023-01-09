@@ -69,17 +69,22 @@
                 android:icon="@drawable/usicon"
                 android:onClick="timArticles"
                 android:title="@string/timcast" />
-            <item
-                android:id="@+id/menuzero"
-                android:icon="@drawable/usicon"
-                android:onClick="zeroArticles"
-                android:title="@string/zerohedge" />
 
             <item
                 android:id="@+id/menubreit"
                 android:icon="@drawable/usicon"
                 android:onClick="breitbartArticles"
                 android:title="@string/breitbart" />
+            <item
+                android:id="@+id/menuinfo"
+                android:icon="@drawable/usicon"
+                android:onClick="infoArticles"
+                android:title="@string/infow" />
+            <item
+                android:id="@+id/menuzero"
+                android:icon="@drawable/usicon"
+                android:onClick="zeroArticles"
+                android:title="@string/zerohedge" />
             <item
                 android:id="@+id/menurev"
                 android:icon="@drawable/usicon"
@@ -91,20 +96,15 @@
                 android:onClick="bongArticles"
                 android:title="@string/bongino" />
             <item
-                android:id="@+id/menuinfo"
+                android:id="@+id/menucaller"
                 android:icon="@drawable/usicon"
-                android:onClick="infoArticles"
-                android:title="@string/infow" />
+                android:onClick="callerArticles"
+                android:title="@string/dailycaller" />
             <item
                 android:id="@+id/menuamThink"
                 android:icon="@drawable/usicon"
                 android:onClick="amThinkArticles"
                 android:title="@string/amthink" />
-            <item
-                android:id="@+id/menucaller"
-                android:icon="@drawable/usicon"
-                android:onClick="callerArticles"
-                android:title="@string/dailycaller" />
             <item
                 android:id="@+id/menugwp"
                 android:icon="@drawable/usicon"
@@ -169,6 +169,11 @@
                 android:icon="@drawable/usicon"
                 android:onClick="politicoArticles"
                 android:title="@string/politico" />
+            <item
+                android:id="@+id/menuhill"
+                android:icon="@drawable/usicon"
+                android:onClick="hillArticles"
+                android:title="@string/hill" />
             <item
                 android:id="@+id/menuyah"
                 android:icon="@drawable/usicon"

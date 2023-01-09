@@ -186,6 +186,9 @@
         <action
             android:id="@+id/action_storyListFragment_to_nprFragment"
             app:destination="@id/nprFragment" />
+        <action
+            android:id="@+id/action_storyListFragment_to_hillFragment"
+            app:destination="@id/hillFragment" />
     </fragment>
     <fragment
         android:id="@+id/likedListFragment"
@@ -376,4 +379,9 @@
         android:name="org.ben.news.ui.npr.NprFragment"
         android:label="fragment_npr"
         tools:layout="@layout/fragment_npr" />
+    <fragment
+        android:id="@+id/hillFragment"
+        android:name="org.ben.news.ui.hill.HillFragment"
+        android:label="fragment_hill"
+        tools:layout="@layout/fragment_hill" />
 </navigation>
