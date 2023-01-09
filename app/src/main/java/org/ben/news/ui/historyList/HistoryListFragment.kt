@@ -10,8 +10,11 @@ import android.view.*
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.SearchView
+import androidx.core.view.MenuHost
+import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Lifecycle
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -35,7 +38,7 @@ import splitties.views.textColorResource
 import kotlin.collections.ArrayList
 
 
-class HistoryListFragment : Fragment(), StoryListener {
+class HistoryListFragment : Fragment(), StoryListener, MenuProvider {
 
     companion object {
         fun newInstance() = StoryListFragment()
@@ -107,8 +110,9 @@ class HistoryListFragment : Fragment(), StoryListener {
             else if(fragBinding.recyclerViewHistory.adapter!!.itemCount == 0){
                 fragBinding.creepy.visibility = View.VISIBLE
             }
-            if (fragBinding.recyclerViewHistory.adapter!!.itemCount > 0)
+            if (fragBinding.recyclerViewHistory.adapter!!.itemCount > 0) {
                 fragBinding.creepy.visibility = View.INVISIBLE
+            }
             Glide.with(this).load(R.drawable.bidenlost).into(fragBinding.imageView2)
             fragBinding.emptydate.visibility = View.INVISIBLE
             fragBinding.larrow.visibility = View.INVISIBLE
@@ -134,16 +138,11 @@ class HistoryListFragment : Fragment(), StoryListener {
         return root
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if( item.itemId == R.id.app_bar_right) {
-
-        }
-        if( item.itemId == R.id.app_bar_left) {
-
-        }
-        return super.onOptionsItemSelected(item)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        val menuHost: MenuHost = requireActivity()
+        menuHost.addMenuProvider(this, viewLifecycleOwner, Lifecycle.State.RESUMED)
     }
-
 
     private fun setSwipeRefresh() {
         fragBinding.swipe.setOnRefreshListener {
@@ -156,53 +155,6 @@ class HistoryListFragment : Fragment(), StoryListener {
     private fun checkSwipeRefresh() {
         if (fragBinding.swipe.isRefreshing)
             fragBinding.swipe.isRefreshing = false
-    }
-
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.menu_liked, menu)
-        when (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) {
-            Configuration.UI_MODE_NIGHT_YES -> {
-                menu.findItem(R.id.app_bar_right).iconTintList = null
-                menu.findItem(R.id.app_bar_left).iconTintList = null
-            }
-        }
-        /* Finding the search bar in the menu and setting it to the search view. */
-        val item = menu.findItem(R.id.app_bar_search)
-        val searchView = item.actionView as SearchView
-
-        /* This is the code that is executed when the search bar is used. It searches the database for
-        the building that the user is searching for. */
-        searchView.setOnQueryTextListener(object :  SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                return false
-            }
-
-            override fun onQueryTextChange(newText: String?): Boolean {
-                if (newText != null) {
-                    searching = newText
-                    historyListViewModel.search(
-                        newText
-                    )
-                }
-                else{
-                    searching = newText
-                    historyListViewModel.load()
-                }
-                if (newText == "") {
-                    searching = newText
-                    historyListViewModel.load()
-                }
-
-                return true
-            }
-        })
-        searchView.setOnCloseListener {
-            searching = null
-            historyListViewModel.load()
-            false
-        }
-        super.onCreateOptionsMenu(menu, inflater)
     }
 
 
@@ -264,5 +216,61 @@ class HistoryListFragment : Fragment(), StoryListener {
     override fun onDestroyView() {
         super.onDestroyView()
         _fragBinding = null
+    }
+
+    override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+        menuInflater.inflate(R.menu.menu_liked, menu)
+        when (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) {
+            Configuration.UI_MODE_NIGHT_YES -> {
+                menu.findItem(R.id.app_bar_right).iconTintList = null
+                menu.findItem(R.id.app_bar_left).iconTintList = null
+            }
+        }
+        /* Finding the search bar in the menu and setting it to the search view. */
+        val item = menu.findItem(R.id.app_bar_search)
+        val searchView = item.actionView as SearchView
+
+        /* This is the code that is executed when the search bar is used. It searches the database for
+        the building that the user is searching for. */
+        searchView.setOnQueryTextListener(object :  SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                if (newText != null) {
+                    searching = newText
+                    historyListViewModel.search(
+                        newText
+                    )
+                }
+                else{
+                    searching = newText
+                    historyListViewModel.load()
+                }
+                if (newText == "") {
+                    searching = newText
+                    historyListViewModel.load()
+                }
+
+                return true
+            }
+        })
+        searchView.setOnCloseListener {
+            searching = null
+            historyListViewModel.load()
+            false
+        }
+
+    }
+
+    override fun onMenuItemSelected(item: MenuItem): Boolean {
+        if( item.itemId == R.id.app_bar_right) {
+
+        }
+        if( item.itemId == R.id.app_bar_left) {
+
+        }
+        return false
     }
 }
