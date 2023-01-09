@@ -119,7 +119,7 @@ class StoryListFragment : Fragment(), StoryListener, MenuProvider {
             else if(fragBinding.recyclerView.adapter!!.itemCount == 0){
                 fragBinding.creepy.visibility = View.VISIBLE
             }
-            if (fragBinding.recyclerView.adapter!!.itemCount > 0) {
+            if (fragBinding.recyclerView.adapter!!.itemCount > 0)
                 fragBinding.creepy.visibility = View.INVISIBLE
                 Glide.with(this).load(R.drawable.bidenlost).into(fragBinding.imageView2)
                 val datenow = StoryManager.getDate(day)
@@ -140,7 +140,7 @@ class StoryListFragment : Fragment(), StoryListener, MenuProvider {
                         }
                         storyListViewModel.load(day)
                     }
-                }
+
             }
         }
         setSwipeRefresh()

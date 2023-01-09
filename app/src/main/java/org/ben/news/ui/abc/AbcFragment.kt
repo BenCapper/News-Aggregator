@@ -115,7 +115,7 @@ class AbcFragment : Fragment(), StoryListener, MenuProvider {
             else if(fragBinding.recyclerViewAbc.adapter!!.itemCount == 0){
                 fragBinding.creepy.visibility = View.VISIBLE
             }
-            if (fragBinding.recyclerViewAbc.adapter!!.itemCount > 0) {
+            if (fragBinding.recyclerViewAbc.adapter!!.itemCount > 0)
                 fragBinding.creepy.visibility = View.INVISIBLE
                 Glide.with(this).load(R.drawable.bidenlost).into(fragBinding.imageView2)
                 val datenow = StoryManager.getDate(day)
@@ -135,7 +135,7 @@ class AbcFragment : Fragment(), StoryListener, MenuProvider {
                     }
                     abcViewModel.load(day)
                 }
-            }
+
         }
         setSwipeRefresh()
         return root
