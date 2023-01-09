@@ -96,6 +96,11 @@
                 android:onClick="infoArticles"
                 android:title="@string/infow" />
             <item
+                android:id="@+id/menuamThink"
+                android:icon="@drawable/usicon"
+                android:onClick="amThinkArticles"
+                android:title="@string/amthink" />
+            <item
                 android:id="@+id/menucaller"
                 android:icon="@drawable/usicon"
                 android:onClick="callerArticles"
@@ -105,11 +110,6 @@
                 android:icon="@drawable/usicon"
                 android:onClick="gatewayArticles"
                 android:title="@string/gateway" />
-            <item
-                android:id="@+id/menuamThink"
-                android:icon="@drawable/usicon"
-                android:onClick="amThinkArticles"
-                android:title="@string/amthink" />
             <item
                 android:id="@+id/menumill"
                 android:icon="@drawable/canicon"
@@ -134,6 +134,11 @@
                 android:icon="@drawable/gbicon"
                 android:onClick="guaArticles"
                 android:title="@string/gua" />
+            <item
+                android:id="@+id/menumail"
+                android:icon="@drawable/gbicon"
+                android:onClick="dmailArticles"
+                android:title="@string/dmail" />
             <item
                 android:id="@+id/menueuron"
                 android:icon="@drawable/euicon"

@@ -180,6 +180,9 @@
         <action
             android:id="@+id/action_storyListFragment_to_infoFragment"
             app:destination="@id/infoFragment" />
+        <action
+            android:id="@+id/action_storyListFragment_to_dmailFragment"
+            app:destination="@id/dmailFragment" />
     </fragment>
     <fragment
         android:id="@+id/likedListFragment"
@@ -360,4 +363,9 @@
         android:name="org.ben.news.ui.infowars.InfoFragment"
         android:label="fragment_info"
         tools:layout="@layout/fragment_info" />
+    <fragment
+        android:id="@+id/dmailFragment"
+        android:name="org.ben.news.ui.dmail.DmailFragment"
+        android:label="fragment_dmail"
+        tools:layout="@layout/fragment_dmail" />
 </navigation>
