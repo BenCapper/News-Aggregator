@@ -11,8 +11,11 @@ import android.view.*
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.SearchView
+import androidx.core.view.MenuHost
+import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Lifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -38,7 +41,7 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 
-class StoryListFragment : Fragment(), StoryListener {
+class StoryListFragment : Fragment(), StoryListener, MenuProvider {
 
     companion object {
         fun newInstance() = StoryListFragment()
@@ -143,6 +146,11 @@ class StoryListFragment : Fragment(), StoryListener {
         return root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        val menuHost: MenuHost = requireActivity()
+        menuHost.addMenuProvider(this, viewLifecycleOwner, Lifecycle.State.RESUMED)
+    }
 
 
 
@@ -160,85 +168,6 @@ class StoryListFragment : Fragment(), StoryListener {
             fragBinding.swipe.isRefreshing = false
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.menu_home, menu)
-        when (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) {
-            Configuration.UI_MODE_NIGHT_YES -> {
-                menu.findItem(R.id.app_bar_shuffle).iconTintList = null
-                menu.findItem(R.id.app_bar_r).iconTintList = null
-                menu.findItem(R.id.app_bar_l).iconTintList = null
-            }
-        }
-
-
-        /* Finding the search bar in the menu and setting it to the search view. */
-        val item = menu.findItem(R.id.app_bar_search)
-        val searchView = item.actionView as SearchView
-
-        /* This is the code that is executed when the search bar is used. It searches the database for
-        the building that the user is searching for. */
-        searchView.setOnQueryTextListener(object :  SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                return false
-            }
-
-            override fun onQueryTextChange(newText: String?): Boolean {
-                if (newText != null) {
-                    searching = newText
-                    storyListViewModel.search(
-                        day,
-                        newText
-                    )
-                }
-
-                else{
-                    searching = newText
-                    storyListViewModel.load(day)
-                }
-                if (newText == "") {
-                    searching = newText
-                    storyListViewModel.load(day)
-                }
-
-                return true
-            }
-        })
-        searchView.setOnCloseListener {
-            searching = null
-            storyListViewModel.load(day)
-            false
-        }
-        super.onCreateOptionsMenu(menu, inflater)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        val id = item.itemId
-        if (id == R.id.app_bar_shuffle) {
-            showLoader(loader,"")
-            storyListViewModel.loadShuffle(day)
-            shuffle = true
-            state = null
-        }
-        if( item.itemId == R.id.app_bar_r) {
-            if(day != 0) {
-                showLoader(loader, "")
-                day -= 1
-                if (day <= 0) {
-                    day = 0
-                }
-                storyListViewModel.load(day)
-            }
-        }
-        if( item.itemId == R.id.app_bar_l) {
-            if (day < 14) {
-                showLoader(loader, "")
-                day += 1
-                storyListViewModel.load(day)
-            }
-        }
-
-        return super.onOptionsItemSelected(item)
-    }
 
     private fun render(storyList: ArrayList<StoryModel>) {
         fragBinding.recyclerView.adapter = StoryAdapter(storyList, this)
@@ -303,5 +232,83 @@ class StoryListFragment : Fragment(), StoryListener {
     override fun onDestroyView() {
         super.onDestroyView()
         _fragBinding = null
+    }
+
+    override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+        menuInflater.inflate(R.menu.menu_home, menu)
+        when (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) {
+            Configuration.UI_MODE_NIGHT_YES -> {
+                menu.findItem(R.id.app_bar_shuffle).iconTintList = null
+                menu.findItem(R.id.app_bar_r).iconTintList = null
+                menu.findItem(R.id.app_bar_l).iconTintList = null
+            }
+        }
+
+
+        /* Finding the search bar in the menu and setting it to the search view. */
+        val item = menu.findItem(R.id.app_bar_search)
+        val searchView = item.actionView as SearchView
+
+        /* This is the code that is executed when the search bar is used. It searches the database for
+        the building that the user is searching for. */
+        searchView.setOnQueryTextListener(object :  SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                if (newText != null) {
+                    searching = newText
+                    storyListViewModel.search(
+                        day,
+                        newText
+                    )
+                }
+
+                else{
+                    searching = newText
+                    storyListViewModel.load(day)
+                }
+                if (newText == "") {
+                    searching = newText
+                    storyListViewModel.load(day)
+                }
+
+                return true
+            }
+        })
+        searchView.setOnCloseListener {
+            searching = null
+            storyListViewModel.load(day)
+            false
+        }
+    }
+
+    override fun onMenuItemSelected(item: MenuItem): Boolean {
+        val id = item.itemId
+        if (id == R.id.app_bar_shuffle) {
+            showLoader(loader,"")
+            storyListViewModel.loadShuffle(day)
+            shuffle = true
+            state = null
+        }
+        if( item.itemId == R.id.app_bar_r) {
+            if(day != 0) {
+                showLoader(loader, "")
+                day -= 1
+                if (day <= 0) {
+                    day = 0
+                }
+                storyListViewModel.load(day)
+            }
+        }
+        if( item.itemId == R.id.app_bar_l) {
+            if (day < 14) {
+                showLoader(loader, "")
+                day += 1
+                storyListViewModel.load(day)
+            }
+        }
+        return false
     }
 }
