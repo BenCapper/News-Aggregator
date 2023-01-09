@@ -15,7 +15,6 @@ import kotlin.collections.ArrayList
 object StoryManager : StoryStore {
 
     var database: DatabaseReference = FirebaseDatabase.getInstance().reference
-    val dont_show = listOf("www.OANN.com", "BoundingIntoComics.com","www.BoundingIntoComics.com", "www.AmericanThinker.com")
 
 
     fun getDate(n:Int): String{
@@ -54,7 +53,7 @@ object StoryManager : StoryStore {
 
         val totalList = ArrayList<StoryModel>()
             var todayList = mutableListOf<StoryModel>()
-            database.child("stories").child(date)
+            database.child("tests").child(date)
                 .addValueEventListener(object : ValueEventListener {
                     override fun onCancelled(error: DatabaseError) {
                         Timber.i("Firebase error : ${error.message}")
@@ -64,10 +63,8 @@ object StoryManager : StoryStore {
                         val children = snapshot.children
                         children.forEach {
                             val story = it.getValue(StoryModel::class.java)
-                            if (story?.outlet !in dont_show) {
-                                story?.title = story?.title?.let { it -> formatTitle(it) }.toString()
-                                todayList.add(story!!)
-                            }
+                            story?.title = story?.title?.let { it -> formatTitle(it) }.toString()
+                            todayList.add(story!!)
                         }
                         todayList = todayList.sortedBy{it.order}.toMutableList()
                         todayList.reverse()
@@ -177,10 +174,8 @@ object StoryManager : StoryStore {
                                 it.getValue(StoryModel::class.java)?.date!!.contains(term, true)
                             ) {
                                 val story = it.getValue(StoryModel::class.java)
-                                if (story?.outlet !in dont_show) {
-                                    story?.title = story?.title?.let { it -> formatTitle(it) }.toString()
-                                    todayList.add(story!!)
-                                }
+                                story?.title = story?.title?.let { it -> formatTitle(it) }.toString()
+                                todayList.add(story!!)
                             }
                         }
                         todayList = todayList.sortedBy{it.order}.toMutableList()
