@@ -91,7 +91,7 @@ for article in articles[1:]:
                 blob.upload_from_filename(f"{img_path}/{img_title}")
 
             # Get Link to the Stored Image
-            storage_link = f"https://firebasestorage.googleapis.com/v0/b/news-a3e22.appspot.com/o/Hill%2F{td}%2F{title}?alt=media&token={token}"
+            storage_link = f"https://firebasestorage.googleapis.com/v0/b/news-a3e22.appspot.com/o/Hill%2F{td}%2F{img_title}?alt=media&token={token}"
             data = {
                  "title": title,
                  "date": date,
