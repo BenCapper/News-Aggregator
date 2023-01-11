@@ -91,6 +91,7 @@ class Home : AppCompatActivity() {
             R.id.skyFragment,
             R.id.infoFragment,
             R.id.spikedFragment,
+            R.id.trendingFragment,
             R.id.timcastFragment,
             R.id.voxFragment,
             R.id.yahooFragment,
@@ -240,6 +241,12 @@ class Home : AppCompatActivity() {
 
     fun scepticArticles(item: MenuItem) {
         findNavController(R.id.nav_host_fragment).navigate(R.id.scepticFragment)
+        findViewById<DrawerLayout>(R.id.drawer_layout).closeDrawers()
+        Timber.i("UserId = ${loggedInViewModel.liveFirebaseUser.value!!.uid}")
+    }
+
+    fun trendingArticles(item: MenuItem) {
+        findNavController(R.id.nav_host_fragment).navigate(R.id.trendingFragment)
         findViewById<DrawerLayout>(R.id.drawer_layout).closeDrawers()
         Timber.i("UserId = ${loggedInViewModel.liveFirebaseUser.value!!.uid}")
     }

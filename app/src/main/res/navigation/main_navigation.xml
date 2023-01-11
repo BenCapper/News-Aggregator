@@ -192,6 +192,9 @@
         <action
             android:id="@+id/action_storyListFragment_to_scepticFragment"
             app:destination="@id/scepticFragment" />
+        <action
+            android:id="@+id/action_storyListFragment_to_trendingFragment"
+            app:destination="@id/trendingFragment" />
     </fragment>
     <fragment
         android:id="@+id/likedListFragment"
@@ -392,4 +395,9 @@
         android:name="org.ben.news.ui.sceptic.ScepticFragment"
         android:label="fragment_Sceptic"
         tools:layout="@layout/fragment_sceptic" />
+    <fragment
+        android:id="@+id/trendingFragment"
+        android:name="org.ben.news.ui.trending.TrendingFragment"
+        android:label="fragment_trending"
+        tools:layout="@layout/fragment_trending" />
 </navigation>

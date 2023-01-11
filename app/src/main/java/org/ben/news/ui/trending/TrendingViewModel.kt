@@ -1,4 +1,4 @@
-package org.ben.news.ui.sceptic
+package org.ben.news.ui.trending
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -8,12 +8,12 @@ import org.ben.news.firebase.StoryManager
 import org.ben.news.models.StoryModel
 import timber.log.Timber
 
-class ScepticViewModel : ViewModel() {
-    private val scepticList =
+class TrendingViewModel : ViewModel() {
+    private val trendingList =
         MutableLiveData<List<StoryModel>>()
 
-    val observableScepticList: LiveData<List<StoryModel>>
-        get() = scepticList
+    val observableTrendingList: LiveData<List<StoryModel>>
+        get() = trendingList
 
     private val story = MutableLiveData<StoryModel>()
 
@@ -25,15 +25,15 @@ class ScepticViewModel : ViewModel() {
 
     init { load(0) }
 
-    private val outlet = "www.DailySceptic.org"
+    private val outlet = "www.TrendingPoliticsNews.com"
 
 
     fun load(day: Int) {
         val list: String
         try {
             list = StoryManager.getDate(day)
-            StoryManager.findByOutlet(list,outlet,scepticList)
-            Timber.i("Load Success : ${scepticList.value}")
+            StoryManager.findByOutlet(list,outlet,trendingList)
+            Timber.i("Load Success : ${trendingList.value}")
         }
         catch (e: Exception) {
             Timber.i("Load Error : $e.message")
@@ -43,7 +43,7 @@ class ScepticViewModel : ViewModel() {
     fun search( day: Int, term: String) {
         try {
             val dates = StoryManager.getDate(day)
-            StoryManager.searchByOutlet(dates, term, outlet, scepticList)
+            StoryManager.searchByOutlet(dates, term, outlet, trendingList)
             Timber.i("Search Success")
         } catch (e: java.lang.Exception) {
             Timber.i("Search Error : $e.message")

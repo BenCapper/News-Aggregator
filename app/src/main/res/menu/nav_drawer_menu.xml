@@ -100,6 +100,11 @@
                 android:onClick="bongArticles"
                 android:title="@string/bongino" />
             <item
+                android:id="@+id/menutrending"
+                android:icon="@drawable/usicon"
+                android:onClick="trendingArticles"
+                android:title="@string/trending" />
+            <item
                 android:id="@+id/menucaller"
                 android:icon="@drawable/usicon"
                 android:onClick="callerArticles"
