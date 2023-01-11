@@ -34,28 +34,36 @@ class StoryAdapter constructor(
     private var FEED = 5
     private val right = listOf("www.Gript.ie","www.GBNews.uk","www.Spiked-Online.com","www.ThePostMillennial.com","www.TheBlaze.com",
         "www.Timcast.com","www.Revolver.news","www.BonginoReport.com","www.Zerohedge.com","www.Breitbart.com",
-        "www.DailyCaller.com", "www.TheGatewayPundit.com",)
+        "www.DailyCaller.com", "www.TheGatewayPundit.com", "www.AmericanThinker.com", "www.InfoWars.com", "www.DailySceptic.org", "TrendingPoliticsNews.com")
     private val left = listOf("www.RTE.ie","news.Sky.com","www.TheGuardian.com", "www.GlobalNews.ca","www.Euronews.com","www.TheDailyBeast.com",
-        "www.Politico.com", "www.CbsNews.com",  "AbcNews.go.com", "news.Yahoo.com", "www.Vox.com","www.HuffPost.com")
+        "www.Politico.com", "www.CbsNews.com",  "AbcNews.go.com", "news.Yahoo.com", "www.Vox.com","www.HuffPost.com", "www.DailyMail.co.uk", "www.Npr.org", "www.TheHill.com")
+
+
     private val ie = listOf("www.RTE.ie", "www.Gript.ie")
-    private val uk = listOf("www.GBNews.uk", "news.Sky.com", "www.Spiked-Online.com", "www.TheGuardian.com")
+    private val uk = listOf("www.GBNews.uk", "news.Sky.com", "www.Spiked-Online.com", "www.TheGuardian.com", "www.DailyMail.co.uk", "www.DailySceptic.org",)
     private val ca = listOf("www.ThePostMillennial.com", "www.GlobalNews.ca")
     private val eu = listOf("www.Euronews.com")
     private val us = listOf("www.TheBlaze.com",
         "www.Timcast.com",
+        "www.Revolver.news",
         "www.BonginoReport.com",
         "www.Zerohedge.com",
         "www.Breitbart.com",
         "www.Revolver.news",
         "www.DailyCaller.com",
+        "www.InfoWars.com",
+        "www.AmericanThinker.com",
         "www.TheDailyBeast.com",
         "www.TheGatewayPundit.com",
+        "TrendingPoliticsNews.com",
         "www.Politico.com",
         "www.CbsNews.com",
         "AbcNews.go.com",
         "news.Yahoo.com",
         "www.Vox.com",
-        "www.HuffPost.com")
+        "www.HuffPost.com",
+        "www.Npr.org",
+        "www.TheHill.com")
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {

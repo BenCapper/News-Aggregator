@@ -63,6 +63,7 @@ class Home : AppCompatActivity() {
             R.id.usFragment,
             R.id.euFragment,
             R.id.abcFragment,
+            R.id.amThinkFragment,
             R.id.beastFragment,
             R.id.blazeFragment,
             R.id.bonginoFragment,
@@ -70,12 +71,16 @@ class Home : AppCompatActivity() {
             R.id.cbsFragment,
             R.id.callerFragment,
             R.id.conflictFragment,
+            R.id.dmailFragment,
+            R.id.nprFragment,
             R.id.euronFragment,
+            R.id.scepticFragment,
             R.id.gbFragment,
             R.id.globalFragment,
             R.id.guardFragment,
             R.id.griptFragment,
             R.id.gatewayFragment,
+            R.id.hillFragment,
             R.id.huffFragment,
             R.id.leftFragment,
             R.id.pmillFragment,
@@ -84,7 +89,9 @@ class Home : AppCompatActivity() {
             R.id.rteFragment,
             R.id.rightFragment,
             R.id.skyFragment,
+            R.id.infoFragment,
             R.id.spikedFragment,
+            R.id.trendingFragment,
             R.id.timcastFragment,
             R.id.voxFragment,
             R.id.yahooFragment,
@@ -226,6 +233,30 @@ class Home : AppCompatActivity() {
         Timber.i("UserId = ${loggedInViewModel.liveFirebaseUser.value!!.uid}")
     }
 
+    fun amThinkArticles(item: MenuItem) {
+        findNavController(R.id.nav_host_fragment).navigate(R.id.amThinkFragment)
+        findViewById<DrawerLayout>(R.id.drawer_layout).closeDrawers()
+        Timber.i("UserId = ${loggedInViewModel.liveFirebaseUser.value!!.uid}")
+    }
+
+    fun scepticArticles(item: MenuItem) {
+        findNavController(R.id.nav_host_fragment).navigate(R.id.scepticFragment)
+        findViewById<DrawerLayout>(R.id.drawer_layout).closeDrawers()
+        Timber.i("UserId = ${loggedInViewModel.liveFirebaseUser.value!!.uid}")
+    }
+
+    fun trendingArticles(item: MenuItem) {
+        findNavController(R.id.nav_host_fragment).navigate(R.id.trendingFragment)
+        findViewById<DrawerLayout>(R.id.drawer_layout).closeDrawers()
+        Timber.i("UserId = ${loggedInViewModel.liveFirebaseUser.value!!.uid}")
+    }
+
+    fun infoArticles(item: MenuItem) {
+        findNavController(R.id.nav_host_fragment).navigate(R.id.infoFragment)
+        findViewById<DrawerLayout>(R.id.drawer_layout).closeDrawers()
+        Timber.i("UserId = ${loggedInViewModel.liveFirebaseUser.value!!.uid}")
+    }
+
     fun abcArticles(item: MenuItem) {
         findNavController(R.id.nav_host_fragment).navigate(R.id.abcFragment)
         findViewById<DrawerLayout>(R.id.drawer_layout).closeDrawers()
@@ -316,6 +347,12 @@ class Home : AppCompatActivity() {
         Timber.i("UserId = ${loggedInViewModel.liveFirebaseUser.value!!.uid}")
     }
 
+    fun hillArticles(item: MenuItem) {
+        findNavController(R.id.nav_host_fragment).navigate(R.id.hillFragment)
+        findViewById<DrawerLayout>(R.id.drawer_layout).closeDrawers()
+        Timber.i("UserId = ${loggedInViewModel.liveFirebaseUser.value!!.uid}")
+    }
+
     fun politicoArticles(item: MenuItem) {
         findNavController(R.id.nav_host_fragment).navigate(R.id.politicoFragment)
         findViewById<DrawerLayout>(R.id.drawer_layout).closeDrawers()
@@ -324,6 +361,18 @@ class Home : AppCompatActivity() {
 
     fun revArticles(item: MenuItem) {
         findNavController(R.id.nav_host_fragment).navigate(R.id.revolverFragment)
+        findViewById<DrawerLayout>(R.id.drawer_layout).closeDrawers()
+        Timber.i("UserId = ${loggedInViewModel.liveFirebaseUser.value!!.uid}")
+    }
+
+    fun dmailArticles(item: MenuItem) {
+        findNavController(R.id.nav_host_fragment).navigate(R.id.dmailFragment)
+        findViewById<DrawerLayout>(R.id.drawer_layout).closeDrawers()
+        Timber.i("UserId = ${loggedInViewModel.liveFirebaseUser.value!!.uid}")
+    }
+
+    fun nprArticles(item: MenuItem) {
+        findNavController(R.id.nav_host_fragment).navigate(R.id.nprFragment)
         findViewById<DrawerLayout>(R.id.drawer_layout).closeDrawers()
         Timber.i("UserId = ${loggedInViewModel.liveFirebaseUser.value!!.uid}")
     }
@@ -363,13 +412,13 @@ class Home : AppCompatActivity() {
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
         when (currentNightMode) {
             Configuration.UI_MODE_NIGHT_NO -> {
-                sharedPreferences.edit().clear().commit()
-                sharedPreferences.edit().putString("night_mode", "night_mode").commit()
+                sharedPreferences.edit().clear().apply()
+                sharedPreferences.edit().putString("night_mode", "night_mode").apply()
                 AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_YES)
             }
             Configuration.UI_MODE_NIGHT_YES -> {
-                sharedPreferences.edit().clear().commit()
-                sharedPreferences.edit().putString("light_mode", "light_mode").commit()
+                sharedPreferences.edit().clear().apply()
+                sharedPreferences.edit().putString("light_mode", "light_mode").apply()
                 AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_NO)
 
             }

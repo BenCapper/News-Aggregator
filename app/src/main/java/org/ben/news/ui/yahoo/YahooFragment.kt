@@ -11,6 +11,7 @@ import android.widget.FrameLayout
 import androidx.fragment.app.Fragment
 import android.widget.ImageView
 import android.widget.SearchView
+import androidx.appcompat.widget.Toolbar
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.activityViewModels
@@ -165,12 +166,14 @@ class YahooFragment : Fragment(), StoryListener, MenuProvider {
     }
 
     override fun onResume() {
+        activity?.findViewById<Toolbar>(R.id.toolbar)?.visibility = View.VISIBLE
         yahooViewModel.load(day)
         super.onResume()
     }
 
     override fun onPause() {
         state = fragBinding.recyclerViewYahoo.layoutManager?.onSaveInstanceState()
+        activity?.findViewById<Toolbar>(R.id.toolbar)?.visibility = View.INVISIBLE
         super.onPause()
     }
 

@@ -35,7 +35,7 @@ class ConflictAdapter constructor(
     private var AD = 1
     private var FEED = 5
     private val ie = listOf("www.RTE.ie", "www.Gript.ie")
-    private val uk = listOf("www.GBNews.uk", "news.Sky.com", "www.Spiked-Online.com", "www.TheGuardian.com")
+    private val uk = listOf("www.GBNews.uk", "news.Sky.com", "www.Spiked-Online.com", "www.TheGuardian.com", "www.DailyMail.co.uk", "www.DailySceptic.org",)
     private val ca = listOf("www.ThePostMillennial.com", "www.GlobalNews.ca")
     private val eu = listOf("www.Euronews.com")
     private val us = listOf("www.TheBlaze.com",
@@ -46,14 +46,19 @@ class ConflictAdapter constructor(
         "www.Breitbart.com",
         "www.Revolver.news",
         "www.DailyCaller.com",
+        "www.InfoWars.com",
+        "www.AmericanThinker.com",
         "www.TheDailyBeast.com",
         "www.TheGatewayPundit.com",
+        "TrendingPoliticsNews.com",
         "www.Politico.com",
         "www.CbsNews.com",
         "AbcNews.go.com",
         "news.Yahoo.com",
         "www.Vox.com",
-        "www.HuffPost.com")
+        "www.HuffPost.com",
+        "www.Npr.org",
+        "www.TheHill.com")
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
