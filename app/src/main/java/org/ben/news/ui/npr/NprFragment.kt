@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.SearchView
+import androidx.appcompat.widget.Toolbar
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.activityViewModels
@@ -162,12 +163,14 @@ class NprFragment : Fragment(), StoryListener, MenuProvider {
     }
 
     override fun onResume() {
+        activity?.findViewById<Toolbar>(R.id.toolbar)?.visibility = View.VISIBLE
         nprViewModel.load(day)
         super.onResume()
     }
 
     override fun onPause() {
         state = fragBinding.recyclerViewNpr.layoutManager?.onSaveInstanceState()
+        activity?.findViewById<Toolbar>(R.id.toolbar)?.visibility = View.INVISIBLE
         super.onPause()
     }
 

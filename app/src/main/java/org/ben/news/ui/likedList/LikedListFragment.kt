@@ -9,6 +9,7 @@ import android.os.Parcelable
 import android.view.*
 import android.widget.ImageView
 import android.widget.SearchView
+import androidx.appcompat.widget.Toolbar
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
@@ -160,6 +161,7 @@ class LikedListFragment : Fragment(), StorySaveListener, StoryListener, MenuProv
     }
 
     override fun onResume() {
+        activity?.findViewById<Toolbar>(R.id.toolbar)?.visibility = View.VISIBLE
         super.onResume()
         loggedInViewModel.liveFirebaseUser.observe(viewLifecycleOwner) { firebaseUser ->
             if (firebaseUser != null) {
@@ -171,6 +173,7 @@ class LikedListFragment : Fragment(), StorySaveListener, StoryListener, MenuProv
 
     override fun onPause() {
         state = fragBinding.recyclerViewLiked.layoutManager?.onSaveInstanceState()
+        activity?.findViewById<Toolbar>(R.id.toolbar)?.visibility = View.INVISIBLE
         super.onPause()
     }
 

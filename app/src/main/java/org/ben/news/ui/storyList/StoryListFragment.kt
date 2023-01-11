@@ -11,6 +11,7 @@ import android.view.*
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.SearchView
+import androidx.appcompat.widget.Toolbar
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
@@ -174,6 +175,7 @@ class StoryListFragment : Fragment(), StoryListener, MenuProvider {
     }
 
     override fun onResume() {
+        activity?.findViewById<Toolbar>(R.id.toolbar)?.visibility = View.VISIBLE
         storyListViewModel.load(day)
         super.onResume()
     }
@@ -184,6 +186,7 @@ class StoryListFragment : Fragment(), StoryListener, MenuProvider {
         } else {
             fragBinding.recyclerView.layoutManager?.onSaveInstanceState()
         }
+        activity?.findViewById<Toolbar>(R.id.toolbar)?.visibility = View.INVISIBLE
         super.onPause()
     }
 
