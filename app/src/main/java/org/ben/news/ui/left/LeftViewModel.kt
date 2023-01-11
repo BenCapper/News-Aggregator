@@ -28,7 +28,7 @@ class LeftViewModel : ViewModel() {
 
     private val outlet = listOf("www.RTE.ie","news.Sky.com","www.TheGuardian.com","www.Euronews.com","AbcNews.go.com",
         "www.CbsNews.com","www.Vox.com","www.Politico.com","news.Yahoo.com","www.TheDailyBeast.com","www.HuffPost.com",
-        "www.GlobalNews.ca")
+        "www.GlobalNews.ca", "www.TheHill.com", "www.Npr.org", "www.DailyMail.co.uk")
 
 
     fun load(day: Int) {

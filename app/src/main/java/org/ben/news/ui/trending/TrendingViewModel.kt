@@ -25,7 +25,7 @@ class TrendingViewModel : ViewModel() {
 
     init { load(0) }
 
-    private val outlet = "www.TrendingPoliticsNews.com"
+    private val outlet = "TrendingPoliticsNews.com"
 
 
     fun load(day: Int) {
