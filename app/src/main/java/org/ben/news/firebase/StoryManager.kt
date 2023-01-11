@@ -381,7 +381,7 @@ object StoryManager : StoryStore {
                         todayList.add(story!!)
                         Timber.i("user-article=$story")
                     }
-                    todayList = todayList.sortedBy{it.date}.toMutableList()
+                    todayList = todayList.sortedBy{it.date.split('-')[0]}.sortedBy{it.date.split('-')[1]}.sortedBy{it.date.split('-')[2]}.toMutableList()
                     todayList.reverse()
                     database.child("user-$path").child(userId)
                         .removeEventListener(this)
