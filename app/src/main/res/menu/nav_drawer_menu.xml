@@ -60,6 +60,11 @@
                 android:onClick="gbArticles"
                 android:title="@string/gbnews" />
             <item
+                android:id="@+id/menusceptic"
+                android:icon="@drawable/gbicon"
+                android:onClick="scepticArticles"
+                android:title="@string/sceptic" />
+            <item
                 android:id="@+id/menublaze"
                 android:icon="@drawable/usicon"
                 android:onClick="blazeArticles"
@@ -69,7 +74,6 @@
                 android:icon="@drawable/usicon"
                 android:onClick="timArticles"
                 android:title="@string/timcast" />
-
             <item
                 android:id="@+id/menubreit"
                 android:icon="@drawable/usicon"
@@ -105,11 +109,6 @@
                 android:icon="@drawable/usicon"
                 android:onClick="amThinkArticles"
                 android:title="@string/amthink" />
-            <item
-                android:id="@+id/menuepoch"
-                android:icon="@drawable/usicon"
-                android:onClick="epochArticles"
-                android:title="@string/epoch" />
             <item
                 android:id="@+id/menugwp"
                 android:icon="@drawable/usicon"

@@ -190,8 +190,8 @@
             android:id="@+id/action_storyListFragment_to_hillFragment"
             app:destination="@id/hillFragment" />
         <action
-            android:id="@+id/action_storyListFragment_to_epochFragment"
-            app:destination="@id/epochFragment" />
+            android:id="@+id/action_storyListFragment_to_scepticFragment"
+            app:destination="@id/scepticFragment" />
     </fragment>
     <fragment
         android:id="@+id/likedListFragment"
@@ -388,8 +388,8 @@
         android:label="fragment_hill"
         tools:layout="@layout/fragment_hill" />
     <fragment
-        android:id="@+id/epochFragment"
-        android:name="org.ben.news.ui.epoch.EpochFragment"
-        android:label="fragment_epoch"
-        tools:layout="@layout/fragment_epoch" />
+        android:id="@+id/scepticFragment"
+        android:name="org.ben.news.ui.sceptic.ScepticFragment"
+        android:label="fragment_Sceptic"
+        tools:layout="@layout/fragment_sceptic" />
 </navigation>

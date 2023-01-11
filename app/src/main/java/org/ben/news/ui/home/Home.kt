@@ -74,7 +74,7 @@ class Home : AppCompatActivity() {
             R.id.dmailFragment,
             R.id.nprFragment,
             R.id.euronFragment,
-            R.id.epochFragment,
+            R.id.scepticFragment,
             R.id.gbFragment,
             R.id.globalFragment,
             R.id.guardFragment,
@@ -238,8 +238,8 @@ class Home : AppCompatActivity() {
         Timber.i("UserId = ${loggedInViewModel.liveFirebaseUser.value!!.uid}")
     }
 
-    fun epochArticles(item: MenuItem) {
-        findNavController(R.id.nav_host_fragment).navigate(R.id.epochFragment)
+    fun scepticArticles(item: MenuItem) {
+        findNavController(R.id.nav_host_fragment).navigate(R.id.scepticFragment)
         findViewById<DrawerLayout>(R.id.drawer_layout).closeDrawers()
         Timber.i("UserId = ${loggedInViewModel.liveFirebaseUser.value!!.uid}")
     }

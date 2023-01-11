@@ -1,4 +1,4 @@
-package org.ben.news.ui.epoch
+package org.ben.news.ui.sceptic
 
 import android.app.AlertDialog
 import android.content.Intent
@@ -25,7 +25,7 @@ import org.ben.news.R
 import org.ben.news.adapters.EmptyAdapter
 import org.ben.news.adapters.StoryAdapter
 import org.ben.news.adapters.StoryListener
-import org.ben.news.databinding.FragmentEpochBinding
+import org.ben.news.databinding.FragmentScepticBinding
 import org.ben.news.firebase.StoryManager
 import org.ben.news.helpers.createLoader
 import org.ben.news.helpers.hideLoader
@@ -36,17 +36,17 @@ import splitties.alertdialog.appcompat.*
 import splitties.snackbar.snack
 import splitties.views.textColorResource
 
-class EpochFragment : Fragment(), StoryListener, MenuProvider {
+class ScepticFragment : Fragment(), StoryListener, MenuProvider {
 
     companion object {
-        fun newInstance() = EpochFragment()
+        fun newInstance() = ScepticFragment()
     }
 
-    private var _fragBinding: FragmentEpochBinding? = null
+    private var _fragBinding: FragmentScepticBinding? = null
     private val fragBinding get() = _fragBinding!!
     lateinit var loader: AlertDialog
     private val loggedInViewModel: LoggedInViewModel by activityViewModels()
-    private val epochViewModel: EpochViewModel by activityViewModels()
+    private val scepticViewModel: ScepticViewModel by activityViewModels()
     var state: Parcelable? = null
     var day = 0
     var searching: String? = null
@@ -63,16 +63,16 @@ class EpochFragment : Fragment(), StoryListener, MenuProvider {
     ): View {
         loader = createLoader(requireActivity())
         showLoader(loader, "")
-        _fragBinding = FragmentEpochBinding.inflate(inflater, container, false)
+        _fragBinding = FragmentScepticBinding.inflate(inflater, container, false)
         val root = fragBinding.root
 
-        fragBinding.recyclerViewEpoch.layoutManager = activity?.let { LinearLayoutManager(it) }
+        fragBinding.recyclerViewSceptic.layoutManager = activity?.let { LinearLayoutManager(it) }
         activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.epoch)
         MobileAds.initialize(this.requireContext()) {}
         val fab = activity?.findViewById<FloatingActionButton>(R.id.fab)
         val bot = activity?.findViewById<BottomNavigationView>(R.id.bottom_nav)
         fab?.visibility = View.INVISIBLE
-        fragBinding.recyclerViewEpoch.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+        fragBinding.recyclerViewSceptic.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             var y = 0
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 y = dy
@@ -90,25 +90,25 @@ class EpochFragment : Fragment(), StoryListener, MenuProvider {
             }
         })
         fab!!.setOnClickListener {
-            fragBinding.recyclerViewEpoch.smoothScrollToPosition(0)
+            fragBinding.recyclerViewSceptic.smoothScrollToPosition(0)
             bot!!.visibility = View.VISIBLE
         }
 
-        epochViewModel.observableEpochList.observe(viewLifecycleOwner) { story ->
+        scepticViewModel.observableScepticList.observe(viewLifecycleOwner) { story ->
             story?.let {
                 render(story as ArrayList<StoryModel>)
                 checkSwipeRefresh()
             }
             hideLoader(loader)
-            if (fragBinding.recyclerViewEpoch.adapter!!.itemCount == 0 && searching != null) {
+            if (fragBinding.recyclerViewSceptic.adapter!!.itemCount == 0 && searching != null) {
                 val st = ArrayList<StoryModel>()
                 st.add(StoryModel(title = "1"))
-                fragBinding.recyclerViewEpoch.adapter = EmptyAdapter(st, this)
-                state?.let { fragBinding.recyclerViewEpoch.layoutManager?.onRestoreInstanceState(it) }
-            } else if (fragBinding.recyclerViewEpoch.adapter!!.itemCount == 0) {
+                fragBinding.recyclerViewSceptic.adapter = EmptyAdapter(st, this)
+                state?.let { fragBinding.recyclerViewSceptic.layoutManager?.onRestoreInstanceState(it) }
+            } else if (fragBinding.recyclerViewSceptic.adapter!!.itemCount == 0) {
                 fragBinding.creepy.visibility = View.VISIBLE
             }
-            if (fragBinding.recyclerViewEpoch.adapter!!.itemCount > 0) {
+            if (fragBinding.recyclerViewSceptic.adapter!!.itemCount > 0) {
                 fragBinding.creepy.visibility = View.INVISIBLE
             }
             Glide.with(this).load(R.drawable.bidenlost).into(fragBinding.imageView2)
@@ -118,7 +118,7 @@ class EpochFragment : Fragment(), StoryListener, MenuProvider {
                 if (day < 14) {
                     showLoader(loader, "")
                     day += 1
-                    epochViewModel.load(day)
+                    scepticViewModel.load(day)
                 }
             }
             fragBinding.rarrow.setOnClickListener {
@@ -128,7 +128,7 @@ class EpochFragment : Fragment(), StoryListener, MenuProvider {
                     if (day <= 0) {
                         day = 0
                     }
-                    epochViewModel.load(day)
+                    scepticViewModel.load(day)
                 }
             }
         }
@@ -145,8 +145,8 @@ class EpochFragment : Fragment(), StoryListener, MenuProvider {
     private fun setSwipeRefresh() {
         fragBinding.swipe.setOnRefreshListener {
             fragBinding.swipe.isRefreshing = true
-            state = fragBinding.recyclerViewEpoch.layoutManager?.onSaveInstanceState()
-            epochViewModel.load(day)
+            state = fragBinding.recyclerViewSceptic.layoutManager?.onSaveInstanceState()
+            scepticViewModel.load(day)
         }
     }
 
@@ -157,24 +157,24 @@ class EpochFragment : Fragment(), StoryListener, MenuProvider {
 
 
     private fun render(storyList: ArrayList<StoryModel>) {
-        fragBinding.recyclerViewEpoch.adapter = StoryAdapter(storyList, this)
-        state?.let { fragBinding.recyclerViewEpoch.layoutManager?.onRestoreInstanceState(it) }
+        fragBinding.recyclerViewSceptic.adapter = StoryAdapter(storyList, this)
+        state?.let { fragBinding.recyclerViewSceptic.layoutManager?.onRestoreInstanceState(it) }
     }
 
     override fun onResume() {
-        epochViewModel.load(day)
+        scepticViewModel.load(day)
         super.onResume()
     }
 
     override fun onPause() {
-        state = fragBinding.recyclerViewEpoch.layoutManager?.onSaveInstanceState()
+        state = fragBinding.recyclerViewSceptic.layoutManager?.onSaveInstanceState()
         super.onPause()
     }
 
     override fun onStoryClick(story: StoryModel) {
         StoryManager.createLiked(loggedInViewModel.liveFirebaseUser.value!!.uid, "history", story)
         val intent = Intent(Intent.ACTION_VIEW).setData(Uri.parse(story.link))
-        state = fragBinding.recyclerViewEpoch.layoutManager?.onSaveInstanceState()
+        state = fragBinding.recyclerViewSceptic.layoutManager?.onSaveInstanceState()
         startActivity(intent)
     }
 
@@ -209,7 +209,7 @@ class EpochFragment : Fragment(), StoryListener, MenuProvider {
         }
 
         val shareIntent = Intent.createChooser(sendIntent, null)
-        state = fragBinding.recyclerViewEpoch.layoutManager?.onSaveInstanceState()
+        state = fragBinding.recyclerViewSceptic.layoutManager?.onSaveInstanceState()
         startActivity(shareIntent)
     }
 
@@ -240,17 +240,17 @@ class EpochFragment : Fragment(), StoryListener, MenuProvider {
             override fun onQueryTextChange(newText: String?): Boolean {
                 if (newText != null) {
                     searching = newText
-                    epochViewModel.search(
+                    scepticViewModel.search(
                         day,
                         newText
                     )
                 } else {
                     searching = newText
-                    epochViewModel.load(day)
+                    scepticViewModel.load(day)
                 }
                 if (newText == "") {
                     searching = newText
-                    epochViewModel.load(day)
+                    scepticViewModel.load(day)
                 }
 
                 return true
@@ -258,7 +258,7 @@ class EpochFragment : Fragment(), StoryListener, MenuProvider {
         })
         searchView.setOnCloseListener {
             searching = null
-            epochViewModel.load(day)
+            scepticViewModel.load(day)
             false
         }
 
@@ -272,14 +272,14 @@ class EpochFragment : Fragment(), StoryListener, MenuProvider {
                 if (day <= 0) {
                     day = 0
                 }
-                epochViewModel.load(day)
+                scepticViewModel.load(day)
             }
         }
         if (item.itemId == R.id.app_bar_left) {
             if (day < 14) {
                 showLoader(loader, "")
                 day += 1
-                epochViewModel.load(day)
+                scepticViewModel.load(day)
             }
         }
         return false
