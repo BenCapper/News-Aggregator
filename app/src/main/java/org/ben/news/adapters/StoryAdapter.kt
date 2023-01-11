@@ -40,7 +40,7 @@ class StoryAdapter constructor(
 
 
     private val ie = listOf("www.RTE.ie", "www.Gript.ie")
-    private val uk = listOf("www.GBNews.uk", "news.Sky.com", "www.Spiked-Online.com", "www.TheGuardian.com", "www.DailyMail.co.uk")
+    private val uk = listOf("www.GBNews.uk", "news.Sky.com", "www.Spiked-Online.com", "www.TheGuardian.com", "www.DailyMail.co.uk", "www.DailySceptic.org",)
     private val ca = listOf("www.ThePostMillennial.com", "www.GlobalNews.ca")
     private val eu = listOf("www.Euronews.com")
     private val us = listOf("www.TheBlaze.com",
@@ -56,7 +56,6 @@ class StoryAdapter constructor(
         "www.TheDailyBeast.com",
         "www.TheGatewayPundit.com",
         "TrendingPoliticsNews.com",
-        "www.DailySceptic.org",
         "www.Politico.com",
         "www.CbsNews.com",
         "AbcNews.go.com",
