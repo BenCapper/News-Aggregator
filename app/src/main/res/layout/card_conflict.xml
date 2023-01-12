@@ -86,7 +86,7 @@
                 android:text="@{story.date1}"
                 android:textColor="@color/dark"
                 android:textSize="11sp"
-                android:textStyle="bold"
+                android:textStyle="italic"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -206,7 +206,7 @@
                 android:text="@{story.date2}"
                 android:textColor="@color/dark"
                 android:textSize="11sp"
-                android:textStyle="bold"
+                android:textStyle="italic"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
