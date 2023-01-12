@@ -21,7 +21,7 @@ interface StorySaveListener {
     fun onShare(story: StoryModel)
 }
 
-class NoSaveAdapter constructor(private var stories: ArrayList<StoryModel>, private val listener: StorySaveListener, )
+class SaveAdapter constructor(private var stories: ArrayList<StoryModel>, private val listener: StorySaveListener, )
     : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var ITEM = 0
