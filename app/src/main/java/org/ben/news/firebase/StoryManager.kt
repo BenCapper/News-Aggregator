@@ -108,7 +108,6 @@ object StoryManager : StoryStore {
                         children.forEach {
                             val story = it.getValue(StoryModel::class.java)
                             story?.title = story?.title?.let { it -> formatTitle(it) }.toString()
-                            story?.date = story?.date?.let { it -> formatDate(it) }.toString()
                             todayList.add(story!!)
                         }
                         todayList = todayList.sortedBy{it.order}.toMutableList()
@@ -136,8 +135,6 @@ object StoryManager : StoryStore {
                     val children = snapshot.children
                     children.forEach {
                         val story = it.getValue(DoubleStoryModel::class.java)
-                        story?.date1 = story?.date1?.let { it -> formatDate(it) }.toString()
-                        story?.date2 = story?.date2?.let { it -> formatDate(it) }.toString()
                         todayList.add(story!!)
                     }
                     todayList = todayList.sortedBy{it.order}.toMutableList()
@@ -165,7 +162,6 @@ object StoryManager : StoryStore {
                         children.forEach {
                             val story = it.getValue(StoryModel::class.java)
                             story?.title = story?.title?.let { it -> formatTitle(it) }.toString()
-                            story?.date = story?.date?.let { it -> formatDate(it) }.toString()
                             todayList.add(story!!)
                         }
                         todayList.shuffle()
@@ -193,7 +189,6 @@ object StoryManager : StoryStore {
                         val story = it.getValue(StoryModel::class.java)
                         if(story?.outlet in outlets) {
                             story?.title = story?.title?.let { it -> formatTitle(it) }.toString()
-                            story?.date = story?.date?.let { it -> formatDate(it) }.toString()
                             todayList.add(story!!)
                         }
                     }
@@ -224,7 +219,6 @@ object StoryManager : StoryStore {
                             ) {
                                 val story = it.getValue(StoryModel::class.java)
                                 story?.title = story?.title?.let { it -> formatTitle(it) }.toString()
-                                story?.date = story?.date?.let { it -> formatDate(it) }.toString()
                                 todayList.add(story!!)
                             }
                         }
@@ -257,8 +251,6 @@ object StoryManager : StoryStore {
                             it.getValue(DoubleStoryModel::class.java)?.titlehead!!.contains(term, true)
                         ) {
                             val story = it.getValue(DoubleStoryModel::class.java)
-                            story?.date1 = story?.date1?.let { it -> formatDate(it) }.toString()
-                            story?.date2 = story?.date2?.let { it -> formatDate(it) }.toString()
                             todayList.add(story!!)
                         }
                     }
@@ -288,7 +280,6 @@ object StoryManager : StoryStore {
                             val story = it.getValue(StoryModel::class.java)
                             if(story?.outlet == outlet) {
                                 story.title = formatTitle(story.title)
-                                story?.date = story?.date?.let { it -> formatDate(it) }.toString()
                                 todayList.add(story)
                             }
                         }
@@ -320,7 +311,6 @@ object StoryManager : StoryStore {
                             val story = it.getValue(StoryModel::class.java)
                             if(story?.outlet in outlets) {
                                 story?.title = story?.title?.let { it -> formatTitle(it) }.toString()
-                                story?.date = story?.date?.let { it -> formatDate(it) }.toString()
                                 todayList.add(story!!)
                             }
                         }
@@ -351,7 +341,6 @@ object StoryManager : StoryStore {
                             val story = it.getValue(StoryModel::class.java)
                             if(story?.outlet == outlet) {
                                 story.title = formatTitle(story.title)
-                                story?.date = story?.date?.let { it -> formatDate(it) }.toString()
                                 todayList.add(story)
                             }
                         }
@@ -379,7 +368,6 @@ object StoryManager : StoryStore {
                         children.forEach {
                             val story = it.getValue(StoryModel::class.java)
                             story?.title = story?.title?.let { it -> formatTitle(it) }.toString()
-                            story?.date = story?.date?.let { it -> formatDate(it) }.toString()
                             todayList.add(story!!)
                             Timber.i("user-article=$story")
                         }
@@ -407,7 +395,6 @@ object StoryManager : StoryStore {
                     children.forEach {
                         val story = it.getValue(StoryModel::class.java)
                         story?.title = story?.title?.let { it -> formatTitle(it) }.toString()
-                        story?.date = story?.date?.let { it -> formatDate(it) }.toString()
                         todayList.add(story!!)
                         Timber.i("user-article=$story")
                     }
@@ -435,7 +422,6 @@ object StoryManager : StoryStore {
                     children.forEach {
                         val story = it.getValue(StoryModel::class.java)
                         story?.title = story?.title?.let { it -> formatTitle(it) }.toString()
-                        story?.date = story?.date?.let { it -> formatDate(it) }.toString()
                         todayList.add(story!!)
                         Timber.i("user-article=$story")
                     }
@@ -474,7 +460,6 @@ object StoryManager : StoryStore {
                                 val story = it.getValue(StoryModel::class.java)
                                 story?.title =
                                     story?.title?.let { it -> formatTitle(it) }.toString()
-                                story?.date = story?.date?.let { it -> formatDate(it) }.toString()
                                 todayList.add(story!!)
 
                             }
@@ -512,7 +497,6 @@ object StoryManager : StoryStore {
                             val story = it.getValue(StoryModel::class.java)
                             story?.title =
                                 story?.title?.let { it -> formatTitle(it) }.toString()
-                            story?.date = story?.date?.let { it -> formatDate(it) }.toString()
                             todayList.add(story!!)
 
                         }
@@ -544,7 +528,6 @@ object StoryManager : StoryStore {
                             ) {
                                 val story = it.getValue(StoryModel::class.java)
                                 story?.title = story?.title?.let { it -> formatTitle(it) }.toString()
-                                story?.date = story?.date?.let { it -> formatDate(it) }.toString()
                                 todayList.add(story!!)
                             }
                         }
@@ -580,7 +563,6 @@ object StoryManager : StoryStore {
                             ) {
                                 val story = it.getValue(StoryModel::class.java)
                                 story?.title = story?.title?.let { it -> formatTitle(it) }.toString()
-                                story?.date = story?.date?.let { it -> formatDate(it) }.toString()
                                 todayList.add(story!!)
                             }
                         }
@@ -611,7 +593,6 @@ object StoryManager : StoryStore {
                             ) {
                                 val story = it.getValue(StoryModel::class.java)
                                 story?.title = story?.title?.let { it -> formatTitle(it) }.toString()
-                                story?.date = story?.date?.let { it -> formatDate(it) }.toString()
                                 todayList.add(story!!)
                             }
                         }
@@ -646,7 +627,6 @@ object StoryManager : StoryStore {
     }
 
     override fun createLiked(userId: String, path:String, story: StoryModel) {
-        story.date = deFormatDate(story.date)
         val storyValues = story.toMap()
         val childAdd = HashMap<String, Any>()
         val title = formatTitleIllegal(story.title)
