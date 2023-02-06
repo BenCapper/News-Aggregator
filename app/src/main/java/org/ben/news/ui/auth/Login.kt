@@ -23,7 +23,6 @@ class Login : AppCompatActivity() {
 
     private lateinit var loginRegisterViewModel : LoginRegisterViewModel
     private lateinit var loginBinding : LoginBinding
-    private lateinit var startForResult: ActivityResultLauncher<Intent>
 
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,12 +37,6 @@ class Login : AppCompatActivity() {
             createAccount(loginBinding.fieldEmail.text.toString(),
                 loginBinding.fieldPassword.text.toString())
         }
-        loginBinding.googleSignInButton.setSize(SignInButton.SIZE_WIDE)
-        loginBinding.googleSignInButton.setColorScheme(SignInButton.COLOR_LIGHT)
-
-        loginBinding.googleSignInButton.setOnClickListener {
-            googleSignIn()
-        }
     }
 
     public override fun onStart() {
@@ -56,8 +49,6 @@ class Login : AppCompatActivity() {
 
         loginRegisterViewModel.firebaseAuthManager.errorStatus.observe(this, Observer
         { status -> checkStatus(status) })
-
-        setupGoogleSignInCallback()
     }
 
 
@@ -67,40 +58,6 @@ class Login : AppCompatActivity() {
         finish()
     }
 
-    private fun setupGoogleSignInCallback() {
-        startForResult =
-            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-                when (result.resultCode) {
-                    RESULT_OK -> {
-                        val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
-                        try {
-                            // Google Sign In was successful, authenticate with Firebase
-                            val account = task.getResult(ApiException::class.java)
-                            loginRegisterViewModel.authWithGoogle(account!!)
-                        } catch (e: ApiException) {
-                            // Google Sign In failed
-                            Timber.i("Google sign in failed $e")
-                            Snackbar.make(
-                                loginBinding.loginLayout, "Authentication Failed.",
-                                Snackbar.LENGTH_SHORT
-                            ).show()
-                        }
-                        Timber.i("DonationX Google Result $result.data")
-                    }
-                    RESULT_CANCELED -> {
-
-                    }
-                    else -> {}
-                }
-            }
-    }
-
-    private fun googleSignIn() {
-        val signInIntent = loginRegisterViewModel.firebaseAuthManager
-            .googleSignInClient.value!!.signInIntent
-
-        startForResult.launch(signInIntent)
-    }
 
     /**
      * It creates an account for the user.

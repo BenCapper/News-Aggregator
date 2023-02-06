@@ -114,15 +114,4 @@
             android:textCursorDrawable="@null" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <com.google.android.gms.common.SignInButton
-        android:id="@+id/googleSignInButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/emailCreateAccountButton"
-        app:layout_constraintVertical_bias="0.433" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>
