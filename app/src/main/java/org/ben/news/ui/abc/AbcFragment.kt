@@ -11,6 +11,7 @@ import android.widget.FrameLayout
 import androidx.fragment.app.Fragment
 import android.widget.ImageView
 import android.widget.SearchView
+import androidx.appcompat.widget.Toolbar
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.activityViewModels
@@ -26,12 +27,14 @@ import org.ben.news.adapters.EmptyAdapter
 import org.ben.news.adapters.StoryAdapter
 import org.ben.news.adapters.StoryListener
 import org.ben.news.databinding.FragmentAbcBinding
+import org.ben.news.databinding.FragmentBeastBinding
 import org.ben.news.firebase.StoryManager
 import org.ben.news.helpers.createLoader
 import org.ben.news.helpers.hideLoader
 import org.ben.news.helpers.showLoader
 import org.ben.news.models.StoryModel
 import org.ben.news.ui.auth.LoggedInViewModel
+import org.ben.news.ui.beast.BeastViewModel
 import splitties.alertdialog.appcompat.*
 import splitties.snackbar.snack
 import splitties.views.textColorResource
@@ -55,13 +58,11 @@ class AbcFragment : Fragment(), StoryListener, MenuProvider {
     var day = 0
     var searching: String? = null
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
 
     }
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -167,14 +168,15 @@ class AbcFragment : Fragment(), StoryListener, MenuProvider {
         state?.let { fragBinding.recyclerViewAbc.layoutManager?.onRestoreInstanceState(it) }
     }
 
-
     override fun onResume() {
+        activity?.findViewById<Toolbar>(R.id.toolbar)?.visibility = View.VISIBLE
         abcViewModel.load(day)
         super.onResume()
     }
 
     override fun onPause() {
         state = fragBinding.recyclerViewAbc.layoutManager?.onSaveInstanceState()
+        activity?.findViewById<Toolbar>(R.id.toolbar)?.visibility = View.INVISIBLE
         super.onPause()
     }
 
@@ -237,7 +239,6 @@ class AbcFragment : Fragment(), StoryListener, MenuProvider {
         val item = menu.findItem(R.id.app_bar_search)
         val searchView = item.actionView as SearchView
 
-
         /* This is the code that is executed when the search bar is used. It searches the database for
         the building that the user is searching for. */
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
@@ -265,11 +266,11 @@ class AbcFragment : Fragment(), StoryListener, MenuProvider {
             }
         })
         searchView.setOnCloseListener {
-            showLoader(loader, "")
             searching = null
             abcViewModel.load(day)
             false
         }
+
     }
 
     override fun onMenuItemSelected(item: MenuItem): Boolean {
@@ -292,4 +293,5 @@ class AbcFragment : Fragment(), StoryListener, MenuProvider {
         }
         return false
     }
+
 }
