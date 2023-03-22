@@ -407,5 +407,17 @@
         android:id="@+id/feedFragment"
         android:name="org.ben.news.ui.feed.FeedFragment"
         android:label="fragment_feed"
-        tools:layout="@layout/fragment_feed" />
+        tools:layout="@layout/fragment_feed" >
+        <action
+            android:id="@+id/action_feedFragment_to_outletListFragment"
+            app:destination="@id/outletListFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/outletListFragment"
+        android:name="org.ben.news.ui.outletpick.OutletListFragment"
+        android:label="OutletListFragment" >
+        <action
+            android:id="@+id/action_outletListFragment_to_feedFragment"
+            app:destination="@id/feedFragment" />
+    </fragment>
 </navigation>

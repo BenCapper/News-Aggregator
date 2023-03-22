@@ -22,6 +22,8 @@
     <string name="no">No Articles Found</string>
     <string name="save_can">Save Cancelled</string>
     <string name="save_art">Confirm Save</string>
+    <string name="confirm">Confirm</string>
+    <string name="cancel">Cancel</string>
     <string name="list_title">360 News</string>
     <string name="filter">Filter</string>
     <string name="shuffle">Shuffle</string>
