@@ -16,8 +16,11 @@ import android.widget.SearchView
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -243,7 +246,7 @@ class FeedFragment : Fragment(), StoryListener, MenuProvider {
     }
 
     override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
-        menuInflater.inflate(R.menu.menu_home, menu)
+        menuInflater.inflate(R.menu.menu_feed, menu)
         when (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) {
             Configuration.UI_MODE_NIGHT_YES -> {
                 menu.findItem(R.id.app_bar_shuffle).iconTintList = null
@@ -292,11 +295,9 @@ class FeedFragment : Fragment(), StoryListener, MenuProvider {
 
     override fun onMenuItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
-        if (id == R.id.app_bar_shuffle) {
-            showLoader(loader, "")
-            feedViewModel.loadShuffle(day)
-            shuffle = true
-            state = null
+        if (id == R.id.app_bar_plus) {
+            findNavController().navigate(R.id.storyListFragment)
+            activity?.findViewById<DrawerLayout>(R.id.drawer_layout)?.closeDrawers()
         }
         if (item.itemId == R.id.app_bar_r) {
             if (day != 0) {

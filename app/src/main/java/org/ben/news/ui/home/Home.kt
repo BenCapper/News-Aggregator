@@ -57,6 +57,7 @@ class Home : AppCompatActivity() {
             R.id.storyListFragment,
             R.id.likedListFragment,
             R.id.historyListFragment,
+            R.id.feedFragment,
             R.id.canFragment,
             R.id.ieFragment,
             R.id.ukFragment,
