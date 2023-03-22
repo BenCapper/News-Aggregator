@@ -195,6 +195,9 @@
         <action
             android:id="@+id/action_storyListFragment_to_trendingFragment"
             app:destination="@id/trendingFragment" />
+        <action
+            android:id="@+id/action_storyListFragment_to_feedFragment"
+            app:destination="@id/feedFragment" />
     </fragment>
     <fragment
         android:id="@+id/likedListFragment"
@@ -400,4 +403,9 @@
         android:name="org.ben.news.ui.trending.TrendingFragment"
         android:label="fragment_trending"
         tools:layout="@layout/fragment_trending" />
+    <fragment
+        android:id="@+id/feedFragment"
+        android:name="org.ben.news.ui.feed.FeedFragment"
+        android:label="fragment_feed"
+        tools:layout="@layout/fragment_feed" />
 </navigation>
