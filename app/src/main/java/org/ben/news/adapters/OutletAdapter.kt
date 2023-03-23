@@ -10,7 +10,7 @@ import org.ben.news.models.OutletModel
 import org.ben.news.models.StoryModel
 
 interface OutletListener {
-    fun onRadio(story: StoryModel)
+    fun onRadio(outlet: OutletModel)
 }
 
 class OutletAdapter constructor(
@@ -60,6 +60,7 @@ class OutletAdapter constructor(
             if (outlet.region ==  "ie"){
                 Glide.with(this.itemView.context).load(R.drawable.ieicon).into(binding.imageViewOut)
             }
+            binding.radioButton.setOnClickListener { listener.onRadio(outlet) }
             binding.radioButton.isChecked =  outlet.selected
             binding.outlet = outlet
             binding.root.tag = outlet

@@ -113,7 +113,7 @@ class OutletListFragment : Fragment(), OutletListener, MenuProvider {
         return false
     }
 
-    override fun onRadio(story: StoryModel) {
-        TODO("Not yet implemented")
+    override fun onRadio(outlet: OutletModel) {
+        outlet.selected = !outlet.selected
     }
 }
