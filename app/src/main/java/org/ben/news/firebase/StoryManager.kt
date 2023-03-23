@@ -385,7 +385,7 @@ object StoryManager : StoryStore {
     override fun findOutlets(userId: String, outletList: MutableLiveData<List<OutletModel>>) {
         val totalList = ArrayList<OutletModel>()
         var todayList = mutableListOf<OutletModel>()
-        database.child("user-outlets").child(userId)
+        database.child("android-outlets").child(userId)
             .addValueEventListener(object : ValueEventListener {
                 override fun onCancelled(error: DatabaseError) {
                     Timber.i("Firebase error : ${error.message}")
@@ -396,9 +396,9 @@ object StoryManager : StoryStore {
                     children.forEach {
                         val out = it.getValue(OutletModel::class.java)
                         todayList.add(out!!)
-                        Timber.i("user-outlets=$out")
+                        Timber.i("android-outlets=$out")
                     }
-                    database.child("user-outlets").child(userId)
+                    database.child("android-outlets").child(userId)
                         .removeEventListener(this)
                     totalList.addAll(todayList)
                     outletList.value = totalList
@@ -656,6 +656,12 @@ object StoryManager : StoryStore {
         val childAdd = HashMap<String, Any>()
         val title = formatTitleIllegal(story.title)
         childAdd["/user-$path/$userId/$title"] = storyValues
+        database.updateChildren(childAdd)
+    }
+
+    override fun saveOutlets(userId: String, outlets: List<OutletModel>) {
+        val childAdd = HashMap<String, Any>()
+        childAdd["/android-outlets/$userId"] = outlets
         database.updateChildren(childAdd)
     }
 

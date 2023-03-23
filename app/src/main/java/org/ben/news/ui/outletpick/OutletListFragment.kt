@@ -12,6 +12,7 @@ import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomappbar.BottomAppBar
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -103,12 +104,12 @@ class OutletListFragment : Fragment(), OutletListener, MenuProvider {
     }
 
     override fun onMenuItemSelected(item: MenuItem): Boolean {
-        val id = item.itemId
         if (item.itemId == R.id.app_bar_cancel) {
-
+            findNavController().navigate(R.id.action_outletListFragment_to_feedFragment)
         }
         if (item.itemId == R.id.app_bar_confirm) {
-
+            outletViewModel.saveOutlets(loggedInViewModel.liveFirebaseUser.value!!.uid, outletViewModel.observableOutletList.value!!)
+            findNavController().navigate(R.id.action_outletListFragment_to_feedFragment)
         }
         return false
     }

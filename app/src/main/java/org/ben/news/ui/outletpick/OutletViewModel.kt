@@ -70,4 +70,8 @@ class OutletViewModel : ViewModel() {
         }
     }
 
+    fun saveOutlets(userId: String, outlets: List<OutletModel>){
+        StoryManager.saveOutlets(userId, outlets)
+    }
+
 }
