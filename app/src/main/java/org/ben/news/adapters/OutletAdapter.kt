@@ -1,5 +1,6 @@
 package org.ben.news.adapters
 
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -19,7 +20,11 @@ class OutletAdapter constructor(
 )
     : RecyclerView.Adapter<OutletAdapter.MainHolder>() {
 
-
+    private val right = listOf("Gript","GB News","Spiked","The Post Millennial","Blaze",
+        "Timcast","Revolver News","Bongino Report","Zerohedge","Breitbart",
+        "The Daily Caller", "The Gateway Pundit", "American Thinker", "Infowars", "Daily Sceptic", "Trending Politics")
+    private val left = listOf("RTE","Sky News","The Guardian", "Global News","Euronews","The Daily Beast",
+        "Politico", "CBS",  "ABC", "Yahoo News", "Vox","Huffington Post", "The Daily Mail", "NPR", "The Hill")
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainHolder {
         val binding = CardOutletBinding
@@ -59,6 +64,14 @@ class OutletAdapter constructor(
             }
             if (outlet.region ==  "ie"){
                 Glide.with(this.itemView.context).load(R.drawable.ieicon).into(binding.imageViewOut)
+            }
+            if (outlet.name in left){
+                binding.divider3.setBackgroundColor(Color.parseColor("#2FB4FF"))
+                binding.divider6.setBackgroundColor(Color.parseColor("#2FB4FF"))
+            }
+            if (outlet.name in right){
+                binding.divider3.setBackgroundColor(Color.parseColor("#FF0000"))
+                binding.divider6.setBackgroundColor(Color.parseColor("#FF0000"))
             }
             binding.radioButton.setOnClickListener { listener.onRadio(outlet) }
             binding.radioButton.isChecked =  outlet.selected
