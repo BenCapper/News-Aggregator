@@ -4,6 +4,7 @@ package org.ben.news.firebase
 import androidx.lifecycle.MutableLiveData
 import com.google.firebase.database.*
 import org.ben.news.models.DoubleStoryModel
+import org.ben.news.models.OutletModel
 import org.ben.news.models.StoryModel
 import org.ben.news.models.StoryStore
 import timber.log.Timber
@@ -379,6 +380,30 @@ object StoryManager : StoryStore {
                         storyList.value = totalList
                     }
                 })
+    }
+
+    override fun findOutlets(userId: String, outletList: MutableLiveData<List<OutletModel>>) {
+        val totalList = ArrayList<OutletModel>()
+        var todayList = mutableListOf<OutletModel>()
+        database.child("user-outlets").child(userId)
+            .addValueEventListener(object : ValueEventListener {
+                override fun onCancelled(error: DatabaseError) {
+                    Timber.i("Firebase error : ${error.message}")
+                }
+
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val children = snapshot.children
+                    children.forEach {
+                        val out = it.getValue(OutletModel::class.java)
+                        todayList.add(out!!)
+                        Timber.i("user-outlets=$out")
+                    }
+                    database.child("user-outlets").child(userId)
+                        .removeEventListener(this)
+                    totalList.addAll(todayList)
+                    outletList.value = totalList
+                }
+            })
     }
 
     override fun find(date: String, userId: String, path:String, storyList: MutableLiveData<List<StoryModel>>) {

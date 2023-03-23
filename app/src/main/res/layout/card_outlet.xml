@@ -28,33 +28,37 @@
                 android:id="@+id/outName"
                 android:layout_width="210dp"
                 android:layout_height="24dp"
+                android:layout_marginStart="52dp"
                 android:text="@{outlet.name}"
                 android:textColor="@color/dark"
-                android:textSize="16sp"
-                android:textStyle="italic"
+                android:textSize="14sp"
+                android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/radioButton"
                 app:layout_constraintStart_toEndOf="@+id/imageViewOut"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.528" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
                 android:id="@id/imageViewOut"
                 android:layout_width="30dp"
                 android:layout_height="21dp"
+                android:layout_marginStart="4dp"
                 android:scaleType="fitCenter"
                 android:src="@drawable/usicon"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.511" />
 
             <RadioButton
                 android:id="@+id/radioButton"
-                android:layout_width="31dp"
-                android:layout_height="29dp"
+                android:layout_width="39dp"
+                android:layout_height="39dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintHorizontal_bias="0.733"
+                app:layout_constraintStart_toEndOf="@+id/outName"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.707" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

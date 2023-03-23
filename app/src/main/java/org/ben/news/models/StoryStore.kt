@@ -25,4 +25,5 @@ interface StoryStore {
     fun searchByOutlets(date: String, term: String, outlets:List<String>, storyList: MutableLiveData<List<StoryModel>>)
     fun searchOutletNoImage(date: String, term: String, outlet:String, storyList: MutableLiveData<List<StoryModel>>)
     fun searchLiked(term: String, userId: String, path:String,  storyList: MutableLiveData<List<StoryModel>>)
+    fun findOutlets(userId: String, outletList: MutableLiveData<List<OutletModel>>)
 }

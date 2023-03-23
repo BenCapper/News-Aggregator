@@ -7,6 +7,7 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class OutletModel(var name: String = "",
+                       var selected: Boolean = false,
                        var region: String = "") : Parcelable
     {
                         @Exclude

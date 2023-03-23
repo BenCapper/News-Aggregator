@@ -254,43 +254,6 @@ class FeedFragment : Fragment(), StoryListener, MenuProvider {
                 menu.findItem(R.id.app_bar_l).iconTintList = null
             }
         }
-
-
-        /* Finding the search bar in the menu and setting it to the search view. */
-        val item = menu.findItem(R.id.app_bar_search)
-        val searchView = item.actionView as SearchView
-
-        /* This is the code that is executed when the search bar is used. It searches the database for
-        the building that the user is searching for. */
-        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                return false
-            }
-
-            override fun onQueryTextChange(newText: String?): Boolean {
-                if (newText != null) {
-                    searching = newText
-                    feedViewModel.search(
-                        day,
-                        newText
-                    )
-                } else {
-                    searching = newText
-                    feedViewModel.load(day)
-                }
-                if (newText == "") {
-                    searching = newText
-                    feedViewModel.load(day)
-                }
-
-                return true
-            }
-        })
-        searchView.setOnCloseListener {
-            searching = null
-            feedViewModel.load(day)
-            false
-        }
     }
 
     override fun onMenuItemSelected(item: MenuItem): Boolean {

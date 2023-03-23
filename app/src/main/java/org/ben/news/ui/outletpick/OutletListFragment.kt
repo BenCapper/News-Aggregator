@@ -13,12 +13,15 @@ import androidx.core.view.MenuProvider
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.bottomappbar.BottomAppBar
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import org.ben.news.R
 import org.ben.news.adapters.*
 import org.ben.news.databinding.FragmentOutletlistBinding
 import org.ben.news.helpers.createLoader
 import org.ben.news.helpers.showLoader
 import org.ben.news.models.OutletModel
+import org.ben.news.models.StoryModel
 import org.ben.news.ui.auth.LoggedInViewModel
 
 class OutletListFragment : Fragment(), OutletListener, MenuProvider {
@@ -48,6 +51,7 @@ class OutletListFragment : Fragment(), OutletListener, MenuProvider {
         savedInstanceState: Bundle?
     ): View {
         activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.hometit)
+        activity?.findViewById<BottomAppBar>(R.id.bottomAppBar)?.visibility = View.INVISIBLE
         _fragBinding = FragmentOutletlistBinding.inflate(inflater, container, false)
         val root = fragBinding.root
         fragBinding.recyclerViewOutlet.layoutManager = activity?.let { LinearLayoutManager(it) }
@@ -57,7 +61,6 @@ class OutletListFragment : Fragment(), OutletListener, MenuProvider {
                 render(outlet as ArrayList<OutletModel>)
             }
         }
-        setSwipeRefresh()
         return root
     }
 
@@ -65,20 +68,6 @@ class OutletListFragment : Fragment(), OutletListener, MenuProvider {
         super.onViewCreated(view, savedInstanceState)
         val menuHost: MenuHost = requireActivity()
         menuHost.addMenuProvider(this, viewLifecycleOwner, Lifecycle.State.RESUMED)
-    }
-
-
-    private fun setSwipeRefresh() {
-        fragBinding.swipe.setOnRefreshListener {
-            fragBinding.swipe.isRefreshing = true
-            state = fragBinding.recyclerViewOutlet.layoutManager?.onSaveInstanceState()
-        }
-    }
-
-
-    private fun checkSwipeRefresh() {
-        if (fragBinding.swipe.isRefreshing)
-            fragBinding.swipe.isRefreshing = false
     }
 
 
@@ -103,7 +92,7 @@ class OutletListFragment : Fragment(), OutletListener, MenuProvider {
     }
 
     override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
-        menuInflater.inflate(R.menu.menu_home, menu)
+        menuInflater.inflate(R.menu.menu_outlets, menu)
         when (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) {
             Configuration.UI_MODE_NIGHT_YES -> {
                 menu.findItem(R.id.app_bar_plus).iconTintList = null
@@ -122,5 +111,9 @@ class OutletListFragment : Fragment(), OutletListener, MenuProvider {
 
         }
         return false
+    }
+
+    override fun onRadio(story: StoryModel) {
+        TODO("Not yet implemented")
     }
 }
