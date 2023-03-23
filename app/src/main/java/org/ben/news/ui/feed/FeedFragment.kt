@@ -296,7 +296,7 @@ class FeedFragment : Fragment(), StoryListener, MenuProvider {
     override fun onMenuItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
         if (id == R.id.app_bar_plus) {
-            findNavController().navigate(R.id.storyListFragment)
+            findNavController().navigate(R.id.action_feedFragment_to_outletListFragment)
             activity?.findViewById<DrawerLayout>(R.id.drawer_layout)?.closeDrawers()
         }
         if (item.itemId == R.id.app_bar_r) {

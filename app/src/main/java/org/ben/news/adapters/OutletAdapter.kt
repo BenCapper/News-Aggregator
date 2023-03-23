@@ -3,17 +3,15 @@ package org.ben.news.adapters
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import org.ben.news.R
-import org.ben.news.databinding.CardEmptyBinding
-import org.ben.news.models.StoryModel
+import org.ben.news.databinding.CardOutletBinding
+import org.ben.news.models.OutletModel
 
 interface OutletListener {
 
 }
 
 class OutletAdapter constructor(
-    private var stories: ArrayList<StoryModel>,
+    private var outlets: ArrayList<OutletModel>,
     private val listener: OutletListener
 )
     : RecyclerView.Adapter<OutletAdapter.MainHolder>() {
@@ -21,7 +19,7 @@ class OutletAdapter constructor(
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainHolder {
-        val binding = CardEmptyBinding
+        val binding = CardOutletBinding
             .inflate(LayoutInflater.from(parent.context), parent, false)
 
         return MainHolder(binding)
@@ -29,24 +27,23 @@ class OutletAdapter constructor(
 
     override fun onBindViewHolder(holder: MainHolder, position: Int) {
 
-        val story = stories[holder.absoluteAdapterPosition]
-        holder.bind(story, listener)
+        val outlet = outlets[holder.absoluteAdapterPosition]
+        holder.bind(outlet, listener)
 
     }
 
-    override fun getItemCount(): Int = stories.size
+    override fun getItemCount(): Int = outlets.size
 
 
     /* This class binds the building information to the recyclerview card */
-    inner class MainHolder(private val binding : CardEmptyBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class MainHolder(private val binding : CardOutletBinding) : RecyclerView.ViewHolder(binding.root) {
 
         //val readOnlyRow = readOnly
 
-        fun bind(story: StoryModel, listener : OutletListener) {
+        fun bind(outlet: OutletModel, listener : OutletListener) {
 
-
-            binding.root.tag = story
-            Glide.with(this.itemView.context).load(R.drawable.bidenfall).into(binding.imageView2)
+            binding.outlet = outlet
+            binding.root.tag = outlet
             binding.executePendingBindings()
         }
 

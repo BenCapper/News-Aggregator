@@ -5,56 +5,36 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseUser
 import org.ben.news.firebase.StoryManager
+import org.ben.news.models.OutletModel
 import org.ben.news.models.StoryModel
 import timber.log.Timber
 
 class OutletViewModel : ViewModel() {
 
     private val outletList =
-        MutableLiveData<List<StoryModel>>()
+        MutableLiveData<List<OutletModel>>()
 
-    val observableOutletList: LiveData<List<StoryModel>>
+    val observableOutletList: LiveData<List<OutletModel>>
         get() = outletList
 
-    private val outlet = MutableLiveData<StoryModel>()
+    private val outlet = MutableLiveData<OutletModel>()
 
-    var observableOutlet: LiveData<StoryModel>
+    var observableOutlet: LiveData<OutletModel>
         get() = outlet
         set(value) {outlet.value = value.value}
 
     var liveFirebaseUser = MutableLiveData<FirebaseUser>()
 
-    init { load(0) }
+    init { load() }
 
-    fun load(day: Int) {
-        val list: String
+    fun load() {
         try {
-            list = StoryManager.getDate(day)
-            StoryManager.findAll(list,outletList)
-            Timber.i("Load Success : ${outletList.value}")
-        }
-        catch (e: Exception) {
-            Timber.i("Load Error : $e.message")
-        }
-    }
-
-    fun search( day: Int, term: String) {
-        try {
-            val dates = StoryManager.getDate(day)
-            StoryManager.search(term,dates,outletList)
-            Timber.i("Search Success")
-        }
-        catch (e: java.lang.Exception) {
-            Timber.i("Search Error : $e.message")
-        }
-    }
-
-
-
-    fun loadShuffle(day:Int) {
-        try {
-            val dates = StoryManager.getDate(day)
-            StoryManager.findAllShuffle(dates,outletList)
+            // list = StoryManager.getDate()
+            // StoryManager.findAll(list,outletList)
+            val list = mutableListOf<OutletModel>()
+            list.add(OutletModel("Gript", "ie"))
+            list.add(OutletModel("RTE", "ie"))
+            outletList.value = list
             Timber.i("Load Success : ${outletList.value}")
         }
         catch (e: Exception) {

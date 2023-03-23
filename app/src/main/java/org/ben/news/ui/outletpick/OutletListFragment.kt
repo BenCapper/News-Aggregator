@@ -15,19 +15,19 @@ import androidx.lifecycle.Lifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import org.ben.news.R
 import org.ben.news.adapters.*
-import org.ben.news.databinding.FragmentOutletBinding
+import org.ben.news.databinding.FragmentOutletlistBinding
 import org.ben.news.helpers.createLoader
 import org.ben.news.helpers.showLoader
-import org.ben.news.models.StoryModel
+import org.ben.news.models.OutletModel
 import org.ben.news.ui.auth.LoggedInViewModel
 
-class OutletFragment : Fragment(), OutletListener, MenuProvider {
+class OutletListFragment : Fragment(), OutletListener, MenuProvider {
 
     companion object {
-        fun newInstance() = OutletFragment()
+        fun newInstance() = OutletListFragment()
     }
 
-    private var _fragBinding: FragmentOutletBinding? = null
+    private var _fragBinding: FragmentOutletlistBinding? = null
     private val fragBinding get() = _fragBinding!!
     lateinit var loader: AlertDialog
     private val loggedInViewModel: LoggedInViewModel by activityViewModels()
@@ -47,12 +47,16 @@ class OutletFragment : Fragment(), OutletListener, MenuProvider {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        loader = createLoader(requireActivity())
-        showLoader(loader, "")
         activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.hometit)
-        _fragBinding = FragmentOutletBinding.inflate(inflater, container, false)
+        _fragBinding = FragmentOutletlistBinding.inflate(inflater, container, false)
         val root = fragBinding.root
         fragBinding.recyclerViewOutlet.layoutManager = activity?.let { LinearLayoutManager(it) }
+
+        outletViewModel.observableOutletList.observe(viewLifecycleOwner) { outlet ->
+            outlet?.let {
+                render(outlet as ArrayList<OutletModel>)
+            }
+        }
         setSwipeRefresh()
         return root
     }
@@ -68,7 +72,6 @@ class OutletFragment : Fragment(), OutletListener, MenuProvider {
         fragBinding.swipe.setOnRefreshListener {
             fragBinding.swipe.isRefreshing = true
             state = fragBinding.recyclerViewOutlet.layoutManager?.onSaveInstanceState()
-            outletViewModel.load(day)
         }
     }
 
@@ -79,14 +82,13 @@ class OutletFragment : Fragment(), OutletListener, MenuProvider {
     }
 
 
-    private fun render(storyList: ArrayList<StoryModel>) {
-        fragBinding.recyclerViewOutlet.adapter = OutletAdapter(storyList, this)
+    private fun render(outletList: ArrayList<OutletModel>) {
+        fragBinding.recyclerViewOutlet.adapter = OutletAdapter(outletList, this)
         state?.let { fragBinding.recyclerViewOutlet.layoutManager?.onRestoreInstanceState(it) }
     }
 
     override fun onResume() {
         activity?.findViewById<Toolbar>(R.id.toolbar)?.visibility = View.VISIBLE
-        outletViewModel.load(day)
         super.onResume()
     }
 
