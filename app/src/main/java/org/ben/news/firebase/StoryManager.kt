@@ -370,7 +370,7 @@ object StoryManager : StoryStore {
                 })
     }
 
-    override fun findOutlets(userId: String, outletList: MutableLiveData<List<OutletModel>>) {
+    override fun findOutlets(userId: String, outletList: MutableLiveData<List<OutletModel>>, callback: () -> Unit) {
         val totalList = ArrayList<OutletModel>()
         var foundList = mutableListOf<OutletModel>()
         database.child("android-outlets").child(userId)
@@ -390,7 +390,7 @@ object StoryManager : StoryStore {
                     totalList.addAll(foundList)
                     outletList.value = totalList
                     Timber.i("FEEDLIST =$totalList")
-
+                    callback()
                 }
             })
     }
