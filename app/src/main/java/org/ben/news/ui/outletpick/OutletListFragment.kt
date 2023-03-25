@@ -102,16 +102,12 @@ class OutletListFragment : Fragment(), OutletListener, MenuProvider {
         menuInflater.inflate(R.menu.menu_outlets, menu)
         when (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) {
             Configuration.UI_MODE_NIGHT_YES -> {
-                menu.findItem(R.id.app_bar_cancel).iconTintList = null
                 menu.findItem(R.id.app_bar_confirm).iconTintList = null
             }
         }
     }
 
     override fun onMenuItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.app_bar_cancel) {
-            findNavController().navigate(R.id.action_outletListFragment_to_feedFragment)
-        }
         if (item.itemId == R.id.app_bar_confirm) {
             outletViewModel.saveOutlets(loggedInViewModel.liveFirebaseUser.value!!.uid, outletViewModel.observableOutletList.value!!)
             findNavController().navigate(R.id.action_outletListFragment_to_feedFragment)
