@@ -178,8 +178,13 @@ class FeedFragment : Fragment(), StoryListener, MenuProvider {
 
     override fun onResume() {
         activity?.findViewById<Toolbar>(R.id.toolbar)?.visibility = View.VISIBLE
-        feedViewModel.load(day)
         super.onResume()
+        loggedInViewModel.liveFirebaseUser.observe(viewLifecycleOwner) { firebaseUser ->
+            if (firebaseUser != null) {
+                feedViewModel.liveFirebaseUser.value = firebaseUser
+                feedViewModel.load(day)
+            }
+        }
     }
 
     override fun onPause() {

@@ -15,34 +15,34 @@ class FeedViewModel : ViewModel() {
         MutableLiveData<List<StoryModel>>()
 
     private val outletList =
-        MutableLiveData<List<OutletModel>>()
+        MutableLiveData<List<String>>()
 
     val observableFeedList: LiveData<List<StoryModel>>
         get() = feedList
+
+    val observableOutletList: LiveData<List<String>>
+        get() = outletList
 
     var liveFirebaseUser = MutableLiveData<FirebaseUser>()
 
     init { load(0) }
 
-    private val outlet = "www.Euronews.com"
+    private val outlet = "www.Revolver.news"
 
-    fun getOutlets(){
-        try {
-            StoryManager.findOutlets(liveFirebaseUser.value!!.uid,outletList)
-        }
-        catch (e: Exception) {
-            Timber.i("GET OUTLETS ERROR : $e.message")
-        }
-    }
 
     fun load(day: Int) {
-        val list: String
+        var list: String
+        val outlets = ArrayList<String>()
         try {
-            list = StoryManager.getDate(day)
-            StoryManager.findByOutlet(list,outlet,feedList)
-            Timber.i("Load Success : ${feedList.value}")
-        }
-        catch (e: Exception) {
+            StoryManager.findOutletLinks(liveFirebaseUser.value!!.uid, outletList) {
+                // This block will be executed when the findOutletNames operation is complete
+                Timber.i("NAMES FOUND VM  : ${outletList.value}")
+                outletList.value?.let { outlets.addAll(it) }
+                list = StoryManager.getDate(day)
+                StoryManager.findByOutletFeed(list, outlets, feedList)
+                Timber.i("NAMES FOUND VM2  : ${feedList.value}")
+            }
+        } catch (e: Exception) {
             Timber.i("Load Error : $e.message")
         }
     }

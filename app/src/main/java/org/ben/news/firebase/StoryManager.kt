@@ -245,9 +245,42 @@ object StoryManager : StoryStore {
                             .removeEventListener(this)
                         totalList.addAll(todayList)
                         storyList.value = totalList
-
+                        Timber.i("FEEDLIST MANAGER : $totalList")
                     }
                 })
+    }
+
+    override fun findByOutletFeed(date: String, outlets: ArrayList<String>, storyList: MutableLiveData<List<StoryModel>>) {
+        val totalList = ArrayList<StoryModel>()
+
+        var todayList = mutableListOf<StoryModel>()
+        database.child("stories").child(date)
+            .addValueEventListener(object : ValueEventListener {
+                override fun onCancelled(error: DatabaseError) {
+                    Timber.i("Firebase error : ${error.message}")
+                }
+
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val children = snapshot.children
+                    children.forEach {
+                        val story = it.getValue(StoryModel::class.java)
+                        for (o in outlets){
+                            if(story!!.outlet.contains(o)) {
+                                story.title = formatTitle(story.title)
+                                todayList.add(story)
+                            }
+                        }
+
+                    }
+                    todayList = todayList.sortedBy{it.order}.toMutableList()
+                    todayList.reverse()
+                    database.child("stories").child(date)
+                        .removeEventListener(this)
+                    totalList.addAll(todayList)
+                    storyList.value = totalList
+                    Timber.i("NAMES FOUND MANAGER : $totalList")
+                }
+            })
     }
 
     override fun findByOutlets(date: String, outlets: List<String>, storyList: MutableLiveData<List<StoryModel>>) {
@@ -351,12 +384,41 @@ object StoryManager : StoryStore {
                     children.forEach {
                         val outlet = it.getValue(OutletModel::class.java)
                         foundList.add(outlet!!)
-                        Timber.i("user-article=$outlet")
                     }
                     database.child("android-outlets").child(userId)
                         .removeEventListener(this)
                     totalList.addAll(foundList)
                     outletList.value = totalList
+                    Timber.i("FEEDLIST =$totalList")
+
+                }
+            })
+    }
+
+    override fun findOutletLinks(userId: String, outletList: MutableLiveData<List<String>>, callback: () -> Unit) {
+        val totalList = ArrayList<String>()
+        var foundList = mutableListOf<String>()
+        database.child("android-outlets").child(userId)
+            .addValueEventListener(object : ValueEventListener {
+                override fun onCancelled(error: DatabaseError) {
+                    Timber.i("Firebase error : ${error.message}")
+                }
+
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val children = snapshot.children
+                    children.forEach {
+                        val outlet = it.getValue(OutletModel::class.java)
+                        if (outlet!!.selected){
+                            foundList.add(outlet!!.link)
+
+                        }
+                    }
+                    database.child("android-outlets").child(userId)
+                        .removeEventListener(this)
+                    totalList.addAll(foundList)
+                    outletList.value = totalList
+                    Timber.i("NAMES FOUND == ${totalList}")
+                    callback()
                 }
             })
     }
