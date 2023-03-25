@@ -73,7 +73,7 @@ class FeedFragment : Fragment(), StoryListener, MenuProvider {
     ): View {
         loader = createLoader(requireActivity())
         showLoader(loader, "")
-        activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.hometit)
+        activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.feed)
         _fragBinding = FragmentFeedBinding.inflate(inflater, container, false)
         val root = fragBinding.root
 
