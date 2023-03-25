@@ -257,7 +257,7 @@ class FeedFragment : Fragment(), StoryListener, MenuProvider {
         menuInflater.inflate(R.menu.menu_feed, menu)
         when (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) {
             Configuration.UI_MODE_NIGHT_YES -> {
-                menu.findItem(R.id.app_bar_shuffle).iconTintList = null
+                menu.findItem(R.id.app_bar_plus).iconTintList = null
                 menu.findItem(R.id.app_bar_r).iconTintList = null
                 menu.findItem(R.id.app_bar_l).iconTintList = null
             }

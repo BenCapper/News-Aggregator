@@ -102,9 +102,8 @@ class OutletListFragment : Fragment(), OutletListener, MenuProvider {
         menuInflater.inflate(R.menu.menu_outlets, menu)
         when (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) {
             Configuration.UI_MODE_NIGHT_YES -> {
-                menu.findItem(R.id.app_bar_plus).iconTintList = null
-                menu.findItem(R.id.app_bar_r).iconTintList = null
-                menu.findItem(R.id.app_bar_l).iconTintList = null
+                menu.findItem(R.id.app_bar_cancel).iconTintList = null
+                menu.findItem(R.id.app_bar_confirm).iconTintList = null
             }
         }
     }
