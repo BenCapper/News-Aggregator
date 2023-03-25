@@ -127,6 +127,9 @@ class FeedFragment : Fragment(), StoryListener, MenuProvider {
             Glide.with(this).load(R.drawable.bidenlost).into(fragBinding.imageView2)
             val datenow = StoryManager.getDate(day)
             fragBinding.emptydate.text = datenow
+            fragBinding.addOut.setOnClickListener {
+                findNavController().navigate(R.id.action_feedFragment_to_outletListFragment)
+            }
             fragBinding.larrow.setOnClickListener {
                 if (day < 14) {
                     showLoader(loader, "")
