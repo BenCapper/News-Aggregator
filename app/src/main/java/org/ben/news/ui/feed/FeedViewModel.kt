@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseUser
 import org.ben.news.firebase.StoryManager
+import org.ben.news.models.OutletModel
 import org.ben.news.models.StoryModel
 import timber.log.Timber
 
@@ -13,14 +14,11 @@ class FeedViewModel : ViewModel() {
     private val feedList =
         MutableLiveData<List<StoryModel>>()
 
+    private val outletList =
+        MutableLiveData<List<OutletModel>>()
+
     val observableFeedList: LiveData<List<StoryModel>>
         get() = feedList
-
-    private val story = MutableLiveData<StoryModel>()
-
-    var observableStory: LiveData<StoryModel>
-        get() = story
-        set(value) {story.value = value.value}
 
     var liveFirebaseUser = MutableLiveData<FirebaseUser>()
 
@@ -28,6 +26,14 @@ class FeedViewModel : ViewModel() {
 
     private val outlet = "www.Euronews.com"
 
+    fun getOutlets(){
+        try {
+            StoryManager.findOutlets(liveFirebaseUser.value!!.uid,outletList)
+        }
+        catch (e: Exception) {
+            Timber.i("GET OUTLETS ERROR : $e.message")
+        }
+    }
 
     fun load(day: Int) {
         val list: String

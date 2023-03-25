@@ -14,6 +14,7 @@ data class OutletModel(var name: String = "",
                         fun toMap(): Map<String, Any?> {
                             return mapOf(
                                 "name" to name,
+                                "selected" to selected,
                                 "region" to region
                             )
                         }

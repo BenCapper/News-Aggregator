@@ -80,6 +80,12 @@ class OutletListFragment : Fragment(), OutletListener, MenuProvider {
     override fun onResume() {
         activity?.findViewById<Toolbar>(R.id.toolbar)?.visibility = View.VISIBLE
         super.onResume()
+        loggedInViewModel.liveFirebaseUser.observe(viewLifecycleOwner) { firebaseUser ->
+            if (firebaseUser != null) {
+                outletViewModel.liveFirebaseUser.value = firebaseUser
+                outletViewModel.load()
+            }
+        }
     }
 
     override fun onPause() {

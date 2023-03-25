@@ -1,6 +1,7 @@
 package org.ben.news.firebase
 
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.google.firebase.database.*
 import org.ben.news.models.DoubleStoryModel
@@ -49,51 +50,6 @@ object StoryManager : StoryStore {
             .replace("&amp;", "and")
     }
 
-    private fun deFormatDate(date: String): String{
-        var month = ""
-        val dateParts = date.replace(","," ").replace("  ", " ").split(" ")
-        month = dateParts[0]
-        val year = dateParts[2].substring(2)
-        when (month) {
-            "January"  -> month = "01"
-            "February" -> month = "02"
-            "March" -> month = "03"
-            "April" -> month = "04"
-            "May" -> month = "05"
-            "June" -> month = "06"
-            "July" -> month = "07"
-            "August" -> month = "08"
-            "September" -> month = "09"
-            "October" -> month = "10"
-            "November" -> month = "11"
-            "December" -> month = "12"
-        }
-        return month + "-" + dateParts[1] + "-" + year
-    }
-
-    private fun formatDate(date: String): String {
-        var month = ""
-        val dateParts = date.split('-')
-        month = dateParts[0]
-        when (month) {
-            "01" -> month = "January"
-            "02" -> month = "February"
-            "03" -> month = "March"
-            "04" -> month = "April"
-            "05" -> month = "May"
-            "06" -> month = "June"
-            "07" -> month = "July"
-            "08" -> month = "August"
-            "09" -> month = "September"
-            "10" -> month = "October"
-            "11" -> month = "November"
-            "12" -> month = "December"
-        }
-        return month + " " + dateParts[1] + ", 20" + dateParts[2]
-    }
-
-
-
     override fun findAll(date: String, storyList: MutableLiveData<List<StoryModel>>) {
 
         val totalList = ArrayList<StoryModel>()
@@ -120,7 +76,6 @@ object StoryManager : StoryStore {
                     }
                 })
     }
-
 
     override fun findAllDouble(date: String, storyList: MutableLiveData<List<DoubleStoryModel>>) {
 
@@ -384,7 +339,7 @@ object StoryManager : StoryStore {
 
     override fun findOutlets(userId: String, outletList: MutableLiveData<List<OutletModel>>) {
         val totalList = ArrayList<OutletModel>()
-        var todayList = mutableListOf<OutletModel>()
+        var foundList = mutableListOf<OutletModel>()
         database.child("android-outlets").child(userId)
             .addValueEventListener(object : ValueEventListener {
                 override fun onCancelled(error: DatabaseError) {
@@ -394,13 +349,13 @@ object StoryManager : StoryStore {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     val children = snapshot.children
                     children.forEach {
-                        val out = it.getValue(OutletModel::class.java)
-                        todayList.add(out!!)
-                        Timber.i("android-outlets=$out")
+                        val outlet = it.getValue(OutletModel::class.java)
+                        foundList.add(outlet!!)
+                        Timber.i("user-article=$outlet")
                     }
                     database.child("android-outlets").child(userId)
                         .removeEventListener(this)
-                    totalList.addAll(todayList)
+                    totalList.addAll(foundList)
                     outletList.value = totalList
                 }
             })
@@ -660,9 +615,14 @@ object StoryManager : StoryStore {
     }
 
     override fun saveOutlets(userId: String, outlets: List<OutletModel>) {
-        val childAdd = HashMap<String, Any>()
-        childAdd["/android-outlets/$userId"] = outlets
-        database.updateChildren(childAdd)
+        val updates = HashMap<String, Any>()
+
+        for (outlet in outlets) {
+            val outValues = outlet.toMap()
+            updates["/android-outlets/$userId/${outlet.name}"] = outValues
+        }
+
+        database.updateChildren(updates)
     }
 
     override fun delete(day:String, userId: String, path: String, title: String) {
