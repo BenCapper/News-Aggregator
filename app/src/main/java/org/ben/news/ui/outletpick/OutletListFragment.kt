@@ -51,7 +51,7 @@ class OutletListFragment : Fragment(), OutletListener, MenuProvider {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.hometit)
+        activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.selfeed)
         activity?.findViewById<BottomAppBar>(R.id.bottomAppBar)?.visibility = View.INVISIBLE
         _fragBinding = FragmentOutletlistBinding.inflate(inflater, container, false)
         val root = fragBinding.root
