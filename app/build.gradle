@@ -57,7 +57,7 @@ dependencies {
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4'
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4'
-
+    implementation 'com.squareup.picasso:picasso:2.71828'
     implementation("com.louiscad.splitties:splitties-fun-pack-android-base-with-views-dsl:3.0.0")
     implementation 'com.louiscad.splitties:splitties-alertdialog-appcompat:3.0.0'
     implementation("com.louiscad.splitties:splitties-fun-pack-android-material-components-with-views-dsl:3.0.0")
