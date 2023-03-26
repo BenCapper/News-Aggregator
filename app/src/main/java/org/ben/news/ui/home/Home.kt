@@ -57,6 +57,7 @@ class Home : AppCompatActivity() {
             R.id.storyListFragment,
             R.id.likedListFragment,
             R.id.historyListFragment,
+            R.id.feedFragment,
             R.id.canFragment,
             R.id.ieFragment,
             R.id.ukFragment,
@@ -157,6 +158,12 @@ class Home : AppCompatActivity() {
 
     fun savedArticles(item: MenuItem) {
         findNavController(R.id.nav_host_fragment).navigate(R.id.likedListFragment)
+        findViewById<DrawerLayout>(R.id.drawer_layout).closeDrawers()
+        Timber.i("UserId = ${loggedInViewModel.liveFirebaseUser.value!!.uid}")
+    }
+
+    fun yourFeed(item: MenuItem) {
+        findNavController(R.id.nav_host_fragment).navigate(R.id.feedFragment)
         findViewById<DrawerLayout>(R.id.drawer_layout).closeDrawers()
         Timber.i("UserId = ${loggedInViewModel.liveFirebaseUser.value!!.uid}")
     }
