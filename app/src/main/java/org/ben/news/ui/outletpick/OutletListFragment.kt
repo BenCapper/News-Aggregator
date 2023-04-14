@@ -16,6 +16,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomappbar.BottomAppBar
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import org.ben.news.R
 import org.ben.news.adapters.*
 import org.ben.news.databinding.FragmentOutletlistBinding
@@ -53,6 +54,7 @@ class OutletListFragment : Fragment(), OutletListener, MenuProvider {
     ): View {
         activity?.findViewById<ImageView>(R.id.toolimg)?.setImageResource(R.drawable.selfeed)
         activity?.findViewById<BottomAppBar>(R.id.bottomAppBar)?.visibility = View.INVISIBLE
+        activity?.findViewById<FloatingActionButton>(R.id.fab)?.visibility = View.INVISIBLE
         _fragBinding = FragmentOutletlistBinding.inflate(inflater, container, false)
         val root = fragBinding.root
         fragBinding.recyclerViewOutlet.layoutManager = activity?.let { LinearLayoutManager(it) }

@@ -17,7 +17,7 @@ class FirebaseAuthManager(application: Application) {
     private var application: Application? = null
 
     var firebaseAuth: FirebaseAuth? = null
-    var liveFirebaseUser = MutableLiveData<FirebaseUser>()
+    var liveFirebaseUser = MutableLiveData<FirebaseUser?>()
     var loggedOut = MutableLiveData<Boolean>()
     var errorStatus = MutableLiveData<Boolean>()
 
@@ -30,6 +30,21 @@ class FirebaseAuthManager(application: Application) {
             loggedOut.postValue(false)
             errorStatus.postValue(false)
         }
+    }
+    fun loginWithGoogle(idToken: String) {
+        val credential = GoogleAuthProvider.getCredential(idToken, null)
+        firebaseAuth?.signInWithCredential(credential)
+            ?.addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    Timber.d("signInWithCredential:success")
+                    liveFirebaseUser.postValue(firebaseAuth!!.currentUser)
+                    errorStatus.postValue(false)
+                } else {
+                    Timber.w(task.exception, "signInWithCredential:failure")
+                    liveFirebaseUser.postValue(null)
+                    errorStatus.postValue(true)
+                }
+            }
     }
 
     /**
