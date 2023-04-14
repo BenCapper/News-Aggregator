@@ -189,7 +189,7 @@ class ConflictAdapter constructor(
 
         fun bind() {
 
-            val adLoader = AdLoader.Builder(this.itemView.context, "ca-app-pub-3940256099942544/2247696110") //
+            val adLoader = AdLoader.Builder(this.itemView.context, "") //
                 .forNativeAd { ad : NativeAd ->
                     populateNativeAdView(ad,binding)
 
