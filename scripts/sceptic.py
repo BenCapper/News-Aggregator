@@ -1,35 +1,42 @@
 import os
+from uuid import uuid4
 import requests
-from bs4 import BeautifulSoup
+from firebase_admin import storage
 from utils.utilities import (
-    decodeTitle,
     formatDate,
-    imgFolder,
+    imgTitleFormat,
     initialise,
     jsonFolder,
     appendJson,
+    todayDate,
+    imgFolder,
     logFolder,
     pageSoup,
     pushToDB,
+    titleFormat,
     similar,
     getHour,
 )
 
+
+td = todayDate()
 # Set Global Variables
 ref_list = []
-log_file_path = "/home/bencapper/src/News-Aggregator/scripts/log/yahoodone.log"
+log_file_path = "/home/bencapper/src/News-Aggregator/scripts/log/sceptic.log"
 log_folder_path = "/home/bencapper/src/News-Aggregator/scripts/log/"
-json_dump_path = "/home/bencapper/src/News-Aggregator/scripts/json/yah.json"
+json_dump_path = ("/home/bencapper/src/"
+                  "News-Aggregator/scripts/json/sceptic.json")
 json_folder_path = "/home/bencapper/src/News-Aggregator/scripts/json/"
 json_path = "/home/bencapper/src/News-Aggregator/scripts/news.json"
 db_url = "https://news-a3e22-default-rtdb.firebaseio.com/"
 bucket = "news-a3e22.appspot.com"
-page_url = "https://news.yahoo.com"
-img_path = "/home/bencapper/src/News/Yahoo"
+page_url = "https://dailysceptic.org/"
+img_path = f"/home/bencapper/src/News/Sceptic/{td}"
 storage_path = ("https://firebasestorage.googleapis.com/"
                 "v0/b/news-a3e22.appspot.com/o")
 db_path = "stories"
-outlet = "news.Yahoo.com"
+outlet = "www.DailySceptic.org"
+
 
 # Set Local Folders
 logFolder(log_folder_path)
@@ -57,63 +64,54 @@ order = getHour()
 # Find the Div Containing
 # Targeted Article Links
 soup = pageSoup(page_url)
-articles = soup.find_all("div", "Cf")
+articles = soup.find_all("article", "jeg_post jeg_pl_md_1 format-standard")
+
 
 # Cycle through List just Gathered
 # And Save to DB or Pass due to Lack
 # of Information Available
 for article in articles:
-    # Catch all for a Litany of Possible Errors
     try:
-        # Get Article Link
-        a = article.select("a")
-        link = str(a).split('href="')[1].split('">')[0]
-        link = f"{page_url}{link}"
-        # Get Full Article Page
-        full_page = requests.get(link).content
-        articleSoup = BeautifulSoup(full_page, features="lxml")
-        # Gather Title
-        title = articleSoup.select("h1")
-        title = str(title).split('headline">')[1].split("</")[0]
-        title = decodeTitle(title)
-        # Gather / Format Date
-        date = list()
-        dates = articleSoup.select("time")
-        monthDay = str(dates).split('">')[1].split(",")[0].split(" ")
-        year = str(dates).split('">')[1].split(",")[1].rstrip().lstrip()
-        date.append(monthDay[1])
-        date.append(monthDay[0])
-        date.append(year)
+        img_tag = article.find("div", "jeg_thumb")
+        url = str(img_tag).split('href="')[1].split('">')[0]
+        img_src = str(img_tag).split('src="')[1].split('" srcset')[0]
+        title_tag = article.find("h3", "jeg_post_title")
+        title = str(title_tag).split('/">')[1].split("</a")[0]
+        title = titleFormat(title)
+        img_title = imgTitleFormat(title)
+        date_tag = article.find("div", "jeg_meta_date")
+        date = str(date_tag).split("</i> ")[1].split("</a")[0].split(" ")
         date = formatDate(date)
-        # No Images
-        img_title = ""
-        img_src = ""
-        # Check if an Article which is 80%+
-        # Similar to any Other in the Log
-        # Similar function in Utils
+        bucket = storage.bucket()
+        token = ""
         check = False
         for ref in ref_list:
             similarity = similar(ref, title)
-            if similarity > 0.8:
+            if similarity > 0.8 or "<span" in title:
                 check = True
                 break
-        # Only Continue if the Title is not
-        # Already in the Log and is not too
-        # Similar to Another
         if title not in ref_list and check is False:
-            # Add the Title to the List
-            # of Titles Already in the Log
             ref_list.append(title)
             open_temp = open(log_file_path, "a")
+            with open(f"{img_path}/{img_title}", "wb") as img:
+                headers = {
+                    "User-Agent": ("Mozilla/5.0 (X11; Linux x86_64)"
+                                   " AppleWebKit/537.36 (KHTML, like Gecko)"
+                                   " Chrome/88.0.4324.96 Safari/537.36")
+                }
+                img.write(requests.get(img_src, headers=headers).content)
+                blob = bucket.blob(f"Sceptic/{td}/{img_title}")
+                token = uuid4()
+                metadata = {"firebaseStorageDownloadTokens": token}
+                blob.upload_from_filename(f"{img_path}/{img_title}")
             # Get Link to the Stored Image
-            storage_link = ("https://firebasestorage.googleapis.com/"
-                            "v0/b/news-a3e22.appspot.com/o/Yahoo%2Fyah."
-                            "png?alt=media&token=bb4eabf2-5056-"
-                            "445c-982a-f88a06e951dd")
+            storage_link = (f"https://firebasestorage.googleapis.com/"
+                            f"v0/b/news-a3e22.appspot.com/o/Sceptic%2F{td}"
+                            f"%2F{img_title}?alt=media&token={token}")
             data = {
                 "title": title,
                 "date": date,
-                "link": link,
+                "link": url,
                 "outlet": outlet,
                 "storage_link": storage_link,
                 "order": order,
@@ -121,18 +119,13 @@ for article in articles:
             open_json = open(json_dump_path, "r")
             read_json = open_json.read()
             appendJson(json_dump_path, data)
-
             # Push the Gathered Data to DB
             # Using Utils method
-            pushToDB(db_path, title, date, link, outlet, storage_link, order)
+            pushToDB(db_path, title, date, url, outlet, storage_link, order)
             # Write Title to Local Log File
             open_temp.write(str(title) + "\n")
-            print("Yahoo Article Added to the database")
+            print("Daily Sceptic Article Added to DB")
         else:
-            print("Yahoo Article Already in the database" + title)
-
-    # One of Many Possible Things
-    # Went Wrong -
-    # Too Much of This is an Issue
+            print("Daily Sceptic Article Already in DB")
     except:
-        print("Yahoo Article Error")
+        print("Daily Sceptic Article Error")

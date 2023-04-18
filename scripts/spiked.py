@@ -2,8 +2,22 @@ import os
 from uuid import uuid4
 import requests
 from firebase_admin import storage
-from utils.utilities import (decodeTitle, formatDate, imgFolder, imgTitleFormat, initialise, jsonFolder, dumpJson, appendJson,
-                           todayDate,logFolder, pageSoup, pushToDB, titleFormat, similar,getHour)
+from utils.utilities import (
+    decodeTitle,
+    formatDate,
+    imgFolder,
+    imgTitleFormat,
+    initialise,
+    jsonFolder,
+    appendJson,
+    todayDate,
+    logFolder,
+    pageSoup,
+    pushToDB,
+    similar,
+    getHour,
+)
+
 td = todayDate()
 # Set Global Variables
 ref_list = []
@@ -16,7 +30,8 @@ db_url = "https://news-a3e22-default-rtdb.firebaseio.com/"
 bucket = "news-a3e22.appspot.com"
 page_url = "https://www.spiked-online.com/latest/"
 img_path = f"/home/bencapper/src/News/Spiked/{td}"
-storage_path = "https://firebasestorage.googleapis.com/v0/b/news-a3e22.appspot.com/o"
+storage_path = ("https://firebasestorage.googleapis.com/"
+                "v0/b/news-a3e22.appspot.com/o")
 db_path = "stories"
 outlet = "www.Spiked-Online.com"
 
@@ -27,11 +42,11 @@ jsonFolder(json_folder_path)
 
 # Read from Existing Log
 if os.path.exists(log_file_path):
-  open_temp = open(log_file_path, "r")
-  read_temp = open_temp.read()
-  ref_list = read_temp.splitlines()
+    open_temp = open(log_file_path, "r")
+    read_temp = open_temp.read()
+    ref_list = read_temp.splitlines()
 else:
-  os.mknod(log_file_path)
+    os.mknod(log_file_path)
 
 # Initialize Firebase
 initialise(json_path, db_url, bucket)
@@ -52,27 +67,24 @@ articles = soup.find_all("div", "post")
 # And Save to DB or Pass due to Lack
 # of Information Available
 for article in articles:
-
     # Catch all for a Litany of Possible Errors
     try:
-
         # Get Article Link
         url = article.find("a", "post-image block rel")
         link = str(url).split('href="')[1].split('">')[0]
-        
-  
+
         # Get Image Link
         img_src = str(url).split('data-src="')[1].split('" ')[0]
-        
+
         # Gather Title / Img Title
         title = article.select("h3")
-        title = str(title).split('">')[1].split('</')[0].rstrip().lstrip()
+        title = str(title).split('">')[1].split("</")[0].rstrip().lstrip()
         title = decodeTitle(title)
         img_title = imgTitleFormat(title)
-  
+
         # Gather / Format Date
         date = article.find("div", "post-date")
-        date = str(date).split('">')[1].split('</')[0].split(' ')
+        date = str(date).split('">')[1].split("</")[0].split(" ")
         dates = list()
         day = date[0][:-2]
         if len(day) < 2:
@@ -83,12 +95,11 @@ for article in articles:
         dates.append(month)
         dates.append(year)
         dates = formatDate(dates)
-  
+
         # Unwanted Article, Pass
         if "<span" in title:
             pass
         else:
-
             # Initialize Storage Variables
             bucket = storage.bucket()
             token = ""
@@ -98,16 +109,15 @@ for article in articles:
             # Similar function in Utils
             check = False
             for ref in ref_list:
-               similarity = similar(ref,title)
-               if similarity > .8:
-                  check = True
-                  break
-            
+                similarity = similar(ref, title)
+                if similarity > 0.8:
+                    check = True
+                    break
+
             # Only Continue if the Title is not
             # Already in the Log and is not too
             # Similar to Another
             if title not in ref_list and check is False:
-
                 # Add the Title to the List
                 # of Titles Already in the Log
                 ref_list.append(title)
@@ -124,32 +134,33 @@ for article in articles:
                     blob.upload_from_filename(f"{img_path}/{img_title}")
 
                 # Get Link to the Stored Image
-                storage_link = f"https://firebasestorage.googleapis.com/v0/b/news-a3e22.appspot.com/o/Spiked%2F{td}%2F{img_title}?alt=media&token={token}"
+                storage_link = (f"https://firebasestorage.googleapis.com/"
+                                f"v0/b/news-a3e22.appspot.com/o/Spiked%2F"
+                                f"{td}%2F{img_title}?alt=media&token={token}")
                 data = {
-                   "title": title,
-                   "date": dates,
-                   "link": link,
-                   "outlet": outlet,
-                   "storage_link": storage_link,
-                   "order": order
+                    "title": title,
+                    "date": dates,
+                    "link": link,
+                    "outlet": outlet,
+                    "storage_link": storage_link,
+                    "order": order,
                 }
                 open_json = open(json_dump_path, "r")
                 read_json = open_json.read()
-                appendJson(json_dump_path,data)
+                appendJson(json_dump_path, data)
                 # Push the Gathered Data to DB
                 # Using Utils method
-                pushToDB(
-                    db_path, title, dates, link, outlet, storage_link, order
-                )
+                pushToDB(db_path, title, dates,
+                         link, outlet, storage_link, order)
 
                 # Write Title to Local Log File
                 open_temp.write(str(title) + "\n")
                 print("Spiked Article Added to DB")
             else:
-                print("Spiked Article Already in DB") 
-    
+                print("Spiked Article Already in DB")
+
     # One of Many Possible Things
-    # Went Wrong - 
+    # Went Wrong -
     # Too Much of This is an Issue
     except:
         print("Spiked Article Error")

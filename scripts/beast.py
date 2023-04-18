@@ -2,11 +2,13 @@ import os
 from uuid import uuid4
 import requests
 from firebase_admin import storage
-from utils.utilities import (decodeTitle, formatDate, imgFolder, imgTitleFormat, initialise, jsonFolder, dumpJson, appendJson,
-                          todayDate,logFolder, pageSoup, pushToDB, titleFormat, similar,getHour)
-
+from utils.utilities import (decodeTitle, formatDate, imgFolder,
+                             imgTitleFormat, initialise, jsonFolder,
+                             appendJson, todayDate, logFolder, pageSoup,
+                             pushToDB, similar, getHour)
 
 td = todayDate()
+
 # Set Global Variables
 ref_list = []
 log_file_path = "/home/bencapper/src/News-Aggregator/scripts/log/beastdone.log"
@@ -18,7 +20,8 @@ db_url = "https://news-a3e22-default-rtdb.firebaseio.com/"
 bucket = "news-a3e22.appspot.com"
 page_url = "https://www.thedailybeast.com/category/politics"
 img_path = f"/home/bencapper/src/News/Beast/{td}"
-storage_path = "https://firebasestorage.googleapis.com/v0/b/news-a3e22.appspot.com/o"
+storage_path = ("https://firebasestorage.googleapis.com/"
+                "v0/b/news-a3e22.appspot.com/o")
 db_path = "stories"
 outlet = "www.TheDailyBeast.com"
 
@@ -29,12 +32,12 @@ jsonFolder(json_folder_path)
 
 # Read from Existing Log
 if os.path.exists(log_file_path):
- open_temp = open(log_file_path, "r")
- read_temp = open_temp.read()
- ref_list = read_temp.splitlines()
+    open_temp = open(log_file_path, "r")
+    read_temp = open_temp.read()
+    ref_list = read_temp.splitlines()
 else:
- os.mknod(log_file_path)
- 
+    os.mknod(log_file_path)
+
 # Initialize Firebase
 initialise(json_path, db_url, bucket)
 
@@ -95,11 +98,11 @@ for article in articles:
         # Similar function in Utils
         check = False
         for ref in ref_list:
-           similarity = similar(ref,title)
-           if similarity > .8:
-              check = True
-              break
-                    
+            similarity = similar(ref, title)
+            if similarity > .8:
+                check = True
+                break
+
         # Only Continue if the Title is not
         # Already in the Log and is not too
         # Similar to Another
@@ -109,7 +112,7 @@ for article in articles:
             # of Titles Already in the Log
             ref_list.append(title)
             open_temp = open(log_file_path, "a")
-            
+
             # Get Image Data using Requests
             # Create the Image Locally
             # Upload image to Storage
@@ -121,7 +124,11 @@ for article in articles:
                 blob.upload_from_filename(f"{img_path}/{img_title}")
 
             # Get Link to the Stored Image
-            storage_link = f"https://firebasestorage.googleapis.com/v0/b/news-a3e22.appspot.com/o/Beast%2F{td}%2F{img_title}?alt=media&token={token}"
+            storage_link = (
+                            f"https://firebasestorage.googleapis.com/"
+                            f"v0/b/news-a3e22.appspot.com/o/Beast%2F{td}"
+                            f"%2F{img_title}?alt=media&token={token}"
+                           )
             data = {
                    "title": title,
                    "date": date,
@@ -132,7 +139,7 @@ for article in articles:
                }
             open_json = open(json_dump_path, "r")
             read_json = open_json.read()
-            appendJson(json_dump_path,data)
+            appendJson(json_dump_path, data)
             # Push the Gathered Data to DB
             # Using Utils method
             pushToDB(
@@ -142,16 +149,16 @@ for article in articles:
             # Write Title to Local Log File
             open_temp.write(str(title) + "\n")
 
-            # Return Confirmation of New DB Entry 
+            # Return Confirmation of New DB Entry
             print("Daily Beast Article Added to DB")
 
         # Title was Already in the Log List
         # or too Similar to another
         else:
             print("Daily Beast Article Already in DB")
-            
+
     # One of Many Possible Things
-    # Went Wrong - 
+    # Went Wrong -
     # Too Much of This is an Issue
     except:
         print("Daily Beast Article Error")

@@ -1,16 +1,28 @@
 import os
-from uuid import uuid4
- 
 import requests
 from bs4 import BeautifulSoup
 from firebase_admin import storage
- 
-from utils.utilities import (decodeTitle, formatDate, imgFolder, imgTitleFormat, initialise, jsonFolder, dumpJson, appendJson,
-                            todayDate,logFolder, pageSoup, pushToDB, titleFormat, similar,getHour)
+from utils.utilities import (
+    decodeTitle,
+    formatDate,
+    imgFolder,
+    imgTitleFormat,
+    initialise,
+    jsonFolder,
+    appendJson,
+    todayDate,
+    logFolder,
+    pageSoup,
+    pushToDB,
+    similar,
+    getHour,
+)
+
 td = todayDate()
 # Set Global Variables
 ref_list = []
-log_file_path = "/home/bencapper/src/News-Aggregator/scripts/log/globaldone.log"
+log_file_path = ("/home/bencapper/src/News-Aggregator/"
+                 "scripts/log/globaldone.log")
 log_folder_path = "/home/bencapper/src/News-Aggregator/scripts/log/"
 json_dump_path = "/home/bencapper/src/News-Aggregator/scripts/json/global.json"
 json_folder_path = "/home/bencapper/src/News-Aggregator/scripts/json/"
@@ -19,7 +31,8 @@ db_url = "https://news-a3e22-default-rtdb.firebaseio.com/"
 bucket = "news-a3e22.appspot.com"
 page_url = "https://globalnews.ca/canada"
 img_path = f"/home/bencapper/src/News/Global/{td}"
-storage_path = "https://firebasestorage.googleapis.com/v0/b/news-a3e22.appspot.com/o"
+storage_path = ("https://firebasestorage.googleapis.com/"
+                "v0/b/news-a3e22.appspot.com/o")
 db_path = "stories"
 outlet = "www.GlobalNews.ca"
 
@@ -30,12 +43,12 @@ jsonFolder(json_folder_path)
 
 # Read from Existing Log
 if os.path.exists(log_file_path):
-   open_temp = open(log_file_path, "r")
-   read_temp = open_temp.read()
-   ref_list = read_temp.splitlines()
+    open_temp = open(log_file_path, "r")
+    read_temp = open_temp.read()
+    ref_list = read_temp.splitlines()
 else:
-   os.mknod(log_file_path)
- 
+    os.mknod(log_file_path)
+
 # Initialize Firebase
 initialise(json_path, db_url, bucket)
 
@@ -55,17 +68,15 @@ articles = soup.find_all("li", "c-posts__item c-posts__loadmore")
 # And Save to DB or Pass due to Lack
 # of Information Available
 for article in articles:
-
     # Catch all for a Litany of Possible Errors
     try:
-
         # Get Article Link
         link = str(article).split(' href="')[1].split('">')[0]
 
         # Gather Title from Article
         # Format with  a Utils Function
         # Format Title to get Image Title
-        title = str(article).split('data-title="">')[1].split('</span')[0]
+        title = str(article).split('data-title="">')[1].split("</span")[0]
         title = decodeTitle(title)
         img_title = imgTitleFormat(title)
 
@@ -77,9 +88,14 @@ for article in articles:
         articleSoup = BeautifulSoup(full_page, features="lxml")
 
         # Get Date
-        dates = articleSoup.find("div", "c-byline__date c-byline__date--pubDate")
-        monthDay = str(dates).split('<span>')[1].split('ed ')[1].split(',')[0].split(' ')
-        year = str(dates).split('<span>')[1].split('ed ')[1].split(',')[1].split(' ')[1]
+        dates = articleSoup.find("div",
+                                 "c-byline__date c-byline__date--pubDate")
+        monthDay = (
+            str(dates).split("<span>")[1].split("ed ")
+            [1].split(",")[0].split(" ")
+        )
+        year = str(dates).split("<span>")[1].split("ed ")
+        [1].split(",")[1].split(" ")[1]
         date = list()
         date.append(monthDay[1])
         date.append(monthDay[0])
@@ -95,59 +111,48 @@ for article in articles:
         # Similar function in Utils
         check = False
         for ref in ref_list:
-           similarity = similar(ref,title)
-           if similarity > .8:
-              check = True
-              break
-        
+            similarity = similar(ref, title)
+            if similarity > 0.8:
+                check = True
+                break
+
         # Only Continue if the Title is not
         # Already in the Log and is not too
         # Similar to Another
         if title not in ref_list and check is False:
-
             # Add the Title to the List
             # of Titles Already in the Log
             ref_list.append(title)
             open_temp = open(log_file_path, "a")
 
-            # Get Image Data using Requests
-            # Create the Image Locally
-            # Upload image to Storage
-            #with open(f"{img_path}/{img_title}", "wb") as img:
-            #    img.write(requests.get(img_src).content)
-            #    blob = bucket.blob(f"Global/{td}/{img_title}")
-            #    token = uuid4()
-            #    metadata = {"firebaseStorageDownloadTokens": token}
-            #    blob.upload_from_filename(f"{img_path}/{img_title}")
-
             # Get Link to the Stored Image
-            storage_link = f"https://firebasestorage.googleapis.com/v0/b/news-a3e22.appspot.com/o/Global%2Fglo.png?alt=media&token=2560dcd6-6f15-4da1-85ff-53de78333456"
+            storage_link = ("https://firebasestorage.googleapis.com"
+                            "/v0/b/news-a3e22.appspot.com/o/Global%2Fglo.png"
+                            "?alt=media&token=2560dcd6-"
+                            "6f15-4da1-85ff-53de78333456")
             data = {
-                   "title": title,
-                   "date": date,
-                   "link": link,
-                   "outlet": outlet,
-                   "storage_link": storage_link,
-                   "order": order
+                "title": title,
+                "date": date,
+                "link": link,
+                "outlet": outlet,
+                "storage_link": storage_link,
+                "order": order,
             }
             open_json = open(json_dump_path, "r")
             read_json = open_json.read()
-            appendJson(json_dump_path,data)
+            appendJson(json_dump_path, data)
             # Push the Gathered Data to DB
             # Using Utils method
-            pushToDB(
-                db_path, title, date, link, outlet, storage_link, order
-            )
+            pushToDB(db_path, title, date, link, outlet, storage_link, order)
 
             # Write Title to Local Log File
             open_temp.write(str(title) + "\n")
             print("Global News Article Added to DB")
         else:
             print("Global News Article Already in DB")
-    
+
     # One of Many Possible Things
-    # Went Wrong - 
+    # Went Wrong -
     # Too Much of This is an Issue
     except:
         print("Global News Article Error")
-    

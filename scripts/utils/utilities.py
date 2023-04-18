@@ -1,116 +1,129 @@
-from encodings import utf_8
 import json
 import os
- 
 import firebase_admin
 import requests
 from bs4 import BeautifulSoup
 from difflib import SequenceMatcher
 from firebase_admin import credentials, db
 from datetime import datetime, timedelta
-from datetime import date 
- 
+from datetime import date
+
+
 def logFolder(log_folder_path):
-   if os.path.exists(log_folder_path):
-       pass
-   else:
-       os.mkdir(log_folder_path)
+    if os.path.exists(log_folder_path):
+        pass
+    else:
+        os.mkdir(log_folder_path)
+
 
 def jsonFolder(log_folder_path):
-   if os.path.exists(log_folder_path):
-       pass
-   else:
-       os.mkdir(log_folder_path)
+    if os.path.exists(log_folder_path):
+        pass
+    else:
+        os.mkdir(log_folder_path)
+
 
 def dumpJson(json_dump_path, data):
-    with open(json_dump_path, 'w', encoding='utf8') as f:
+    with open(json_dump_path, "w", encoding="utf8") as f:
         json.dump(data, f, indent=4, ensure_ascii=False)
 
+
 def appendJson(json_dump_path, data):
-    with open(json_dump_path, 'r+') as file:
+    with open(json_dump_path, "r+") as file:
         file_data = json.load(file)
-        file_data['articles'].append(data)
+        file_data["articles"].append(data)
         file.seek(0)
         json.dump(file_data, file, indent=4)
 
-def initialise(json_path, db_url, bucket):
-   with open(json_path) as file:
-       data = json.load(file)
-       cred = credentials.Certificate(data)
-   firebase_admin.initialize_app(
-       cred, {"databaseURL": db_url, "storageBucket": bucket}
-   )
- 
- 
-def pageSoup(page_url):
-   headers = {"User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.96 Safari/537.36"} 
-   page = requests.get(page_url, headers=headers).content
-   soup = BeautifulSoup(page, features="lxml")
-   return soup
 
-def similar(a,b):
-    return SequenceMatcher(None, a, b).ratio() 
+def initialise(json_path, db_url, bucket):
+    with open(json_path) as file:
+        data = json.load(file)
+        cred = credentials.Certificate(data)
+    firebase_admin.initialize_app(
+        cred, {"databaseURL": db_url, "storageBucket": bucket}
+    )
+
+
+def pageSoup(page_url):
+    headers = {
+        "User-Agent": ("Mozilla/5.0 (X11; Linux x86_64)"
+                       " AppleWebKit/537.36 (KHTML, like Gecko)"
+                       " Chrome/88.0.4324.96 Safari/537.36")
+    }
+    page = requests.get(page_url, headers=headers).content
+    soup = BeautifulSoup(page, features="lxml")
+    return soup
+
+
+def similar(a, b):
+    return SequenceMatcher(None, a, b).ratio()
+
 
 def getHour():
     timenow = datetime.now()
     return timenow.hour
- 
+
+
 def titleFormat(string):
-   string = (
-       string.replace(".", "(dot)")
-       .replace("%", "(pc)")
-       .replace("+", "(plus)")
-       .replace(":", "(colon)")
-       .replace("#", "(hash)")
-       .replace("?", "(quest)")
-       .replace(",", "(comma)")
-       .replace("$", "(USD)")
-       .replace("&amp;", "and")
-       .replace("/","-")
-       .replace("  ", " ")
-   )
-   return string
+    string = (
+        string.replace(".", "(dot)")
+        .replace("%", "(pc)")
+        .replace("+", "(plus)")
+        .replace(":", "(colon)")
+        .replace("#", "(hash)")
+        .replace("?", "(quest)")
+        .replace(",", "(comma)")
+        .replace("$", "(USD)")
+        .replace("&amp;", "and")
+        .replace("/", "-")
+        .replace("  ", " ")
+    )
+    return string
+
 
 def titleDeFormat(string):
-   string = (
-       string.replace("(dot)", ".")
-       .replace("(pc)", "%")
-       .replace("(plus)", "+")
-       .replace("(colon)", ":")
-       .replace("(hash)", "#")
-       .replace("(quest)", "?")
-       .replace("(comma)", ",")
-       .replace("(USD)", "$")
-   )
-   return string
- 
- 
+    string = (
+        string.replace("(dot)", ".")
+        .replace("(pc)", "%")
+        .replace("(plus)", "+")
+        .replace("(colon)", ":")
+        .replace("(hash)", "#")
+        .replace("(quest)", "?")
+        .replace("(comma)", ",")
+        .replace("(USD)", "$")
+    )
+    return string
+
+
 def imgTitleFormat(string):
-   string = (
-       string.replace(".", "(dot)")
-       .replace("%", "(pc)")
-       .replace("+", "(plus)")
-       .replace(":", "(colon)")
-       .replace("#", "(hash)")
-       .replace("?", "(quest)")
-       .replace(",", "(comma)")
-       .replace("$", "(USD)")
-       .replace("&amp;", "and")
-       .replace("  ", " ")
-       .replace(" ", "-")
-   )
-   string += ".png"
-   return string
- 
- 
+    string = (
+        string.replace(".", "(dot)")
+        .replace("%", "(pc)")
+        .replace("+", "(plus)")
+        .replace(":", "(colon)")
+        .replace("#", "(hash)")
+        .replace("?", "(quest)")
+        .replace(",", "(comma)")
+        .replace("$", "(USD)")
+        .replace("&amp;", "and")
+        .replace("  ", " ")
+        .replace(" ", "-")
+    )
+    string += ".png"
+    return string
+
+
 def imgFolder(img_path):
-   if os.path.exists(img_path) == False:
-       os.mkdir(img_path)
+    if os.path.exists(img_path) is False:
+        os.mkdir(img_path)
+
 
 def dumpFolder(dump_path):
-   if os.path.exists(dump_path) == False:
-       os.mkdir(dump_path)
- 
+    if os.path.exists(dump_path) is False:
+        os.mkdir(dump_path)
+
+
 # def pushToDB(
 #    db_path, title, date, img_src, img_name, link, outlet, storage_link, order
 # ):
@@ -128,96 +141,116 @@ def dumpFolder(dump_path):
 #        }
 #    )
 
+
 def pushDoubleToDB(
-   db_path, titlehead, title1, date1, link1, outlet1, storage_link1,
-    title2, date2, link2, outlet2, storage_link2 ,order
+    db_path,
+    titlehead,
+    title1,
+    date1,
+    link1,
+    outlet1,
+    storage_link1,
+    title2,
+    date2,
+    link2,
+    outlet2,
+    storage_link2,
+    order,
 ):
-   d = datetime.today().strftime('%m-%d-%y')
-   ref = db.reference(f"{db_path}/{d}/{titlehead}")
-   ref.set(
-       {
-           "title1": title1,
-           "date1": date1,
-           "link1": link1,
-           "outlet1": outlet1,
-           "storage_link1": storage_link1,
-           "title2": title2,
-           "date2": date2,
-           "link2": link2,
-           "outlet2": outlet2,
-           "storage_link2": storage_link2,
-           "order": order
-       }
-   )
+    d = datetime.today().strftime("%m-%d-%y")
+    ref = db.reference(f"{db_path}/{d}/{titlehead}")
+    ref.set(
+        {
+            "title1": title1,
+            "date1": date1,
+            "link1": link1,
+            "outlet1": outlet1,
+            "storage_link1": storage_link1,
+            "title2": title2,
+            "date2": date2,
+            "link2": link2,
+            "outlet2": outlet2,
+            "storage_link2": storage_link2,
+            "order": order,
+        }
+    )
 
 
-def pushToDB(
-   db_path, title, date, link, outlet, storage_link, order
-):
-   ref = db.reference(f"{db_path}/{date}/{title}")
-   ref.set(
-       {
-           "title": title,
-           "date": date,
-           "link": link,
-           "outlet": outlet,
-           "storage_link": storage_link,
-           "order": order
-       }
-   )
- 
+def pushToDB(db_path, title, date, link, outlet, storage_link, order):
+    ref = db.reference(f"{db_path}/{date}/{title}")
+    ref.set(
+        {
+            "title": title,
+            "date": date,
+            "link": link,
+            "outlet": outlet,
+            "storage_link": storage_link,
+            "order": order,
+        }
+    )
+
+
 def addYearAndFormat(date):
-   dates = date.split('/')
-   month = dates[0]
-   day = dates[1][:-1]
-   if len(day) == 1:
-       day = f"0{day}"
-   if len(month) == 1:
-       month = f"0{month}"
-   year = datetime.today().strftime('%y')
-   return f"{month}-{day}-{year}"
- 
+    dates = date.split("/")
+    month = dates[0]
+    day = dates[1][:-1]
+    if len(day) == 1:
+        day = f"0{day}"
+    if len(month) == 1:
+        month = f"0{month}"
+    year = datetime.today().strftime("%y")
+    return f"{month}-{day}-{year}"
+
+
 def formatDate(date):
-   day = date[0]
-   month = date[1]
-   if month in "January":
-       month = "01"
-   if month in "February":
-       month = "02"
-   if month in "March":
-       month = "03"
-   if month in "April":
-       month = "04"
-   if month in "May":
-       month = "05"
-   if month in "June":
-       month = "06"
-   if month in "July":
-       month = "07"
-   if month in "August":
-       month = "08"
-   if month in "September":
-       month = "09"
-   if month in "October":
-       month = "10"
-   if month in "November":
-       month = "11"
-   if month in "December":
-       month = "12"
-   if len(day) < 2:
-       day = f"0{day}"
-   year = date[2][2:]
-   return f"{month}-{day}-{year}"
+    day = date[0]
+    month = date[1]
+    if month in "January":
+        month = "01"
+    if month in "February":
+        month = "02"
+    if month in "March":
+        month = "03"
+    if month in "April":
+        month = "04"
+    if month in "May":
+        month = "05"
+    if month in "June":
+        month = "06"
+    if month in "July":
+        month = "07"
+    if month in "August":
+        month = "08"
+    if month in "September":
+        month = "09"
+    if month in "October":
+        month = "10"
+    if month in "November":
+        month = "11"
+    if month in "December":
+        month = "12"
+    if len(day) < 2:
+        day = f"0{day}"
+    year = date[2][2:]
+    return f"{month}-{day}-{year}"
+
 
 def todayDate():
     today = date.today()
     return today.strftime("%m-%d-%y")
 
+
 def cutOffDate():
     today = datetime.now() - timedelta(days=15)
     return today.strftime("%m-%d-%y")
+
 
 def decodeTitle(title):
     titleencode = title.encode("ascii", "ignore")
     titledecode = titleencode.decode()
     return titleFormat(titledecode)
+
+
+def getYear():
+    today = datetime.now()
+    return today.year
