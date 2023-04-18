@@ -1,12 +1,22 @@
 import os
 from uuid import uuid4
- 
 import requests
-from bs4 import BeautifulSoup
 from firebase_admin import storage
- 
-from utils.utilities import (decodeTitle, formatDate, imgFolder, imgTitleFormat, initialise, jsonFolder, dumpJson, appendJson,
-                            todayDate,logFolder, pageSoup, pushToDB, titleFormat, similar,getHour)
+from utils.utilities import (
+    decodeTitle,
+    imgFolder,
+    imgTitleFormat,
+    initialise,
+    jsonFolder,
+    appendJson,
+    todayDate,
+    logFolder,
+    pageSoup,
+    pushToDB,
+    similar,
+    getHour,
+)
+
 td = todayDate()
 # Set Global Variables
 ref_list = []
@@ -19,7 +29,8 @@ db_url = "https://news-a3e22-default-rtdb.firebaseio.com/"
 bucket = "news-a3e22.appspot.com"
 page_url = "https://www.thegatewaypundit.com/"
 img_path = f"/home/bencapper/src/News/GWP/{td}"
-storage_path = "https://firebasestorage.googleapis.com/v0/b/news-a3e22.appspot.com/o"
+storage_path = ("https://firebasestorage.googleapis.com/"
+                "v0/b/news-a3e22.appspot.com/o")
 db_path = "stories"
 outlet = "www.TheGatewayPundit.com"
 
@@ -30,11 +41,11 @@ jsonFolder(json_folder_path)
 
 # Read from Existing Log
 if os.path.exists(log_file_path):
-   open_temp = open(log_file_path, "r")
-   read_temp = open_temp.read()
-   ref_list = read_temp.splitlines()
+    open_temp = open(log_file_path, "r")
+    read_temp = open_temp.read()
+    ref_list = read_temp.splitlines()
 else:
-   os.mknod(log_file_path)
+    os.mknod(log_file_path)
 
 # Initialize Firebase
 initialise(json_path, db_url, bucket)
@@ -49,111 +60,97 @@ order = getHour()
 # Find the Div Containing
 # Targeted Article Links
 soup = pageSoup(page_url)
-articles = soup.find_all("div","tgp-post")
+articles = soup.find_all("div", "gb-inside-container")
 
 # Cycle through List just Gathered
 # And Save to DB or Pass due to Lack
 # of Information Available
 for article in articles:
+    # Catch all for a Litany of Possible Errors
+    try:
+        # Get Article Link
+        a = article.select("a")
+        img_src = str(article.select("img")).split('src="')[1].split('" ')[0]
+        url = str(article).split(' href="')[1].split('" ')[0]
+        if '">' in url:
+            url = url.split('">')[0]
+        t = article.select("h2")
+        if t == [] or "Please Help TGP" in str(t):
+            pass
+        else:
+            title = str(t).split("<a")[1].split('">')[1].split("</a")[0]
+            title = decodeTitle(title)
+            img_title = imgTitleFormat(title)
+            dates = (
+                str(article.select("time"))
+                .split('datetime="')[1]
+                .split("T")[0]
+                .split("-")
+            )
+            date = f"{dates[1]}-{dates[2]}-{dates[0][2:]}"
 
-   # Catch all for a Litany of Possible Errors
-   try:
+            # Initialize Storage Variables
+            bucket = storage.bucket()
+            token = ""
 
-      # Get Article Link
-      a = article.select("a")
-      img_src = str(a).split(' data-src="')[1].split('" data-src')[0].split('" height')[0]
-      url = str(article).split(' href="')[1].split('">')[0]
+            # Check if an Article which is 80%+
+            # Similar to any Other in the Log
+            # Similar function in Utils
+            check = False
+            for ref in ref_list:
+                similarity = similar(ref, title)
+                if similarity > 0.8:
+                    check = True
+                    break
 
-      # Get Full Article Page
-      full_page = requests.get(url).content
-      articleSoup = BeautifulSoup(full_page, features="lxml")
+            # Only Continue if the Title is not
+            # Already in the Log and is not too
+            # Similar to Another
+            if title not in ref_list and check is False:
+                # Add the Title to the List
+                # of Titles Already in the Log
+                ref_list.append(title)
+                open_temp = open(log_file_path, "a")
 
-      # Gather Title / Img Title
-      title = str(articleSoup.select("h1")).split('">')[1].split('</')[0]
-      title = decodeTitle(title)
-      img_title = imgTitleFormat(title)
+                # Get Image Data using Requests
+                # Create the Image Locally
+                # Upload image to Storage
+                with open(f"{img_path}/{img_title}", "wb") as img:
+                    img.write(requests.get(img_src).content)
+                    blob = bucket.blob(f"GWP/{td}/{img_title}")
+                    token = uuid4()
+                    metadata = {"firebaseStorageDownloadTokens": token}
+                    blob.upload_from_filename(f"{img_path}/{img_title}")
 
-      # Gather / Format Date
-      date = articleSoup.find_all("div", "entry-meta-text")
-      date = str(date).split("Published ")[1].split(" at")[0]
-      date = date.replace(",", " ").replace("  ", " ").split(" ")
-      day = date[1]
-      month = date[0]
-      year = date[2]
-      date = [day,month,year]
-      date = formatDate(date)
+                # Get Link to the Stored Image
+                storage_link = (f"https://firebasestorage.googleapis.com"
+                                f"/v0/b/news-a3e22.appspot.com/o/GWP%2F{td}"
+                                f"%2F{img_title}?alt=media&token={token}")
 
-      # Initialize Storage Variables
-      bucket = storage.bucket()
-      token = ""
+                data = {
+                    "title": title,
+                    "date": date,
+                    "link": url,
+                    "outlet": outlet,
+                    "storage_link": storage_link,
+                    "order": order,
+                }
+                open_json = open(json_dump_path, "r")
+                read_json = open_json.read()
+                appendJson(json_dump_path, data)
+                # Push the Gathered Data to DB
+                # Using Utils method
+                pushToDB(db_path, title, date,
+                         url, outlet, storage_link, order)
 
-      # Check if an Article which is 80%+
-      # Similar to any Other in the Log
-      # Similar function in Utils
-      check = False
-      for ref in ref_list:
-         similarity = similar(ref,title)
-         if similarity > .8:
-            check = True
-            break
+                # Write Title to Local Log File
+                open_temp.write(str(title) + "\n")
+                print("GatewayPundit Article Added to DB")
+            else:
+                print("GatewayPundit Article Already in DB")
 
-      # Only Continue if the Title is not
-      # Already in the Log and is not too
-      # Similar to Another
-      if title not in ref_list and check is False:
-
-         # Add the Title to the List
-         # of Titles Already in the Log
-         ref_list.append(title)
-         open_temp = open(log_file_path, "a")
-
-         # Get Image Data using Requests
-         # Create the Image Locally
-         # Upload image to Storage
-         #with open(f"{img_path}/{img_title}", "wb") as img:
-         #    img.write(requests.get(img_src).content)
-         #    blob = bucket.blob(f"GWP/{td}/{img_title}")
-         #    token = uuid4()
-         #    metadata = {"firebaseStorageDownloadTokens": token}
-         #    blob.upload_from_filename(f"{img_path}/{img_title}")
-
-         # Get Link to the Stored Image
-         storage_link = f"https://firebasestorage.googleapis.com/v0/b/news-a3e22.appspot.com/o/GWP%2Fgwp.png?alt=media&token=e5515db3-ff14-4781-9fb7-efe276cbc92b"
-
-         data = {
-             "title": title,
-             "date": date,
-             "link": url,
-             "outlet": outlet,
-             "storage_link": storage_link,
-             "order": order
-         }
-         open_json = open(json_dump_path, "r")
-         read_json = open_json.read()
-         appendJson(json_dump_path,data)
-         # Push the Gathered Data to DB
-         # Using Utils method
-         pushToDB(
-              db_path,
-              title,
-              date,
-              url,
-              outlet,
-              storage_link,
-              order
-          )
-
-         # Write Title to Local Log File
-         open_temp.write(str(title) + "\n")
-         print("GatewayPundit Article Added to DB")
-      else:
-         print("GatewayPundit Article Already in DB")
-         
-   # One of Many Possible Things
-   # Went Wrong - 
-   # Too Much of This is an Issue
-   except:
-      print("GatewayPundit Article Error")
- 
-
-
+        # One of Many Possible Things
+        # Went Wrong -
+        # Too Much of This is an Issue
+    except:
+        print("GatewayPundit Article Error")

@@ -1,7 +1,7 @@
 from uuid import uuid4
 import os
 from firebase_admin import storage
-from utils.utilities import (initialise, cutOffDate)
+from utils.utilities import initialise, cutOffDate
 
 
 cutdate = cutOffDate()
@@ -43,5 +43,3 @@ for outlet in outlet_list:
                     print("Found and Deleted Local")
         except:
             print("folder doesnt exist")
-
-

@@ -1,4 +1,4 @@
-from utils.utilities import (initialise, cutOffDate)
+from utils.utilities import initialise, cutOffDate
 from firebase_admin import db
 
 

@@ -46,3 +46,6 @@ Every outlet we get news from has their own option in the Navigation Drawer (Ope
 ![Discover](./playimgs/disc2.png) ![Save](./playimgs/save2.png) ![Search](./playimgs/search2.png)
 
 ![Left](./playimgs/left2.png) ![Right](./playimgs/right2.png) ![Dark Mode](./playimgs/dark2.png)
+
+
+![Poster](./playimgs/poster3.png)

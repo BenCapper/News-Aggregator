@@ -6,5 +6,4 @@ log_list = os.listdir(log_path)
 
 for log in log_list:
     os.chdir(log_path)
-    open(f"{log}","w").close()
-
+    open(f"{log}", "w").close()

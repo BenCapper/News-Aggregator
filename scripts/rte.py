@@ -1,13 +1,24 @@
 import os
 from uuid import uuid4
- 
 import requests
-import datetime
 from bs4 import BeautifulSoup
 from firebase_admin import storage
- 
-from utils.utilities import (decodeTitle, formatDate, imgFolder, imgTitleFormat, initialise, jsonFolder, dumpJson, appendJson,
-                            todayDate,logFolder, pageSoup, pushToDB, titleFormat, similar,getHour)
+from utils.utilities import (
+    decodeTitle,
+    formatDate,
+    imgFolder,
+    imgTitleFormat,
+    initialise,
+    jsonFolder,
+    appendJson,
+    todayDate,
+    logFolder,
+    pageSoup,
+    pushToDB,
+    similar,
+    getHour,
+)
+
 td = todayDate()
 # Set Global Variables
 ref_list = []
@@ -21,23 +32,24 @@ db_url = "https://news-a3e22-default-rtdb.firebaseio.com/"
 bucket = "news-a3e22.appspot.com"
 page_url = "https://www.rte.ie/news/"
 img_path = f"/home/bencapper/src/News/Rte/{td}"
-storage_path = "https://firebasestorage.googleapis.com/v0/b/news-a3e22.appspot.com/o"
+storage_path = ("https://firebasestorage.googleapis.com/"
+                "v0/b/news-a3e22.appspot.com/o")
 db_path = "stories"
 outlet = "www.RTE.ie"
 prefix = "https://www.rte.ie"
- 
+
 # Set Local Folders
 logFolder(log_folder_path)
 imgFolder(img_path)
 jsonFolder(json_folder_path)
 
-# Read from Existing Log 
+# Read from Existing Log
 if os.path.exists(log_file_path):
-   open_temp = open(log_file_path, "r")
-   read_temp = open_temp.read()
-   ref_list = read_temp.splitlines()
+    open_temp = open(log_file_path, "r")
+    read_temp = open_temp.read()
+    ref_list = read_temp.splitlines()
 else:
-   os.mknod(log_file_path)
+    os.mknod(log_file_path)
 
 # Initialize Firebase
 initialise(json_path, db_url, bucket)
@@ -47,7 +59,7 @@ initialise(json_path, db_url, bucket)
 # to Make Sure The Most Recent
 # Articles are Shown First
 order = getHour()
- 
+
 # Gather News Page HTML
 # Find the Div Containing
 # Targeted Article Links
@@ -58,10 +70,8 @@ articles = soup.find_all("div", "article-meta")
 # And Save to DB or Pass due to Lack
 # of Information Available
 for article in articles:
-
     # Catch all for a Litany of Possible Errors
     try:
-
         # Tracks if Article has an Image
         empty = False
 
@@ -71,7 +81,6 @@ for article in articles:
         # Link Comes as a List lol
         # Pass if Empty
         if url != []:
-
             # Finalize Link
             url = str(url).split(' href="')[1].split('">')[0]
             url = f"{prefix}{url}"
@@ -82,14 +91,14 @@ for article in articles:
 
             # Gather Title / Img Title
             title = articleSoup.select("h1")
-            title = str(title).split('">')[1].split('</')[0]
+            title = str(title).split('">')[1].split("</")[0]
             title = title.rstrip().lstrip()
             title = decodeTitle(title)
             img_title = imgTitleFormat(title)
 
             # Gather / Format Date
             date = articleSoup.find("span", "modified-date")
-            date = str(date).split(', ')[1].split(' <str')[0].split(' ')
+            date = str(date).split(", ")[1].split(" <str")[0].split(" ")
             date = formatDate(date)
 
             # Attempt to Find Image Tag
@@ -98,7 +107,8 @@ for article in articles:
                 empty = True
                 img_src = ""
             else:
-                img_src = str(img_src).split(' data-src="')[1].split('" item')[0]
+                img_src = str(img_src).split(' data-src="')
+                [1].split('" item')[0]
 
             # Initialize Storage Variables
             bucket = storage.bucket()
@@ -108,22 +118,20 @@ for article in articles:
             if "<span" in title:
                 pass
             else:
-
                 # Check if an Article which is 80%+
                 # Similar to any Other in the Log
                 # Similar function in Utils
                 check = False
                 for ref in ref_list:
-                   similarity = similar(ref,title)
-                   if similarity > .8:
-                      check = True
-                      break
+                    similarity = similar(ref, title)
+                    if similarity > 0.8:
+                        check = True
+                        break
 
                 # Only Continue if the Title is not
                 # Already in the Log and is not too
                 # Similar to Another
                 if title not in ref_list and check is False:
-
                     # Add the Title to the List
                     # of Titles Already in the Log
                     ref_list.append(title)
@@ -133,34 +141,37 @@ for article in articles:
                     # Use Default
                     if empty is True:
                         img_title = "rte.jpg"
-                        storage_link = f"https://firebasestorage.googleapis.com/v0/b/news-a3e22.appspot.com/o/Rte%2Frte.jpg?alt=media&token=d8a33f89-ca2f-4627-bcea-ca362213ff44"
-                        
+                        storage_link = ("https://firebasestorage.googleapis"
+                                        ".com/v0/b/news-a3e22.appspot.com/o/"
+                                        "Rte%2Frte.jpg?alt=media&token="
+                                        "d8a33f89-ca2f-4627-bcea-ca362213ff44")
+
                         data = {
                             "title": title,
                             "date": date,
                             "link": url,
                             "outlet": outlet,
                             "storage_link": storage_link,
-                            "order": order
+                            "order": order,
                         }
                         open_json = open(json_dump_path, "r")
                         read_json = open_json.read()
-                        appendJson(json_dump_path,data)
+                        appendJson(json_dump_path, data)
 
                         # Push the Gathered Data to DB
                         # Using Utils method
                         pushToDB(
-                           db_path,
-                           title,
-                           date,
-                           img_src,
-                           img_title,
-                           url,
-                           outlet,
-                           storage_link,
-                           order
-                         )
-                        
+                            db_path,
+                            title,
+                            date,
+                            img_src,
+                            img_title,
+                            url,
+                            outlet,
+                            storage_link,
+                            order,
+                        )
+
                         # Write Title to Local Log File
                         open_temp.write(str(title) + "\n")
                         print("RTE Article Added to DB - (No Image)")
@@ -169,13 +180,18 @@ for article in articles:
                         # Create the Image Locally
                         # Upload image to Storage
                         with open(f"{img_path}/{img_title}", "wb") as img:
-                          img.write(requests.get(img_src).content)
-                          blob = bucket.blob(f"Rte/{td}/{img_title}")
-                          token = uuid4()
-                          metadata = {"firebaseStorageDownloadTokens": token}
-                          blob.upload_from_filename(f"{img_path}/{img_title}")
-  
-                          storage_link = f"https://firebasestorage.googleapis.com/v0/b/news-a3e22.appspot.com/o/Rte%2F{td}%2F{img_title}?alt=media&token={token}"
+                            img.write(requests.get(img_src).content)
+                            blob = bucket.blob(f"Rte/{td}/{img_title}")
+                            token = uuid4()
+                            metadata = {"firebaseStorageDownloadTokens": token}
+                            blob.upload_from_filename(f"{img_path}"
+                                                      f"/{img_title}")
+
+                            storage_link = (f"https://firebasestorage."
+                                            f"googleapis.com/v0/b/news-"
+                                            f"a3e22.appspot.com/o/Rte%2F"
+                                            f"{td}%2F{img_title}?alt="
+                                            f"media&token={token}")
 
                         data = {
                             "title": title,
@@ -183,33 +199,24 @@ for article in articles:
                             "link": url,
                             "outlet": outlet,
                             "storage_link": storage_link,
-                            "order": order
+                            "order": order,
                         }
                         open_json = open(json_dump_path, "r")
                         read_json = open_json.read()
-                        appendJson(json_dump_path,data)
-                          
-                          # Push the Gathered Data to DB
-                          # Using Utils method
-                        pushToDB(
-                            db_path,
-                            title,
-                            date,
-                            url,
-                            outlet,
-                            storage_link,
-                            order
-                        )
+                        appendJson(json_dump_path, data)
+
+                        # Push the Gathered Data to DB
+                        # Using Utils method
+                        pushToDB(db_path, title, date, url,
+                                 outlet, storage_link, order)
                         # Write Title to Local Log File
                         open_temp.write(str(title) + "\n")
                         print("RTE Article Added to DB")
-                else: 
+                else:
                     print("RTE Article Already in DB")
 
     # One of Many Possible Things
-    # Went Wrong - 
+    # Went Wrong -
     # Too Much of This is an Issue
     except:
         print("RTE Article Error")
-
-

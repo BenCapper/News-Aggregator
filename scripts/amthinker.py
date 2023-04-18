@@ -1,21 +1,24 @@
 import os
 import requests
 from bs4 import BeautifulSoup
-from firebase_admin import storage
-from utils.utilities import (formatDate, initialise, jsonFolder, appendJson,
-                          logFolder, pageSoup, pushToDB, titleFormat, similar,getHour)
+from utils.utilities import (formatDate, initialise, jsonFolder,
+                             appendJson, logFolder, pageSoup, pushToDB,
+                             titleFormat, similar, getHour)
 # Set Global Variables
 ref_list = []
-log_file_path = "/home/bencapper/src/News-Aggregator/scripts/log/amthinkerdone.log"
+log_file_path = ("/home/bencapper/src/News-Aggregator"
+                 "/scripts/log/amthinkerdone.log")
+json_dump_path = ("/home/bencapper/src/News-Aggregator/"
+                  "scripts/json/amthinker.json")
+storage_path = ("https://firebasestorage.googleapis.com/"
+                "v0/b/news-a3e22.appspot.com/o")
 log_folder_path = "/home/bencapper/src/News-Aggregator/scripts/log/"
-json_dump_path = "/home/bencapper/src/News-Aggregator/scripts/json/amthinker.json"
 json_folder_path = "/home/bencapper/src/News-Aggregator/scripts/json/"
 json_path = "/home/bencapper/src/News-Aggregator/scripts/news.json"
 db_url = "https://news-a3e22-default-rtdb.firebaseio.com/"
 bucket = "news-a3e22.appspot.com"
 page_url = "https://www.americanthinker.com"
-storage_path = "https://firebasestorage.googleapis.com/v0/b/news-a3e22.appspot.com/o"
-db_path = "tests"
+db_path = "stories"
 outlet = "www.AmericanThinker.com"
 
 # Set Local Folders
@@ -24,11 +27,11 @@ jsonFolder(json_folder_path)
 
 # Read from Existing Log
 if os.path.exists(log_file_path):
- open_temp = open(log_file_path, "r")
- read_temp = open_temp.read()
- ref_list = read_temp.splitlines()
+    open_temp = open(log_file_path, "r")
+    read_temp = open_temp.read()
+    ref_list = read_temp.splitlines()
 else:
- os.mknod(log_file_path)
+    os.mknod(log_file_path)
 
 # Initialize Firebase
 initialise(json_path, db_url, bucket)
@@ -60,23 +63,27 @@ for article in articles:
 
         date = articleSoup.find('div', 'article_date')
         date = str(date).split('">')[1].split('</d')[0]
-        date = date.replace(',',' ').replace('  ',' ').split(' ')
+        date = date.replace(',', ' ').replace('  ', ' ').split(' ')
         dates = list()
         dates.append(date[1])
         dates.append(date[0])
         dates.append(date[2])
         date = formatDate(dates)
-        storage_link = "https://firebasestorage.googleapis.com/v0/b/news-a3e22.appspot.com/o/AmThink%2Famthink.png?alt=media&token=49067977-74ea-4d50-8c70-cb99885ec0af"
+        storage_link = ("https://firebasestorage.googleapis.com/"
+                        "v0/b/news-a3e22.appspot.com/o/"
+                        "AmThink%2Famthink.png?alt=media&token"
+                        "=49067977-74ea-4d50-8c70-cb99885ec0af")
 
         check = False
         for ref in ref_list:
-            similarity = similar(ref,title)
+            similarity = similar(ref, title)
             if similarity > .8 or "<span" in title:
-              check = True
-              break
-                 # Only Continue if the Title is not
-             # Already in the Log and is not too
-             # Similar to Another
+                check = True
+                break
+                # Only Continue if the Title is not
+                # Already in the Log and is not too
+                # Similar to Another
+
         if title not in ref_list and check is False:
             # Add the Title to the List
             # of Titles Already in the Log
@@ -92,7 +99,7 @@ for article in articles:
             }
             open_json = open(json_dump_path, "r")
             read_json = open_json.read()
-            appendJson(json_dump_path,data)
+            appendJson(json_dump_path, data)
             # Push the Gathered Data to DB
             # Using Utils method
             pushToDB(
